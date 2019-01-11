@@ -48,7 +48,7 @@ collections:
       - { name: 'subtitle', label: 'Subtitle', widget: 'string' }
       - { name: 'image', label: 'Image', widget: 'image' }
       - { name: 'price', label: 'Price', widget: 'string' }
-      - { name: 'body', label: 'Text', widget: 'markdown' }
+      - { name: 'body', label: 'Text', widget: 'markdown', required: false }
   - name: 'testimonials'
     label: 'Testimonials'
     label_singular: 'Testimonial'
