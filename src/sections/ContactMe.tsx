@@ -28,15 +28,6 @@ const initialValues: FormValues = {
   message: '',
 };
 
-// tslint:disable-next-line:no-any
-function urlEncode(data: { [key: string]: any }): string {
-  return Object.keys(data)
-    .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
-    .join('&');
-}
-
-const validate = (value: string) => (value.length === 0 ? 'Required' : undefined);
-
 const Notification: React.FC<{ type: NotificationType }> = ({ type }) => {
   switch (type) {
     case 'success':
@@ -56,6 +47,34 @@ const Notification: React.FC<{ type: NotificationType }> = ({ type }) => {
   }
 };
 
+// tslint:disable-next-line:no-any
+function urlEncode(data: { [key: string]: any }): string {
+  return Object.keys(data)
+    .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
+    .join('&');
+}
+
+async function submitForm(values: FormValues): Promise<boolean> {
+  try {
+    const res = await window.fetch('/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: urlEncode({
+        'form-name': 'contact',
+        ...values,
+      }),
+    });
+
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
+const validate = (value: string) => (value.length === 0 ? 'Required' : undefined);
+
 class ContactMe extends React.Component<{}, State> {
   readonly state: State = {};
 
@@ -71,7 +90,7 @@ class ContactMe extends React.Component<{}, State> {
               <Heading text="So findest du mich" size={1} className="has-text-light has-text-centered" />
               <FindMe />
               {notificationType && <Notification type={notificationType} />}
-              <Form>
+              <Form name="contact" data-netlify="true">
                 <HorizontalField>
                   <FormField
                     icon="fas fa-user"
@@ -131,23 +150,8 @@ class ContactMe extends React.Component<{}, State> {
 
   private handleFormSubmit = async (values: FormValues, { setSubmitting }: FormikActions<FormValues>) => {
     this.setState({ notificationType: undefined });
-
-    try {
-      await window.fetch('/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: urlEncode({
-          'form-name': 'contact',
-          ...values,
-        }),
-      });
-      this.showNotification('success');
-    } catch {
-      this.showNotification('error');
-    }
-
+    const successful = await submitForm(values);
+    this.showNotification(successful === true ? 'success' : 'error');
     setSubmitting(false);
   };
 }
