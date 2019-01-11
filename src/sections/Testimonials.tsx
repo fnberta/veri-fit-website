@@ -26,6 +26,7 @@ class Testimonials extends React.Component<Props, State> {
   readonly state: State = { activeSlideIdx: 0 };
 
   render() {
+    const { testimonialData } = this.props;
     const { activeSlideIdx } = this.state;
     return (
       <Layout className="section">
@@ -36,16 +37,20 @@ class Testimonials extends React.Component<Props, State> {
           autoPlay={5000}
           onChange={this.handleSlideChange}
         >
-          {this.props.testimonialData.map((data, idx) => (
+          {testimonialData.map((data, idx) => (
             <Testimonial key={`${data.author}-${idx}`} {...data} />
           ))}
         </Carousel>
-        <Dots activeIdx={activeSlideIdx} onDotClick={this.handleSlideChange} count={3} />
+        <Dots activeIdx={activeSlideIdx} onDotClick={this.handleSlideChange} count={testimonialData.length} />
       </Layout>
     );
   }
 
-  private handleSlideChange = (idx: number) => this.setState({ activeSlideIdx: idx });
+  private handleSlideChange = (idx: number) => {
+    const length = this.props.testimonialData.length;
+    const activeSlideIdx = idx < length ? idx : idx - length;
+    this.setState({ activeSlideIdx });
+  };
 }
 
 export default Testimonials;
