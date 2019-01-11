@@ -2,50 +2,20 @@ import Image, { FluidObject } from 'gatsby-image';
 import React from 'react';
 import Heading from '../components/bulma/Heading';
 import { FullHeightCard } from '../components/Layout';
-import { ScheduleEntry } from '../components/Schedule';
+import Schedule, { ScheduleEntry } from '../components/Schedule';
 import { ChildImageSharp, FluidImage } from '../interfaces';
 
 export interface OfferData {
   title: string;
   subtitle: string;
   image: ChildImageSharp<FluidImage>;
+  schedule: ScheduleEntry[];
   html: string;
-  // schedule: React.ReactNode;
 }
 
 export interface Props {
   offerData: OfferData[];
 }
-
-const YOGA_SCHEDULE: ScheduleEntry[] = [
-  {
-    day: 'Dienstag',
-    time: '18:00 – 19:00',
-  },
-  {
-    day: 'Mittwoch',
-    time: '06:15 – 07:15',
-  },
-  {
-    day: 'Mittwoch',
-    time: '12:05 – 12:55',
-  },
-  {
-    day: 'Freitag',
-    time: '09:15 – 10:15',
-  },
-  {
-    day: 'Samstag',
-    time: '09:15 – 10:15',
-  },
-];
-
-const HIIT_SCHEDULE: ScheduleEntry[] = [
-  {
-    day: 'Mittwoch',
-    time: '18:45 – 19:30',
-  },
-];
 
 const Offers: React.FC<Props> = ({ offerData }) => (
   <section id="offer" className="section has-background-light">
@@ -69,6 +39,7 @@ const Offers: React.FC<Props> = ({ offerData }) => (
               <div className="content">
                 <div dangerouslySetInnerHTML={{ __html: data.html }} />
               </div>
+              <Schedule entries={data.schedule} />
             </FullHeightCard>
           </div>
         ))}

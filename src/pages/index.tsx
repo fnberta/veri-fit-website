@@ -3,6 +3,7 @@ import { FixedObject, FluidObject } from 'gatsby-image';
 import React from 'react';
 import Layout from '../components/Layout';
 import Navbar from '../components/Navbar';
+import { ScheduleEntry } from '../components/Schedule';
 import { ChildImageSharp, EdgesNode, FluidImage } from '../interfaces';
 import AboutMe from '../sections/AboutMe';
 import ContactMe from '../sections/ContactMe';
@@ -23,6 +24,7 @@ export interface Props {
         title: string;
         subtitle: string;
         image: ChildImageSharp<FluidImage>;
+        schedule: ScheduleEntry[] | null;
       };
     }>;
     prices: EdgesNode<{
@@ -49,6 +51,7 @@ const IndexPage: React.FC<Props> = ({ data }) => (
     <Offers
       offerData={data.offers.edges.map(edge => ({
         ...edge.node.frontmatter,
+        schedule: edge.node.frontmatter.schedule || [],
         html: edge.node.html,
       }))}
     />
@@ -92,6 +95,10 @@ export const query = graphql`
             subtitle
             image {
               ...FluidImage
+            }
+            schedule {
+              day
+              time
             }
           }
         }
