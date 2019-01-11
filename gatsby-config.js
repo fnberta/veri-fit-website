@@ -8,6 +8,13 @@ module.exports = {
     {
       resolve: 'gatsby-source-filesystem',
       options: {
+        path: `${__dirname}/static/assets`,
+        name: 'assets',
+      },
+    },
+    {
+      resolve: 'gatsby-source-filesystem',
+      options: {
         name: 'images',
         path: `${__dirname}/src/images`,
       },
@@ -43,7 +50,15 @@ module.exports = {
     {
       resolve: 'gatsby-transformer-remark',
       options: {
-        plugins: ['gatsby-remark-images'],
+        plugins: [
+          {
+            resolve: 'gatsby-remark-relative-images',
+            options: {
+              name: 'assets',
+            },
+          },
+          'gatsby-remark-images',
+        ],
       },
     },
     'gatsby-transformer-sharp',
@@ -54,5 +69,6 @@ module.exports = {
     'gatsby-plugin-sass',
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-netlify-cms',
+    'gatsby-plugin-netlify',
   ],
 };

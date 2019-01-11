@@ -1,4 +1,5 @@
 const { resolve } = require('path');
+const { fmImagesToRelative } = require('gatsby-remark-relative-images');
 
 exports.createPages = async ({ actions, graphql }) => {
   const result = await graphql(`
@@ -28,4 +29,10 @@ exports.createPages = async ({ actions, graphql }) => {
     path: node.frontmatter.path,
     component: resolve('src/templates/AgbPageTemplate.tsx'),
   });
+};
+
+exports.onCreateNode = ({ node }) => {
+  // converts any absolute paths in markdown frontmatter data into relative paths if a matching file is found
+  // needed for netlify cms
+  fmImagesToRelative(node);
 };
