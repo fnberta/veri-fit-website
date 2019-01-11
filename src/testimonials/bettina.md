@@ -1,0 +1,5 @@
+---
+collection: 'testimonial'
+author: 'Bettina'
+quote: 'Pilates mit Vera ist ein Höhepunkt der Woche: Kompetent und locker geleitet, verhilft es mir zu innerer Gelassenheit und Stärke. Ich verlasse die Stunde jeweils mit einem besseren Körpergefühl und einem Lächeln.'
+---

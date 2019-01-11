@@ -1,0 +1,5 @@
+---
+collection: 'testimonial'
+author: 'Fabio'
+quote: 'Noch nie bin ich so fit in eine Saison gestartet wie nach dem Aufbautraining mit Vera!'
+---

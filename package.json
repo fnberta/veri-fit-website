@@ -1,0 +1,53 @@
+{
+  "name": "veri-fit",
+  "private": true,
+  "description": "Website for veri-fit business",
+  "version": "0.1.0",
+  "author": "Fabio Berta <fnberta@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "gatsby build",
+    "develop": "gatsby develop",
+    "start": "npm run develop",
+    "typecheck": "tsc",
+    "lint": "tslint --fix 'src/**/*.{ts,tsx}'",
+    "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx,json,css,scss,sass,md,yml,yaml}'"
+  },
+  "dependencies": {
+    "@brainhubeu/react-carousel": "^1.10.11",
+    "@emotion/core": "^10.0.6",
+    "@emotion/styled": "^10.0.6",
+    "@fortawesome/fontawesome-free": "^5.6.3",
+    "bulma": "^0.7.2",
+    "classnames": "^2.2.6",
+    "formik": "^1.4.2",
+    "gatsby": "^2.0.91",
+    "gatsby-image": "^2.0.26",
+    "gatsby-plugin-emotion": "^4.0.1",
+    "gatsby-plugin-netlify-cms": "^3.0.9",
+    "gatsby-plugin-react-helmet": "^3.0.5",
+    "gatsby-plugin-sass": "^2.0.7",
+    "gatsby-plugin-sharp": "^2.0.17",
+    "gatsby-plugin-typescript": "^2.0.3",
+    "gatsby-remark-images": "^3.0.1",
+    "gatsby-source-filesystem": "^2.0.13",
+    "gatsby-transformer-remark": "^2.2.0",
+    "gatsby-transformer-sharp": "^2.1.10",
+    "netlify-cms": "^2.3.3",
+    "node-sass": "^4.11.0",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "react-helmet": "^5.2.0"
+  },
+  "devDependencies": {
+    "@types/classnames": "^2.2.7",
+    "@types/react-helmet": "^5.0.8",
+    "gatsby-plugin-tslint": "^0.0.2",
+    "prettier": "^1.15.3",
+    "tslint": "^5.12.1",
+    "tslint-config-prettier": "^1.17.0",
+    "tslint-loader": "^3.5.4",
+    "tslint-react": "^3.6.0",
+    "typescript": "^3.2.2"
+  }
+}
