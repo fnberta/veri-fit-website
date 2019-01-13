@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import React from 'react';
-import Card from '../components/bulma/Card';
 import { Subtitle, Title } from '../components/bulma/Heading';
+import ScheduleItem from '../components/ScheduleItem';
 
 export type Weekday = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday';
 
@@ -31,28 +31,11 @@ const Layout = styled.div({
   },
 });
 
-const ItemCard = styled(Card)<Pick<ScheduleEntryData, 'weekday' | 'timeOfDay'>>(({ weekday, timeOfDay }) => ({
-  '@media screen and (min-width: 769px)': {
-    gridColumnStart: weekday,
-    gridRowStart: timeOfDay,
-  },
-}));
-
 const ItemsBlock: React.FC<{ title: string; entries?: ScheduleEntryData[] }> = ({ title, entries }) => (
   <>
     <Subtitle className="is-marginless" text={title} size={4} />
     {entries &&
-      entries.map((entry, idx) => (
-        <ItemCard
-          key={`${entry.weekday}-${entry.timeOfDay}-${idx}`}
-          className="has-text-centered"
-          weekday={entry.weekday}
-          timeOfDay={entry.timeOfDay}
-        >
-          <Title text={entry.title} size={5} />
-          <p className="is-6">{entry.time}</p>
-        </ItemCard>
-      ))}
+      entries.map((entry, idx) => <ScheduleItem key={`${entry.weekday}-${entry.timeOfDay}-${idx}`} {...entry} />)}
   </>
 );
 
