@@ -15,10 +15,9 @@ const Layout = styled.section(parallax(), {
 });
 
 const ImageTitle = styled.div({
-  alignSelf: 'flex-start',
   width: '100%',
-  '@media screen and (min-width: 331px)': {
-    width: '70%',
+  '@media screen and (min-width: 321px)': {
+    width: '80%',
   },
   '@media screen and (min-width: 641px)': {
     width: '60%',
