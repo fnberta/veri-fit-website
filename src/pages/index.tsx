@@ -10,7 +10,7 @@ import ContactMe from '../sections/ContactMe';
 import Hero from '../sections/Hero';
 import LocationMap from '../sections/LocationMap';
 import Offers from '../sections/Offers';
-import Schedule, { TimeOfDay, Weekday } from '../sections/Schedule';
+import Schedule from '../sections/Schedule';
 import Testimonials from '../sections/Testimonials';
 import TryOut from '../sections/TryOut';
 
@@ -21,6 +21,7 @@ export interface Props {
     offers: EdgesNode<{
       html: string;
       frontmatter: {
+        order: number;
         title: string;
         subtitle: string;
         image: ChildImageSharp<FluidImage>;
@@ -30,8 +31,8 @@ export interface Props {
     schedule: EdgesNode<{
       frontmatter: {
         title: string;
-        weekday: Weekday;
-        timeOfDay: TimeOfDay;
+        weekday: string;
+        timeOfDay: string;
         time: string;
       };
     }>;
@@ -90,6 +91,7 @@ export const query = graphql`
         node {
           html
           frontmatter {
+            order
             title
             subtitle
             image {

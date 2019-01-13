@@ -6,6 +6,7 @@ import Offer, { Price } from '../components/Offer';
 import { ChildImageSharp, FluidImage } from '../interfaces';
 
 export interface OfferData {
+  order: number;
   title: string;
   subtitle: string;
   image: ChildImageSharp<FluidImage>;
@@ -31,17 +32,19 @@ const Offers: React.FC<Props> = ({ offerData }) => (
         </p>
       </div>
       <div className="columns">
-        {offerData.map((data, idx) => (
-          <div key={`${data.title}-${idx}`} className="column">
-            <Offer
-              title={data.title}
-              subtitle={data.subtitle}
-              image={<Image fluid={data.image.childImageSharp.fluid} alt="Training image" />}
-              prices={data.prices}
-              body={data.html}
-            />
-          </div>
-        ))}
+        {offerData
+          .sort((a, b) => a.order - b.order)
+          .map((data, idx) => (
+            <div key={`${data.title}-${idx}`} className="column">
+              <Offer
+                title={data.title}
+                subtitle={data.subtitle}
+                image={<Image fluid={data.image.childImageSharp.fluid} alt="Training image" />}
+                prices={data.prices}
+                body={data.html}
+              />
+            </div>
+          ))}
       </div>
       <div className="content has-text-centered">
         <p>

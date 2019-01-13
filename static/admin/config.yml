@@ -26,6 +26,7 @@ collections:
     slug: '{{slug}}'
     fields:
       - { name: 'collection', label: 'Collection', widget: 'hidden', default: 'schedule' }
+      - { name: 'order', label: 'Order', widget: 'number', valueType: 'int', min: 1 }
       - { name: 'title', label: 'Title', widget: 'string' }
       - { name: 'subtitle', label: 'Subtitle', widget: 'string' }
       - { name: 'image', label: 'Image', widget: 'image' }

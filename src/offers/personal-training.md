@@ -1,5 +1,6 @@
 ---
 collection: offer
+order: 3
 title: Personal Training
 subtitle: Spezifisch für dich
 image: /assets/kettlebells.jpg

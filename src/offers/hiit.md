@@ -1,5 +1,6 @@
 ---
 collection: offer
+order: 2
 title: HIIT
 subtitle: High Intensity Interval Training
 image: /assets/hiit.jpg

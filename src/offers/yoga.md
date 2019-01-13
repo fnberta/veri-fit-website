@@ -1,5 +1,6 @@
 ---
 collection: offer
+order: 1
 title: Yoga
 subtitle: Stark und beweglich
 image: /assets/yoga.jpg

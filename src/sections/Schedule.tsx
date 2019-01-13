@@ -3,14 +3,10 @@ import React from 'react';
 import { Subtitle, Title } from '../components/bulma/Heading';
 import ScheduleItem from '../components/ScheduleItem';
 
-export type Weekday = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday';
-
-export type TimeOfDay = 'morning' | 'midday' | 'evening';
-
 export interface ScheduleEntryData {
   title: string;
-  weekday: Weekday;
-  timeOfDay: TimeOfDay;
+  weekday: string;
+  timeOfDay: string;
   time: string;
 }
 
@@ -18,7 +14,12 @@ export interface Props {
   entries: ScheduleEntryData[];
 }
 
-type ByWeekday = { [key in Weekday]?: ScheduleEntryData[] };
+interface ByWeekday {
+  [key: string]: ScheduleEntryData[];
+}
+
+const WEEKDAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+const TIMES_OF_DAY = ['morning', 'midday', 'evening'];
 
 const Layout = styled.div({
   width: '100%',
@@ -26,8 +27,8 @@ const Layout = styled.div({
   gridGap: '0.75em',
   gridTemplateColumns: '1fr',
   '@media screen and (min-width: 769px)': {
-    gridTemplateColumns: '[monday] 1fr [tuesday] 1fr [wednesday] 1fr [thursday] 1fr [friday] 1fr [saturday] 1fr',
-    gridTemplateRows: 'auto [morning] 1fr [midday] 1fr [evening] 1fr',
+    gridTemplateColumns: WEEKDAYS.map(day => `[${day}] 1fr`).join(' '),
+    gridTemplateRows: `auto ${TIMES_OF_DAY.map(time => `[${time}] 1fr`).join(' ')}`,
   },
 });
 
@@ -40,7 +41,7 @@ const ItemsBlock: React.FC<{ title: string; entries?: ScheduleEntryData[] }> = (
 );
 
 function getByWeekday(entries: ScheduleEntryData[]): ByWeekday {
-  return entries.reduce<ByWeekday>((acc, curr) => {
+  const byWeekday = entries.reduce<ByWeekday>((acc, curr) => {
     const list = acc[curr.weekday];
     if (list) {
       list.push(curr);
@@ -50,6 +51,12 @@ function getByWeekday(entries: ScheduleEntryData[]): ByWeekday {
 
     return acc;
   }, {});
+
+  Object.keys(byWeekday)
+    .map(key => byWeekday[key])
+    .forEach(day => day.sort((a, b) => TIMES_OF_DAY.indexOf(a.timeOfDay) - TIMES_OF_DAY.indexOf(b.timeOfDay)));
+
+  return byWeekday;
 }
 
 const Schedule: React.FC<Props> = ({ entries }) => {
