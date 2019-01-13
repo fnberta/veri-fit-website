@@ -14,13 +14,31 @@ const Layout = styled.section(parallax(), {
   backgroundImage: `url(${require('../images/hero.jpg')})`,
 });
 
+const ImageTitle = styled.div({
+  alignSelf: 'flex-start',
+  width: '100%',
+  '@media screen and (min-width: 331px)': {
+    width: '70%',
+  },
+  '@media screen and (min-width: 641px)': {
+    width: '60%',
+  },
+  '@media screen and (min-width: 769px)': {
+    width: '50%',
+  },
+  '@media screen and (min-width: 1216px)': {
+    width: '40%',
+  },
+});
+
 const Hero: React.FC<Props> = ({ logo }) => (
   <Layout id="home" className="hero is-fullheight">
-    <div className="hero-body columns">
-      <div className="column is-three-fifths">
+    <div className="hero-body">
+      <ImageTitle>
         <Image fluid={logo.childImageSharp.fluid} title="Veri-Fit" alt="Veri-Fit" />
         <Subtitle
-          className="has-text-light"
+          className="has-text-light is-size-4-touch"
+          size={3}
           text={
             <>
               Tone your body, calm your mind,
@@ -28,9 +46,8 @@ const Hero: React.FC<Props> = ({ logo }) => (
               get in shape – feel great!
             </>
           }
-          size={3}
         />
-      </div>
+      </ImageTitle>
     </div>
   </Layout>
 );
