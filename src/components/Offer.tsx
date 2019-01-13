@@ -1,6 +1,6 @@
 import React from 'react';
 import Body from './Body';
-import Heading from './bulma/Heading';
+import { Subtitle, Title } from './bulma/Heading';
 import { FullHeightCard } from './Layout';
 
 export interface Price {
@@ -27,8 +27,8 @@ function getPriceTypeDisplay(type: number): string {
 
 const Offer: React.FC<Props> = ({ title, subtitle, image, body, prices }) => (
   <FullHeightCard image={image}>
-    <Heading text={title} size={4} />
-    <Heading text={subtitle} size={5} type="subtitle" />
+    <Title text={title} size={4} />
+    <Subtitle text={subtitle} size={5} />
     <Body data={body} />
     <table className="table is-fullwidth">
       <thead>

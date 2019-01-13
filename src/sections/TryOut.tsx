@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import React from 'react';
-import Heading from '../components/bulma/Heading';
+import { Title } from '../components/bulma/Heading';
 import { parallax } from '../utils/styles';
 
 const Layout = styled.section(parallax(true), {
@@ -13,7 +13,7 @@ const Layout = styled.section(parallax(true), {
 const TryOut: React.FC = () => (
   <Layout className="section">
     <div className="container has-text-centered">
-      <Heading className="has-text-light" text="Starte jetzt gleich mit einem Probetraining!" size={3} />
+      <Title className="has-text-light" text="Starte jetzt gleich mit einem Probetraining!" size={3} />
       <a className="button is-primary is-uppercase" role="button" href="#contact">
         Kontakt
       </a>

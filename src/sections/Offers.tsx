@@ -1,7 +1,7 @@
 import { Link } from 'gatsby';
 import Image, { FluidObject } from 'gatsby-image';
 import React from 'react';
-import Heading from '../components/bulma/Heading';
+import { Title } from '../components/bulma/Heading';
 import Offer, { Price } from '../components/Offer';
 import { ChildImageSharp, FluidImage } from '../interfaces';
 
@@ -20,7 +20,7 @@ export interface Props {
 const Offers: React.FC<Props> = ({ offerData }) => (
   <section id="offer" className="section has-background-light">
     <div className="container">
-      <Heading className="has-text-centered" text="Training für dich!" size={1} />
+      <Title className="has-text-centered" text="Training für dich!" size={1} />
       <div className="content has-text-centered">
         <p>
           Kraft, Stabilität, Beweglichkeit, Athletik, Elastizität, Ausdauer, Freude, Energie, Entspannung, Gesundheit,

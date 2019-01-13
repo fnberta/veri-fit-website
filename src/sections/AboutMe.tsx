@@ -1,6 +1,6 @@
 import Image, { FluidObject } from 'gatsby-image';
 import React from 'react';
-import Heading from '../components/bulma/Heading';
+import { Subtitle, Title } from '../components/bulma/Heading';
 import { ChildImageSharp, FluidImage } from '../interfaces';
 
 export interface Props {
@@ -17,8 +17,8 @@ const AboutMe: React.FC<Props> = ({ vera }) => (
       </div>
       <div className="column has-background-light">
         <div className="section">
-          <Heading text="Über mich" size={1} />
-          <Heading text="Vera Lienhard" size={3} type="subtitle" />
+          <Title text="Über mich" size={1} />
+          <Subtitle text="Vera Lienhard" size={3} />
           <div className="content">
             <p>
               Es ist meine Überzeugung, dass durch die richtige Trainingsintervention fast alle bewegungsbezogenen Ziele
@@ -29,7 +29,7 @@ const AboutMe: React.FC<Props> = ({ vera }) => (
             </p>
             <p className="is-italic">Let’s do this!</p>
           </div>
-          <Heading text="Ausbildungen" size={5} />
+          <Title text="Ausbildungen" size={5} />
           <div className="content">
             <ul>
               <li> Master Sportwissenschaft Universität Bern</li>
@@ -41,12 +41,8 @@ const AboutMe: React.FC<Props> = ({ vera }) => (
               <li> Spiraldynamik Basic Med</li>
               <li> Beckenboden Instruktorin</li>
             </ul>
+            <p className="is-size-5">Für Fragen zum Training oder zu mir stehe ich dir gerne zur Verfügung!</p>
           </div>
-          <Heading
-            text="Für Fragen zum Training oder zu mir stehe ich dir gerne zur Verfügung!"
-            size={5}
-            type="subtitle"
-          />
         </div>
       </div>
     </div>

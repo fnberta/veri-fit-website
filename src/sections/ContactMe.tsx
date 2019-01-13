@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { Field, Form, Formik, FormikActions } from 'formik';
 import React from 'react';
 import { FormField, HorizontalField, SubmitButton } from '../components/bulma/Forms';
-import Heading from '../components/bulma/Heading';
+import { Title } from '../components/bulma/Heading';
 import FindMe from '../components/FindMe';
 import { parallax } from '../utils/styles';
 
@@ -87,7 +87,7 @@ class ContactMe extends React.Component<{}, State> {
         render={({ errors, isSubmitting }) => (
           <Layout id="contact" className="section">
             <div className="container">
-              <Heading text="So findest du mich" size={1} className="has-text-light has-text-centered" />
+              <Title text="So findest du mich" size={1} className="has-text-light has-text-centered" />
               <FindMe />
               {notificationType && <Notification type={notificationType} />}
               <Form name="contact" data-netlify="true">

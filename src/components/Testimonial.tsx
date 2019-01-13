@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import React from 'react';
-import Heading from '../components/bulma/Heading';
 import { verticallySpaced } from '../utils/styles';
+import { Title } from './bulma/Heading';
 
 export interface Props {
   author: string;
@@ -24,7 +24,7 @@ const Quote = styled.blockquote({
 const Testimonial: React.FC<Props> = ({ author, quote }) => (
   <Layout>
     <Quote className="has-text-light is-italic is-size-4 has-text-weight-light has-text-centered">{quote}</Quote>
-    <Heading className="has-text-light" size={6} text={`– ${author}`} />
+    <Title className="has-text-light" size={6} text={`– ${author}`} />
   </Layout>
 );
 

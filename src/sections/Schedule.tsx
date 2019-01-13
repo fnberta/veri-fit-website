@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import React from 'react';
 import Card from '../components/bulma/Card';
-import Heading from '../components/bulma/Heading';
+import { Subtitle, Title } from '../components/bulma/Heading';
 
 export type Weekday = 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday';
 
@@ -40,7 +40,7 @@ const ItemCard = styled(Card)<Pick<ScheduleEntryData, 'weekday' | 'timeOfDay'>>(
 
 const ItemsBlock: React.FC<{ title: string; entries?: ScheduleEntryData[] }> = ({ title, entries }) => (
   <>
-    <Heading className="is-marginless" text={title} size={4} type="subtitle" />
+    <Subtitle className="is-marginless" text={title} size={4} />
     {entries &&
       entries.map((entry, idx) => (
         <ItemCard
@@ -49,7 +49,7 @@ const ItemsBlock: React.FC<{ title: string; entries?: ScheduleEntryData[] }> = (
           weekday={entry.weekday}
           timeOfDay={entry.timeOfDay}
         >
-          <Heading text={entry.title} size={5} />
+          <Title text={entry.title} size={5} />
           <p className="is-6">{entry.time}</p>
         </ItemCard>
       ))}
@@ -74,7 +74,7 @@ const Schedule: React.FC<Props> = ({ entries }) => {
   return (
     <section id="schedule" className="section has-background-light">
       <div className="container has-text-centered">
-        <Heading text="Stundenplan" size={1} />
+        <Title text="Stundenplan" size={1} />
         <div className="content has-text-centered">
           <p>
             Die Zeiten für die Gruppenstunden findest du hier. Ich freue mich auf deinen Besuch! <br /> Um einen Termin
