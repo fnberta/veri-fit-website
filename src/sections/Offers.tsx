@@ -51,30 +51,30 @@ const Offers: React.FC<Props> = ({ offerData }) => (
               <Heading text={data.title} size={4} />
               <Heading text={data.subtitle} size={5} type="subtitle" />
               <div className="content">
-                <p dangerouslySetInnerHTML={{ __html: data.html }} />
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <th>Typ</th>
-                      <th>Preis</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data.prices.map(price => (
-                      <tr>
-                        <td>
-                          <div>{getPriceTypeDisplay(price.type)}</div>
-                          {price.validity && <div className="is-size-7">{`(gültig für ${price.validity})`}</div>}
-                        </td>
-                        <td>
-                          <span className="is-size-6">CHF </span>
-                          <span className="is-size-4">{price.price}</span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <div dangerouslySetInnerHTML={{ __html: data.html }} />
               </div>
+              <table className="table is-fullwidth">
+                <thead>
+                  <tr>
+                    <th>Typ</th>
+                    <th>Preis</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.prices.map(price => (
+                    <tr>
+                      <td>
+                        <div>{getPriceTypeDisplay(price.type)}</div>
+                        {price.validity && <div className="is-size-7">{`(gültig für ${price.validity})`}</div>}
+                      </td>
+                      <td>
+                        <span className="is-size-6">CHF </span>
+                        <span className="is-size-4">{price.price}</span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </FullHeightCard>
           </div>
         ))}
