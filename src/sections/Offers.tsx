@@ -2,14 +2,8 @@ import { Link } from 'gatsby';
 import Image, { FluidObject } from 'gatsby-image';
 import React from 'react';
 import Heading from '../components/bulma/Heading';
-import { FullHeightCard } from '../components/Layout';
+import Offer, { Price } from '../components/Offer';
 import { ChildImageSharp, FluidImage } from '../interfaces';
-
-export interface Price {
-  price: number;
-  type: number;
-  validity?: string;
-}
 
 export interface OfferData {
   title: string;
@@ -21,14 +15,6 @@ export interface OfferData {
 
 export interface Props {
   offerData: OfferData[];
-}
-
-function getPriceTypeDisplay(type: number): string {
-  if (type === 1) {
-    return 'Einzeleintritt';
-  }
-
-  return `${type}er Abo`;
 }
 
 const Offers: React.FC<Props> = ({ offerData }) => (
@@ -45,37 +31,15 @@ const Offers: React.FC<Props> = ({ offerData }) => (
         </p>
       </div>
       <div className="columns">
-        {offerData.map(data => (
-          <div key={data.title} className="column">
-            <FullHeightCard image={<Image fluid={data.image.childImageSharp.fluid} alt="Training image" />}>
-              <Heading text={data.title} size={4} />
-              <Heading text={data.subtitle} size={5} type="subtitle" />
-              <div className="content">
-                <div dangerouslySetInnerHTML={{ __html: data.html }} />
-              </div>
-              <table className="table is-fullwidth">
-                <thead>
-                  <tr>
-                    <th>Typ</th>
-                    <th>Preis</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {data.prices.map(price => (
-                    <tr>
-                      <td>
-                        <div>{getPriceTypeDisplay(price.type)}</div>
-                        {price.validity && <div className="is-size-7">{`(gültig für ${price.validity})`}</div>}
-                      </td>
-                      <td>
-                        <span className="is-size-6">CHF </span>
-                        <span className="is-size-4">{price.price}</span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </FullHeightCard>
+        {offerData.map((data, idx) => (
+          <div key={`${data.title}-${idx}`} className="column">
+            <Offer
+              title={data.title}
+              subtitle={data.subtitle}
+              image={<Image fluid={data.image.childImageSharp.fluid} alt="Training image" />}
+              prices={data.prices}
+              body={data.html}
+            />
           </div>
         ))}
       </div>
