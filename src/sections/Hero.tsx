@@ -25,7 +25,7 @@ const ImageTitle = styled.div({
   '@media screen and (min-width: 769px)': {
     width: '50%',
   },
-  '@media screen and (min-width: 1216px)': {
+  '@media screen and (min-width: 1280px)': {
     width: '40%',
   },
 });
