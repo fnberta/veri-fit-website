@@ -11,6 +11,12 @@ export interface State {
   menuActive: boolean;
 }
 
+const NavbarItem: React.FC<State & { name: string; href: string }> = ({ name, href, fixed, menuActive }) => (
+  <a className={cx('navbar-item', { 'has-text-light': !fixed && !menuActive })} role="button" href={href}>
+    {name}
+  </a>
+);
+
 class Navbar extends React.Component<{}, State> {
   readonly state: State = {
     fixed: false,
@@ -40,7 +46,10 @@ class Navbar extends React.Component<{}, State> {
             </a>
             <a
               role="button"
-              className={cx('navbar-burger', 'burger', { 'is-active': menuActive })}
+              className={cx('navbar-burger', 'burger', {
+                'is-active': menuActive,
+                'has-text-light': !fixed,
+              })}
               aria-label="menu"
               aria-expanded="false"
               onClick={this.handleBurgerClick}
@@ -52,21 +61,11 @@ class Navbar extends React.Component<{}, State> {
           </div>
           <div className={cx('navbar-menu', { 'is-active': menuActive })}>
             <div className="navbar-end" onClick={this.handleItemClick}>
-              <a className={cx('navbar-item', { 'has-text-light': !fixed })} role="button" href="#home">
-                Home
-              </a>
-              <a className={cx('navbar-item', { 'has-text-light': !fixed })} role="button" href="#offer">
-                Angebot
-              </a>
-              <a className={cx('navbar-item', { 'has-text-light': !fixed })} role="button" href="#schedule">
-                Stundenplan
-              </a>
-              <a className={cx('navbar-item', { 'has-text-light': !fixed })} role="button" href="#about">
-                Über mich
-              </a>
-              <a className={cx('navbar-item', { 'has-text-light': !fixed })} role="button" href="#contact">
-                Kontakt
-              </a>
+              <NavbarItem name="Home" href="#home" fixed={fixed} menuActive={menuActive} />
+              <NavbarItem name="Angebot" href="#offer" fixed={fixed} menuActive={menuActive} />
+              <NavbarItem name="Stundenplan" href="#schedule" fixed={fixed} menuActive={menuActive} />
+              <NavbarItem name="Über mich" href="#about" fixed={fixed} menuActive={menuActive} />
+              <NavbarItem name="Kontakt" href="#contact" fixed={fixed} menuActive={menuActive} />
             </div>
           </div>
         </div>
