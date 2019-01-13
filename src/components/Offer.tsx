@@ -47,7 +47,7 @@ const Offer: React.FC<Props> = ({ title, subtitle, image, body, prices }) => (
             </td>
             <td>
               <span className="is-size-6">CHF </span>
-              <span className="is-size-4">{price.price.toLocaleString(window.navigator.language)}</span>
+              <span className="is-size-4">{price.price.toLocaleString()}</span>
             </td>
           </tr>
         ))}
