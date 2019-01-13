@@ -28,19 +28,22 @@ const initialValues: FormValues = {
   message: '',
 };
 
-const Notification: React.FC<{ type: NotificationType }> = ({ type }) => {
+const Notification: React.FC<{ type: NotificationType; onCloseClick: React.MouseEventHandler<HTMLButtonElement> }> = ({
+  type,
+  onCloseClick,
+}) => {
   switch (type) {
     case 'success':
       return (
         <div className="notification is-primary">
-          <button className="delete" />
+          <button className="delete" onClick={onCloseClick} />
           Herzlichen Dank für deine Nachricht! Ich melde mich sofort bei dir.
         </div>
       );
     case 'error':
       return (
         <div className="notification is-danger">
-          <button className="delete" />
+          <button className="delete" onClick={onCloseClick} />
           Da ist etwas schief gegangen. Bitte versuche es nochmals!
         </div>
       );
@@ -89,8 +92,15 @@ class ContactMe extends React.Component<{}, State> {
             <div className="container">
               <Title text="So findest du mich" size={1} className="has-text-light has-text-centered" />
               <FindMe />
-              {notificationType && <Notification type={notificationType} />}
-              <Form name="contact" data-netlify="true">
+              {notificationType && (
+                <Notification type={notificationType} onCloseClick={this.handleNotificationCloseClick} />
+              )}
+              <Form name="contact" data-netlify="true" netlify-honeypot="bot-field">
+                <div className="is-invisible">
+                  <label>
+                    Don’t fill this out if you're human: <input name="bot-field" />
+                  </label>
+                </div>
                 <HorizontalField>
                   <FormField
                     icon="fas fa-user"
@@ -154,6 +164,8 @@ class ContactMe extends React.Component<{}, State> {
     this.showNotification(successful === true ? 'success' : 'error');
     setSubmitting(false);
   };
+
+  private handleNotificationCloseClick = () => this.setState({ notificationType: undefined });
 }
 
 export default ContactMe;
