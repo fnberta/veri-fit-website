@@ -96,7 +96,7 @@ class ContactMe extends React.Component<{}, State> {
                 <Notification type={notificationType} onCloseClick={this.handleNotificationCloseClick} />
               )}
               <Form name="contact" data-netlify="true" netlify-honeypot="bot-field">
-                <div className="is-invisible">
+                <div className="is-none">
                   <label>
                     Don’t fill this out if you're human: <input name="bot-field" />
                   </label>
