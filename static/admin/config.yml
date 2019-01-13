@@ -23,32 +23,53 @@ collections:
     label_singular: 'Offer'
     folder: 'src/offers'
     create: true
-    slug: '{{year}}-{{month}}-{{day}}-{{slug}}'
+    slug: '{{slug}}'
+    fields:
+      - { name: 'collection', label: 'Collection', widget: 'hidden', default: 'schedule' }
+      - { name: 'title', label: 'Title', widget: 'string' }
+      - { name: 'subtitle', label: 'Subtitle', widget: 'string' }
+      - { name: 'image', label: 'Image', widget: 'image' }
+      - name: 'prices'
+        label: 'Prices'
+        widget: 'list'
+        fields:
+          - { name: 'price', label: 'Price', widget: 'number', valueType: 'int', min: 1 }
+          - name: 'type'
+            label: 'Type'
+            widget: 'select'
+            default: 1
+            options:
+              - { label: 'Single', value: 1 }
+              - { label: '10', value: 10 }
+              - { label: '20', value: 20 }
+          - { name: 'validity', label: 'Validity', widget: 'string', required: false }
+      - { name: 'body', label: 'Text', widget: 'markdown' }
+  - name: 'schedule'
+    label: 'Schedule'
+    folder: 'src/schedule'
+    create: true
+    slug: '{{slug}}-{{weekday}}-{{timeOfDay}}'
     fields:
       - { name: 'collection', label: 'Collection', widget: 'hidden', default: 'offer' }
       - { name: 'title', label: 'Title', widget: 'string' }
-      - { name: 'subtitle', label: 'Subtitle', widget: 'string' }
-      - { name: 'image', label: 'Image', widget: 'image' }
-      - { name: 'body', label: 'Text', widget: 'markdown' }
-      - label: 'Schedule'
-        name: 'schedule'
-        widget: 'list'
-        fields:
-          - { name: 'day', label: 'Day', widget: 'string', default: 'Monday' }
-          - { name: 'time', label: 'Time', widget: 'string' }
-  - name: 'prices'
-    label: 'Prices'
-    label_singular: 'Price'
-    folder: 'src/prices'
-    create: true
-    slug: '{{year}}-{{month}}-{{day}}-{{slug}}'
-    fields:
-      - { name: 'collection', label: 'Collection', widget: 'hidden', default: 'price' }
-      - { name: 'title', label: 'Title', widget: 'string' }
-      - { name: 'subtitle', label: 'Subtitle', widget: 'string' }
-      - { name: 'image', label: 'Image', widget: 'image' }
-      - { name: 'price', label: 'Price', widget: 'string' }
-      - { name: 'body', label: 'Text', widget: 'markdown', required: false }
+      - name: 'weekday'
+        label: 'Weekday'
+        widget: 'select'
+        options:
+          - { label: 'Monday', value: 'monday' }
+          - { label: 'Tuesday', value: 'tuesday' }
+          - { label: 'Wednesday', value: 'wednesday' }
+          - { label: 'Thursday', value: 'thursday' }
+          - { label: 'Friday', value: 'friday' }
+          - { label: 'Saturday', value: 'saturday' }
+      - name: 'timeOfDay'
+        label: 'Time of Day'
+        widget: 'select'
+        options:
+          - { label: 'Morning', value: 'morning' }
+          - { label: 'Midday', value: 'midday' }
+          - { label: 'Evening', value: 'evening' }
+      - { name: 'time', label: 'Time', widget: 'string' }
   - name: 'testimonials'
     label: 'Testimonials'
     label_singular: 'Testimonial'

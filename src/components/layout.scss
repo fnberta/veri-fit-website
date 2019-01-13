@@ -3,6 +3,7 @@
 $primary: #fd892c;
 $navbar-height: 4rem;
 $navbar-item-img-max-height: 3rem;
+$navbar-item-hover-color: $primary;
 
 @import '~bulma/bulma';
 
@@ -31,5 +32,11 @@ body {
   &.is-top {
     position: absolute;
     width: 100%;
+  }
+}
+
+.table {
+  td {
+    vertical-align: baseline !important;
   }
 }

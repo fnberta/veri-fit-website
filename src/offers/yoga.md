@@ -3,16 +3,14 @@ collection: offer
 title: Yoga
 subtitle: Stark und beweglich
 image: /assets/yoga.jpg
-schedule:
-  - day: Dienstag
-    time: '18:00 – 19:00'
-  - day: Mittwoch
-    time: '06:15 – 07:15'
-  - day: Mittwoch
-    time: '12:05 – 12:55'
-  - day: Freitag
-    time: '09:15 – 10:15'
-  - day: Samstag
-    time: '09:15 – 10:15'  
+prices:
+  - price: 30
+    type: 1
+  - price: 230
+    type: 10
+    validity: '3 Monate'
+  - price: 430
+    type: 20
+    validity: '6 Monate'
 ---
 Fliessende Abfolgen, wärmende Kräftigung und verlängernde Haltepositionen – beim Yoga sind die Gedanken ganz bei dir und deinem Körper, so kannst du beim Training alles rundherum vergessen.

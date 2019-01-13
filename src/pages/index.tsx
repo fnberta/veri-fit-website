@@ -3,14 +3,13 @@ import { FixedObject, FluidObject } from 'gatsby-image';
 import React from 'react';
 import Layout from '../components/Layout';
 import Navbar from '../components/Navbar';
-import { ScheduleEntry } from '../components/Schedule';
 import { ChildImageSharp, EdgesNode, FluidImage } from '../interfaces';
 import AboutMe from '../sections/AboutMe';
 import ContactMe from '../sections/ContactMe';
 import Hero from '../sections/Hero';
 import LocationMap from '../sections/LocationMap';
-import Offers from '../sections/Offers';
-import Pricing from '../sections/Pricing';
+import Offers, { Price } from '../sections/Offers';
+import Schedule, { TimeOfDay, Weekday } from '../sections/Schedule';
 import Testimonials from '../sections/Testimonials';
 import TryOut from '../sections/TryOut';
 
@@ -24,15 +23,15 @@ export interface Props {
         title: string;
         subtitle: string;
         image: ChildImageSharp<FluidImage>;
-        schedule: ScheduleEntry[] | null;
+        prices: Price[];
       };
     }>;
-    prices: EdgesNode<{
+    schedule: EdgesNode<{
       frontmatter: {
         title: string;
-        subtitle: string;
-        price: number;
-        image: ChildImageSharp<FluidImage>;
+        weekday: Weekday;
+        timeOfDay: TimeOfDay;
+        time: string;
       };
     }>;
     testimonials: EdgesNode<{
@@ -51,12 +50,11 @@ const IndexPage: React.FC<Props> = ({ data }) => (
     <Offers
       offerData={data.offers.edges.map(edge => ({
         ...edge.node.frontmatter,
-        schedule: edge.node.frontmatter.schedule || [],
         html: edge.node.html,
       }))}
     />
     <TryOut />
-    <Pricing priceData={data.prices.edges.map(edge => edge.node.frontmatter)} />
+    <Schedule entries={data.schedule.edges.map(edge => edge.node.frontmatter)} />
     <Testimonials testimonialData={data.testimonials.edges.map(edge => edge.node.frontmatter)} />
     <AboutMe vera={data.vera} />
     <ContactMe />
@@ -96,24 +94,23 @@ export const query = graphql`
             image {
               ...FluidImage
             }
-            schedule {
-              day
-              time
+            prices {
+              price
+              type
+              validity
             }
           }
         }
       }
     }
-    prices: allMarkdownRemark(filter: { frontmatter: { collection: { eq: "price" } } }) {
+    schedule: allMarkdownRemark(filter: { frontmatter: { collection: { eq: "schedule" } } }) {
       edges {
         node {
           frontmatter {
             title
-            subtitle
-            image {
-              ...FluidImage
-            }
-            price
+            weekday
+            timeOfDay
+            time
           }
         }
       }

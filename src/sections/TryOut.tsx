@@ -15,7 +15,7 @@ const TryOut: React.FC = () => (
     <div className="container has-text-centered">
       <Heading className="has-text-light" text="Starte jetzt gleich mit einem Probetraining!" size={3} />
       <a className="button is-primary is-uppercase" role="button" href="#contact">
-        Anmeldung
+        Kontakt
       </a>
     </div>
   </Layout>

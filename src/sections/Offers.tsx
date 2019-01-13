@@ -1,20 +1,34 @@
+import { Link } from 'gatsby';
 import Image, { FluidObject } from 'gatsby-image';
 import React from 'react';
 import Heading from '../components/bulma/Heading';
 import { FullHeightCard } from '../components/Layout';
-import Schedule, { ScheduleEntry } from '../components/Schedule';
 import { ChildImageSharp, FluidImage } from '../interfaces';
+
+export interface Price {
+  price: number;
+  type: number;
+  validity?: string;
+}
 
 export interface OfferData {
   title: string;
   subtitle: string;
   image: ChildImageSharp<FluidImage>;
-  schedule: ScheduleEntry[];
+  prices: Price[];
   html: string;
 }
 
 export interface Props {
   offerData: OfferData[];
+}
+
+function getPriceTypeDisplay(type: number): string {
+  if (type === 1) {
+    return 'Einzeleintritt';
+  }
+
+  return `${type}er Abo`;
 }
 
 const Offers: React.FC<Props> = ({ offerData }) => (
@@ -37,12 +51,38 @@ const Offers: React.FC<Props> = ({ offerData }) => (
               <Heading text={data.title} size={4} />
               <Heading text={data.subtitle} size={5} type="subtitle" />
               <div className="content">
-                <div dangerouslySetInnerHTML={{ __html: data.html }} />
+                <p dangerouslySetInnerHTML={{ __html: data.html }} />
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th>Typ</th>
+                      <th>Preis</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.prices.map(price => (
+                      <tr>
+                        <td>
+                          <div>{getPriceTypeDisplay(price.type)}</div>
+                          {price.validity && <div className="is-size-7">{`(gültig für ${price.validity})`}</div>}
+                        </td>
+                        <td>
+                          <span className="is-size-6">CHF </span>
+                          <span className="is-size-4">{price.price}</span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
-              <Schedule entries={data.schedule} />
             </FullHeightCard>
           </div>
         ))}
+      </div>
+      <div className="content has-text-centered">
+        <p>
+          Es gelten die <Link to="/agb/">allgemeinen Geschäftsbedingungen</Link>
+        </p>
       </div>
     </div>
   </section>

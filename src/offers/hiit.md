@@ -3,10 +3,10 @@ collection: offer
 title: HIIT
 subtitle: High Intensity Interval Training
 image: /assets/hiit.jpg
-schedule:
-  - day: Mittwoch
-    time: '18:45 – 19:30'
+prices:
+  - price: 5
+    type: 1
 ---
 Kurze, hochintensive Intervallübungen, die deinen Körper herausfordern. Mach dich fit für den Sommer – ob für Beachvolleyball, Biken, Surfen, … oder für den Strand. Viel Schweiss = viel Spass!
 
-Das Training findet bei jedem Wetter draussen statt – Teilnahme: CHF 5.-
+Das Training findet bei jedem Wetter draussen statt.

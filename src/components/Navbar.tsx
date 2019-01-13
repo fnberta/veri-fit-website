@@ -29,10 +29,7 @@ class Navbar extends React.Component<{}, State> {
     const { fixed, menuActive } = this.state;
     return (
       <nav
-        className={cx(
-          'navbar',
-          fixed === true ? ['is-fixed-top', 'has-shadow'] : ['is-dark', 'is-transparent', 'is-top'],
-        )}
+        className={cx('navbar', fixed === true ? ['is-fixed-top', 'has-shadow'] : ['is-transparent', 'is-top'])}
         role="navigation"
         aria-label="main navigation"
       >
@@ -43,7 +40,7 @@ class Navbar extends React.Component<{}, State> {
             </a>
             <a
               role="button"
-              className={cx('navbar-burger', 'burger', menuActive === true && 'is-active')}
+              className={cx('navbar-burger', 'burger', { 'is-active': menuActive })}
               aria-label="menu"
               aria-expanded="false"
               onClick={this.handleBurgerClick}
@@ -53,21 +50,21 @@ class Navbar extends React.Component<{}, State> {
               <span aria-hidden="true" />
             </a>
           </div>
-          <div className={cx('navbar-menu', menuActive === true && 'is-active')}>
+          <div className={cx('navbar-menu', { 'is-active': menuActive })}>
             <div className="navbar-end" onClick={this.handleItemClick}>
-              <a className="navbar-item" role="button" href="#home">
+              <a className={cx('navbar-item', { 'has-text-light': !fixed })} role="button" href="#home">
                 Home
               </a>
-              <a className="navbar-item" role="button" href="#offer">
+              <a className={cx('navbar-item', { 'has-text-light': !fixed })} role="button" href="#offer">
                 Angebot
               </a>
-              <a className="navbar-item" role="button" href="#pricing">
-                Preise
+              <a className={cx('navbar-item', { 'has-text-light': !fixed })} role="button" href="#schedule">
+                Stundenplan
               </a>
-              <a className="navbar-item" role="button" href="#about">
+              <a className={cx('navbar-item', { 'has-text-light': !fixed })} role="button" href="#about">
                 Über mich
               </a>
-              <a className="navbar-item" role="button" href="#contact">
+              <a className={cx('navbar-item', { 'has-text-light': !fixed })} role="button" href="#contact">
                 Kontakt
               </a>
             </div>

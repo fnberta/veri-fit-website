@@ -7,9 +7,9 @@ export function parallax(withOverlay?: boolean): CSSObject {
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
-    backgroundAttachment: 'fixed',
-    '@media only screen and (max-device-width: 1023px)': {
-      backgroundAttachment: 'scroll',
+    backgroundAttachment: 'scroll',
+    '@media screen and (min-width: 1023px)': {
+      backgroundAttachment: 'fixed',
     },
     ...(withOverlay === true && {
       position: 'relative',
