@@ -88,6 +88,8 @@ const DocHead: React.FC<Props> = ({ title, lang = 'de-CH', meta = [], keywords =
       <Helmet titleTemplate={`%s | ${data.site.siteMetadata.title}`} meta={getMeta(meta, keywords, data)}>
         <html lang={lang} />
         <title>{title}</title>
+        <link rel="icon" type="image/png" href={require('../images/favicon-32x32.png')} sizes="32x32" />
+        <link rel="icon" type="image/png" href={require('../images/favicon-16x16.png')} sizes="16x16" />
       </Helmet>
     )}
   />
