@@ -41,8 +41,10 @@ const AboutMe: React.FC<Props> = ({ vera }) => (
               <li> Spiraldynamik Basic Med</li>
               <li> Beckenboden Instruktorin</li>
             </ul>
-            <p className="is-size-5">Für Fragen zum Training oder zu mir stehe ich dir gerne zur Verfügung!</p>
           </div>
+          <p className="is-size-5 is-italic is-bold">
+            Für Fragen zum Training oder zu mir stehe ich dir gerne zur Verfügung!
+          </p>
         </div>
       </div>
     </div>
