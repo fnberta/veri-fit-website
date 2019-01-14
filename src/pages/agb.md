@@ -4,7 +4,6 @@ path: /agb
 title: Allgemeine Geschäftsbedingungen
 subtitle: Für alle Kurse von Veri-Fit gelten die folgenden Bestimmungen
 ---
-
 #### Einstieg
 
 Der Einstieg in die Kurse ist nach Absprache jederzeit möglich. Voraussetzung ist, dass freie Plätze
@@ -15,7 +14,7 @@ empfiehlt zudem bei einem Facharzt die gesundheitliche Eignung einzuholen.
 
 Sämtliche Abonnemente sind persönlich, nicht übertrag- oder abänderbar. Wird das Abonnement nicht benutzt
 oder ein Kurs nicht besucht, besteht kein Anspruch auf Reduktion oder Rückerstattung des Betrages. Auf der
-separaten Preisliste oder auf der veri-fit.ch (unter Preise) findest du das gesamte Abo-Angebot sowie deren
+separaten Preisliste oder auf veri-fit.ch findest du das gesamte Abo-Angebot sowie deren
 Gültigkeitsdauer. Beachte, dass bei Veri-Fit das Abo nicht automatisch verlängert wird!
 
 #### Anmeldung Gruppenkurse
@@ -42,7 +41,7 @@ Wiederaufnahme eingestellt werden.
 
 #### Kursgeld
 
-Das Kursgeld ist vor dem Training bar zu bezahlen. Eine Ratenzahlung ist nicht möglich.
+Das Kursgeld ist vor dem Training zu bezahlen. Eine Ratenzahlung ist nicht möglich.
 
 #### Unvorhersehbare Umstände / Änderung der Angebote und Betriebszeiten / Weiterbildung
 
