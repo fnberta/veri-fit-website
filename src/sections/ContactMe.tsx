@@ -108,6 +108,7 @@ class ContactMe extends React.Component<{}, State> {
                     control={
                       <Field
                         className="input"
+                        aria-label="Name"
                         type="text"
                         name="name"
                         placeholder="Name"
@@ -122,6 +123,7 @@ class ContactMe extends React.Component<{}, State> {
                     control={
                       <Field
                         className="input"
+                        aria-label="Email"
                         type="email"
                         name="email"
                         placeholder="Email"
@@ -136,6 +138,7 @@ class ContactMe extends React.Component<{}, State> {
                   control={
                     <Field
                       className="textarea"
+                      aria-label="Nachricht"
                       component="textarea"
                       name="message"
                       placeholder="Wie kann ich dir helfen?"
