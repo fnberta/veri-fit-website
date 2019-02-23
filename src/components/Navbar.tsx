@@ -6,12 +6,14 @@ import React, { useEffect, useState } from 'react';
 const logoOrange = require('../images/logo_orange.png');
 const logoBlue = require('../images/logo_blue.png');
 
-export interface State {
+export interface NavbarItemProps {
+  name: string;
+  href: string;
   fixed: boolean;
   menuActive: boolean;
 }
 
-const NavbarItem: React.FC<State & { name: string; href: string }> = ({ name, href, fixed, menuActive }) => (
+const NavbarItem: React.FC<NavbarItemProps> = ({ name, href, fixed, menuActive }) => (
   <a className={cx('navbar-item', { 'has-text-light': !fixed && !menuActive })} role="button" href={href}>
     {name}
   </a>
