@@ -1,4 +1,4 @@
-import { graphql, StaticQuery } from 'gatsby';
+import { graphql, useStaticQuery } from 'gatsby';
 import React from 'react';
 import Helmet from 'react-helmet';
 
@@ -81,18 +81,16 @@ function getMeta(meta: Meta[], keywords: string[], data: QueryData): Meta[] {
   return list.concat(meta);
 }
 
-const DocHead: React.FC<Props> = ({ title, lang = 'de-CH', meta = [], keywords = [] }) => (
-  <StaticQuery
-    query={DETAILS_QUERY}
-    render={(data: QueryData) => (
-      <Helmet titleTemplate={`%s | ${data.site.siteMetadata.title}`} meta={getMeta(meta, keywords, data)}>
-        <html lang={lang} />
-        <title>{title}</title>
-        <link rel="icon" type="image/png" href={require('../images/favicon-32x32.png')} sizes="32x32" />
-        <link rel="icon" type="image/png" href={require('../images/favicon-16x16.png')} sizes="16x16" />
-      </Helmet>
-    )}
-  />
-);
+const DocHead: React.FC<Props> = ({ title, lang = 'de-CH', meta = [], keywords = [] }) => {
+  const data = useStaticQuery<QueryData>(DETAILS_QUERY);
+  return (
+    <Helmet titleTemplate={`%s | ${data.site.siteMetadata.title}`} meta={getMeta(meta, keywords, data)}>
+      <html lang={lang} />
+      <title>{title}</title>
+      <link rel="icon" type="image/png" href={require('../images/favicon-32x32.png')} sizes="32x32" />
+      <link rel="icon" type="image/png" href={require('../images/favicon-16x16.png')} sizes="16x16" />
+    </Helmet>
+  );
+};
 
 export default DocHead;
