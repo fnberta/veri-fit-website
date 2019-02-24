@@ -1,4 +1,4 @@
-// tslint:disable:no-var-requires
+/* eslint-disable @typescript-eslint/no-var-requires */
 
 import cx from 'classnames';
 import React, { useEffect, useState } from 'react';

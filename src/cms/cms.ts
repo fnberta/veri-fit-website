@@ -5,7 +5,7 @@ import SchedulePreview from './SchedulePreview';
 import TestimonialPreview from './TestimonialPreview';
 
 export interface ImmutableJsRecord {
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getIn: (path: string[]) => any;
 }
 
