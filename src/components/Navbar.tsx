@@ -38,14 +38,14 @@ const Navbar: React.FC<{}> = () => {
 
   return (
     <nav
-      className={cx('navbar', fixed === true ? ['is-fixed-top', 'has-shadow'] : ['is-transparent', 'is-top'])}
+      className={cx('navbar', fixed ? ['is-fixed-top', 'has-shadow'] : ['is-transparent', 'is-top'])}
       role="navigation"
       aria-label="main navigation"
     >
       <div className="container">
         <div className="navbar-brand">
           <a className="navbar-item" href="#home">
-            <img src={fixed === true ? logoBlue : logoOrange} title="Veri-Fit" alt="Veri-Fit" />
+            <img src={fixed ? logoBlue : logoOrange} title="Veri-Fit" alt="Veri-Fit" />
           </a>
           <a
             role="button"

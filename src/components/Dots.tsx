@@ -32,7 +32,7 @@ const Circle = styled.span<{ active: boolean }>(
     transition: 'width 0.2s, height 0.2s',
   },
   ({ active }) => {
-    const size = active === true ? '0.5rem' : '0.375rem';
+    const size = active ? '0.5rem' : '0.375rem';
     return {
       width: size,
       height: size,

@@ -8,6 +8,8 @@ prices:
   - price: 5
     type: 1
 ---
-Kurze, hochintensive Intervallübungen, die deinen Körper herausfordern. Mach dich fit für den Sommer – ob für Beachvolleyball, Biken, Surfen, … oder für den Strand. Viel Schweiss = viel Spass!
+
+Kurze, hochintensive Intervallübungen, die deinen Körper herausfordern. Mach dich fit für den Sommer – ob für
+Beachvolleyball, Biken, Surfen, … oder für den Strand. Viel Schweiss = viel Spass!
 
 Das Training findet bei jedem Wetter draussen statt.

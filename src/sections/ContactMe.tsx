@@ -84,7 +84,7 @@ const ContactMe: React.FC = () => {
   async function handleFormSubmit(values: FormValues, { setSubmitting }: FormikActions<FormValues>) {
     setNotificationType(undefined);
     const successful = await submitForm(values);
-    showNotification(successful === true ? 'success' : 'error');
+    showNotification(successful ? 'success' : 'error');
     setSubmitting(false);
   }
 
