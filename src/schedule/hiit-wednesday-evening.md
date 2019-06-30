@@ -1,7 +1,7 @@
 ---
 collection: schedule
 title: HIIT
-weekday: thursday
+weekday: monday
 timeOfDay: evening
-time: '18:30 - 19:15'
+time: '20:00 - 20:45'
 ---
