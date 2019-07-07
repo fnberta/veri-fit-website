@@ -7,10 +7,10 @@ import Testimonial, { Props as TestimonialProps } from '../components/Testimonia
 import { parallax, verticallySpaced } from '../utils/styles';
 
 export interface Props {
-  testimonialData: TestimonialProps[];
+  data: TestimonialProps[];
 }
 
-const Layout = styled.section(parallax(true), verticallySpaced('1.5rem'), {
+const Section = styled.section(parallax(true), verticallySpaced('1.5rem'), {
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',
@@ -18,23 +18,23 @@ const Layout = styled.section(parallax(true), verticallySpaced('1.5rem'), {
   backgroundImage: `url(${require('../images/testimonials.jpg')})`,
 });
 
-const Testimonials: React.FC<Props> = ({ testimonialData }) => {
+const Testimonials: React.FC<Props> = ({ data }) => {
   const [activeSlideIdx, setActiveSlideIdx] = useState(0);
 
   function handleSlideChange(idx: number) {
-    const length = testimonialData.length;
+    const length = data.length;
     setActiveSlideIdx(idx < length ? idx : idx - length);
   }
 
   return (
-    <Layout className="section">
+    <Section className="section">
       <Carousel value={activeSlideIdx} infinite={true} centered={true} autoPlay={5000} onChange={handleSlideChange}>
-        {testimonialData.map((data, idx) => (
+        {data.map((data, idx) => (
           <Testimonial key={`${data.author}-${idx}`} {...data} />
         ))}
       </Carousel>
-      <Dots activeIdx={activeSlideIdx} onDotClick={handleSlideChange} count={testimonialData.length} />
-    </Layout>
+      <Dots activeIdx={activeSlideIdx} onDotClick={handleSlideChange} count={data.length} />
+    </Section>
   );
 };
 

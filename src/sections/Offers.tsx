@@ -3,22 +3,22 @@ import Image, { FluidObject } from 'gatsby-image';
 import React from 'react';
 import { Title } from '../components/bulma/Heading';
 import Offer, { Price } from '../components/Offer';
-import { ChildImageSharp, FluidImage } from '../interfaces';
+import { FluidImageFragment } from '../generatedGraphQL';
 
 export interface OfferData {
   order: number;
   title: string;
   subtitle: string;
-  image: ChildImageSharp<FluidImage>;
+  image: FluidImageFragment;
   prices: Price[];
   html: string;
 }
 
 export interface Props {
-  offerData: OfferData[];
+  data: OfferData[];
 }
 
-const Offers: React.FC<Props> = ({ offerData }) => (
+const Offers: React.FC<Props> = ({ data }) => (
   <section id="offer" className="section has-background-light">
     <div className="container">
       <Title className="has-text-centered" text="Training für dich!" size={1} />
@@ -32,14 +32,14 @@ const Offers: React.FC<Props> = ({ offerData }) => (
         </p>
       </div>
       <div className="columns">
-        {offerData
+        {data
           .sort((a, b) => a.order - b.order)
           .map((data, idx) => (
             <div key={`${data.title}-${idx}`} className="column">
               <Offer
                 title={data.title}
                 subtitle={data.subtitle}
-                image={<Image fluid={data.image.childImageSharp.fluid} alt="Training image" />}
+                image={<Image fluid={data.image!.childImageSharp!.fluid as FluidObject} alt="Training image" />}
                 prices={data.prices}
                 body={data.html}
               />

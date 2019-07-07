@@ -6,15 +6,15 @@ import { Title } from '../components/bulma/Heading';
 import FindMe from '../components/FindMe';
 import { parallax } from '../utils/styles';
 
-export type NotificationType = 'success' | 'error';
+type NotificationType = 'success' | 'error';
 
-export interface FormValues {
+interface FormValues {
   name: string;
   email: string;
   message: string;
 }
 
-const Layout = styled.section(parallax(true), {
+const Section = styled.section(parallax(true), {
   backgroundImage: `url(${require('../images/sunrise.jpg')})`,
 });
 
@@ -93,7 +93,7 @@ const ContactMe: React.FC = () => {
       initialValues={initialValues}
       onSubmit={handleFormSubmit}
       render={({ errors, isSubmitting }) => (
-        <Layout id="contact" className="section">
+        <Section id="contact" className="section">
           <div className="container">
             <Title text="So findest du mich" size={1} className="has-text-light has-text-centered" />
             <FindMe />
@@ -103,7 +103,7 @@ const ContactMe: React.FC = () => {
             <Form name="contact" data-netlify="true" netlify-honeypot="bot-field">
               <div className="is-none">
                 <label>
-                  Don’t fill this out if you're human: <input name="bot-field" />
+                  Don't fill this out if you're human: <input name="bot-field" />
                 </label>
               </div>
               <HorizontalField>
@@ -155,7 +155,7 @@ const ContactMe: React.FC = () => {
               <SubmitButton text="Senden" submitting={isSubmitting} />
             </Form>
           </div>
-        </Layout>
+        </Section>
       )}
     />
   );

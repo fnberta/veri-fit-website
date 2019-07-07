@@ -2,14 +2,14 @@ import styled from '@emotion/styled';
 import Image, { FluidObject } from 'gatsby-image';
 import React from 'react';
 import { Subtitle } from '../components/bulma/Heading';
-import { ChildImageSharp, FluidImage } from '../interfaces';
+import { FluidImageNoBase64Fragment } from '../generatedGraphQL';
 import { parallax } from '../utils/styles';
 
 export interface Props {
-  logo: ChildImageSharp<FluidImage>;
+  logo: FluidImageNoBase64Fragment;
 }
 
-const Layout = styled.section(parallax(), {
+const Section = styled.section(parallax(), {
   position: 'relative',
   backgroundImage: `url(${require('../images/hero.jpg')})`,
 });
@@ -31,10 +31,10 @@ const ImageTitle = styled.div({
 });
 
 const Hero: React.FC<Props> = ({ logo }) => (
-  <Layout id="home" className="hero is-fullheight">
+  <Section id="home" className="hero is-fullheight">
     <div className="hero-body">
       <ImageTitle>
-        <Image fluid={logo.childImageSharp.fluid} title="Veri-Fit" alt="Veri-Fit" />
+        <Image fluid={logo.childImageSharp!.fluid as FluidObject} title="Veri-Fit" alt="Veri-Fit" />
         <Subtitle
           className="has-text-light is-size-4-touch"
           size={3}
@@ -48,7 +48,7 @@ const Hero: React.FC<Props> = ({ logo }) => (
         />
       </ImageTitle>
     </div>
-  </Layout>
+  </Section>
 );
 
 export default Hero;

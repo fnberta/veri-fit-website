@@ -1,5 +1,23 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+
 const { resolve } = require('path');
 const { fmImagesToRelative } = require('gatsby-remark-relative-images');
+
+exports.createSchemaCustomization = ({ actions }) => {
+  const { createTypes } = actions;
+  const typeDefs = `
+    type SiteSiteMetadata {
+      title: String!
+      description: String!
+      author: String!
+    }
+    
+    type Site implements Node {
+      siteMetadata: SiteSiteMetadata!
+    }
+  `;
+  createTypes(typeDefs);
+};
 
 exports.createPages = async ({ actions, graphql }) => {
   const result = await graphql(`

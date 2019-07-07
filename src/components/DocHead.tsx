@@ -1,6 +1,7 @@
 import { graphql, useStaticQuery } from 'gatsby';
 import React from 'react';
 import Helmet from 'react-helmet';
+import { MetadataQuery, SiteSiteMetadata } from '../generatedGraphQL';
 
 export type Meta = JSX.IntrinsicElements['meta'];
 
@@ -11,18 +12,8 @@ export interface Props {
   keywords?: string[];
 }
 
-interface QueryData {
-  site: {
-    siteMetadata: {
-      title: string;
-      description: string;
-      author: string;
-    };
-  };
-}
-
 const DETAILS_QUERY = graphql`
-  query MetadataQuery {
+  query Metadata {
     site {
       siteMetadata {
         title
@@ -33,9 +24,7 @@ const DETAILS_QUERY = graphql`
   }
 `;
 
-function getMeta(meta: Meta[], keywords: string[], data: QueryData): Meta[] {
-  const { title, description, author } = data.site.siteMetadata;
-
+function getMeta(meta: Meta[], keywords: string[], { title, description, author }: SiteSiteMetadata): Meta[] {
   const list: Meta[] = [
     {
       name: 'description',
@@ -82,9 +71,10 @@ function getMeta(meta: Meta[], keywords: string[], data: QueryData): Meta[] {
 }
 
 const DocHead: React.FC<Props> = ({ title, lang = 'de-CH', meta = [], keywords = [] }) => {
-  const data = useStaticQuery<QueryData>(DETAILS_QUERY);
+  const data = useStaticQuery<MetadataQuery>(DETAILS_QUERY);
+  const { siteMetadata } = data.site!; // we know it's defined
   return (
-    <Helmet titleTemplate={`%s | ${data.site.siteMetadata.title}`} meta={getMeta(meta, keywords, data)}>
+    <Helmet titleTemplate={`%s | ${siteMetadata.title}`} meta={getMeta(meta, keywords, siteMetadata)}>
       <html lang={lang} />
       <title>{title}</title>
       <link rel="icon" type="image/png" href={require('../images/favicon-32x32.png')} sizes="32x32" />
