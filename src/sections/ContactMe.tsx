@@ -74,7 +74,7 @@ async function submitForm(values: FormValues): Promise<boolean> {
 const validate = (value: string) => (value.length === 0 ? 'Required' : undefined);
 
 const ContactMe: React.FC = () => {
-  const [notificationType, setNotificationType] = useState<NotificationType | undefined>(undefined);
+  const [notificationType, setNotificationType] = useState<NotificationType>();
 
   function showNotification(type: NotificationType) {
     setNotificationType(type);
