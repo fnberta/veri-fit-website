@@ -39,7 +39,7 @@ export const FormField: React.FC<FormFieldProps> = ({ label, control, icon, help
       {icon && <Icon className="is-left" icon={icon} />}
       {error && <Icon className="is-small is-right" icon="fa-exclamation-triangle" />}
     </div>
-    {help && <p className="help">This is a help text</p>}
+    {help && <p className="help">{help}</p>}
   </div>
 );
 

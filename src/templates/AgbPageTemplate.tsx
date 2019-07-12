@@ -3,17 +3,10 @@ import React from 'react';
 import Body from '../components/Body';
 import { Subtitle, Title } from '../components/bulma/Heading';
 import Layout from '../components/Layout';
+import { AgbPageQuery } from '../generatedGraphQL';
 
 export interface Props {
-  data: {
-    markdownRemark: {
-      html: string;
-      frontmatter: {
-        title: string;
-        subtitle: string;
-      };
-    };
-  };
+  data: AgbPageQuery;
 }
 
 export interface TemplateProps {
@@ -35,14 +28,14 @@ export const AgbTemplate: React.FC<TemplateProps> = ({ title, subtitle, body }) 
 );
 
 const AgbPageTemplate: React.FC<Props> = ({ data }) => {
-  const { frontmatter, html } = data.markdownRemark;
-  return <AgbTemplate title={frontmatter.title} subtitle={frontmatter.subtitle} body={html} />;
+  const { frontmatter, html } = data.markdownRemark!;
+  return <AgbTemplate title={frontmatter!.title!} subtitle={frontmatter!.subtitle!} body={html!} />;
 };
 
 export default AgbPageTemplate;
 
 export const query = graphql`
-  query AgbPageQuery($path: String!) {
+  query AgbPage($path: String!) {
     markdownRemark(frontmatter: { path: { eq: $path } }) {
       html
       frontmatter {

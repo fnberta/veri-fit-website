@@ -6,18 +6,11 @@
     "noEmit": true,
     "esModuleInterop": true,
     "strict": true,
-    "skipLibCheck": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
+    "noUnusedLocals": true,
     "jsx": "react",
-    "lib": [
-      "es2015",
-      "dom"
-    ]
-  },
-  "include": [
-    "src/**/*",
-    "typings/**/*"
-  ]
+    "lib": ["es2015", "dom"]
+  }
 }

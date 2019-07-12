@@ -1,10 +1,10 @@
 import Image, { FluidObject } from 'gatsby-image';
 import React from 'react';
 import { Subtitle, Title } from '../components/bulma/Heading';
-import { ChildImageSharp, FluidImage } from '../interfaces';
+import { FluidImageFragment } from '../generatedGraphQL';
 
 export interface Props {
-  vera: ChildImageSharp<FluidImage>;
+  vera: FluidImageFragment;
 }
 
 const IMG_STYLE = { height: '100%' };
@@ -13,7 +13,12 @@ const AboutMe: React.FC<Props> = ({ vera }) => (
   <section id="about">
     <div className="columns is-marginless">
       <div className="column is-two-fifths is-paddingless">
-        <Image fluid={vera.childImageSharp.fluid} title="Vera Lienhard" alt="Vera Lienhard" style={IMG_STYLE} />
+        <Image
+          fluid={vera.childImageSharp!.fluid as FluidObject}
+          title="Vera Lienhard"
+          alt="Vera Lienhard"
+          style={IMG_STYLE}
+        />
       </div>
       <div className="column has-background-light">
         <div className="section">
@@ -27,7 +32,7 @@ const AboutMe: React.FC<Props> = ({ vera }) => (
               zielgerichtet gestärkt und erweitert. Gekoppelt mit meiner langjährigen Erfahrung im Unterrichten von
               Fitness-Stunden und Personal Trainings kann ich dich beim Erreichen deiner Ziele optimal unterstützen.
             </p>
-            <p className="is-italic">Let’s do this!</p>
+            <p className="is-italic">Let's do this!</p>
           </div>
           <Title text="Ausbildungen" size={5} />
           <div className="content">

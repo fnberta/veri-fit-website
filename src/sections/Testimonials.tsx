@@ -1,20 +1,16 @@
 import Carousel from '@brainhubeu/react-carousel';
 import '@brainhubeu/react-carousel/lib/style.css';
 import styled from '@emotion/styled';
-import React from 'react';
+import React, { useState } from 'react';
 import Dots from '../components/Dots';
 import Testimonial, { Props as TestimonialProps } from '../components/Testimonial';
 import { parallax, verticallySpaced } from '../utils/styles';
 
 export interface Props {
-  testimonialData: TestimonialProps[];
+  data: TestimonialProps[];
 }
 
-export interface State {
-  activeSlideIdx: number;
-}
-
-const Layout = styled.section(parallax(true), verticallySpaced('1.5rem'), {
+const Section = styled.section(parallax(true), verticallySpaced('1.5rem'), {
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',
@@ -22,35 +18,24 @@ const Layout = styled.section(parallax(true), verticallySpaced('1.5rem'), {
   backgroundImage: `url(${require('../images/testimonials.jpg')})`,
 });
 
-class Testimonials extends React.Component<Props, State> {
-  readonly state: State = { activeSlideIdx: 0 };
+const Testimonials: React.FC<Props> = ({ data }) => {
+  const [activeSlideIdx, setActiveSlideIdx] = useState(0);
 
-  render() {
-    const { testimonialData } = this.props;
-    const { activeSlideIdx } = this.state;
-    return (
-      <Layout className="section">
-        <Carousel
-          value={activeSlideIdx}
-          infinite={true}
-          centered={true}
-          autoPlay={5000}
-          onChange={this.handleSlideChange}
-        >
-          {testimonialData.map((data, idx) => (
-            <Testimonial key={`${data.author}-${idx}`} {...data} />
-          ))}
-        </Carousel>
-        <Dots activeIdx={activeSlideIdx} onDotClick={this.handleSlideChange} count={testimonialData.length} />
-      </Layout>
-    );
+  function handleSlideChange(idx: number) {
+    const length = data.length;
+    setActiveSlideIdx(idx < length ? idx : idx - length);
   }
 
-  private handleSlideChange = (idx: number) => {
-    const length = this.props.testimonialData.length;
-    const activeSlideIdx = idx < length ? idx : idx - length;
-    this.setState({ activeSlideIdx });
-  };
-}
+  return (
+    <Section className="section">
+      <Carousel value={activeSlideIdx} infinite={true} centered={true} autoPlay={5000} onChange={handleSlideChange}>
+        {data.map((data, idx) => (
+          <Testimonial key={`${data.author}-${idx}`} {...data} />
+        ))}
+      </Carousel>
+      <Dots activeIdx={activeSlideIdx} onDotClick={handleSlideChange} count={data.length} />
+    </Section>
+  );
+};
 
 export default Testimonials;

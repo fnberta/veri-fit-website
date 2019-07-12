@@ -3,7 +3,7 @@ import React from 'react';
 import { Title } from '../components/bulma/Heading';
 import { parallax } from '../utils/styles';
 
-const Layout = styled.section(parallax(true), {
+const Section = styled.section(parallax(true), {
   minHeight: '20rem',
   display: 'flex',
   alignItems: 'center',
@@ -11,7 +11,7 @@ const Layout = styled.section(parallax(true), {
 });
 
 const Current: React.FC = () => (
-  <Layout className="section">
+  <Section className="section">
     <div className="container has-text-centered">
       <Title className="has-text-light" text="Aktuell: Training über die Festtage!" size={3} />
       <div className="content has-text-light">
@@ -20,7 +20,7 @@ const Current: React.FC = () => (
         <p>HIIT Mi 26.12.18 10.45-11.30 Uhr</p>
       </div>
     </div>
-  </Layout>
+  </Section>
 );
 
 export default Current;

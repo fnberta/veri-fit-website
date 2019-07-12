@@ -14,4 +14,6 @@ prices:
     type: 20
     validity: '6 Monate'
 ---
-Fliessende Abfolgen, wärmende Kräftigung und verlängernde Haltepositionen – beim Yoga sind die Gedanken ganz bei dir und deinem Körper, so kannst du beim Training alles rundherum vergessen.
+
+Fliessende Abfolgen, wärmende Kräftigung und verlängernde Haltepositionen – beim Yoga sind die Gedanken ganz bei dir und
+deinem Körper, so kannst du beim Training alles rundherum vergessen.

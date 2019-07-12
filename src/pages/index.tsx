@@ -1,64 +1,32 @@
 import { graphql } from 'gatsby';
-import { FixedObject, FluidObject } from 'gatsby-image';
 import React from 'react';
 import Layout from '../components/Layout';
 import Navbar from '../components/Navbar';
-import { Price } from '../components/Offer';
-import { ChildImageSharp, EdgesNode, FluidImage } from '../interfaces';
+import { IndexPageQuery } from '../generatedGraphQL';
 import AboutMe from '../sections/AboutMe';
 import ContactMe from '../sections/ContactMe';
 import Hero from '../sections/Hero';
 import LocationMap from '../sections/LocationMap';
-import Offers from '../sections/Offers';
-import Schedule from '../sections/Schedule';
+import Offers, { OfferData } from '../sections/Offers';
+import Schedule, { ScheduleEntryData } from '../sections/Schedule';
 import Testimonials from '../sections/Testimonials';
+import { Props as TestimonialProps } from '../components/Testimonial';
 import TryOut from '../sections/TryOut';
 
 export interface Props {
-  data: {
-    logo: ChildImageSharp<FluidImage>;
-    vera: ChildImageSharp<FluidImage>;
-    offers: EdgesNode<{
-      html: string;
-      frontmatter: {
-        order: number;
-        title: string;
-        subtitle: string;
-        image: ChildImageSharp<FluidImage>;
-        prices: Price[];
-      };
-    }>;
-    schedule: EdgesNode<{
-      frontmatter: {
-        title: string;
-        weekday: string;
-        timeOfDay: string;
-        time: string;
-      };
-    }>;
-    testimonials: EdgesNode<{
-      frontmatter: {
-        author: string;
-        quote: string;
-      };
-    }>;
-  };
+  data: IndexPageQuery;
 }
 
+// lot's of assertions here, would need proper graphql schema customization to fix
 const IndexPage: React.FC<Props> = ({ data }) => (
   <Layout title="Home">
     <Navbar />
-    <Hero logo={data.logo} />
-    <Offers
-      offerData={data.offers.edges.map(edge => ({
-        ...edge.node.frontmatter,
-        html: edge.node.html,
-      }))}
-    />
+    <Hero logo={data.logo!} />
+    <Offers data={data.offers!.nodes.map(node => ({ ...node.frontmatter, html: node.html } as OfferData))} />
     <TryOut />
-    <Schedule entries={data.schedule.edges.map(edge => edge.node.frontmatter)} />
-    <Testimonials testimonialData={data.testimonials.edges.map(edge => edge.node.frontmatter)} />
-    <AboutMe vera={data.vera} />
+    <Schedule entries={data.schedule!.nodes.map(node => node.frontmatter as ScheduleEntryData)} />
+    <Testimonials data={data.testimonials!.nodes.map(node => node.frontmatter as TestimonialProps)} />
+    <AboutMe vera={data.vera!} />
     <ContactMe />
     <LocationMap />
   </Layout>
@@ -67,6 +35,14 @@ const IndexPage: React.FC<Props> = ({ data }) => (
 export default IndexPage;
 
 export const query = graphql`
+  fragment FluidImageNoBase64 on File {
+    childImageSharp {
+      fluid {
+        ...GatsbyImageSharpFluid_noBase64
+      }
+    }
+  }
+
   fragment FluidImage on File {
     childImageSharp {
       fluid {
@@ -75,56 +51,46 @@ export const query = graphql`
     }
   }
 
-  query IndexPageQuery {
+  query IndexPage {
     logo: file(relativePath: { eq: "logo_orange.png" }) {
-      childImageSharp {
-        fluid {
-          ...GatsbyImageSharpFluid_noBase64
-        }
-      }
+      ...FluidImageNoBase64
     }
     vera: file(relativePath: { eq: "vera.jpg" }) {
       ...FluidImage
     }
     offers: allMarkdownRemark(filter: { frontmatter: { collection: { eq: "offer" } } }) {
-      edges {
-        node {
-          html
-          frontmatter {
-            order
-            title
-            subtitle
-            image {
-              ...FluidImage
-            }
-            prices {
-              price
-              type
-              validity
-            }
+      nodes {
+        html
+        frontmatter {
+          order
+          title
+          subtitle
+          image {
+            ...FluidImage
+          }
+          prices {
+            price
+            type
+            validity
           }
         }
       }
     }
     schedule: allMarkdownRemark(filter: { frontmatter: { collection: { eq: "schedule" } } }) {
-      edges {
-        node {
-          frontmatter {
-            title
-            weekday
-            timeOfDay
-            time
-          }
+      nodes {
+        frontmatter {
+          title
+          weekday
+          timeOfDay
+          time
         }
       }
     }
     testimonials: allMarkdownRemark(filter: { frontmatter: { collection: { eq: "testimonial" } } }) {
-      edges {
-        node {
-          frontmatter {
-            author
-            quote
-          }
+      nodes {
+        frontmatter {
+          author
+          quote
         }
       }
     }

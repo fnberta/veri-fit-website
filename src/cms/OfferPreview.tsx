@@ -9,7 +9,7 @@ const OfferPreview: React.FC<PreviewProps> = ({ entry, widgetFor, widgetsFor, ge
     validity: price.getIn(['data', 'validity']),
   }));
   const asset = getAsset(entry.getIn(['data', 'image']));
-  const image = asset ? <img src={asset.toString()} alt="Training image" /> : undefined;
+  const image = asset ? <img src={asset.toString()} alt="Training" /> : undefined;
   return (
     <Offer
       title={entry.getIn(['data', 'title'])}

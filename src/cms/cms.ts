@@ -1,11 +1,11 @@
-import CMS from 'netlify-cms';
+import CMS from 'netlify-cms-app';
 import AgbPagePreview from './AbgPagePreview';
 import OfferPreview from './OfferPreview';
 import SchedulePreview from './SchedulePreview';
 import TestimonialPreview from './TestimonialPreview';
 
 export interface ImmutableJsRecord {
-  // tslint:disable-next-line:no-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getIn: (path: string[]) => any;
 }
 
