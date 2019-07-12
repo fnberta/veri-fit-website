@@ -1,4 +1,4 @@
-import CMS from 'netlify-cms';
+import CMS from 'netlify-cms-app';
 import AgbPagePreview from './AbgPagePreview';
 import OfferPreview from './OfferPreview';
 import SchedulePreview from './SchedulePreview';
