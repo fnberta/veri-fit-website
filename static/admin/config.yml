@@ -25,7 +25,7 @@ collections:
     create: true
     slug: '{{slug}}'
     fields:
-      - { name: 'collection', label: 'Collection', widget: 'hidden', default: 'schedule' }
+      - { name: 'collection', label: 'Collection', widget: 'hidden', default: 'offer' }
       - { name: 'order', label: 'Order', widget: 'number', valueType: 'int', min: 1 }
       - { name: 'title', label: 'Title', widget: 'string' }
       - { name: 'subtitle', label: 'Subtitle', widget: 'string' }
@@ -51,7 +51,7 @@ collections:
     create: true
     slug: '{{slug}}-{{weekday}}-{{timeOfDay}}'
     fields:
-      - { name: 'collection', label: 'Collection', widget: 'hidden', default: 'offer' }
+      - { name: 'collection', label: 'Collection', widget: 'hidden', default: 'schedule' }
       - { name: 'title', label: 'Title', widget: 'string' }
       - name: 'weekday'
         label: 'Weekday'
