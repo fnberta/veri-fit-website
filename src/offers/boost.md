@@ -1,5 +1,5 @@
 ---
-collection: schedule
+collection: offer
 order: 4
 title: BOOST
 subtitle: Funktionelles Krafttraining
@@ -9,4 +9,7 @@ prices:
     type: 20
     validity: Trainingsblock - 8 Wochen
 ---
-Funktionelles Krafttraining für dynamisch kraftvolle und athletische Bewegungen - in jeweils 8-wöchigen aufeinander aufbauenden Trainingsblocks trainieren wir mit funktionellen Übungen deine Muskeln. Durch die aufbauende Trainingsstruktur profitierst du auch langfristig von mehr Dynamik und Stabilität.
+
+Funktionelles Krafttraining für dynamisch kraftvolle und athletische Bewegungen - in jeweils 8-wöchigen aufeinander
+aufbauenden Trainingsblocks trainieren wir mit funktionellen Übungen deine Muskeln. Durch die aufbauende
+Trainingsstruktur profitierst du auch langfristig von mehr Dynamik und Stabilität.
