@@ -5,9 +5,9 @@ title: BOOST
 subtitle: Funktionelles Krafttraining
 image: /assets/boost_placeholder.jpg
 prices:
-  - price: 160
-    type: 20
-    validity: Trainingsblock - 8 Wochen
+  - price: 200
+    type: 16
+    validity: Trainingsblock
 ---
 
 Funktionelles Krafttraining für dynamisch kraftvolle und athletische Bewegungen - in jeweils 8-wöchigen aufeinander
