@@ -1,8 +1,9 @@
 import styled from '@emotion/styled';
 import React from 'react';
+import { ClassNameProps } from '../interfaces';
 import { range } from '../utils/numbers';
 
-export interface Props {
+export interface Props extends ClassNameProps {
   count: number;
   activeIdx: number;
   onDotClick: (idx: number) => void;
@@ -46,8 +47,8 @@ const Dot: React.FC<{ active: boolean; onClick: React.MouseEventHandler<HTMLElem
   </DotLayout>
 );
 
-const Dots: React.FC<Props> = ({ count, activeIdx, onDotClick }) => (
-  <Layout>
+const Dots: React.FC<Props> = ({ count, activeIdx, onDotClick, className }) => (
+  <Layout className={className}>
     {range(0, count).map(idx => (
       <Dot key={idx} active={activeIdx === idx} onClick={() => onDotClick(idx)} />
     ))}

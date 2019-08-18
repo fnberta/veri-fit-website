@@ -1,7 +1,5 @@
 import { CSSObject } from '@emotion/core';
 
-export type BoxUnit = number | string;
-
 export function parallax(withOverlay?: boolean): CSSObject {
   return {
     backgroundPosition: 'center',
@@ -24,27 +22,5 @@ export function parallax(withOverlay?: boolean): CSSObject {
         opacity: 0.5,
       },
     }),
-  };
-}
-
-export function verticallySpaced(margin: BoxUnit): CSSObject {
-  return {
-    '&>*': {
-      marginBottom: margin,
-    },
-    '&>*:last-child': {
-      marginBottom: 0,
-    },
-  };
-}
-
-export function horizontallySpaced(margin: BoxUnit): CSSObject {
-  return {
-    '&>*': {
-      marginRight: margin,
-    },
-    '&>*:last-child': {
-      marginRight: 0,
-    },
   };
 }

@@ -65,13 +65,11 @@ const Schedule: React.FC<Props> = ({ entries }) => {
     <section id="schedule" className="section has-background-light">
       <div className="container has-text-centered">
         <Title text="Stundenplan" size={1} />
-        <div className="content has-text-centered">
-          <p>
-            Die Zeiten für die Gruppenstunden findest du hier. Ich freue mich auf deinen Besuch! <br /> Um einen Termin
-            für ein Personal Training zu vereinbaren, <a href="#contact">melde</a> dich doch gleich direkt bei mir.
-          </p>
-        </div>
-        <Layout>
+        <p className="block">
+          Die Zeiten für die Gruppenstunden findest du hier. Ich freue mich auf deinen Besuch! <br /> Um einen Termin
+          für ein Personal Training zu vereinbaren, <a href="#contact">melde</a> dich doch gleich direkt bei mir.
+        </p>
+        <Layout className="block">
           <ItemsBlock title="Montag" entries={monday} />
           <ItemsBlock title="Dienstag" entries={tuesday} />
           <ItemsBlock title="Mittwoch" entries={wednesday} />
@@ -79,6 +77,21 @@ const Schedule: React.FC<Props> = ({ entries }) => {
           <ItemsBlock title="Freitag" entries={friday} />
           <ItemsBlock title="Samstag" entries={saturday} />
         </Layout>
+        <div className="block">
+          <Title text="Neuer Stundenplan ab 16. September 2019!" size={4} />
+          <Subtitle
+            text={
+              <>
+                {'Eine Übersicht der neuen Trainingszeiten findest du in meinem aktuellen '}
+                <a href="/assets/VeriFit_Flyer_Herbst19.pdf" target="_blank">
+                  Flyer
+                </a>
+                {'.'}
+              </>
+            }
+            size={6}
+          />
+        </div>
       </div>
     </section>
   );

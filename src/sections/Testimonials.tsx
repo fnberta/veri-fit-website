@@ -4,13 +4,13 @@ import styled from '@emotion/styled';
 import React, { useState } from 'react';
 import Dots from '../components/Dots';
 import Testimonial, { Props as TestimonialProps } from '../components/Testimonial';
-import { parallax, verticallySpaced } from '../utils/styles';
+import { parallax } from '../utils/styles';
 
 export interface Props {
   data: TestimonialProps[];
 }
 
-const Section = styled.section(parallax(true), verticallySpaced('1.5rem'), {
+const Section = styled.section(parallax(true), {
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',
@@ -28,12 +28,19 @@ const Testimonials: React.FC<Props> = ({ data }) => {
 
   return (
     <Section className="section">
-      <Carousel value={activeSlideIdx} infinite={true} centered={true} autoPlay={5000} onChange={handleSlideChange}>
+      <Carousel
+        className="block"
+        value={activeSlideIdx}
+        infinite={true}
+        centered={true}
+        autoPlay={5000}
+        onChange={handleSlideChange}
+      >
         {data.map((data, idx) => (
           <Testimonial key={`${data.author}-${idx}`} {...data} />
         ))}
       </Carousel>
-      <Dots activeIdx={activeSlideIdx} onDotClick={handleSlideChange} count={data.length} />
+      <Dots className="block" activeIdx={activeSlideIdx} onDotClick={handleSlideChange} count={data.length} />
     </Section>
   );
 };

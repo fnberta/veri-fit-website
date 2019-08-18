@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 import React from 'react';
-import { verticallySpaced } from '../utils/styles';
 import { Title } from './bulma/Heading';
 
 export interface Props {
@@ -8,7 +7,7 @@ export interface Props {
   quote: string;
 }
 
-const Layout = styled.div(verticallySpaced('1.5rem'), {
+const Layout = styled.div({
   display: 'flex',
   flexDirection: 'column',
   maxWidth: '720px',
@@ -23,8 +22,8 @@ const Quote = styled.blockquote({
 
 const Testimonial: React.FC<Props> = ({ author, quote }) => (
   <Layout>
-    <Quote className="has-text-light is-italic is-size-4 has-text-weight-light has-text-centered">{quote}</Quote>
-    <Title className="has-text-light" size={6} text={`– ${author}`} />
+    <Quote className="block has-text-light is-italic is-size-4 has-text-weight-light has-text-centered">{quote}</Quote>
+    <Title className="block has-text-light" size={6} text={`– ${author}`} />
   </Layout>
 );
 
