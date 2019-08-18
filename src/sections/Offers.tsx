@@ -31,11 +31,11 @@ const Offers: React.FC<Props> = ({ data }) => (
           Finde dein optimales Training – für dein Wohlbefinden – für deinen Erfolg – für dich!
         </p>
       </div>
-      <div className="columns">
+      <div className="columns is-multiline">
         {data
           .sort((a, b) => a.order - b.order)
           .map((data, idx) => (
-            <div key={`${data.title}-${idx}`} className="column">
+            <div key={`${data.title}-${idx}`} className="column is-6">
               <Offer
                 title={data.title}
                 subtitle={data.subtitle}
