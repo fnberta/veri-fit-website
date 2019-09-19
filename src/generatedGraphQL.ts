@@ -7,9 +7,10 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** A date string, such as 2007-12-03, compliant with the ISO 8601 standard for
+  /**
+   * A date string, such as 2007-12-03, compliant with the ISO 8601 standard for
    * representation of dates and times using the Gregorian calendar.
-   */
+   **/
   Date: any;
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: any;
@@ -335,16 +336,10 @@ export type DirectorySortInput = {
 };
 
 export type DuotoneGradient = {
-  highlight?: Maybe<Scalars['String']>;
-  shadow?: Maybe<Scalars['String']>;
+  highlight: Scalars['String'];
+  shadow: Scalars['String'];
   opacity?: Maybe<Scalars['Int']>;
 };
-
-export enum ExcerptFormats {
-  Plain = 'PLAIN',
-  Html = 'HTML',
-  Markdown = 'MARKDOWN',
-}
 
 export type File = Node & {
   __typename?: 'File';
@@ -588,6 +583,199 @@ export enum FileFieldsEnum {
   InternalMediaType = 'internal___mediaType',
   InternalOwner = 'internal___owner',
   InternalType = 'internal___type',
+  ChildImageSharpId = 'childImageSharp___id',
+  ChildImageSharpFixedBase64 = 'childImageSharp___fixed___base64',
+  ChildImageSharpFixedTracedSvg = 'childImageSharp___fixed___tracedSVG',
+  ChildImageSharpFixedAspectRatio = 'childImageSharp___fixed___aspectRatio',
+  ChildImageSharpFixedWidth = 'childImageSharp___fixed___width',
+  ChildImageSharpFixedHeight = 'childImageSharp___fixed___height',
+  ChildImageSharpFixedSrc = 'childImageSharp___fixed___src',
+  ChildImageSharpFixedSrcSet = 'childImageSharp___fixed___srcSet',
+  ChildImageSharpFixedSrcWebp = 'childImageSharp___fixed___srcWebp',
+  ChildImageSharpFixedSrcSetWebp = 'childImageSharp___fixed___srcSetWebp',
+  ChildImageSharpFixedOriginalName = 'childImageSharp___fixed___originalName',
+  ChildImageSharpResolutionsBase64 = 'childImageSharp___resolutions___base64',
+  ChildImageSharpResolutionsTracedSvg = 'childImageSharp___resolutions___tracedSVG',
+  ChildImageSharpResolutionsAspectRatio = 'childImageSharp___resolutions___aspectRatio',
+  ChildImageSharpResolutionsWidth = 'childImageSharp___resolutions___width',
+  ChildImageSharpResolutionsHeight = 'childImageSharp___resolutions___height',
+  ChildImageSharpResolutionsSrc = 'childImageSharp___resolutions___src',
+  ChildImageSharpResolutionsSrcSet = 'childImageSharp___resolutions___srcSet',
+  ChildImageSharpResolutionsSrcWebp = 'childImageSharp___resolutions___srcWebp',
+  ChildImageSharpResolutionsSrcSetWebp = 'childImageSharp___resolutions___srcSetWebp',
+  ChildImageSharpResolutionsOriginalName = 'childImageSharp___resolutions___originalName',
+  ChildImageSharpFluidBase64 = 'childImageSharp___fluid___base64',
+  ChildImageSharpFluidTracedSvg = 'childImageSharp___fluid___tracedSVG',
+  ChildImageSharpFluidAspectRatio = 'childImageSharp___fluid___aspectRatio',
+  ChildImageSharpFluidSrc = 'childImageSharp___fluid___src',
+  ChildImageSharpFluidSrcSet = 'childImageSharp___fluid___srcSet',
+  ChildImageSharpFluidSrcWebp = 'childImageSharp___fluid___srcWebp',
+  ChildImageSharpFluidSrcSetWebp = 'childImageSharp___fluid___srcSetWebp',
+  ChildImageSharpFluidSizes = 'childImageSharp___fluid___sizes',
+  ChildImageSharpFluidOriginalImg = 'childImageSharp___fluid___originalImg',
+  ChildImageSharpFluidOriginalName = 'childImageSharp___fluid___originalName',
+  ChildImageSharpFluidPresentationWidth = 'childImageSharp___fluid___presentationWidth',
+  ChildImageSharpFluidPresentationHeight = 'childImageSharp___fluid___presentationHeight',
+  ChildImageSharpSizesBase64 = 'childImageSharp___sizes___base64',
+  ChildImageSharpSizesTracedSvg = 'childImageSharp___sizes___tracedSVG',
+  ChildImageSharpSizesAspectRatio = 'childImageSharp___sizes___aspectRatio',
+  ChildImageSharpSizesSrc = 'childImageSharp___sizes___src',
+  ChildImageSharpSizesSrcSet = 'childImageSharp___sizes___srcSet',
+  ChildImageSharpSizesSrcWebp = 'childImageSharp___sizes___srcWebp',
+  ChildImageSharpSizesSrcSetWebp = 'childImageSharp___sizes___srcSetWebp',
+  ChildImageSharpSizesSizes = 'childImageSharp___sizes___sizes',
+  ChildImageSharpSizesOriginalImg = 'childImageSharp___sizes___originalImg',
+  ChildImageSharpSizesOriginalName = 'childImageSharp___sizes___originalName',
+  ChildImageSharpSizesPresentationWidth = 'childImageSharp___sizes___presentationWidth',
+  ChildImageSharpSizesPresentationHeight = 'childImageSharp___sizes___presentationHeight',
+  ChildImageSharpOriginalWidth = 'childImageSharp___original___width',
+  ChildImageSharpOriginalHeight = 'childImageSharp___original___height',
+  ChildImageSharpOriginalSrc = 'childImageSharp___original___src',
+  ChildImageSharpResizeSrc = 'childImageSharp___resize___src',
+  ChildImageSharpResizeTracedSvg = 'childImageSharp___resize___tracedSVG',
+  ChildImageSharpResizeWidth = 'childImageSharp___resize___width',
+  ChildImageSharpResizeHeight = 'childImageSharp___resize___height',
+  ChildImageSharpResizeAspectRatio = 'childImageSharp___resize___aspectRatio',
+  ChildImageSharpResizeOriginalName = 'childImageSharp___resize___originalName',
+  ChildImageSharpParentId = 'childImageSharp___parent___id',
+  ChildImageSharpParentParentId = 'childImageSharp___parent___parent___id',
+  ChildImageSharpParentParentChildren = 'childImageSharp___parent___parent___children',
+  ChildImageSharpParentChildren = 'childImageSharp___parent___children',
+  ChildImageSharpParentChildrenId = 'childImageSharp___parent___children___id',
+  ChildImageSharpParentChildrenChildren = 'childImageSharp___parent___children___children',
+  ChildImageSharpParentInternalContent = 'childImageSharp___parent___internal___content',
+  ChildImageSharpParentInternalContentDigest = 'childImageSharp___parent___internal___contentDigest',
+  ChildImageSharpParentInternalDescription = 'childImageSharp___parent___internal___description',
+  ChildImageSharpParentInternalFieldOwners = 'childImageSharp___parent___internal___fieldOwners',
+  ChildImageSharpParentInternalIgnoreType = 'childImageSharp___parent___internal___ignoreType',
+  ChildImageSharpParentInternalMediaType = 'childImageSharp___parent___internal___mediaType',
+  ChildImageSharpParentInternalOwner = 'childImageSharp___parent___internal___owner',
+  ChildImageSharpParentInternalType = 'childImageSharp___parent___internal___type',
+  ChildImageSharpChildren = 'childImageSharp___children',
+  ChildImageSharpChildrenId = 'childImageSharp___children___id',
+  ChildImageSharpChildrenParentId = 'childImageSharp___children___parent___id',
+  ChildImageSharpChildrenParentChildren = 'childImageSharp___children___parent___children',
+  ChildImageSharpChildrenChildren = 'childImageSharp___children___children',
+  ChildImageSharpChildrenChildrenId = 'childImageSharp___children___children___id',
+  ChildImageSharpChildrenChildrenChildren = 'childImageSharp___children___children___children',
+  ChildImageSharpChildrenInternalContent = 'childImageSharp___children___internal___content',
+  ChildImageSharpChildrenInternalContentDigest = 'childImageSharp___children___internal___contentDigest',
+  ChildImageSharpChildrenInternalDescription = 'childImageSharp___children___internal___description',
+  ChildImageSharpChildrenInternalFieldOwners = 'childImageSharp___children___internal___fieldOwners',
+  ChildImageSharpChildrenInternalIgnoreType = 'childImageSharp___children___internal___ignoreType',
+  ChildImageSharpChildrenInternalMediaType = 'childImageSharp___children___internal___mediaType',
+  ChildImageSharpChildrenInternalOwner = 'childImageSharp___children___internal___owner',
+  ChildImageSharpChildrenInternalType = 'childImageSharp___children___internal___type',
+  ChildImageSharpInternalContent = 'childImageSharp___internal___content',
+  ChildImageSharpInternalContentDigest = 'childImageSharp___internal___contentDigest',
+  ChildImageSharpInternalDescription = 'childImageSharp___internal___description',
+  ChildImageSharpInternalFieldOwners = 'childImageSharp___internal___fieldOwners',
+  ChildImageSharpInternalIgnoreType = 'childImageSharp___internal___ignoreType',
+  ChildImageSharpInternalMediaType = 'childImageSharp___internal___mediaType',
+  ChildImageSharpInternalOwner = 'childImageSharp___internal___owner',
+  ChildImageSharpInternalType = 'childImageSharp___internal___type',
+  ChildMarkdownRemarkId = 'childMarkdownRemark___id',
+  ChildMarkdownRemarkFrontmatterTitle = 'childMarkdownRemark___frontmatter___title',
+  ChildMarkdownRemarkFrontmatterCollection = 'childMarkdownRemark___frontmatter___collection',
+  ChildMarkdownRemarkFrontmatterPath = 'childMarkdownRemark___frontmatter___path',
+  ChildMarkdownRemarkFrontmatterSubtitle = 'childMarkdownRemark___frontmatter___subtitle',
+  ChildMarkdownRemarkFrontmatterAuthor = 'childMarkdownRemark___frontmatter___author',
+  ChildMarkdownRemarkFrontmatterQuote = 'childMarkdownRemark___frontmatter___quote',
+  ChildMarkdownRemarkFrontmatterOrder = 'childMarkdownRemark___frontmatter___order',
+  ChildMarkdownRemarkFrontmatterImageBirthtime = 'childMarkdownRemark___frontmatter___image___birthtime',
+  ChildMarkdownRemarkFrontmatterImageBirthtimeMs = 'childMarkdownRemark___frontmatter___image___birthtimeMs',
+  ChildMarkdownRemarkFrontmatterImageSourceInstanceName = 'childMarkdownRemark___frontmatter___image___sourceInstanceName',
+  ChildMarkdownRemarkFrontmatterImageAbsolutePath = 'childMarkdownRemark___frontmatter___image___absolutePath',
+  ChildMarkdownRemarkFrontmatterImageRelativePath = 'childMarkdownRemark___frontmatter___image___relativePath',
+  ChildMarkdownRemarkFrontmatterImageExtension = 'childMarkdownRemark___frontmatter___image___extension',
+  ChildMarkdownRemarkFrontmatterImageSize = 'childMarkdownRemark___frontmatter___image___size',
+  ChildMarkdownRemarkFrontmatterImagePrettySize = 'childMarkdownRemark___frontmatter___image___prettySize',
+  ChildMarkdownRemarkFrontmatterImageModifiedTime = 'childMarkdownRemark___frontmatter___image___modifiedTime',
+  ChildMarkdownRemarkFrontmatterImageAccessTime = 'childMarkdownRemark___frontmatter___image___accessTime',
+  ChildMarkdownRemarkFrontmatterImageChangeTime = 'childMarkdownRemark___frontmatter___image___changeTime',
+  ChildMarkdownRemarkFrontmatterImageBirthTime = 'childMarkdownRemark___frontmatter___image___birthTime',
+  ChildMarkdownRemarkFrontmatterImageRoot = 'childMarkdownRemark___frontmatter___image___root',
+  ChildMarkdownRemarkFrontmatterImageDir = 'childMarkdownRemark___frontmatter___image___dir',
+  ChildMarkdownRemarkFrontmatterImageBase = 'childMarkdownRemark___frontmatter___image___base',
+  ChildMarkdownRemarkFrontmatterImageExt = 'childMarkdownRemark___frontmatter___image___ext',
+  ChildMarkdownRemarkFrontmatterImageName = 'childMarkdownRemark___frontmatter___image___name',
+  ChildMarkdownRemarkFrontmatterImageRelativeDirectory = 'childMarkdownRemark___frontmatter___image___relativeDirectory',
+  ChildMarkdownRemarkFrontmatterImageDev = 'childMarkdownRemark___frontmatter___image___dev',
+  ChildMarkdownRemarkFrontmatterImageMode = 'childMarkdownRemark___frontmatter___image___mode',
+  ChildMarkdownRemarkFrontmatterImageNlink = 'childMarkdownRemark___frontmatter___image___nlink',
+  ChildMarkdownRemarkFrontmatterImageUid = 'childMarkdownRemark___frontmatter___image___uid',
+  ChildMarkdownRemarkFrontmatterImageGid = 'childMarkdownRemark___frontmatter___image___gid',
+  ChildMarkdownRemarkFrontmatterImageRdev = 'childMarkdownRemark___frontmatter___image___rdev',
+  ChildMarkdownRemarkFrontmatterImageBlksize = 'childMarkdownRemark___frontmatter___image___blksize',
+  ChildMarkdownRemarkFrontmatterImageIno = 'childMarkdownRemark___frontmatter___image___ino',
+  ChildMarkdownRemarkFrontmatterImageBlocks = 'childMarkdownRemark___frontmatter___image___blocks',
+  ChildMarkdownRemarkFrontmatterImageAtimeMs = 'childMarkdownRemark___frontmatter___image___atimeMs',
+  ChildMarkdownRemarkFrontmatterImageMtimeMs = 'childMarkdownRemark___frontmatter___image___mtimeMs',
+  ChildMarkdownRemarkFrontmatterImageCtimeMs = 'childMarkdownRemark___frontmatter___image___ctimeMs',
+  ChildMarkdownRemarkFrontmatterImageAtime = 'childMarkdownRemark___frontmatter___image___atime',
+  ChildMarkdownRemarkFrontmatterImageMtime = 'childMarkdownRemark___frontmatter___image___mtime',
+  ChildMarkdownRemarkFrontmatterImageCtime = 'childMarkdownRemark___frontmatter___image___ctime',
+  ChildMarkdownRemarkFrontmatterImagePublicUrl = 'childMarkdownRemark___frontmatter___image___publicURL',
+  ChildMarkdownRemarkFrontmatterImageId = 'childMarkdownRemark___frontmatter___image___id',
+  ChildMarkdownRemarkFrontmatterImageChildren = 'childMarkdownRemark___frontmatter___image___children',
+  ChildMarkdownRemarkFrontmatterPrices = 'childMarkdownRemark___frontmatter___prices',
+  ChildMarkdownRemarkFrontmatterPricesPrice = 'childMarkdownRemark___frontmatter___prices___price',
+  ChildMarkdownRemarkFrontmatterPricesType = 'childMarkdownRemark___frontmatter___prices___type',
+  ChildMarkdownRemarkFrontmatterPricesValidity = 'childMarkdownRemark___frontmatter___prices___validity',
+  ChildMarkdownRemarkFrontmatterWeekday = 'childMarkdownRemark___frontmatter___weekday',
+  ChildMarkdownRemarkFrontmatterTimeOfDay = 'childMarkdownRemark___frontmatter___timeOfDay',
+  ChildMarkdownRemarkFrontmatterTime = 'childMarkdownRemark___frontmatter___time',
+  ChildMarkdownRemarkExcerpt = 'childMarkdownRemark___excerpt',
+  ChildMarkdownRemarkRawMarkdownBody = 'childMarkdownRemark___rawMarkdownBody',
+  ChildMarkdownRemarkFileAbsolutePath = 'childMarkdownRemark___fileAbsolutePath',
+  ChildMarkdownRemarkHtml = 'childMarkdownRemark___html',
+  ChildMarkdownRemarkHtmlAst = 'childMarkdownRemark___htmlAst',
+  ChildMarkdownRemarkExcerptAst = 'childMarkdownRemark___excerptAst',
+  ChildMarkdownRemarkHeadings = 'childMarkdownRemark___headings',
+  ChildMarkdownRemarkHeadingsValue = 'childMarkdownRemark___headings___value',
+  ChildMarkdownRemarkHeadingsDepth = 'childMarkdownRemark___headings___depth',
+  ChildMarkdownRemarkTimeToRead = 'childMarkdownRemark___timeToRead',
+  ChildMarkdownRemarkTableOfContents = 'childMarkdownRemark___tableOfContents',
+  ChildMarkdownRemarkWordCountParagraphs = 'childMarkdownRemark___wordCount___paragraphs',
+  ChildMarkdownRemarkWordCountSentences = 'childMarkdownRemark___wordCount___sentences',
+  ChildMarkdownRemarkWordCountWords = 'childMarkdownRemark___wordCount___words',
+  ChildMarkdownRemarkParentId = 'childMarkdownRemark___parent___id',
+  ChildMarkdownRemarkParentParentId = 'childMarkdownRemark___parent___parent___id',
+  ChildMarkdownRemarkParentParentChildren = 'childMarkdownRemark___parent___parent___children',
+  ChildMarkdownRemarkParentChildren = 'childMarkdownRemark___parent___children',
+  ChildMarkdownRemarkParentChildrenId = 'childMarkdownRemark___parent___children___id',
+  ChildMarkdownRemarkParentChildrenChildren = 'childMarkdownRemark___parent___children___children',
+  ChildMarkdownRemarkParentInternalContent = 'childMarkdownRemark___parent___internal___content',
+  ChildMarkdownRemarkParentInternalContentDigest = 'childMarkdownRemark___parent___internal___contentDigest',
+  ChildMarkdownRemarkParentInternalDescription = 'childMarkdownRemark___parent___internal___description',
+  ChildMarkdownRemarkParentInternalFieldOwners = 'childMarkdownRemark___parent___internal___fieldOwners',
+  ChildMarkdownRemarkParentInternalIgnoreType = 'childMarkdownRemark___parent___internal___ignoreType',
+  ChildMarkdownRemarkParentInternalMediaType = 'childMarkdownRemark___parent___internal___mediaType',
+  ChildMarkdownRemarkParentInternalOwner = 'childMarkdownRemark___parent___internal___owner',
+  ChildMarkdownRemarkParentInternalType = 'childMarkdownRemark___parent___internal___type',
+  ChildMarkdownRemarkChildren = 'childMarkdownRemark___children',
+  ChildMarkdownRemarkChildrenId = 'childMarkdownRemark___children___id',
+  ChildMarkdownRemarkChildrenParentId = 'childMarkdownRemark___children___parent___id',
+  ChildMarkdownRemarkChildrenParentChildren = 'childMarkdownRemark___children___parent___children',
+  ChildMarkdownRemarkChildrenChildren = 'childMarkdownRemark___children___children',
+  ChildMarkdownRemarkChildrenChildrenId = 'childMarkdownRemark___children___children___id',
+  ChildMarkdownRemarkChildrenChildrenChildren = 'childMarkdownRemark___children___children___children',
+  ChildMarkdownRemarkChildrenInternalContent = 'childMarkdownRemark___children___internal___content',
+  ChildMarkdownRemarkChildrenInternalContentDigest = 'childMarkdownRemark___children___internal___contentDigest',
+  ChildMarkdownRemarkChildrenInternalDescription = 'childMarkdownRemark___children___internal___description',
+  ChildMarkdownRemarkChildrenInternalFieldOwners = 'childMarkdownRemark___children___internal___fieldOwners',
+  ChildMarkdownRemarkChildrenInternalIgnoreType = 'childMarkdownRemark___children___internal___ignoreType',
+  ChildMarkdownRemarkChildrenInternalMediaType = 'childMarkdownRemark___children___internal___mediaType',
+  ChildMarkdownRemarkChildrenInternalOwner = 'childMarkdownRemark___children___internal___owner',
+  ChildMarkdownRemarkChildrenInternalType = 'childMarkdownRemark___children___internal___type',
+  ChildMarkdownRemarkInternalContent = 'childMarkdownRemark___internal___content',
+  ChildMarkdownRemarkInternalContentDigest = 'childMarkdownRemark___internal___contentDigest',
+  ChildMarkdownRemarkInternalDescription = 'childMarkdownRemark___internal___description',
+  ChildMarkdownRemarkInternalFieldOwners = 'childMarkdownRemark___internal___fieldOwners',
+  ChildMarkdownRemarkInternalIgnoreType = 'childMarkdownRemark___internal___ignoreType',
+  ChildMarkdownRemarkInternalMediaType = 'childMarkdownRemark___internal___mediaType',
+  ChildMarkdownRemarkInternalOwner = 'childMarkdownRemark___internal___owner',
+  ChildMarkdownRemarkInternalType = 'childMarkdownRemark___internal___type',
 }
 
 export type FileFilterInput = {
@@ -629,6 +817,8 @@ export type FileFilterInput = {
   parent?: Maybe<NodeFilterInput>;
   children?: Maybe<NodeFilterListInput>;
   internal?: Maybe<InternalFilterInput>;
+  childImageSharp?: Maybe<ImageSharpFilterInput>;
+  childMarkdownRemark?: Maybe<MarkdownRemarkFilterInput>;
 };
 
 export type FileGroupConnection = {
@@ -656,15 +846,6 @@ export type FloatQueryOperatorInput = {
   in?: Maybe<Array<Maybe<Scalars['Float']>>>;
   nin?: Maybe<Array<Maybe<Scalars['Float']>>>;
 };
-
-export enum HeadingLevels {
-  H1 = 'h1',
-  H2 = 'h2',
-  H3 = 'h3',
-  H4 = 'h4',
-  H5 = 'h5',
-  H6 = 'h6',
-}
 
 export enum ImageCropFocus {
   Center = 'CENTER',
@@ -1194,6 +1375,12 @@ export type JsonQueryOperatorInput = {
   glob?: Maybe<Scalars['JSON']>;
 };
 
+export enum MarkdownExcerptFormats {
+  Plain = 'PLAIN',
+  Html = 'HTML',
+  Markdown = 'MARKDOWN',
+}
+
 export type MarkdownHeading = {
   __typename?: 'MarkdownHeading';
   value?: Maybe<Scalars['String']>;
@@ -1209,12 +1396,18 @@ export type MarkdownHeadingFilterListInput = {
   elemMatch?: Maybe<MarkdownHeadingFilterInput>;
 };
 
+export enum MarkdownHeadingLevels {
+  H1 = 'h1',
+  H2 = 'h2',
+  H3 = 'h3',
+  H4 = 'h4',
+  H5 = 'h5',
+  H6 = 'h6',
+}
+
 export type MarkdownRemark = Node & {
   __typename?: 'MarkdownRemark';
   id: Scalars['ID'];
-  parent?: Maybe<Node>;
-  children: Array<Node>;
-  internal: Internal;
   frontmatter?: Maybe<MarkdownRemarkFrontmatter>;
   excerpt?: Maybe<Scalars['String']>;
   rawMarkdownBody?: Maybe<Scalars['String']>;
@@ -1225,13 +1418,16 @@ export type MarkdownRemark = Node & {
   headings?: Maybe<Array<Maybe<MarkdownHeading>>>;
   timeToRead?: Maybe<Scalars['Int']>;
   tableOfContents?: Maybe<Scalars['String']>;
-  wordCount?: Maybe<WordCount>;
+  wordCount?: Maybe<MarkdownWordCount>;
+  parent?: Maybe<Node>;
+  children: Array<Node>;
+  internal: Internal;
 };
 
 export type MarkdownRemarkExcerptArgs = {
   pruneLength?: Maybe<Scalars['Int']>;
   truncate?: Maybe<Scalars['Boolean']>;
-  format?: Maybe<ExcerptFormats>;
+  format?: Maybe<MarkdownExcerptFormats>;
 };
 
 export type MarkdownRemarkExcerptAstArgs = {
@@ -1240,7 +1436,7 @@ export type MarkdownRemarkExcerptAstArgs = {
 };
 
 export type MarkdownRemarkHeadingsArgs = {
-  depth?: Maybe<HeadingLevels>;
+  depth?: Maybe<MarkdownHeadingLevels>;
 };
 
 export type MarkdownRemarkTableOfContentsArgs = {
@@ -1278,6 +1474,95 @@ export type MarkdownRemarkEdge = {
 
 export enum MarkdownRemarkFieldsEnum {
   Id = 'id',
+  FrontmatterTitle = 'frontmatter___title',
+  FrontmatterCollection = 'frontmatter___collection',
+  FrontmatterPath = 'frontmatter___path',
+  FrontmatterSubtitle = 'frontmatter___subtitle',
+  FrontmatterAuthor = 'frontmatter___author',
+  FrontmatterQuote = 'frontmatter___quote',
+  FrontmatterOrder = 'frontmatter___order',
+  FrontmatterImageBirthtime = 'frontmatter___image___birthtime',
+  FrontmatterImageBirthtimeMs = 'frontmatter___image___birthtimeMs',
+  FrontmatterImageSourceInstanceName = 'frontmatter___image___sourceInstanceName',
+  FrontmatterImageAbsolutePath = 'frontmatter___image___absolutePath',
+  FrontmatterImageRelativePath = 'frontmatter___image___relativePath',
+  FrontmatterImageExtension = 'frontmatter___image___extension',
+  FrontmatterImageSize = 'frontmatter___image___size',
+  FrontmatterImagePrettySize = 'frontmatter___image___prettySize',
+  FrontmatterImageModifiedTime = 'frontmatter___image___modifiedTime',
+  FrontmatterImageAccessTime = 'frontmatter___image___accessTime',
+  FrontmatterImageChangeTime = 'frontmatter___image___changeTime',
+  FrontmatterImageBirthTime = 'frontmatter___image___birthTime',
+  FrontmatterImageRoot = 'frontmatter___image___root',
+  FrontmatterImageDir = 'frontmatter___image___dir',
+  FrontmatterImageBase = 'frontmatter___image___base',
+  FrontmatterImageExt = 'frontmatter___image___ext',
+  FrontmatterImageName = 'frontmatter___image___name',
+  FrontmatterImageRelativeDirectory = 'frontmatter___image___relativeDirectory',
+  FrontmatterImageDev = 'frontmatter___image___dev',
+  FrontmatterImageMode = 'frontmatter___image___mode',
+  FrontmatterImageNlink = 'frontmatter___image___nlink',
+  FrontmatterImageUid = 'frontmatter___image___uid',
+  FrontmatterImageGid = 'frontmatter___image___gid',
+  FrontmatterImageRdev = 'frontmatter___image___rdev',
+  FrontmatterImageBlksize = 'frontmatter___image___blksize',
+  FrontmatterImageIno = 'frontmatter___image___ino',
+  FrontmatterImageBlocks = 'frontmatter___image___blocks',
+  FrontmatterImageAtimeMs = 'frontmatter___image___atimeMs',
+  FrontmatterImageMtimeMs = 'frontmatter___image___mtimeMs',
+  FrontmatterImageCtimeMs = 'frontmatter___image___ctimeMs',
+  FrontmatterImageAtime = 'frontmatter___image___atime',
+  FrontmatterImageMtime = 'frontmatter___image___mtime',
+  FrontmatterImageCtime = 'frontmatter___image___ctime',
+  FrontmatterImagePublicUrl = 'frontmatter___image___publicURL',
+  FrontmatterImageId = 'frontmatter___image___id',
+  FrontmatterImageParentId = 'frontmatter___image___parent___id',
+  FrontmatterImageParentChildren = 'frontmatter___image___parent___children',
+  FrontmatterImageChildren = 'frontmatter___image___children',
+  FrontmatterImageChildrenId = 'frontmatter___image___children___id',
+  FrontmatterImageChildrenChildren = 'frontmatter___image___children___children',
+  FrontmatterImageInternalContent = 'frontmatter___image___internal___content',
+  FrontmatterImageInternalContentDigest = 'frontmatter___image___internal___contentDigest',
+  FrontmatterImageInternalDescription = 'frontmatter___image___internal___description',
+  FrontmatterImageInternalFieldOwners = 'frontmatter___image___internal___fieldOwners',
+  FrontmatterImageInternalIgnoreType = 'frontmatter___image___internal___ignoreType',
+  FrontmatterImageInternalMediaType = 'frontmatter___image___internal___mediaType',
+  FrontmatterImageInternalOwner = 'frontmatter___image___internal___owner',
+  FrontmatterImageInternalType = 'frontmatter___image___internal___type',
+  FrontmatterImageChildImageSharpId = 'frontmatter___image___childImageSharp___id',
+  FrontmatterImageChildImageSharpChildren = 'frontmatter___image___childImageSharp___children',
+  FrontmatterImageChildMarkdownRemarkId = 'frontmatter___image___childMarkdownRemark___id',
+  FrontmatterImageChildMarkdownRemarkExcerpt = 'frontmatter___image___childMarkdownRemark___excerpt',
+  FrontmatterImageChildMarkdownRemarkRawMarkdownBody = 'frontmatter___image___childMarkdownRemark___rawMarkdownBody',
+  FrontmatterImageChildMarkdownRemarkFileAbsolutePath = 'frontmatter___image___childMarkdownRemark___fileAbsolutePath',
+  FrontmatterImageChildMarkdownRemarkHtml = 'frontmatter___image___childMarkdownRemark___html',
+  FrontmatterImageChildMarkdownRemarkHtmlAst = 'frontmatter___image___childMarkdownRemark___htmlAst',
+  FrontmatterImageChildMarkdownRemarkExcerptAst = 'frontmatter___image___childMarkdownRemark___excerptAst',
+  FrontmatterImageChildMarkdownRemarkHeadings = 'frontmatter___image___childMarkdownRemark___headings',
+  FrontmatterImageChildMarkdownRemarkTimeToRead = 'frontmatter___image___childMarkdownRemark___timeToRead',
+  FrontmatterImageChildMarkdownRemarkTableOfContents = 'frontmatter___image___childMarkdownRemark___tableOfContents',
+  FrontmatterImageChildMarkdownRemarkChildren = 'frontmatter___image___childMarkdownRemark___children',
+  FrontmatterPrices = 'frontmatter___prices',
+  FrontmatterPricesPrice = 'frontmatter___prices___price',
+  FrontmatterPricesType = 'frontmatter___prices___type',
+  FrontmatterPricesValidity = 'frontmatter___prices___validity',
+  FrontmatterWeekday = 'frontmatter___weekday',
+  FrontmatterTimeOfDay = 'frontmatter___timeOfDay',
+  FrontmatterTime = 'frontmatter___time',
+  Excerpt = 'excerpt',
+  RawMarkdownBody = 'rawMarkdownBody',
+  FileAbsolutePath = 'fileAbsolutePath',
+  Html = 'html',
+  HtmlAst = 'htmlAst',
+  ExcerptAst = 'excerptAst',
+  Headings = 'headings',
+  HeadingsValue = 'headings___value',
+  HeadingsDepth = 'headings___depth',
+  TimeToRead = 'timeToRead',
+  TableOfContents = 'tableOfContents',
+  WordCountParagraphs = 'wordCount___paragraphs',
+  WordCountSentences = 'wordCount___sentences',
+  WordCountWords = 'wordCount___words',
   ParentId = 'parent___id',
   ParentParentId = 'parent___parent___id',
   ParentParentParentId = 'parent___parent___parent___id',
@@ -1363,89 +1648,10 @@ export enum MarkdownRemarkFieldsEnum {
   InternalMediaType = 'internal___mediaType',
   InternalOwner = 'internal___owner',
   InternalType = 'internal___type',
-  FrontmatterTitle = 'frontmatter___title',
-  FrontmatterCollection = 'frontmatter___collection',
-  FrontmatterPath = 'frontmatter___path',
-  FrontmatterSubtitle = 'frontmatter___subtitle',
-  FrontmatterAuthor = 'frontmatter___author',
-  FrontmatterQuote = 'frontmatter___quote',
-  FrontmatterOrder = 'frontmatter___order',
-  FrontmatterImageBirthtime = 'frontmatter___image___birthtime',
-  FrontmatterImageBirthtimeMs = 'frontmatter___image___birthtimeMs',
-  FrontmatterImageSourceInstanceName = 'frontmatter___image___sourceInstanceName',
-  FrontmatterImageAbsolutePath = 'frontmatter___image___absolutePath',
-  FrontmatterImageRelativePath = 'frontmatter___image___relativePath',
-  FrontmatterImageExtension = 'frontmatter___image___extension',
-  FrontmatterImageSize = 'frontmatter___image___size',
-  FrontmatterImagePrettySize = 'frontmatter___image___prettySize',
-  FrontmatterImageModifiedTime = 'frontmatter___image___modifiedTime',
-  FrontmatterImageAccessTime = 'frontmatter___image___accessTime',
-  FrontmatterImageChangeTime = 'frontmatter___image___changeTime',
-  FrontmatterImageBirthTime = 'frontmatter___image___birthTime',
-  FrontmatterImageRoot = 'frontmatter___image___root',
-  FrontmatterImageDir = 'frontmatter___image___dir',
-  FrontmatterImageBase = 'frontmatter___image___base',
-  FrontmatterImageExt = 'frontmatter___image___ext',
-  FrontmatterImageName = 'frontmatter___image___name',
-  FrontmatterImageRelativeDirectory = 'frontmatter___image___relativeDirectory',
-  FrontmatterImageDev = 'frontmatter___image___dev',
-  FrontmatterImageMode = 'frontmatter___image___mode',
-  FrontmatterImageNlink = 'frontmatter___image___nlink',
-  FrontmatterImageUid = 'frontmatter___image___uid',
-  FrontmatterImageGid = 'frontmatter___image___gid',
-  FrontmatterImageRdev = 'frontmatter___image___rdev',
-  FrontmatterImageBlksize = 'frontmatter___image___blksize',
-  FrontmatterImageIno = 'frontmatter___image___ino',
-  FrontmatterImageBlocks = 'frontmatter___image___blocks',
-  FrontmatterImageAtimeMs = 'frontmatter___image___atimeMs',
-  FrontmatterImageMtimeMs = 'frontmatter___image___mtimeMs',
-  FrontmatterImageCtimeMs = 'frontmatter___image___ctimeMs',
-  FrontmatterImageAtime = 'frontmatter___image___atime',
-  FrontmatterImageMtime = 'frontmatter___image___mtime',
-  FrontmatterImageCtime = 'frontmatter___image___ctime',
-  FrontmatterImagePublicUrl = 'frontmatter___image___publicURL',
-  FrontmatterImageId = 'frontmatter___image___id',
-  FrontmatterImageParentId = 'frontmatter___image___parent___id',
-  FrontmatterImageParentChildren = 'frontmatter___image___parent___children',
-  FrontmatterImageChildren = 'frontmatter___image___children',
-  FrontmatterImageChildrenId = 'frontmatter___image___children___id',
-  FrontmatterImageChildrenChildren = 'frontmatter___image___children___children',
-  FrontmatterImageInternalContent = 'frontmatter___image___internal___content',
-  FrontmatterImageInternalContentDigest = 'frontmatter___image___internal___contentDigest',
-  FrontmatterImageInternalDescription = 'frontmatter___image___internal___description',
-  FrontmatterImageInternalFieldOwners = 'frontmatter___image___internal___fieldOwners',
-  FrontmatterImageInternalIgnoreType = 'frontmatter___image___internal___ignoreType',
-  FrontmatterImageInternalMediaType = 'frontmatter___image___internal___mediaType',
-  FrontmatterImageInternalOwner = 'frontmatter___image___internal___owner',
-  FrontmatterImageInternalType = 'frontmatter___image___internal___type',
-  FrontmatterPrices = 'frontmatter___prices',
-  FrontmatterPricesPrice = 'frontmatter___prices___price',
-  FrontmatterPricesType = 'frontmatter___prices___type',
-  FrontmatterPricesValidity = 'frontmatter___prices___validity',
-  FrontmatterWeekday = 'frontmatter___weekday',
-  FrontmatterTimeOfDay = 'frontmatter___timeOfDay',
-  FrontmatterTime = 'frontmatter___time',
-  Excerpt = 'excerpt',
-  RawMarkdownBody = 'rawMarkdownBody',
-  FileAbsolutePath = 'fileAbsolutePath',
-  Html = 'html',
-  HtmlAst = 'htmlAst',
-  ExcerptAst = 'excerptAst',
-  Headings = 'headings',
-  HeadingsValue = 'headings___value',
-  HeadingsDepth = 'headings___depth',
-  TimeToRead = 'timeToRead',
-  TableOfContents = 'tableOfContents',
-  WordCountParagraphs = 'wordCount___paragraphs',
-  WordCountSentences = 'wordCount___sentences',
-  WordCountWords = 'wordCount___words',
 }
 
 export type MarkdownRemarkFilterInput = {
   id?: Maybe<StringQueryOperatorInput>;
-  parent?: Maybe<NodeFilterInput>;
-  children?: Maybe<NodeFilterListInput>;
-  internal?: Maybe<InternalFilterInput>;
   frontmatter?: Maybe<MarkdownRemarkFrontmatterFilterInput>;
   excerpt?: Maybe<StringQueryOperatorInput>;
   rawMarkdownBody?: Maybe<StringQueryOperatorInput>;
@@ -1456,7 +1662,10 @@ export type MarkdownRemarkFilterInput = {
   headings?: Maybe<MarkdownHeadingFilterListInput>;
   timeToRead?: Maybe<IntQueryOperatorInput>;
   tableOfContents?: Maybe<StringQueryOperatorInput>;
-  wordCount?: Maybe<WordCountFilterInput>;
+  wordCount?: Maybe<MarkdownWordCountFilterInput>;
+  parent?: Maybe<NodeFilterInput>;
+  children?: Maybe<NodeFilterListInput>;
+  internal?: Maybe<InternalFilterInput>;
 };
 
 export type MarkdownRemarkFrontmatter = {
@@ -1522,6 +1731,19 @@ export type MarkdownRemarkSortInput = {
   order?: Maybe<Array<Maybe<SortOrderEnum>>>;
 };
 
+export type MarkdownWordCount = {
+  __typename?: 'MarkdownWordCount';
+  paragraphs?: Maybe<Scalars['Int']>;
+  sentences?: Maybe<Scalars['Int']>;
+  words?: Maybe<Scalars['Int']>;
+};
+
+export type MarkdownWordCountFilterInput = {
+  paragraphs?: Maybe<IntQueryOperatorInput>;
+  sentences?: Maybe<IntQueryOperatorInput>;
+  words?: Maybe<IntQueryOperatorInput>;
+};
+
 /** Node Interface */
 export type Node = {
   id: Scalars['ID'];
@@ -1574,40 +1796,20 @@ export enum PotraceTurnPolicy {
 
 export type Query = {
   __typename?: 'Query';
-  imageSharp?: Maybe<ImageSharp>;
-  allImageSharp?: Maybe<ImageSharpConnection>;
   file?: Maybe<File>;
-  allFile?: Maybe<FileConnection>;
-  site?: Maybe<Site>;
-  allSite?: Maybe<SiteConnection>;
-  sitePage?: Maybe<SitePage>;
-  allSitePage?: Maybe<SitePageConnection>;
-  sitePlugin?: Maybe<SitePlugin>;
-  allSitePlugin?: Maybe<SitePluginConnection>;
-  directory?: Maybe<Directory>;
-  allDirectory?: Maybe<DirectoryConnection>;
+  allFile: FileConnection;
+  imageSharp?: Maybe<ImageSharp>;
+  allImageSharp: ImageSharpConnection;
   markdownRemark?: Maybe<MarkdownRemark>;
-  allMarkdownRemark?: Maybe<MarkdownRemarkConnection>;
-};
-
-export type QueryImageSharpArgs = {
-  id?: Maybe<StringQueryOperatorInput>;
-  fixed?: Maybe<ImageSharpFixedFilterInput>;
-  resolutions?: Maybe<ImageSharpResolutionsFilterInput>;
-  fluid?: Maybe<ImageSharpFluidFilterInput>;
-  sizes?: Maybe<ImageSharpSizesFilterInput>;
-  original?: Maybe<ImageSharpOriginalFilterInput>;
-  resize?: Maybe<ImageSharpResizeFilterInput>;
-  parent?: Maybe<NodeFilterInput>;
-  children?: Maybe<NodeFilterListInput>;
-  internal?: Maybe<InternalFilterInput>;
-};
-
-export type QueryAllImageSharpArgs = {
-  filter?: Maybe<ImageSharpFilterInput>;
-  sort?: Maybe<ImageSharpSortInput>;
-  skip?: Maybe<Scalars['Int']>;
-  limit?: Maybe<Scalars['Int']>;
+  allMarkdownRemark: MarkdownRemarkConnection;
+  site?: Maybe<Site>;
+  allSite: SiteConnection;
+  sitePage?: Maybe<SitePage>;
+  allSitePage: SitePageConnection;
+  sitePlugin?: Maybe<SitePlugin>;
+  allSitePlugin: SitePluginConnection;
+  directory?: Maybe<Directory>;
+  allDirectory: DirectoryConnection;
 };
 
 export type QueryFileArgs = {
@@ -1649,6 +1851,8 @@ export type QueryFileArgs = {
   parent?: Maybe<NodeFilterInput>;
   children?: Maybe<NodeFilterListInput>;
   internal?: Maybe<InternalFilterInput>;
+  childImageSharp?: Maybe<ImageSharpFilterInput>;
+  childMarkdownRemark?: Maybe<MarkdownRemarkFilterInput>;
 };
 
 export type QueryAllFileArgs = {
@@ -1658,12 +1862,57 @@ export type QueryAllFileArgs = {
   limit?: Maybe<Scalars['Int']>;
 };
 
+export type QueryImageSharpArgs = {
+  id?: Maybe<StringQueryOperatorInput>;
+  fixed?: Maybe<ImageSharpFixedFilterInput>;
+  resolutions?: Maybe<ImageSharpResolutionsFilterInput>;
+  fluid?: Maybe<ImageSharpFluidFilterInput>;
+  sizes?: Maybe<ImageSharpSizesFilterInput>;
+  original?: Maybe<ImageSharpOriginalFilterInput>;
+  resize?: Maybe<ImageSharpResizeFilterInput>;
+  parent?: Maybe<NodeFilterInput>;
+  children?: Maybe<NodeFilterListInput>;
+  internal?: Maybe<InternalFilterInput>;
+};
+
+export type QueryAllImageSharpArgs = {
+  filter?: Maybe<ImageSharpFilterInput>;
+  sort?: Maybe<ImageSharpSortInput>;
+  skip?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+};
+
+export type QueryMarkdownRemarkArgs = {
+  id?: Maybe<StringQueryOperatorInput>;
+  frontmatter?: Maybe<MarkdownRemarkFrontmatterFilterInput>;
+  excerpt?: Maybe<StringQueryOperatorInput>;
+  rawMarkdownBody?: Maybe<StringQueryOperatorInput>;
+  fileAbsolutePath?: Maybe<StringQueryOperatorInput>;
+  html?: Maybe<StringQueryOperatorInput>;
+  htmlAst?: Maybe<JsonQueryOperatorInput>;
+  excerptAst?: Maybe<JsonQueryOperatorInput>;
+  headings?: Maybe<MarkdownHeadingFilterListInput>;
+  timeToRead?: Maybe<IntQueryOperatorInput>;
+  tableOfContents?: Maybe<StringQueryOperatorInput>;
+  wordCount?: Maybe<MarkdownWordCountFilterInput>;
+  parent?: Maybe<NodeFilterInput>;
+  children?: Maybe<NodeFilterListInput>;
+  internal?: Maybe<InternalFilterInput>;
+};
+
+export type QueryAllMarkdownRemarkArgs = {
+  filter?: Maybe<MarkdownRemarkFilterInput>;
+  sort?: Maybe<MarkdownRemarkSortInput>;
+  skip?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+};
+
 export type QuerySiteArgs = {
   siteMetadata?: Maybe<SiteSiteMetadataFilterInput>;
   port?: Maybe<IntQueryOperatorInput>;
   host?: Maybe<StringQueryOperatorInput>;
-  pathPrefix?: Maybe<StringQueryOperatorInput>;
   polyfill?: Maybe<BooleanQueryOperatorInput>;
+  pathPrefix?: Maybe<StringQueryOperatorInput>;
   buildTime?: Maybe<DateQueryOperatorInput>;
   id?: Maybe<StringQueryOperatorInput>;
   parent?: Maybe<NodeFilterInput>;
@@ -1770,38 +2019,13 @@ export type QueryAllDirectoryArgs = {
   limit?: Maybe<Scalars['Int']>;
 };
 
-export type QueryMarkdownRemarkArgs = {
-  id?: Maybe<StringQueryOperatorInput>;
-  parent?: Maybe<NodeFilterInput>;
-  children?: Maybe<NodeFilterListInput>;
-  internal?: Maybe<InternalFilterInput>;
-  frontmatter?: Maybe<MarkdownRemarkFrontmatterFilterInput>;
-  excerpt?: Maybe<StringQueryOperatorInput>;
-  rawMarkdownBody?: Maybe<StringQueryOperatorInput>;
-  fileAbsolutePath?: Maybe<StringQueryOperatorInput>;
-  html?: Maybe<StringQueryOperatorInput>;
-  htmlAst?: Maybe<JsonQueryOperatorInput>;
-  excerptAst?: Maybe<JsonQueryOperatorInput>;
-  headings?: Maybe<MarkdownHeadingFilterListInput>;
-  timeToRead?: Maybe<IntQueryOperatorInput>;
-  tableOfContents?: Maybe<StringQueryOperatorInput>;
-  wordCount?: Maybe<WordCountFilterInput>;
-};
-
-export type QueryAllMarkdownRemarkArgs = {
-  filter?: Maybe<MarkdownRemarkFilterInput>;
-  sort?: Maybe<MarkdownRemarkSortInput>;
-  skip?: Maybe<Scalars['Int']>;
-  limit?: Maybe<Scalars['Int']>;
-};
-
 export type Site = Node & {
   __typename?: 'Site';
   siteMetadata: SiteSiteMetadata;
   port?: Maybe<Scalars['Int']>;
   host?: Maybe<Scalars['String']>;
-  pathPrefix?: Maybe<Scalars['String']>;
   polyfill?: Maybe<Scalars['Boolean']>;
+  pathPrefix?: Maybe<Scalars['String']>;
   buildTime?: Maybe<Scalars['Date']>;
   id: Scalars['ID'];
   parent?: Maybe<Node>;
@@ -1849,8 +2073,8 @@ export enum SiteFieldsEnum {
   SiteMetadataAuthor = 'siteMetadata___author',
   Port = 'port',
   Host = 'host',
-  PathPrefix = 'pathPrefix',
   Polyfill = 'polyfill',
+  PathPrefix = 'pathPrefix',
   BuildTime = 'buildTime',
   Id = 'id',
   ParentId = 'parent___id',
@@ -1944,8 +2168,8 @@ export type SiteFilterInput = {
   siteMetadata?: Maybe<SiteSiteMetadataFilterInput>;
   port?: Maybe<IntQueryOperatorInput>;
   host?: Maybe<StringQueryOperatorInput>;
-  pathPrefix?: Maybe<StringQueryOperatorInput>;
   polyfill?: Maybe<BooleanQueryOperatorInput>;
+  pathPrefix?: Maybe<StringQueryOperatorInput>;
   buildTime?: Maybe<DateQueryOperatorInput>;
   id?: Maybe<StringQueryOperatorInput>;
   parent?: Maybe<NodeFilterInput>;
@@ -2098,6 +2322,7 @@ export enum SitePageFieldsEnum {
   Component = 'component',
   ComponentChunkName = 'componentChunkName',
   IsCreatedByStatefulCreatePages = 'isCreatedByStatefulCreatePages',
+  PluginCreatorId = 'pluginCreator___id',
   PluginCreatorParentId = 'pluginCreator___parent___id',
   PluginCreatorParentParentId = 'pluginCreator___parent___parent___id',
   PluginCreatorParentParentChildren = 'pluginCreator___parent___parent___children',
@@ -2169,7 +2394,6 @@ export enum SitePageFieldsEnum {
   PluginCreatorPackageJsonPeerDependenciesName = 'pluginCreator___packageJson___peerDependencies___name',
   PluginCreatorPackageJsonPeerDependenciesVersion = 'pluginCreator___packageJson___peerDependencies___version',
   PluginCreatorPackageJsonKeywords = 'pluginCreator___packageJson___keywords',
-  PluginCreatorId = 'pluginCreatorId',
   ComponentPath = 'componentPath',
 }
 
@@ -2556,115 +2780,6 @@ export type StringQueryOperatorInput = {
   regex?: Maybe<Scalars['String']>;
   glob?: Maybe<Scalars['String']>;
 };
-
-export type WordCount = {
-  __typename?: 'wordCount';
-  paragraphs?: Maybe<Scalars['Int']>;
-  sentences?: Maybe<Scalars['Int']>;
-  words?: Maybe<Scalars['Int']>;
-};
-
-export type WordCountFilterInput = {
-  paragraphs?: Maybe<IntQueryOperatorInput>;
-  sentences?: Maybe<IntQueryOperatorInput>;
-  words?: Maybe<IntQueryOperatorInput>;
-};
-export type MetadataQueryVariables = {};
-
-export type MetadataQuery = { __typename?: 'Query' } & {
-  site: Maybe<
-    { __typename?: 'Site' } & {
-      siteMetadata: { __typename?: 'SiteSiteMetadata' } & Pick<SiteSiteMetadata, 'title' | 'description' | 'author'>;
-    }
-  >;
-};
-
-export type FluidImageNoBase64Fragment = { __typename?: 'File' } & {
-  childImageSharp: Maybe<
-    { __typename?: 'ImageSharp' } & {
-      fluid: Maybe<{ __typename?: 'ImageSharpFluid' } & GatsbyImageSharpFluid_NoBase64Fragment>;
-    }
-  >;
-};
-
-export type FluidImageFragment = { __typename?: 'File' } & {
-  childImageSharp: Maybe<
-    { __typename?: 'ImageSharp' } & { fluid: Maybe<{ __typename?: 'ImageSharpFluid' } & GatsbyImageSharpFluidFragment> }
-  >;
-};
-
-export type IndexPageQueryVariables = {};
-
-export type IndexPageQuery = { __typename?: 'Query' } & {
-  logo: Maybe<{ __typename?: 'File' } & FluidImageNoBase64Fragment>;
-  vera: Maybe<{ __typename?: 'File' } & FluidImageFragment>;
-  offers: Maybe<
-    { __typename?: 'MarkdownRemarkConnection' } & {
-      nodes: Array<
-        { __typename?: 'MarkdownRemark' } & Pick<MarkdownRemark, 'html'> & {
-            frontmatter: Maybe<
-              { __typename?: 'MarkdownRemarkFrontmatter' } & Pick<
-                MarkdownRemarkFrontmatter,
-                'order' | 'title' | 'subtitle'
-              > & {
-                  image: Maybe<{ __typename?: 'File' } & FluidImageFragment>;
-                  prices: Maybe<
-                    Array<
-                      Maybe<
-                        { __typename?: 'MarkdownRemarkFrontmatterPrices' } & Pick<
-                          MarkdownRemarkFrontmatterPrices,
-                          'price' | 'type' | 'validity'
-                        >
-                      >
-                    >
-                  >;
-                }
-            >;
-          }
-      >;
-    }
-  >;
-  schedule: Maybe<
-    { __typename?: 'MarkdownRemarkConnection' } & {
-      nodes: Array<
-        { __typename?: 'MarkdownRemark' } & {
-          frontmatter: Maybe<
-            { __typename?: 'MarkdownRemarkFrontmatter' } & Pick<
-              MarkdownRemarkFrontmatter,
-              'title' | 'weekday' | 'timeOfDay' | 'time'
-            >
-          >;
-        }
-      >;
-    }
-  >;
-  testimonials: Maybe<
-    { __typename?: 'MarkdownRemarkConnection' } & {
-      nodes: Array<
-        { __typename?: 'MarkdownRemark' } & {
-          frontmatter: Maybe<
-            { __typename?: 'MarkdownRemarkFrontmatter' } & Pick<MarkdownRemarkFrontmatter, 'author' | 'quote'>
-          >;
-        }
-      >;
-    }
-  >;
-};
-
-export type AgbPageQueryVariables = {
-  path: Scalars['String'];
-};
-
-export type AgbPageQuery = { __typename?: 'Query' } & {
-  markdownRemark: Maybe<
-    { __typename?: 'MarkdownRemark' } & Pick<MarkdownRemark, 'html'> & {
-        frontmatter: Maybe<
-          { __typename?: 'MarkdownRemarkFrontmatter' } & Pick<MarkdownRemarkFrontmatter, 'title' | 'subtitle'>
-        >;
-      }
-  >;
-};
-
 export type GatsbyImageSharpFixedFragment = { __typename?: 'ImageSharpFixed' } & Pick<
   ImageSharpFixed,
   'base64' | 'width' | 'height' | 'src' | 'srcSet'
@@ -2784,3 +2899,93 @@ export type GatsbyImageSharpSizes_WithWebp_NoBase64Fragment = { __typename?: 'Im
   ImageSharpSizes,
   'aspectRatio' | 'src' | 'srcSet' | 'srcWebp' | 'srcSetWebp' | 'sizes'
 >;
+
+export type MetadataQueryVariables = {};
+
+export type MetadataQuery = { __typename?: 'Query' } & {
+  site: Maybe<
+    { __typename?: 'Site' } & {
+      siteMetadata: { __typename?: 'SiteSiteMetadata' } & Pick<SiteSiteMetadata, 'title' | 'description' | 'author'>;
+    }
+  >;
+};
+
+export type FluidImageNoBase64Fragment = { __typename?: 'File' } & {
+  childImageSharp: Maybe<
+    { __typename?: 'ImageSharp' } & {
+      fluid: Maybe<{ __typename?: 'ImageSharpFluid' } & GatsbyImageSharpFluid_NoBase64Fragment>;
+    }
+  >;
+};
+
+export type FluidImageFragment = { __typename?: 'File' } & {
+  childImageSharp: Maybe<
+    { __typename?: 'ImageSharp' } & { fluid: Maybe<{ __typename?: 'ImageSharpFluid' } & GatsbyImageSharpFluidFragment> }
+  >;
+};
+
+export type IndexPageQueryVariables = {};
+
+export type IndexPageQuery = { __typename?: 'Query' } & {
+  logo: Maybe<{ __typename?: 'File' } & FluidImageNoBase64Fragment>;
+  vera: Maybe<{ __typename?: 'File' } & FluidImageFragment>;
+  offers: { __typename?: 'MarkdownRemarkConnection' } & {
+    nodes: Array<
+      { __typename?: 'MarkdownRemark' } & Pick<MarkdownRemark, 'html'> & {
+          frontmatter: Maybe<
+            { __typename?: 'MarkdownRemarkFrontmatter' } & Pick<
+              MarkdownRemarkFrontmatter,
+              'order' | 'title' | 'subtitle'
+            > & {
+                image: Maybe<{ __typename?: 'File' } & FluidImageFragment>;
+                prices: Maybe<
+                  Array<
+                    Maybe<
+                      { __typename?: 'MarkdownRemarkFrontmatterPrices' } & Pick<
+                        MarkdownRemarkFrontmatterPrices,
+                        'price' | 'type' | 'validity'
+                      >
+                    >
+                  >
+                >;
+              }
+          >;
+        }
+    >;
+  };
+  schedule: { __typename?: 'MarkdownRemarkConnection' } & {
+    nodes: Array<
+      { __typename?: 'MarkdownRemark' } & {
+        frontmatter: Maybe<
+          { __typename?: 'MarkdownRemarkFrontmatter' } & Pick<
+            MarkdownRemarkFrontmatter,
+            'title' | 'weekday' | 'timeOfDay' | 'time'
+          >
+        >;
+      }
+    >;
+  };
+  testimonials: { __typename?: 'MarkdownRemarkConnection' } & {
+    nodes: Array<
+      { __typename?: 'MarkdownRemark' } & {
+        frontmatter: Maybe<
+          { __typename?: 'MarkdownRemarkFrontmatter' } & Pick<MarkdownRemarkFrontmatter, 'author' | 'quote'>
+        >;
+      }
+    >;
+  };
+};
+
+export type AgbPageQueryVariables = {
+  path: Scalars['String'];
+};
+
+export type AgbPageQuery = { __typename?: 'Query' } & {
+  markdownRemark: Maybe<
+    { __typename?: 'MarkdownRemark' } & Pick<MarkdownRemark, 'html'> & {
+        frontmatter: Maybe<
+          { __typename?: 'MarkdownRemarkFrontmatter' } & Pick<MarkdownRemarkFrontmatter, 'title' | 'subtitle'>
+        >;
+      }
+  >;
+};
