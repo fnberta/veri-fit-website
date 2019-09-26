@@ -22,10 +22,10 @@ const IndexPage: React.FC<Props> = ({ data }) => (
   <Layout title="Home">
     <Navbar />
     <Hero logo={data.logo!} />
-    <Offers data={data.offers!.nodes.map(node => ({ ...node.frontmatter, html: node.html } as OfferData))} />
+    <Offers data={data.offers.nodes.map(node => ({ ...node.frontmatter, html: node.html } as OfferData))} />
     <TryOut />
-    <Schedule entries={data.schedule!.nodes.map(node => node.frontmatter as ScheduleEntryData)} />
-    <Testimonials data={data.testimonials!.nodes.map(node => node.frontmatter as TestimonialProps)} />
+    <Schedule entries={data.schedule.nodes.map(node => node.frontmatter as ScheduleEntryData)} />
+    <Testimonials data={data.testimonials.nodes.map(node => node.frontmatter as TestimonialProps)} />
     <AboutMe vera={data.vera!} />
     <ContactMe />
     <LocationMap />

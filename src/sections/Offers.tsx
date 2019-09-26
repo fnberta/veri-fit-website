@@ -39,7 +39,7 @@ const Offers: React.FC<Props> = ({ data }) => (
               <Offer
                 title={data.title}
                 subtitle={data.subtitle}
-                image={<Image fluid={data.image!.childImageSharp!.fluid as FluidObject} alt="Training image" />}
+                image={<Image fluid={data.image.childImageSharp!.fluid as FluidObject} alt="Training image" />}
                 prices={data.prices}
                 body={data.html}
               />

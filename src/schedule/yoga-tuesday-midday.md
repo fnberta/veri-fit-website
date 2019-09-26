@@ -2,6 +2,6 @@
 collection: schedule
 title: Yoga
 weekday: tuesday
-timeOfDay: evening
-time: '18:00 - 19:00'
+timeOfDay: midday
+time: '12:00 - 13:00'
 ---

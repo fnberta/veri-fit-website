@@ -6,6 +6,9 @@ documents:
 generates:
   src/generatedGraphQL.ts:
     plugins:
-      - 'add': '/* eslint-disable */'
+      - add: '/* eslint-disable */'
       - 'typescript'
       - 'typescript-operations'
+hooks:
+  afterAllFileWrite:
+    - 'prettier --write'

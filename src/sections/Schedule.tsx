@@ -77,21 +77,13 @@ const Schedule: React.FC<Props> = ({ entries }) => {
           <ItemsBlock title="Freitag" entries={friday} />
           <ItemsBlock title="Samstag" entries={saturday} />
         </Layout>
-        <div className="block">
-          <Title text="Neuer Stundenplan ab 16. September 2019!" size={4} />
-          <Subtitle
-            text={
-              <>
-                {'Eine Übersicht der neuen Trainingszeiten findest du in meinem aktuellen '}
-                <a href="/assets/VeriFit_Flyer_Herbst19.pdf" target="_blank">
-                  Flyer
-                </a>
-                {'.'}
-              </>
-            }
-            size={6}
-          />
-        </div>
+        <p className="block">
+          {'Eine Übersicht aller Stunden findest du auch in meinem aktuellen '}
+          <a href="/assets/VeriFit_Flyer_Herbst19.pdf" target="_blank">
+            Flyer
+          </a>
+          {'.'}
+        </p>
       </div>
     </section>
   );
