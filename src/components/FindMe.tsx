@@ -13,9 +13,9 @@ const FindMe: React.FC = () => (
   <div className="columns">
     <div className="column">
       <BulletItem icon="fa-location-arrow" title="Location">
-        Stadthausstrasse 24
+        Lagerplatz 6, Winterthur
         <br />
-        beim Bahnhof Winterthur
+        1. OG – Raum 111
       </BulletItem>
     </div>
     <div className="column">
