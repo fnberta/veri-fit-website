@@ -1,19 +1,8 @@
 import cx from 'classnames';
 import React from 'react';
+import { ClassNameProps } from '../../interfaces';
 import Icon from './Icon';
-
-export interface SubmitButtonProps {
-  text: string;
-  submitting?: boolean;
-}
-
-export interface FormFieldProps {
-  label?: React.ReactNode;
-  control: React.ReactNode;
-  icon?: string;
-  help?: string;
-  error?: string;
-}
+import styled from '@emotion/styled';
 
 export interface HorizontalFieldProps {
   label?: React.ReactNode;
@@ -21,14 +10,31 @@ export interface HorizontalFieldProps {
 
 export const HorizontalField: React.FC<HorizontalFieldProps> = ({ label, children }) => (
   <div className="field is-horizontal">
-    {label && <div className="field-label is-normal">{label}</div>}
+    {label != null && (
+      <div className="field-label is-normal">
+        <label className="label">{label}</label>
+      </div>
+    )}
     <div className="field-body is-expanded">{children}</div>
   </div>
 );
 
-export const FormField: React.FC<FormFieldProps> = ({ label, control, icon, help, error }) => (
-  <div className="field">
-    {label}
+export interface FormFieldProps extends ClassNameProps {
+  label?: React.ReactNode;
+  control: React.ReactNode;
+  short?: boolean;
+  icon?: string;
+  help?: string;
+  error?: string;
+}
+
+const Field = styled.div<{ short?: boolean }>(props => ({
+  maxWidth: props.short === true ? '10rem' : undefined,
+}));
+
+export const FormField: React.FC<FormFieldProps> = ({ label, control, short, icon, help, error, className }) => (
+  <Field className={cx('field', className)} short={short}>
+    {label != null && <label className="label">{label}</label>}
     <div
       className={cx('control', {
         'has-icons-left': icon,
@@ -39,14 +45,7 @@ export const FormField: React.FC<FormFieldProps> = ({ label, control, icon, help
       {icon && <Icon className="is-left" icon={icon} />}
       {error && <Icon className="is-small is-right" icon="fa-exclamation-triangle" />}
     </div>
+    {error && <p className="help is-danger">{error}</p>}
     {help && <p className="help">{help}</p>}
-  </div>
-);
-
-export const SubmitButton: React.FC<SubmitButtonProps> = ({ text, submitting }) => (
-  <div className="control">
-    <button className={cx('button', 'is-primary', { 'is-loading': submitting })} type="submit" disabled={submitting}>
-      {text}
-    </button>
-  </div>
+  </Field>
 );

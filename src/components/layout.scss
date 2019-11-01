@@ -37,10 +37,6 @@ body {
 
 .table {
   td {
-    vertical-align: baseline !important;
+    vertical-align: middle !important;
   }
-}
-
-.is-none {
-  display: none !important;
 }

@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import React from 'react';
+import { Container } from '../components/bulma/Page';
 import { Subtitle, Title } from '../components/bulma/Heading';
 import ScheduleItem from '../components/ScheduleItem';
 
@@ -63,7 +64,7 @@ const Schedule: React.FC<Props> = ({ entries }) => {
   const { monday, tuesday, wednesday, thursday, friday, saturday } = getByWeekday(entries);
   return (
     <section id="schedule" className="section has-background-light">
-      <div className="container has-text-centered">
+      <Container className="has-text-centered">
         <Title text="Stundenplan" size={1} />
         <p className="block">
           Die Zeiten für die Gruppenstunden findest du hier. Ich freue mich auf deinen Besuch! <br /> Um einen Termin
@@ -84,7 +85,7 @@ const Schedule: React.FC<Props> = ({ entries }) => {
           </a>
           {'.'}
         </p>
-      </div>
+      </Container>
     </section>
   );
 };

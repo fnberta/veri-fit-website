@@ -54,3 +54,11 @@ exports.onCreateNode = ({ node }) => {
   // needed for netlify cms
   fmImagesToRelative(node);
 };
+
+exports.onCreatePage = ({ page, actions }) => {
+  // page.matchPath is a special key that's used for matching pages only on the client.
+  if (page.path.match(/^\/manage/)) {
+    page.matchPath = '/manage/*';
+    actions.createPage(page);
+  }
+};

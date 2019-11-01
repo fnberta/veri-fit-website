@@ -1,7 +1,9 @@
 import styled from '@emotion/styled';
-import { Field, Form, Formik, FormikActions } from 'formik';
+import { Field, Form, Formik, FormikHelpers } from 'formik';
 import React, { useState } from 'react';
-import { FormField, HorizontalField, SubmitButton } from '../components/bulma/Forms';
+import Button from '../components/bulma/Button';
+import { Container, Section } from '../components/bulma/Page';
+import { FormField, HorizontalField } from '../components/bulma/Forms';
 import { Title } from '../components/bulma/Heading';
 import FindMe from '../components/FindMe';
 import { parallax } from '../utils/styles';
@@ -14,9 +16,11 @@ interface FormValues {
   message: string;
 }
 
-const Section = styled.section(parallax(true), {
+const ParallaxSection = styled(Section)(parallax(true), {
   backgroundImage: `url(${require('../images/sunrise.jpg')})`,
 });
+
+const Hidden = styled.div({ display: 'none' });
 
 const initialValues: FormValues = {
   name: '',
@@ -81,7 +85,7 @@ const ContactMe: React.FC = () => {
     setTimeout(() => setNotificationType(undefined), 3000);
   }
 
-  async function handleFormSubmit(values: FormValues, { setSubmitting }: FormikActions<FormValues>) {
+  async function handleFormSubmit(values: FormValues, { setSubmitting }: FormikHelpers<FormValues>) {
     setNotificationType(undefined);
     const successful = await submitForm(values);
     showNotification(successful ? 'success' : 'error');
@@ -93,19 +97,19 @@ const ContactMe: React.FC = () => {
       initialValues={initialValues}
       onSubmit={handleFormSubmit}
       render={({ errors, isSubmitting }) => (
-        <Section id="contact" className="section">
-          <div className="container">
+        <ParallaxSection id="contact">
+          <Container>
             <Title text="So findest du mich" size={1} className="has-text-light has-text-centered" />
             <FindMe />
             {notificationType && (
               <Notification type={notificationType} onCloseClick={() => setNotificationType(undefined)} />
             )}
             <Form name="contact" data-netlify="true" netlify-honeypot="bot-field">
-              <div className="is-none">
+              <Hidden>
                 <label>
                   Don't fill this out if you're human: <input name="bot-field" />
                 </label>
-              </div>
+              </Hidden>
               <HorizontalField>
                 <FormField
                   icon="fas fa-user"
@@ -144,7 +148,7 @@ const ContactMe: React.FC = () => {
                   <Field
                     className="textarea"
                     aria-label="Nachricht"
-                    component="textarea"
+                    as="textarea"
                     name="message"
                     placeholder="Wie kann ich dir helfen?"
                     validate={validate}
@@ -152,10 +156,12 @@ const ContactMe: React.FC = () => {
                   />
                 }
               />
-              <SubmitButton text="Senden" submitting={isSubmitting} />
+              <div className="control">
+                <Button type="submit" text="Senden" intent="primary" loading={isSubmitting} disabled={isSubmitting} />
+              </div>
             </Form>
-          </div>
-        </Section>
+          </Container>
+        </ParallaxSection>
       )}
     />
   );

@@ -9,7 +9,7 @@ export interface Props {
   logo: FluidImageNoBase64Fragment;
 }
 
-const Section = styled.section(parallax(), {
+const HeroSection = styled.section(parallax(), {
   position: 'relative',
   backgroundImage: `url(${require('../images/hero.jpg')})`,
 });
@@ -31,7 +31,7 @@ const ImageTitle = styled.div({
 });
 
 const Hero: React.FC<Props> = ({ logo }) => (
-  <Section id="home" className="hero is-fullheight">
+  <HeroSection id="home" className="hero is-fullheight">
     <div className="hero-body">
       <ImageTitle>
         <Image fluid={logo.childImageSharp!.fluid as FluidObject} title="Veri-Fit" alt="Veri-Fit" />
@@ -48,7 +48,7 @@ const Hero: React.FC<Props> = ({ logo }) => (
         />
       </ImageTitle>
     </div>
-  </Section>
+  </HeroSection>
 );
 
 export default Hero;

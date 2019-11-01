@@ -24,3 +24,25 @@ export function parallax(withOverlay?: boolean): CSSObject {
     }),
   };
 }
+
+export function verticallySpaced(margin: string | number): CSSObject {
+  return {
+    '&>*': {
+      marginBottom: margin,
+    },
+    '&>*:last-child': {
+      marginBottom: 0,
+    },
+  };
+}
+
+export function horizontallySpaced(margin: string | number): CSSObject {
+  return {
+    '&>*': {
+      marginRight: margin,
+    },
+    '&>*:last-child': {
+      marginRight: 0,
+    },
+  };
+}

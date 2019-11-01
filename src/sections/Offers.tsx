@@ -4,6 +4,7 @@ import React from 'react';
 import { Title } from '../components/bulma/Heading';
 import Offer, { Price } from '../components/Offer';
 import { FluidImageFragment } from '../generatedGraphQL';
+import { Container } from '../components/bulma/Page';
 
 export interface OfferData {
   order: number;
@@ -20,7 +21,7 @@ export interface Props {
 
 const Offers: React.FC<Props> = ({ data }) => (
   <section id="offer" className="section has-background-light">
-    <div className="container">
+    <Container>
       <Title className="has-text-centered" text="Training für dich!" size={1} />
       <div className="content has-text-centered">
         <p>
@@ -51,7 +52,7 @@ const Offers: React.FC<Props> = ({ data }) => (
           Es gelten die <Link to="/agb/">allgemeinen Geschäftsbedingungen</Link>
         </p>
       </div>
-    </div>
+    </Container>
   </section>
 );
 
