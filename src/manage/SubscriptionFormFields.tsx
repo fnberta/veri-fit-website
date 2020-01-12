@@ -1,147 +1,219 @@
-import { Field, FormikErrors, useField, useFormikContext } from 'formik';
+import { ErrorMessage, Field, getIn, useFormikContext } from 'formik';
 import React from 'react';
-import { SubscriptionType, TrainingType } from '../../shared/interfaces';
-import { FormField, HorizontalField } from '../components/bulma/Forms';
+import { SubscriptionType, TrainingType } from '../../shared';
+import { FormField } from '../components/bulma/Forms';
 import { makeValidator } from '../utils/forms';
-import { SubscriptionInput } from './UserRepository';
+import { getEndDate, getToday } from './dateTime';
+import { getSubscriptionName, getTrainingName } from './displayNames';
+import { SubscriptionInput } from './repositories/ClientRepository';
+import { validSubscriptionTypes } from './subscriptionChecks';
+
+export interface SubscriptionFormValues {
+  type: SubscriptionType;
+  category: TrainingType;
+  trainingsLeft: number;
+  start: string; // YYYY-MM-DD
+  paid: boolean;
+  paidAt: string; // YYYY-MM-DD
+}
 
 export interface Props {
-  parentName?: string;
-  errors: FormikErrors<SubscriptionInput> | undefined;
+  namespace?: string;
   disabled: boolean;
 }
 
-export function getTrainingName(type: TrainingType): string {
+export function getDefaultTrainingsLeft(type: SubscriptionType): number {
   switch (type) {
-    case TrainingType.BOOST:
-      return 'BOOST';
-    case TrainingType.HIIT:
-      return 'HIIT';
-    case TrainingType.PERSONAL:
-      return 'Personal';
-    case TrainingType.YOGA:
-      return 'Yoga';
-  }
-}
-
-export function getSubscriptionName(type: SubscriptionType): string {
-  switch (type) {
-    case SubscriptionType.UNLIMITED_10:
-      return '10er unlimitiert';
     case SubscriptionType.SINGLE:
-      return 'Einzeleintritt';
+      return 1;
     case SubscriptionType.LIMITED_10:
-      return '10er limitiert';
+    case SubscriptionType.UNLIMITED_10:
+      return 10;
     case SubscriptionType.LIMITED_20:
-      return '20er limitiert';
+      return 20;
     case SubscriptionType.BLOCK:
-      return 'Block';
+      // return invalid high number, makes sure it gets overwritten when another selection is made
+      return 9999;
+  }
+}
+export function mapToSubscriptionInput(values: SubscriptionFormValues): SubscriptionInput {
+  switch (values.type) {
+    case SubscriptionType.SINGLE: {
+      if (values.category === TrainingType.YOGA || values.category === TrainingType.PERSONAL) {
+        return {
+          type: values.type,
+          category: values.category,
+          start: values.start,
+          end: values.start,
+          trainingsLeft: values.trainingsLeft,
+          ...(values.paid && { paidAt: values.paidAt }),
+        };
+      }
+
+      throw new Error('invalid combination of training and subscription');
+    }
+    case SubscriptionType.LIMITED_10: {
+      if (values.category === TrainingType.YOGA || values.category === TrainingType.PERSONAL) {
+        return {
+          type: values.type,
+          category: values.category,
+          start: values.start,
+          end: getEndDate(values.start, { months: 3 }),
+          trainingsLeft: values.trainingsLeft,
+          ...(values.paid && { paidAt: values.paidAt }),
+        };
+      }
+
+      throw new Error('invalid combination of training and subscription');
+    }
+    case SubscriptionType.LIMITED_20: {
+      if (values.category === TrainingType.YOGA) {
+        return {
+          type: values.type,
+          category: values.category,
+          start: values.start,
+          end: getEndDate(values.start, { months: 6 }),
+          trainingsLeft: values.trainingsLeft,
+          ...(values.paid && { paidAt: values.paidAt }),
+        };
+      }
+
+      throw new Error('invalid combination of training and subscription');
+    }
+    case SubscriptionType.UNLIMITED_10: {
+      if (values.category === TrainingType.YOGA) {
+        return {
+          type: values.type,
+          category: values.category,
+          start: values.start,
+          trainingsLeft: values.trainingsLeft,
+          ...(values.paid && { paidAt: values.paidAt }),
+        };
+      }
+
+      throw new Error('invalid combination of training and subscription');
+    }
+    case SubscriptionType.BLOCK: {
+      if (values.category === TrainingType.HIIT || values.category === TrainingType.BOOST) {
+        return {
+          type: values.type,
+          category: values.category,
+          start: values.start,
+          end: getEndDate(values.start, { weeks: 6 }),
+          ...(values.paid && { paidAt: values.paidAt }),
+        };
+      }
+
+      throw new Error('invalid combination of training and subscription');
+    }
   }
 }
 
-const SubscriptionSelect: React.FC<
-  React.HTMLProps<HTMLSelectElement> & { name: string; category: TrainingType }
-> = props => {
-  const [field, meta] = useField(props);
-  const { category } = props;
-  return (
-    <HorizontalField label="">
-      <FormField
-        error={meta.error}
-        control={
-          <div className="select">
-            <select {...field} {...props}>
-              {category === TrainingType.YOGA ? (
-                <>
-                  <option value={SubscriptionType.LIMITED_10}>
-                    {getSubscriptionName(SubscriptionType.LIMITED_10)}
-                  </option>
-                  <option value={SubscriptionType.LIMITED_20}>
-                    {getSubscriptionName(SubscriptionType.LIMITED_20)}
-                  </option>
-                  <option value={SubscriptionType.UNLIMITED_10}>
-                    {getSubscriptionName(SubscriptionType.UNLIMITED_10)}
-                  </option>
-                  <option value={SubscriptionType.SINGLE}>{getSubscriptionName(SubscriptionType.SINGLE)}</option>
-                </>
-              ) : category === TrainingType.HIIT || category === TrainingType.BOOST ? (
-                <option value={SubscriptionType.BLOCK}>{getSubscriptionName(SubscriptionType.BLOCK)}</option>
-              ) : (
-                <>
-                  <option value={SubscriptionType.LIMITED_10}>
-                    {getSubscriptionName(SubscriptionType.LIMITED_10)}
-                  </option>
-                  <option value={SubscriptionType.LIMITED_20}>
-                    {getSubscriptionName(SubscriptionType.LIMITED_20)}
-                  </option>
-                  <option value={SubscriptionType.SINGLE}>{getSubscriptionName(SubscriptionType.SINGLE)}</option>
-                </>
-              )}
-            </select>
-          </div>
-        }
-      />
-    </HorizontalField>
-  );
-};
+const SubscriptionFormFields: React.FC<Props> = ({ disabled, namespace }) => {
+  const withNamespace = (name: string) => (namespace ? `${namespace}.${name}` : name);
 
-const SubscriptionFormFields: React.FC<Props> = ({ errors, disabled, parentName }) => {
-  const prefix = parentName != null ? `${parentName}.` : '';
-  const { values } = useFormikContext();
-  const category = (parentName != null ? values[parentName].category : values.category) as TrainingType;
+  // this is not very type safe but good enough for now
+  const { values, setFieldValue } = useFormikContext();
+  const category = getIn(values, withNamespace('category')) as TrainingType;
+  const type = getIn(values, withNamespace('type')) as SubscriptionType;
+  const trainingsLeft = getIn(values, withNamespace('trainingsLeft')) as number;
+  const paid = getIn(values, withNamespace('paid')) as boolean;
+
+  const validTypes = validSubscriptionTypes[category];
+  if (!validTypes.includes(type)) {
+    setFieldValue(withNamespace('type'), validTypes[0]);
+  }
+
+  const defaultTrainingsLeft = getDefaultTrainingsLeft(type);
+  if (trainingsLeft > defaultTrainingsLeft) {
+    setFieldValue(withNamespace('trainingsLeft'), defaultTrainingsLeft);
+  }
 
   return (
     <>
-      <HorizontalField label="Abo">
+      <FormField
+        label="Trainings-Typ"
+        error={<ErrorMessage name={withNamespace('category')} />}
+        control={
+          <div className="select">
+            <Field as="select" name={withNamespace('category')}>
+              {Object.keys(validSubscriptionTypes).map(trainingType => (
+                <option key={trainingType} value={trainingType}>
+                  {getTrainingName(trainingType as TrainingType)}
+                </option>
+              ))}
+            </Field>
+          </div>
+        }
+      />
+      <FormField
+        label="Abo-Typ"
+        error={<ErrorMessage name={withNamespace('type')} />}
+        control={
+          <div className="select">
+            <Field as="select" name={withNamespace('type')}>
+              {validSubscriptionTypes[category].map(type => (
+                <option key={type} value={type}>
+                  {getSubscriptionName(type)}
+                </option>
+              ))}
+            </Field>
+          </div>
+        }
+      />
+      {type !== SubscriptionType.BLOCK && (
         <FormField
-          error={errors && errors.category}
-          control={
-            <div className="select">
-              <Field as="select" aria-label="Abo-Typ" name={`${prefix}category`}>
-                <option value={TrainingType.YOGA}>{getTrainingName(TrainingType.YOGA)}</option>
-                <option value={TrainingType.BOOST}>{getTrainingName(TrainingType.BOOST)}</option>
-                <option value={TrainingType.HIIT}>{getTrainingName(TrainingType.HIIT)}</option>
-                <option value={TrainingType.PERSONAL}>{getTrainingName(TrainingType.PERSONAL)}</option>
-              </Field>
-            </div>
-          }
-        />
-      </HorizontalField>
-      <SubscriptionSelect aria-label="Abo-Typ" name={`${prefix}type`} category={category} />
-      <HorizontalField label="">
-        <FormField
-          help="Startpunkt des Abos"
-          error={errors && errors.start}
+          label="Anzahl Trainings übrig"
+          error={<ErrorMessage name={withNamespace('trainingsLeft')} />}
           control={
             <Field
               className="input"
-              aria-label="Startpunkt"
-              type="date"
-              name={`${prefix}start`}
-              placeholder="Startpunkt"
-              validate={makeValidator('Startpunkt')}
+              type="number"
+              name={withNamespace('trainingsLeft')}
+              validate={makeValidator('Trainings übrig')}
               disabled={disabled}
             />
           }
         />
-      </HorizontalField>
-      <HorizontalField label="">
+      )}
+      <FormField
+        label="Startpunkt"
+        error={<ErrorMessage name={withNamespace('start')} />}
+        control={
+          <Field
+            className="input"
+            type="date"
+            name={withNamespace('start')}
+            validate={makeValidator('Startpunkt')}
+            disabled={disabled}
+          />
+        }
+      />
+      <FormField
+        label="Kosten"
+        error={<ErrorMessage name={withNamespace('paid')} />}
+        control={
+          <>
+            <Field className="checkbox" type="checkbox" name={withNamespace('paid')} disabled={disabled} />
+            {' Bereits bezahlt'}
+          </>
+        }
+      />
+      {paid && (
         <FormField
-          error={errors && errors.paid}
+          label="Bezahlt am"
+          error={<ErrorMessage name={withNamespace('paidAt')} />}
           control={
-            <label className="checkbox">
-              <Field
-                className="checkbox"
-                aria-label="bezahlt"
-                type="checkbox"
-                name={`${prefix}paid`}
-                disabled={disabled}
-              />
-              {' Bezahlt'}
-            </label>
+            <Field
+              className="input"
+              type="date"
+              name={withNamespace('paidAt')}
+              validate={makeValidator('Bezahlt am')}
+              disabled={disabled}
+            />
           }
         />
-      </HorizontalField>
+      )}
     </>
   );
 };

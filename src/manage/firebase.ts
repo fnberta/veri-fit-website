@@ -1,11 +1,14 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/functions';
+import 'firebase/auth';
 
 export type Firestore = firebase.firestore.Firestore;
 export type Functions = firebase.functions.Functions;
-export type DocumentSnapshot = firebase.firestore.DocumentSnapshot;
+export type Auth = firebase.auth.Auth;
 export type HttpsCallable = firebase.functions.HttpsCallable;
+export type AuthProvider = firebase.auth.GoogleAuthProvider;
+export type User = firebase.User;
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBoigzCLWt04NFAVZz6f41APTszUPzuWJM',
@@ -19,4 +22,13 @@ const firebaseConfig = {
 
 export default function initFirebase(): firebase.app.App {
   return firebase.initializeApp(firebaseConfig);
+}
+
+export function initFirebaseAuth() {
+  const auth = firebase.auth();
+  auth.useDeviceLanguage();
+  return {
+    auth,
+    provider: new firebase.auth.GoogleAuthProvider(),
+  };
 }

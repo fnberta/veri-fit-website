@@ -1,8 +1,6 @@
 import cx from 'classnames';
-import React from 'react';
-import { ClassNameProps } from '../../interfaces';
+import React, { cloneElement, isValidElement } from 'react';
 import Icon from './Icon';
-import styled from '@emotion/styled';
 
 export interface HorizontalFieldProps {
   label?: React.ReactNode;
@@ -19,33 +17,28 @@ export const HorizontalField: React.FC<HorizontalFieldProps> = ({ label, childre
   </div>
 );
 
-export interface FormFieldProps extends ClassNameProps {
-  label?: React.ReactNode;
+export interface FormFieldProps extends Omit<React.HTMLProps<HTMLDivElement>, 'label'> {
+  label: React.ReactNode;
   control: React.ReactNode;
-  short?: boolean;
   icon?: string;
   help?: string;
-  error?: string;
+  error?: React.ReactNode;
 }
 
-const Field = styled.div<{ short?: boolean }>(props => ({
-  maxWidth: props.short === true ? '10rem' : undefined,
-}));
-
-export const FormField: React.FC<FormFieldProps> = ({ label, control, short, icon, help, error, className }) => (
-  <Field className={cx('field', className)} short={short}>
-    {label != null && <label className="label">{label}</label>}
-    <div
-      className={cx('control', {
-        'has-icons-left': icon,
-        'has-icons-right': error,
-      })}
-    >
-      {control}
-      {icon && <Icon className="is-left" icon={icon} />}
-      {error && <Icon className="is-small is-right" icon="fa-exclamation-triangle" />}
-    </div>
+export const FormField: React.FC<FormFieldProps> = ({ label, control, icon, help, error, className }) => (
+  <div className={cx('field', className)}>
+    <label>
+      {isValidElement(label) ? (
+        cloneElement(label, { className: cx('label', label.props.className) })
+      ) : (
+        <span className="label">{label}</span>
+      )}
+      <div className={cx('control', { 'has-icons-left': icon })}>
+        {control}
+        {icon && <Icon className="is-left" icon={icon} />}
+      </div>
+    </label>
     {error && <p className="help is-danger">{error}</p>}
     {help && <p className="help">{help}</p>}
-  </Field>
+  </div>
 );

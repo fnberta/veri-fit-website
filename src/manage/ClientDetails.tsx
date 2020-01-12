@@ -1,25 +1,23 @@
 import styled from '@emotion/styled';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
-import { Session, Subscription, SubscriptionType, Training, User } from '../../shared/interfaces';
+import { Link } from '@reach/router';
+import { Session, Subscription, SubscriptionType, Training, Client } from '../../shared';
 import Button, { Buttons } from '../components/bulma/Button';
 import Card from '../components/bulma/Card';
 import Dialog from '../components/bulma/Dialog';
 import { Subtitle, Title } from '../components/bulma/Heading';
 import { Tag, Tags } from '../components/bulma/Tags';
 import { verticallySpaced } from '../utils/styles';
-import AddEditSubscriptionDialog from './AddEditSubscriptionDialog';
-import { formatLocale } from './dateTime';
-import EditUserDialog from './EditUserDialog';
-import { useRepos } from './RepoContext';
-import { getSubscriptionName, getTrainingName } from './SubscriptionFormFields';
+import AddSubscriptionDialog from './AddSubscriptionDialog';
+import { formatLocale, getToday } from './dateTime';
+import { getSubscriptionName, getTrainingName } from './displayNames';
+import EditClientDialog from './EditClientDialog';
+import { useRepos } from './repositories/RepoContext';
 
 export interface Props {
-  user: User;
-  onCloseClick: React.MouseEventHandler;
+  client: Client;
 }
-
-type SubscriptionDialog = { type: 'ADD' } | { type: 'EDIT'; subscription: Subscription };
 
 const LayoutCard = styled(Card)({
   gridColumn: '1 / -1',
@@ -48,9 +46,9 @@ const SubscriptionEntry = styled.li(verticallySpaced('0.75rem'), {
   padding: '0.75rem',
 });
 
-const SubscriptionSummary: React.FC<{ subscription: Subscription; onEditClick: React.MouseEventHandler }> = ({
+const SubscriptionSummary: React.FC<{ subscription: Subscription; onSetPaidClick: React.MouseEventHandler }> = ({
   subscription,
-  onEditClick,
+  onSetPaidClick,
 }) => {
   const active =
     subscription.type === SubscriptionType.SINGLE ||
@@ -65,7 +63,9 @@ const SubscriptionSummary: React.FC<{ subscription: Subscription; onEditClick: R
         </header>
         {active ? (
           <Buttons>
-            <Button title="Abo bearbeiten" icon="fa-edit" size="small" onClick={onEditClick} />
+            {subscription.paidAt == null && (
+              <Button title="Auf bezahlt setzen" icon="fa-dollar-sign" size="small" onClick={onSetPaidClick} />
+            )}
             <Button title="Abo löschen" icon="fa-trash" size="small" />
           </Buttons>
         ) : (
@@ -101,44 +101,51 @@ const SubscriptionSummary: React.FC<{ subscription: Subscription; onEditClick: R
         {subscription.paidAt ? (
           <Tag text={`Bezahlt am ${formatLocale(subscription.paidAt)}`} intent="success" />
         ) : (
-          <Tag text="Zahlung offen" intent="danger" />
+          <Tag text="Unbezahlt" intent="danger" />
         )}
       </Tags>
     </SubscriptionEntry>
   );
 };
 
-const UserDetails: React.FC<Props> = ({ user, onCloseClick }) => {
+const ClientDetails: React.FC<Props> = ({ client }) => {
   const [subscriptions, setSubscriptions] = useState([] as Subscription[]);
   const [sessions, setSessions] = useState([] as Session[]);
   const [trainings, setTrainings] = useState([] as Training[]);
-  const [subscriptionDialog, setSubscriptionDialog] = useState<SubscriptionDialog>();
+  const [showAddSubscriptionDialog, setAddSubscriptionDialog] = useState(false);
   const [showDeleteDialog, setDeleteDialog] = useState(false);
   const [showEditDialog, setEditDialog] = useState(false);
-  const { userRepo, sessionRepo, trainingRepo } = useRepos();
+  const { clientRepo, sessionRepo, trainingRepo } = useRepos();
 
-  useEffect(() => userRepo.observeAllSubscriptions(user.id, setSubscriptions), [userRepo, user]);
-  useEffect(() => sessionRepo.observeAllForUser(user, setSessions), [sessionRepo, user]);
-  useEffect(() => trainingRepo.observeAllForUser(user, setTrainings), [trainingRepo, user]);
+  useEffect(() => clientRepo.observeAllSubscriptions(client.id, setSubscriptions), [clientRepo, client.id]);
+  useEffect(() => sessionRepo.observeAllForClients(client.id, setSessions), [sessionRepo, client.id]);
+  useEffect(() => trainingRepo.observeAllForClients(client.id, setTrainings), [trainingRepo, client.id]);
+
+  async function handleSetSubscriptionPaidClick(subscription: Subscription) {
+    await clientRepo.updateSubscription(client.id, subscription.id, {
+      ...subscription,
+      paidAt: getToday(),
+    });
+  }
 
   return (
     <>
       <LayoutCard>
         <HeaderLayout className="block">
           <header>
-            <Title size={3} text={user.name} />
-            <Subtitle className="has-text-grey" size={5} text={`Geboren am ${formatLocale(user.birthday)}`} />
+            <Title size={3} text={client.name} />
+            <Subtitle className="has-text-grey" size={5} text={`Geboren am ${formatLocale(client.birthday)}`} />
           </header>
-          <button className="delete is-medium" onClick={onCloseClick} />
+          <Link className="delete is-medium" to="/manage/clients" />
         </HeaderLayout>
         <div className="columns">
           <Block className="column">
             <Title size={5} text="Kontaktdaten" />
             <div>
-              <div>{`${user.address.street} ${user.address.number}`}</div>
-              <div>{`${user.address.zip} ${user.address.city}`}</div>
-              <a href={`mailto:${user.email}`}>{user.email}</a>
-              <div>{user.phone}</div>
+              <div>{`${client.address.street} ${client.address.number}`}</div>
+              <div>{`${client.address.zip} ${client.address.city}`}</div>
+              <a href={`mailto:${client.email}`}>{client.email}</a>
+              <div>{client.phone}</div>
             </div>
             <Buttons>
               <Button text="Ändern" icon="fa-edit" size="small" onClick={() => setEditDialog(true)} />
@@ -152,22 +159,34 @@ const UserDetails: React.FC<Props> = ({ user, onCloseClick }) => {
                 <SubscriptionSummary
                   key={subscription.id}
                   subscription={subscription}
-                  onEditClick={() => setSubscriptionDialog({ type: 'EDIT', subscription })}
+                  onSetPaidClick={() => handleSetSubscriptionPaidClick(subscription)}
                 />
               ))}
             </SubscriptionsLayout>
-            <Button
-              text="Hinzufügen"
-              icon="fa-plus"
-              size="small"
-              onClick={() => setSubscriptionDialog({ type: 'ADD' })}
-            />
+            <Button text="Hinzufügen" icon="fa-plus" size="small" onClick={() => setAddSubscriptionDialog(true)} />
           </Block>
           <Block className="column">
             <Title size={5} text="Trainingszeiten" />
-            {trainings.map(training => (
-              <div key={training.id}>{getTrainingName(training.type)}</div>
-            ))}
+            {trainings.length > 0 ? (
+              <table className="table is-striped is-fullwidth">
+                <thead>
+                  <tr>
+                    <th>Training</th>
+                    <th>Zeit</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {trainings.map(training => (
+                    <tr key={training.id}>
+                      <td>{getTrainingName(training.type)}</td>
+                      <td>{`${training.time.start} - ${training.time.end}`}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <div>Noch keine Trainingszeiten gesetzt…</div>
+            )}
           </Block>
         </div>
         <Title size={5}>Anwesenheit</Title>
@@ -177,13 +196,15 @@ const UserDetails: React.FC<Props> = ({ user, onCloseClick }) => {
               <tr>
                 <th>Datum</th>
                 <th>Training</th>
+                <th>Zeit</th>
               </tr>
             </thead>
             <tbody>
               {sessions.map(session => (
                 <tr key={session.id}>
                   <td>{session.date}</td>
-                  <td>{session.category}</td>
+                  <td>{getTrainingName(session.category)}</td>
+                  <td>{`${session.time.start} - ${session.time.end}`}</td>
                 </tr>
               ))}
             </tbody>
@@ -192,25 +213,24 @@ const UserDetails: React.FC<Props> = ({ user, onCloseClick }) => {
           <div>Leider noch kein Training besucht…</div>
         )}
       </LayoutCard>
-      {subscriptionDialog && (
-        <AddEditSubscriptionDialog
-          userId={user.id}
-          subscription={subscriptionDialog.type === 'EDIT' ? subscriptionDialog.subscription : undefined}
-          onSubscriptionChanged={() => setSubscriptionDialog(undefined)}
-          onCancelClick={() => setSubscriptionDialog(undefined)}
+      {showAddSubscriptionDialog && (
+        <AddSubscriptionDialog
+          clientId={client.id}
+          onSubscriptionAdded={() => setAddSubscriptionDialog(false)}
+          onCancelClick={() => setAddSubscriptionDialog(false)}
         />
       )}
       {showDeleteDialog && (
         <Dialog
           title="Löschen bestätigen"
-          body={<p>{`Bist du sicher, dass du ${user.name} löschen möchtest?`}</p>}
+          body={<p>{`Bist du sicher, dass du ${client.name} löschen möchtest?`}</p>}
           footer={
             <>
               <Button
                 text="Löschen"
                 intent="danger"
                 onClick={async () => {
-                  await userRepo.delete(user.id);
+                  await clientRepo.delete(client.id);
                   setDeleteDialog(false);
                 }}
               />
@@ -221,9 +241,9 @@ const UserDetails: React.FC<Props> = ({ user, onCloseClick }) => {
         />
       )}
       {showEditDialog && (
-        <EditUserDialog
-          user={user}
-          onUserUpdated={() => setEditDialog(false)}
+        <EditClientDialog
+          client={client}
+          onClientUpdated={() => setEditDialog(false)}
           onCancelClick={() => setEditDialog(false)}
         />
       )}
@@ -231,4 +251,4 @@ const UserDetails: React.FC<Props> = ({ user, onCloseClick }) => {
   );
 };
 
-export default UserDetails;
+export default ClientDetails;

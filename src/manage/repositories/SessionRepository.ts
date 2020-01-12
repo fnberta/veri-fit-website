@@ -1,16 +1,7 @@
 import { Unsubscribe } from 'firebase';
 import { DateTime } from 'luxon';
-import { DocumentSnapshot, Firestore, Functions, HttpsCallable } from './firebase';
-import { MiniUser, Session, User } from '../../shared/interfaces';
-
-const SESSIONS_COLLECTION = 'sessions';
-
-function parseSession(snap: DocumentSnapshot): Session {
-  return {
-    id: snap.id,
-    ...snap.data(),
-  } as Session;
-}
+import { Collection, Session, parseSession } from '../../../shared';
+import { Firestore, Functions, HttpsCallable } from '../firebase';
 
 export default class SessionRepository {
   private readonly createSessions: HttpsCallable;
@@ -29,24 +20,20 @@ export default class SessionRepository {
   async update(session: Session): Promise<Session> {
     const { id, ...rest } = session;
     await this.db
-      .collection(SESSIONS_COLLECTION)
+      .collection(Collection.SESSIONS)
       .doc(id)
       .update(rest);
     return session;
   }
 
-  observeAllForUser(user: User, onChange: (sessions: Session[]) => void): Unsubscribe {
-    const miniUser: MiniUser = { id: user.id, name: user.name };
+  observeAllForClients(clientId: string, onChange: (sessions: Session[]) => void): Unsubscribe {
     return this.db
-      .collection(SESSIONS_COLLECTION)
-      .where('participants', 'array-contains', miniUser)
+      .collection(Collection.SESSIONS)
+      .where('clientIds', 'array-contains', clientId)
       .where('confirmed', '==', true)
       .orderBy('date', 'desc')
       .onSnapshot(querySnap => {
-        const sessions = [] as Session[];
-        querySnap.forEach(snap => {
-          sessions.push(parseSession(snap));
-        });
+        const sessions = querySnap.docs.map(parseSession);
         onChange(sessions);
       });
   }
@@ -55,14 +42,11 @@ export default class SessionRepository {
     const startDate = DateTime.fromObject({ weekYear: year, weekNumber });
     const endDate = startDate.plus({ weeks: 1 });
     return this.db
-      .collection(SESSIONS_COLLECTION)
+      .collection(Collection.SESSIONS)
       .where('date', '>=', startDate.toISODate())
       .where('date', '<', endDate.toISODate())
       .onSnapshot(querySnap => {
-        const sessions = [] as Session[];
-        querySnap.forEach(snap => {
-          sessions.push(parseSession(snap));
-        });
+        const sessions = querySnap.docs.map(parseSession);
         onChange(sessions);
       });
   }

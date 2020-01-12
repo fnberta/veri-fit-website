@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 import React from 'react';
-import { ClassNameProps } from '../interfaces';
 import { Subtitle } from './bulma/Heading';
 
 export const WEEKDAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'] as const;
@@ -16,7 +15,7 @@ export interface WeekdayEntry {
   content: React.ReactNode;
 }
 
-export interface Props extends ClassNameProps {
+export interface Props extends React.HTMLProps<HTMLDivElement> {
   monday: WeekdayEntry[];
   tuesday?: WeekdayEntry[];
   wednesday?: WeekdayEntry[];
@@ -30,14 +29,14 @@ const Layout = styled.div({
   display: 'grid',
   gridGap: '0.75rem',
   gridTemplateColumns: '1fr',
-  '@media screen and (min-width: 769px)': {
+  '@media screen and (min-width: 1280px)': {
     gridTemplateColumns: WEEKDAYS.map(day => `[${day}] 1fr`).join(' '),
     gridTemplateRows: `auto ${TIMES_OF_DAY.map(time => `[${time}] 1fr`).join(' ')}`,
   },
 });
 
 const ScheduleItem = styled.div<{ weekday: Weekday; timeOfDay: TimeOfDay }>(({ weekday, timeOfDay }) => ({
-  '@media screen and (min-width: 769px)': {
+  '@media screen and (min-width: 1280px)': {
     gridColumnStart: weekday,
     gridRowStart: timeOfDay,
   },
@@ -55,8 +54,8 @@ const ScheduleBlock: React.FC<{ title: string; entries?: WeekdayEntry[] }> = ({ 
   </>
 );
 
-const WeekSchedule: React.FC<Props> = ({ monday, tuesday, wednesday, thursday, friday, saturday, className }) => (
-  <Layout className={className}>
+const WeekSchedule: React.FC<Props> = ({ monday, tuesday, wednesday, thursday, friday, saturday, ...rest }) => (
+  <Layout {...rest}>
     <ScheduleBlock title="Montag" entries={monday} />
     <ScheduleBlock title="Dienstag" entries={tuesday} />
     <ScheduleBlock title="Mittwoch" entries={wednesday} />

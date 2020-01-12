@@ -5,6 +5,22 @@ module.exports = {
     author: 'Vera Lienhard',
   },
   plugins: [
+    'gatsby-transformer-sharp',
+    'gatsby-plugin-sharp',
+    {
+      resolve: 'gatsby-transformer-remark',
+      options: {
+        plugins: [
+          {
+            resolve: 'gatsby-remark-relative-images',
+            options: {
+              name: 'assets',
+            },
+          },
+          'gatsby-remark-images',
+        ],
+      },
+    },
     {
       resolve: 'gatsby-source-filesystem',
       options: {
@@ -47,29 +63,11 @@ module.exports = {
         path: `${__dirname}/src/schedule`,
       },
     },
-    {
-      resolve: 'gatsby-transformer-remark',
-      options: {
-        plugins: [
-          {
-            resolve: 'gatsby-remark-relative-images',
-            options: {
-              name: 'assets',
-            },
-          },
-          'gatsby-remark-images',
-        ],
-      },
-    },
-    'gatsby-transformer-sharp',
-    'gatsby-plugin-sharp',
     'gatsby-plugin-typescript',
     'gatsby-plugin-emotion',
     'gatsby-plugin-sass',
     'gatsby-plugin-react-helmet',
-    {
-      resolve: `gatsby-plugin-portal`,
-    },
+    'gatsby-plugin-portal',
     {
       resolve: 'gatsby-plugin-netlify-cms',
       options: {

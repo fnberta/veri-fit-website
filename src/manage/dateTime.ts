@@ -1,6 +1,6 @@
 import { DateTime, DurationObject } from 'luxon';
 
-export function getToday() {
+export function getToday(): string {
   return DateTime.local().toISODate();
 }
 
@@ -12,4 +12,8 @@ export function getEndDate(start: string, duration: DurationObject): string {
 
 export function formatLocale(isoDate: string): string {
   return DateTime.fromISO(isoDate).toLocaleString();
+}
+
+export function getStartOfToday(): DateTime {
+  return DateTime.local().startOf('day');
 }

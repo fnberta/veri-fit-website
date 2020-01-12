@@ -1,3 +1,3 @@
-export type UnionKeys<T> = T extends any ? keyof T : never;
+export type DistributiveOmit<T, K extends keyof T> = T extends unknown ? Omit<T, K> : never;
 
-export type UnionPick<T, K extends UnionKeys<T>> = T extends any ? Pick<T, Extract<K, keyof T>> : never;
+export type DistributivePick<T, K extends keyof T> = T extends unknown ? Pick<T, K> : never;

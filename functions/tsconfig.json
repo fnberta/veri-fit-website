@@ -2,9 +2,9 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "target": "es2017",
-    "rootDir": "src",
     "outDir": "lib",
     "noEmit": false,
-    "sourceMap": true
+    "sourceMap": true,
+    "skipLibCheck": true
   }
 }

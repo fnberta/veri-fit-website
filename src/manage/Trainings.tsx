@@ -1,20 +1,21 @@
-import styled from '@emotion/styled';
+import { RouteComponentProps } from '@reach/router';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
-import Button from '../components/bulma/Button';
-import Card from '../components/bulma/Card';
+import { Client, Session, Time, Training } from '../../shared';
+import Button, { Buttons } from '../components/bulma/Button';
+import { Title } from '../components/bulma/Heading';
 import { Container, Section } from '../components/bulma/Page';
-import { Subtitle, Title } from '../components/bulma/Heading';
 import WeekSchedule, { TimeOfDay, Weekday, WeekdayEntry } from '../components/WeekSchedule';
-import AddTrainingDialog from './AddTrainingDialog';
-import { Session, Time } from '../../shared/interfaces';
-import { useRepos } from './RepoContext';
-import { RouteComponentProps } from '@reach/router';
-import EditSessionDialog from './EditSessionDialog';
+import AddEditTrainingDialog from './AddEditTrainingDialog';
+import EditParticipantsDialog from './EditParticipantsDialog';
+import { useRepos } from './repositories/RepoContext';
+import SessionCard from './SessionCard';
 
 export type Props = RouteComponentProps;
 
 type Week = Record<Weekday, WeekdayEntry[]>;
+
+type TrainingDialog = { type: 'ADD' } | { type: 'EDIT'; training: Training };
 
 function mapNumericWeekday(weekday: number): Weekday {
   switch (weekday) {
@@ -48,23 +49,19 @@ function getTimeOfDay(time: Time): TimeOfDay {
   return 'midday';
 }
 
-const SessionCard = styled(Card)<{ confirmed: boolean }>(props => ({
-  cursor: props.confirmed ? '' : 'pointer',
-  backgroundColor: props.confirmed ? 'hsl(0, 0%, 71%)' : undefined,
-}));
-
 const Trainings: React.FC<Props> = () => {
-  const { weekYear, weekNumber } = DateTime.local();
-  const [addModalOpen, setAddModalOpen] = useState(false);
-  const [editSession, setEditSession] = useState<Session>();
-  const [week, setWeek] = useState(weekNumber);
+  const [date, setDate] = useState(() => DateTime.local());
+  const [trainingDialog, setTrainingDialog] = useState<TrainingDialog>();
+  const [editSessionParticipants, setEditSessionParticipants] = useState<Session>();
+  const [clients, setClients] = useState([] as Client[]);
   const [sessions, setSessions] = useState([] as Session[]);
-  const { sessionRepo } = useRepos();
+  const { clientRepo, sessionRepo } = useRepos();
 
-  useEffect(() => sessionRepo.observeAllForWeek(weekYear, week, setSessions), [sessionRepo, weekYear, week]);
+  useEffect(() => clientRepo.observeAll(setClients), [clientRepo]);
+  useEffect(() => sessionRepo.observeAllForWeek(date.weekYear, date.weekNumber, setSessions), [sessionRepo, date]);
   useEffect(() => {
-    sessionRepo.createForWeek(weekYear, week).catch(err => console.error(err));
-  }, [sessionRepo, weekYear, week]);
+    sessionRepo.createForWeek(date.weekYear, date.weekNumber).catch(err => console.error(err));
+  }, [sessionRepo, date]);
 
   return (
     <Section>
@@ -75,14 +72,14 @@ const Trainings: React.FC<Props> = () => {
           text="Hinzufügen"
           icon="fa-plus"
           intent="primary"
-          onClick={() => setAddModalOpen(true)}
+          onClick={() => setTrainingDialog({ type: 'ADD' })}
         />
-        <div className="buttons has-addons">
-          <Button text="Previous" onClick={() => setWeek(prev => prev - 1)} />
-          <Button text="Current" onClick={() => setWeek(weekNumber)} />
-          <Button text="Next" onClick={() => setWeek(prev => prev + 1)} />
-        </div>
-        <div>{week}</div>
+        <Buttons>
+          <Button text="Previous" onClick={() => setDate(prev => prev.minus({ weeks: 1 }))} />
+          <Button text="Current" onClick={() => setDate(DateTime.local())} />
+          <Button text="Next" onClick={() => setDate(prev => prev.plus({ weeks: 1 }))} />
+        </Buttons>
+        <Title size={4}>{`Woche ${date.weekNumber}`}</Title>
         <WeekSchedule
           {...sessions.reduce<Week>(
             (acc, curr) => {
@@ -92,11 +89,13 @@ const Trainings: React.FC<Props> = () => {
                 weekday,
                 timeOfDay: getTimeOfDay(curr.time),
                 content: (
-                  <SessionCard confirmed={curr.confirmed} onClick={() => setEditSession(curr)}>
-                    <Title text={curr.category} size={5} />
-                    <Subtitle text={`${curr.time.start} - ${curr.time.end}`} size={6} />
-                    <p>{`${curr.participants.length} Teilnehmer`}</p>
-                  </SessionCard>
+                  <SessionCard
+                    session={curr}
+                    clients={clients}
+                    onConfirmToggle={() => sessionRepo.update({ ...curr, confirmed: !curr.confirmed })}
+                    onEditParticipantsClick={() => setEditSessionParticipants(curr)}
+                    onEditTrainingClick={training => setTrainingDialog({ type: 'EDIT', training })}
+                  />
                 ),
               });
 
@@ -112,17 +111,33 @@ const Trainings: React.FC<Props> = () => {
             },
           )}
         />
-        {addModalOpen && (
-          <AddTrainingDialog
-            onTrainingCreated={() => setAddModalOpen(false)}
-            onCancelClick={() => setAddModalOpen(false)}
+        {trainingDialog?.type === 'ADD' && (
+          <AddEditTrainingDialog
+            clients={clients}
+            onTrainingChanged={() => {
+              setTrainingDialog(undefined);
+              sessionRepo.createForWeek(date.weekYear, date.weekNumber).catch(err => console.error(err));
+            }}
+            onCancelClick={() => setTrainingDialog(undefined)}
           />
         )}
-        {editSession && (
-          <EditSessionDialog
-            session={editSession}
-            onSessionUpdated={() => setEditSession(undefined)}
-            onCancelClick={() => setEditSession(undefined)}
+        {trainingDialog?.type === 'EDIT' && (
+          <AddEditTrainingDialog
+            training={trainingDialog.training}
+            clients={clients}
+            onTrainingChanged={() => {
+              setTrainingDialog(undefined);
+              sessionRepo.createForWeek(date.weekYear, date.weekNumber).catch(err => console.error(err));
+            }}
+            onCancelClick={() => setTrainingDialog(undefined)}
+          />
+        )}
+        {editSessionParticipants && (
+          <EditParticipantsDialog
+            session={editSessionParticipants}
+            clients={clients}
+            onSessionUpdated={() => setEditSessionParticipants(undefined)}
+            onCancelClick={() => setEditSessionParticipants(undefined)}
           />
         )}
       </Container>

@@ -1,8 +1,7 @@
 import cx from 'classnames';
 import React from 'react';
-import { ClassNameProps } from '../../interfaces';
 
-export interface Props extends ClassNameProps, React.HTMLProps<HTMLDivElement> {
+export interface Props extends React.HTMLProps<HTMLDivElement> {
   image?: React.ReactNode;
 }
 

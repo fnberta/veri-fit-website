@@ -1,9 +1,5 @@
-export enum TrainingType {
-  YOGA = 'YOGA',
-  BOOST = 'BOOST',
-  HIIT = 'HIIT',
-  PERSONAL = 'PERSONAL',
-}
+import { Entity, Snapshot } from './common';
+import { TrainingType } from './training';
 
 export enum SubscriptionType {
   SINGLE = 'SINGLE',
@@ -13,8 +9,7 @@ export enum SubscriptionType {
   BLOCK = 'BLOCK',
 }
 
-export interface SubscriptionFields {
-  id: string;
+export interface SubscriptionFields extends Entity {
   start: string; // YYYY-MM-DD
   paidAt?: string; // YYYY-MM-DD
 }
@@ -55,50 +50,9 @@ export interface PersonalSubscription extends SubscriptionFields {
 
 export type Subscription = YogaSubscription | HiitSubscription | BoostSubscription | PersonalSubscription;
 
-export interface MiniUser {
-  id: string;
-  name: string;
-}
-
-export interface User extends MiniUser {
-  email: string;
-  birthday: string; // YYYY-MM-DD
-  address: {
-    street: string;
-    number: string;
-    zip: string;
-    city: string;
-  };
-  phone: string;
-  subscriptions: {
-    unpaid: boolean;
-    expires: boolean;
-    runsShort: boolean;
-  };
-}
-
-export interface Time {
-  start: string; // hh:mm
-  end: string; // hh:mm
-}
-
-export interface ParticipantsMap {
-  [userId: string]: string;
-}
-
-export interface Training {
-  id: string;
-  type: TrainingType;
-  weekday: 1 | 2 | 3 | 4 | 5 | 6 | 7;
-  time: Time;
-  participants: MiniUser[];
-}
-
-export interface Session {
-  id: string;
-  category: TrainingType;
-  time: Time;
-  date: string; // YYYY-MM-DD
-  participants: MiniUser[];
-  confirmed: boolean;
+export function parseSubscription(snap: Snapshot): Subscription {
+  return {
+    id: snap.id,
+    ...snap.data(),
+  } as Subscription;
 }

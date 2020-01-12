@@ -1,12 +1,14 @@
 import React, { useContext } from 'react';
+import AuthRepository from './AuthRepository';
 import SessionRepository from './SessionRepository';
-import UserRepository from './UserRepository';
+import ClientRepository from './ClientRepository';
 import TrainingRepository from './TrainingRepository';
 
 export interface RepoContextValues {
-  userRepo: UserRepository;
+  clientRepo: ClientRepository;
   sessionRepo: SessionRepository;
   trainingRepo: TrainingRepository;
+  authRepo: AuthRepository;
 }
 
 export const RepoContext = React.createContext<RepoContextValues | undefined>(undefined);
