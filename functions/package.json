@@ -8,9 +8,8 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "build": "rm -rf lib && tsc",
-    "shell": "npm run build && firebase functions:shell",
-    "start": "npm run shell",
-    "deploy": "firebase deploy --only functions",
+    "shell": "yarn build && firebase functions:shell",
+    "start": "yarn shell",
     "logs": "firebase functions:log"
   },
   "dependencies": {

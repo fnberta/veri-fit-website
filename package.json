@@ -9,6 +9,7 @@
     "build": "gatsby build",
     "dev": "gatsby develop -H 0.0.0.0",
     "serve": "gatsby serve",
+    "firebase:deploy": "firebase deploy",
     "typecheck": "tsc --noEmit",
     "test": "jest",
     "lint": "eslint 'src/**/*.{ts,tsx,js,jsx}'",

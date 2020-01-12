@@ -24,11 +24,6 @@ export default function initFirebase(): firebase.app.App {
   return firebase.initializeApp(firebaseConfig);
 }
 
-export function initFirebaseAuth() {
-  const auth = firebase.auth();
-  auth.useDeviceLanguage();
-  return {
-    auth,
-    provider: new firebase.auth.GoogleAuthProvider(),
-  };
+export function getGoogleAuthProvider() {
+  return new firebase.auth.GoogleAuthProvider();
 }

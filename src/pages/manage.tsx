@@ -6,7 +6,7 @@ import Layout from '../components/Layout';
 import Navbar from '../components/Navbar2';
 import { ManagePageQuery } from '../generatedGraphQL';
 import Clients from '../manage/Clients';
-import initFirebase, { initFirebaseAuth } from '../manage/firebase';
+import initFirebase, { getGoogleAuthProvider } from '../manage/firebase';
 import AuthRepository from '../manage/repositories/AuthRepository';
 import ClientRepository from '../manage/repositories/ClientRepository';
 import { RepoContext, RepoContextValues } from '../manage/repositories/RepoContext';
@@ -17,11 +17,12 @@ import Trainings from '../manage/Trainings';
 const firebaseApp = initFirebase();
 const db = firebaseApp.firestore();
 const functions = firebaseApp.functions();
-const auth = initFirebaseAuth();
+const auth = firebaseApp.auth();
+auth.useDeviceLanguage();
 const clientRepo = new ClientRepository(db);
 const sessionRepo = new SessionRepository(db, functions);
 const trainingRepo = new TrainingRepository(db);
-const authRepo = new AuthRepository(auth.auth, auth.provider);
+const authRepo = new AuthRepository(auth, getGoogleAuthProvider());
 
 const repos: RepoContextValues = {
   clientRepo,
