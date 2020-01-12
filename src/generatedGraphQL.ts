@@ -1,5 +1,6 @@
 /* eslint-disable */
 export type Maybe<T> = T | null;
+
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -7,12 +8,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /**
-   * A date string, such as 2007-12-03, compliant with the ISO 8601 standard for
-   * representation of dates and times using the Gregorian calendar.
-   **/
   Date: any;
-  /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: any;
 };
 
@@ -36,43 +32,43 @@ export type DateQueryOperatorInput = {
 
 export type Directory = Node & {
   __typename?: 'Directory';
+  sourceInstanceName: Scalars['String'];
+  absolutePath: Scalars['String'];
+  relativePath: Scalars['String'];
+  extension: Scalars['String'];
+  size: Scalars['Int'];
+  prettySize: Scalars['String'];
+  modifiedTime: Scalars['Date'];
+  accessTime: Scalars['Date'];
+  changeTime: Scalars['Date'];
+  birthTime: Scalars['Date'];
+  root: Scalars['String'];
+  dir: Scalars['String'];
+  base: Scalars['String'];
+  ext: Scalars['String'];
+  name: Scalars['String'];
+  relativeDirectory: Scalars['String'];
+  dev: Scalars['Int'];
+  mode: Scalars['Int'];
+  nlink: Scalars['Int'];
+  uid: Scalars['Int'];
+  gid: Scalars['Int'];
+  rdev: Scalars['Int'];
+  ino: Scalars['Float'];
+  atimeMs: Scalars['Float'];
+  mtimeMs: Scalars['Float'];
+  ctimeMs: Scalars['Float'];
+  atime: Scalars['Date'];
+  mtime: Scalars['Date'];
+  ctime: Scalars['Date'];
+  birthtime?: Maybe<Scalars['Date']>;
+  birthtimeMs?: Maybe<Scalars['Float']>;
+  blksize?: Maybe<Scalars['Int']>;
+  blocks?: Maybe<Scalars['Int']>;
   id: Scalars['ID'];
   parent?: Maybe<Node>;
   children: Array<Node>;
   internal: Internal;
-  sourceInstanceName?: Maybe<Scalars['String']>;
-  absolutePath?: Maybe<Scalars['String']>;
-  relativePath?: Maybe<Scalars['String']>;
-  extension?: Maybe<Scalars['String']>;
-  size?: Maybe<Scalars['Int']>;
-  prettySize?: Maybe<Scalars['String']>;
-  modifiedTime?: Maybe<Scalars['Date']>;
-  accessTime?: Maybe<Scalars['Date']>;
-  changeTime?: Maybe<Scalars['Date']>;
-  birthTime?: Maybe<Scalars['Date']>;
-  root?: Maybe<Scalars['String']>;
-  dir?: Maybe<Scalars['String']>;
-  base?: Maybe<Scalars['String']>;
-  ext?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
-  relativeDirectory?: Maybe<Scalars['String']>;
-  dev?: Maybe<Scalars['Int']>;
-  mode?: Maybe<Scalars['Int']>;
-  nlink?: Maybe<Scalars['Int']>;
-  uid?: Maybe<Scalars['Int']>;
-  gid?: Maybe<Scalars['Int']>;
-  rdev?: Maybe<Scalars['Int']>;
-  blksize?: Maybe<Scalars['Int']>;
-  ino?: Maybe<Scalars['Int']>;
-  blocks?: Maybe<Scalars['Int']>;
-  atimeMs?: Maybe<Scalars['Float']>;
-  mtimeMs?: Maybe<Scalars['Float']>;
-  ctimeMs?: Maybe<Scalars['Float']>;
-  birthtimeMs?: Maybe<Scalars['Float']>;
-  atime?: Maybe<Scalars['Date']>;
-  mtime?: Maybe<Scalars['Date']>;
-  ctime?: Maybe<Scalars['Date']>;
-  birthtime?: Maybe<Scalars['Date']>;
 };
 
 export type DirectoryModifiedTimeArgs = {
@@ -124,13 +120,6 @@ export type DirectoryCtimeArgs = {
   locale?: Maybe<Scalars['String']>;
 };
 
-export type DirectoryBirthtimeArgs = {
-  formatString?: Maybe<Scalars['String']>;
-  fromNow?: Maybe<Scalars['Boolean']>;
-  difference?: Maybe<Scalars['String']>;
-  locale?: Maybe<Scalars['String']>;
-};
-
 export type DirectoryConnection = {
   __typename?: 'DirectoryConnection';
   totalCount: Scalars['Int'];
@@ -159,6 +148,39 @@ export type DirectoryEdge = {
 };
 
 export enum DirectoryFieldsEnum {
+  SourceInstanceName = 'sourceInstanceName',
+  AbsolutePath = 'absolutePath',
+  RelativePath = 'relativePath',
+  Extension = 'extension',
+  Size = 'size',
+  PrettySize = 'prettySize',
+  ModifiedTime = 'modifiedTime',
+  AccessTime = 'accessTime',
+  ChangeTime = 'changeTime',
+  BirthTime = 'birthTime',
+  Root = 'root',
+  Dir = 'dir',
+  Base = 'base',
+  Ext = 'ext',
+  Name = 'name',
+  RelativeDirectory = 'relativeDirectory',
+  Dev = 'dev',
+  Mode = 'mode',
+  Nlink = 'nlink',
+  Uid = 'uid',
+  Gid = 'gid',
+  Rdev = 'rdev',
+  Ino = 'ino',
+  AtimeMs = 'atimeMs',
+  MtimeMs = 'mtimeMs',
+  CtimeMs = 'ctimeMs',
+  Atime = 'atime',
+  Mtime = 'mtime',
+  Ctime = 'ctime',
+  Birthtime = 'birthtime',
+  BirthtimeMs = 'birthtimeMs',
+  Blksize = 'blksize',
+  Blocks = 'blocks',
   Id = 'id',
   ParentId = 'parent___id',
   ParentParentId = 'parent___parent___id',
@@ -245,46 +267,9 @@ export enum DirectoryFieldsEnum {
   InternalMediaType = 'internal___mediaType',
   InternalOwner = 'internal___owner',
   InternalType = 'internal___type',
-  SourceInstanceName = 'sourceInstanceName',
-  AbsolutePath = 'absolutePath',
-  RelativePath = 'relativePath',
-  Extension = 'extension',
-  Size = 'size',
-  PrettySize = 'prettySize',
-  ModifiedTime = 'modifiedTime',
-  AccessTime = 'accessTime',
-  ChangeTime = 'changeTime',
-  BirthTime = 'birthTime',
-  Root = 'root',
-  Dir = 'dir',
-  Base = 'base',
-  Ext = 'ext',
-  Name = 'name',
-  RelativeDirectory = 'relativeDirectory',
-  Dev = 'dev',
-  Mode = 'mode',
-  Nlink = 'nlink',
-  Uid = 'uid',
-  Gid = 'gid',
-  Rdev = 'rdev',
-  Blksize = 'blksize',
-  Ino = 'ino',
-  Blocks = 'blocks',
-  AtimeMs = 'atimeMs',
-  MtimeMs = 'mtimeMs',
-  CtimeMs = 'ctimeMs',
-  BirthtimeMs = 'birthtimeMs',
-  Atime = 'atime',
-  Mtime = 'mtime',
-  Ctime = 'ctime',
-  Birthtime = 'birthtime',
 }
 
 export type DirectoryFilterInput = {
-  id?: Maybe<StringQueryOperatorInput>;
-  parent?: Maybe<NodeFilterInput>;
-  children?: Maybe<NodeFilterListInput>;
-  internal?: Maybe<InternalFilterInput>;
   sourceInstanceName?: Maybe<StringQueryOperatorInput>;
   absolutePath?: Maybe<StringQueryOperatorInput>;
   relativePath?: Maybe<StringQueryOperatorInput>;
@@ -307,17 +292,21 @@ export type DirectoryFilterInput = {
   uid?: Maybe<IntQueryOperatorInput>;
   gid?: Maybe<IntQueryOperatorInput>;
   rdev?: Maybe<IntQueryOperatorInput>;
-  blksize?: Maybe<IntQueryOperatorInput>;
-  ino?: Maybe<IntQueryOperatorInput>;
-  blocks?: Maybe<IntQueryOperatorInput>;
+  ino?: Maybe<FloatQueryOperatorInput>;
   atimeMs?: Maybe<FloatQueryOperatorInput>;
   mtimeMs?: Maybe<FloatQueryOperatorInput>;
   ctimeMs?: Maybe<FloatQueryOperatorInput>;
-  birthtimeMs?: Maybe<FloatQueryOperatorInput>;
   atime?: Maybe<DateQueryOperatorInput>;
   mtime?: Maybe<DateQueryOperatorInput>;
   ctime?: Maybe<DateQueryOperatorInput>;
   birthtime?: Maybe<DateQueryOperatorInput>;
+  birthtimeMs?: Maybe<FloatQueryOperatorInput>;
+  blksize?: Maybe<IntQueryOperatorInput>;
+  blocks?: Maybe<IntQueryOperatorInput>;
+  id?: Maybe<StringQueryOperatorInput>;
+  parent?: Maybe<NodeFilterInput>;
+  children?: Maybe<NodeFilterListInput>;
+  internal?: Maybe<InternalFilterInput>;
 };
 
 export type DirectoryGroupConnection = {
@@ -343,46 +332,45 @@ export type DuotoneGradient = {
 
 export type File = Node & {
   __typename?: 'File';
+  sourceInstanceName: Scalars['String'];
+  absolutePath: Scalars['String'];
+  relativePath: Scalars['String'];
+  extension: Scalars['String'];
+  size: Scalars['Int'];
+  prettySize: Scalars['String'];
+  modifiedTime: Scalars['Date'];
+  accessTime: Scalars['Date'];
+  changeTime: Scalars['Date'];
+  birthTime: Scalars['Date'];
+  root: Scalars['String'];
+  dir: Scalars['String'];
+  base: Scalars['String'];
+  ext: Scalars['String'];
+  name: Scalars['String'];
+  relativeDirectory: Scalars['String'];
+  dev: Scalars['Int'];
+  mode: Scalars['Int'];
+  nlink: Scalars['Int'];
+  uid: Scalars['Int'];
+  gid: Scalars['Int'];
+  rdev: Scalars['Int'];
+  ino: Scalars['Float'];
+  atimeMs: Scalars['Float'];
+  mtimeMs: Scalars['Float'];
+  ctimeMs: Scalars['Float'];
+  atime: Scalars['Date'];
+  mtime: Scalars['Date'];
+  ctime: Scalars['Date'];
   birthtime?: Maybe<Scalars['Date']>;
   birthtimeMs?: Maybe<Scalars['Float']>;
-  sourceInstanceName?: Maybe<Scalars['String']>;
-  absolutePath?: Maybe<Scalars['String']>;
-  relativePath?: Maybe<Scalars['String']>;
-  extension?: Maybe<Scalars['String']>;
-  size?: Maybe<Scalars['Int']>;
-  prettySize?: Maybe<Scalars['String']>;
-  modifiedTime?: Maybe<Scalars['Date']>;
-  accessTime?: Maybe<Scalars['Date']>;
-  changeTime?: Maybe<Scalars['Date']>;
-  birthTime?: Maybe<Scalars['Date']>;
-  root?: Maybe<Scalars['String']>;
-  dir?: Maybe<Scalars['String']>;
-  base?: Maybe<Scalars['String']>;
-  ext?: Maybe<Scalars['String']>;
-  name?: Maybe<Scalars['String']>;
-  relativeDirectory?: Maybe<Scalars['String']>;
-  dev?: Maybe<Scalars['Int']>;
-  mode?: Maybe<Scalars['Int']>;
-  nlink?: Maybe<Scalars['Int']>;
-  uid?: Maybe<Scalars['Int']>;
-  gid?: Maybe<Scalars['Int']>;
-  rdev?: Maybe<Scalars['Int']>;
   blksize?: Maybe<Scalars['Int']>;
-  ino?: Maybe<Scalars['Int']>;
   blocks?: Maybe<Scalars['Int']>;
-  atimeMs?: Maybe<Scalars['Float']>;
-  mtimeMs?: Maybe<Scalars['Float']>;
-  ctimeMs?: Maybe<Scalars['Float']>;
-  atime?: Maybe<Scalars['Date']>;
-  mtime?: Maybe<Scalars['Date']>;
-  ctime?: Maybe<Scalars['Date']>;
-  /** Copy file to static directory and return public url to it */
   publicURL?: Maybe<Scalars['String']>;
+  childImageSharp?: Maybe<ImageSharp>;
   id: Scalars['ID'];
   parent?: Maybe<Node>;
   children: Array<Node>;
   internal: Internal;
-  childImageSharp?: Maybe<ImageSharp>;
   childMarkdownRemark?: Maybe<MarkdownRemark>;
 };
 
@@ -463,8 +451,6 @@ export type FileEdge = {
 };
 
 export enum FileFieldsEnum {
-  Birthtime = 'birthtime',
-  BirthtimeMs = 'birthtimeMs',
   SourceInstanceName = 'sourceInstanceName',
   AbsolutePath = 'absolutePath',
   RelativePath = 'relativePath',
@@ -487,16 +473,109 @@ export enum FileFieldsEnum {
   Uid = 'uid',
   Gid = 'gid',
   Rdev = 'rdev',
-  Blksize = 'blksize',
   Ino = 'ino',
-  Blocks = 'blocks',
   AtimeMs = 'atimeMs',
   MtimeMs = 'mtimeMs',
   CtimeMs = 'ctimeMs',
   Atime = 'atime',
   Mtime = 'mtime',
   Ctime = 'ctime',
+  Birthtime = 'birthtime',
+  BirthtimeMs = 'birthtimeMs',
+  Blksize = 'blksize',
+  Blocks = 'blocks',
   PublicUrl = 'publicURL',
+  ChildImageSharpFixedBase64 = 'childImageSharp___fixed___base64',
+  ChildImageSharpFixedTracedSvg = 'childImageSharp___fixed___tracedSVG',
+  ChildImageSharpFixedAspectRatio = 'childImageSharp___fixed___aspectRatio',
+  ChildImageSharpFixedWidth = 'childImageSharp___fixed___width',
+  ChildImageSharpFixedHeight = 'childImageSharp___fixed___height',
+  ChildImageSharpFixedSrc = 'childImageSharp___fixed___src',
+  ChildImageSharpFixedSrcSet = 'childImageSharp___fixed___srcSet',
+  ChildImageSharpFixedSrcWebp = 'childImageSharp___fixed___srcWebp',
+  ChildImageSharpFixedSrcSetWebp = 'childImageSharp___fixed___srcSetWebp',
+  ChildImageSharpFixedOriginalName = 'childImageSharp___fixed___originalName',
+  ChildImageSharpResolutionsBase64 = 'childImageSharp___resolutions___base64',
+  ChildImageSharpResolutionsTracedSvg = 'childImageSharp___resolutions___tracedSVG',
+  ChildImageSharpResolutionsAspectRatio = 'childImageSharp___resolutions___aspectRatio',
+  ChildImageSharpResolutionsWidth = 'childImageSharp___resolutions___width',
+  ChildImageSharpResolutionsHeight = 'childImageSharp___resolutions___height',
+  ChildImageSharpResolutionsSrc = 'childImageSharp___resolutions___src',
+  ChildImageSharpResolutionsSrcSet = 'childImageSharp___resolutions___srcSet',
+  ChildImageSharpResolutionsSrcWebp = 'childImageSharp___resolutions___srcWebp',
+  ChildImageSharpResolutionsSrcSetWebp = 'childImageSharp___resolutions___srcSetWebp',
+  ChildImageSharpResolutionsOriginalName = 'childImageSharp___resolutions___originalName',
+  ChildImageSharpFluidBase64 = 'childImageSharp___fluid___base64',
+  ChildImageSharpFluidTracedSvg = 'childImageSharp___fluid___tracedSVG',
+  ChildImageSharpFluidAspectRatio = 'childImageSharp___fluid___aspectRatio',
+  ChildImageSharpFluidSrc = 'childImageSharp___fluid___src',
+  ChildImageSharpFluidSrcSet = 'childImageSharp___fluid___srcSet',
+  ChildImageSharpFluidSrcWebp = 'childImageSharp___fluid___srcWebp',
+  ChildImageSharpFluidSrcSetWebp = 'childImageSharp___fluid___srcSetWebp',
+  ChildImageSharpFluidSizes = 'childImageSharp___fluid___sizes',
+  ChildImageSharpFluidOriginalImg = 'childImageSharp___fluid___originalImg',
+  ChildImageSharpFluidOriginalName = 'childImageSharp___fluid___originalName',
+  ChildImageSharpFluidPresentationWidth = 'childImageSharp___fluid___presentationWidth',
+  ChildImageSharpFluidPresentationHeight = 'childImageSharp___fluid___presentationHeight',
+  ChildImageSharpSizesBase64 = 'childImageSharp___sizes___base64',
+  ChildImageSharpSizesTracedSvg = 'childImageSharp___sizes___tracedSVG',
+  ChildImageSharpSizesAspectRatio = 'childImageSharp___sizes___aspectRatio',
+  ChildImageSharpSizesSrc = 'childImageSharp___sizes___src',
+  ChildImageSharpSizesSrcSet = 'childImageSharp___sizes___srcSet',
+  ChildImageSharpSizesSrcWebp = 'childImageSharp___sizes___srcWebp',
+  ChildImageSharpSizesSrcSetWebp = 'childImageSharp___sizes___srcSetWebp',
+  ChildImageSharpSizesSizes = 'childImageSharp___sizes___sizes',
+  ChildImageSharpSizesOriginalImg = 'childImageSharp___sizes___originalImg',
+  ChildImageSharpSizesOriginalName = 'childImageSharp___sizes___originalName',
+  ChildImageSharpSizesPresentationWidth = 'childImageSharp___sizes___presentationWidth',
+  ChildImageSharpSizesPresentationHeight = 'childImageSharp___sizes___presentationHeight',
+  ChildImageSharpOriginalWidth = 'childImageSharp___original___width',
+  ChildImageSharpOriginalHeight = 'childImageSharp___original___height',
+  ChildImageSharpOriginalSrc = 'childImageSharp___original___src',
+  ChildImageSharpResizeSrc = 'childImageSharp___resize___src',
+  ChildImageSharpResizeTracedSvg = 'childImageSharp___resize___tracedSVG',
+  ChildImageSharpResizeWidth = 'childImageSharp___resize___width',
+  ChildImageSharpResizeHeight = 'childImageSharp___resize___height',
+  ChildImageSharpResizeAspectRatio = 'childImageSharp___resize___aspectRatio',
+  ChildImageSharpResizeOriginalName = 'childImageSharp___resize___originalName',
+  ChildImageSharpId = 'childImageSharp___id',
+  ChildImageSharpParentId = 'childImageSharp___parent___id',
+  ChildImageSharpParentParentId = 'childImageSharp___parent___parent___id',
+  ChildImageSharpParentParentChildren = 'childImageSharp___parent___parent___children',
+  ChildImageSharpParentChildren = 'childImageSharp___parent___children',
+  ChildImageSharpParentChildrenId = 'childImageSharp___parent___children___id',
+  ChildImageSharpParentChildrenChildren = 'childImageSharp___parent___children___children',
+  ChildImageSharpParentInternalContent = 'childImageSharp___parent___internal___content',
+  ChildImageSharpParentInternalContentDigest = 'childImageSharp___parent___internal___contentDigest',
+  ChildImageSharpParentInternalDescription = 'childImageSharp___parent___internal___description',
+  ChildImageSharpParentInternalFieldOwners = 'childImageSharp___parent___internal___fieldOwners',
+  ChildImageSharpParentInternalIgnoreType = 'childImageSharp___parent___internal___ignoreType',
+  ChildImageSharpParentInternalMediaType = 'childImageSharp___parent___internal___mediaType',
+  ChildImageSharpParentInternalOwner = 'childImageSharp___parent___internal___owner',
+  ChildImageSharpParentInternalType = 'childImageSharp___parent___internal___type',
+  ChildImageSharpChildren = 'childImageSharp___children',
+  ChildImageSharpChildrenId = 'childImageSharp___children___id',
+  ChildImageSharpChildrenParentId = 'childImageSharp___children___parent___id',
+  ChildImageSharpChildrenParentChildren = 'childImageSharp___children___parent___children',
+  ChildImageSharpChildrenChildren = 'childImageSharp___children___children',
+  ChildImageSharpChildrenChildrenId = 'childImageSharp___children___children___id',
+  ChildImageSharpChildrenChildrenChildren = 'childImageSharp___children___children___children',
+  ChildImageSharpChildrenInternalContent = 'childImageSharp___children___internal___content',
+  ChildImageSharpChildrenInternalContentDigest = 'childImageSharp___children___internal___contentDigest',
+  ChildImageSharpChildrenInternalDescription = 'childImageSharp___children___internal___description',
+  ChildImageSharpChildrenInternalFieldOwners = 'childImageSharp___children___internal___fieldOwners',
+  ChildImageSharpChildrenInternalIgnoreType = 'childImageSharp___children___internal___ignoreType',
+  ChildImageSharpChildrenInternalMediaType = 'childImageSharp___children___internal___mediaType',
+  ChildImageSharpChildrenInternalOwner = 'childImageSharp___children___internal___owner',
+  ChildImageSharpChildrenInternalType = 'childImageSharp___children___internal___type',
+  ChildImageSharpInternalContent = 'childImageSharp___internal___content',
+  ChildImageSharpInternalContentDigest = 'childImageSharp___internal___contentDigest',
+  ChildImageSharpInternalDescription = 'childImageSharp___internal___description',
+  ChildImageSharpInternalFieldOwners = 'childImageSharp___internal___fieldOwners',
+  ChildImageSharpInternalIgnoreType = 'childImageSharp___internal___ignoreType',
+  ChildImageSharpInternalMediaType = 'childImageSharp___internal___mediaType',
+  ChildImageSharpInternalOwner = 'childImageSharp___internal___owner',
+  ChildImageSharpInternalType = 'childImageSharp___internal___type',
   Id = 'id',
   ParentId = 'parent___id',
   ParentParentId = 'parent___parent___id',
@@ -583,97 +662,6 @@ export enum FileFieldsEnum {
   InternalMediaType = 'internal___mediaType',
   InternalOwner = 'internal___owner',
   InternalType = 'internal___type',
-  ChildImageSharpId = 'childImageSharp___id',
-  ChildImageSharpFixedBase64 = 'childImageSharp___fixed___base64',
-  ChildImageSharpFixedTracedSvg = 'childImageSharp___fixed___tracedSVG',
-  ChildImageSharpFixedAspectRatio = 'childImageSharp___fixed___aspectRatio',
-  ChildImageSharpFixedWidth = 'childImageSharp___fixed___width',
-  ChildImageSharpFixedHeight = 'childImageSharp___fixed___height',
-  ChildImageSharpFixedSrc = 'childImageSharp___fixed___src',
-  ChildImageSharpFixedSrcSet = 'childImageSharp___fixed___srcSet',
-  ChildImageSharpFixedSrcWebp = 'childImageSharp___fixed___srcWebp',
-  ChildImageSharpFixedSrcSetWebp = 'childImageSharp___fixed___srcSetWebp',
-  ChildImageSharpFixedOriginalName = 'childImageSharp___fixed___originalName',
-  ChildImageSharpResolutionsBase64 = 'childImageSharp___resolutions___base64',
-  ChildImageSharpResolutionsTracedSvg = 'childImageSharp___resolutions___tracedSVG',
-  ChildImageSharpResolutionsAspectRatio = 'childImageSharp___resolutions___aspectRatio',
-  ChildImageSharpResolutionsWidth = 'childImageSharp___resolutions___width',
-  ChildImageSharpResolutionsHeight = 'childImageSharp___resolutions___height',
-  ChildImageSharpResolutionsSrc = 'childImageSharp___resolutions___src',
-  ChildImageSharpResolutionsSrcSet = 'childImageSharp___resolutions___srcSet',
-  ChildImageSharpResolutionsSrcWebp = 'childImageSharp___resolutions___srcWebp',
-  ChildImageSharpResolutionsSrcSetWebp = 'childImageSharp___resolutions___srcSetWebp',
-  ChildImageSharpResolutionsOriginalName = 'childImageSharp___resolutions___originalName',
-  ChildImageSharpFluidBase64 = 'childImageSharp___fluid___base64',
-  ChildImageSharpFluidTracedSvg = 'childImageSharp___fluid___tracedSVG',
-  ChildImageSharpFluidAspectRatio = 'childImageSharp___fluid___aspectRatio',
-  ChildImageSharpFluidSrc = 'childImageSharp___fluid___src',
-  ChildImageSharpFluidSrcSet = 'childImageSharp___fluid___srcSet',
-  ChildImageSharpFluidSrcWebp = 'childImageSharp___fluid___srcWebp',
-  ChildImageSharpFluidSrcSetWebp = 'childImageSharp___fluid___srcSetWebp',
-  ChildImageSharpFluidSizes = 'childImageSharp___fluid___sizes',
-  ChildImageSharpFluidOriginalImg = 'childImageSharp___fluid___originalImg',
-  ChildImageSharpFluidOriginalName = 'childImageSharp___fluid___originalName',
-  ChildImageSharpFluidPresentationWidth = 'childImageSharp___fluid___presentationWidth',
-  ChildImageSharpFluidPresentationHeight = 'childImageSharp___fluid___presentationHeight',
-  ChildImageSharpSizesBase64 = 'childImageSharp___sizes___base64',
-  ChildImageSharpSizesTracedSvg = 'childImageSharp___sizes___tracedSVG',
-  ChildImageSharpSizesAspectRatio = 'childImageSharp___sizes___aspectRatio',
-  ChildImageSharpSizesSrc = 'childImageSharp___sizes___src',
-  ChildImageSharpSizesSrcSet = 'childImageSharp___sizes___srcSet',
-  ChildImageSharpSizesSrcWebp = 'childImageSharp___sizes___srcWebp',
-  ChildImageSharpSizesSrcSetWebp = 'childImageSharp___sizes___srcSetWebp',
-  ChildImageSharpSizesSizes = 'childImageSharp___sizes___sizes',
-  ChildImageSharpSizesOriginalImg = 'childImageSharp___sizes___originalImg',
-  ChildImageSharpSizesOriginalName = 'childImageSharp___sizes___originalName',
-  ChildImageSharpSizesPresentationWidth = 'childImageSharp___sizes___presentationWidth',
-  ChildImageSharpSizesPresentationHeight = 'childImageSharp___sizes___presentationHeight',
-  ChildImageSharpOriginalWidth = 'childImageSharp___original___width',
-  ChildImageSharpOriginalHeight = 'childImageSharp___original___height',
-  ChildImageSharpOriginalSrc = 'childImageSharp___original___src',
-  ChildImageSharpResizeSrc = 'childImageSharp___resize___src',
-  ChildImageSharpResizeTracedSvg = 'childImageSharp___resize___tracedSVG',
-  ChildImageSharpResizeWidth = 'childImageSharp___resize___width',
-  ChildImageSharpResizeHeight = 'childImageSharp___resize___height',
-  ChildImageSharpResizeAspectRatio = 'childImageSharp___resize___aspectRatio',
-  ChildImageSharpResizeOriginalName = 'childImageSharp___resize___originalName',
-  ChildImageSharpParentId = 'childImageSharp___parent___id',
-  ChildImageSharpParentParentId = 'childImageSharp___parent___parent___id',
-  ChildImageSharpParentParentChildren = 'childImageSharp___parent___parent___children',
-  ChildImageSharpParentChildren = 'childImageSharp___parent___children',
-  ChildImageSharpParentChildrenId = 'childImageSharp___parent___children___id',
-  ChildImageSharpParentChildrenChildren = 'childImageSharp___parent___children___children',
-  ChildImageSharpParentInternalContent = 'childImageSharp___parent___internal___content',
-  ChildImageSharpParentInternalContentDigest = 'childImageSharp___parent___internal___contentDigest',
-  ChildImageSharpParentInternalDescription = 'childImageSharp___parent___internal___description',
-  ChildImageSharpParentInternalFieldOwners = 'childImageSharp___parent___internal___fieldOwners',
-  ChildImageSharpParentInternalIgnoreType = 'childImageSharp___parent___internal___ignoreType',
-  ChildImageSharpParentInternalMediaType = 'childImageSharp___parent___internal___mediaType',
-  ChildImageSharpParentInternalOwner = 'childImageSharp___parent___internal___owner',
-  ChildImageSharpParentInternalType = 'childImageSharp___parent___internal___type',
-  ChildImageSharpChildren = 'childImageSharp___children',
-  ChildImageSharpChildrenId = 'childImageSharp___children___id',
-  ChildImageSharpChildrenParentId = 'childImageSharp___children___parent___id',
-  ChildImageSharpChildrenParentChildren = 'childImageSharp___children___parent___children',
-  ChildImageSharpChildrenChildren = 'childImageSharp___children___children',
-  ChildImageSharpChildrenChildrenId = 'childImageSharp___children___children___id',
-  ChildImageSharpChildrenChildrenChildren = 'childImageSharp___children___children___children',
-  ChildImageSharpChildrenInternalContent = 'childImageSharp___children___internal___content',
-  ChildImageSharpChildrenInternalContentDigest = 'childImageSharp___children___internal___contentDigest',
-  ChildImageSharpChildrenInternalDescription = 'childImageSharp___children___internal___description',
-  ChildImageSharpChildrenInternalFieldOwners = 'childImageSharp___children___internal___fieldOwners',
-  ChildImageSharpChildrenInternalIgnoreType = 'childImageSharp___children___internal___ignoreType',
-  ChildImageSharpChildrenInternalMediaType = 'childImageSharp___children___internal___mediaType',
-  ChildImageSharpChildrenInternalOwner = 'childImageSharp___children___internal___owner',
-  ChildImageSharpChildrenInternalType = 'childImageSharp___children___internal___type',
-  ChildImageSharpInternalContent = 'childImageSharp___internal___content',
-  ChildImageSharpInternalContentDigest = 'childImageSharp___internal___contentDigest',
-  ChildImageSharpInternalDescription = 'childImageSharp___internal___description',
-  ChildImageSharpInternalFieldOwners = 'childImageSharp___internal___fieldOwners',
-  ChildImageSharpInternalIgnoreType = 'childImageSharp___internal___ignoreType',
-  ChildImageSharpInternalMediaType = 'childImageSharp___internal___mediaType',
-  ChildImageSharpInternalOwner = 'childImageSharp___internal___owner',
-  ChildImageSharpInternalType = 'childImageSharp___internal___type',
   ChildMarkdownRemarkId = 'childMarkdownRemark___id',
   ChildMarkdownRemarkFrontmatterTitle = 'childMarkdownRemark___frontmatter___title',
   ChildMarkdownRemarkFrontmatterCollection = 'childMarkdownRemark___frontmatter___collection',
@@ -682,8 +670,6 @@ export enum FileFieldsEnum {
   ChildMarkdownRemarkFrontmatterAuthor = 'childMarkdownRemark___frontmatter___author',
   ChildMarkdownRemarkFrontmatterQuote = 'childMarkdownRemark___frontmatter___quote',
   ChildMarkdownRemarkFrontmatterOrder = 'childMarkdownRemark___frontmatter___order',
-  ChildMarkdownRemarkFrontmatterImageBirthtime = 'childMarkdownRemark___frontmatter___image___birthtime',
-  ChildMarkdownRemarkFrontmatterImageBirthtimeMs = 'childMarkdownRemark___frontmatter___image___birthtimeMs',
   ChildMarkdownRemarkFrontmatterImageSourceInstanceName = 'childMarkdownRemark___frontmatter___image___sourceInstanceName',
   ChildMarkdownRemarkFrontmatterImageAbsolutePath = 'childMarkdownRemark___frontmatter___image___absolutePath',
   ChildMarkdownRemarkFrontmatterImageRelativePath = 'childMarkdownRemark___frontmatter___image___relativePath',
@@ -706,15 +692,17 @@ export enum FileFieldsEnum {
   ChildMarkdownRemarkFrontmatterImageUid = 'childMarkdownRemark___frontmatter___image___uid',
   ChildMarkdownRemarkFrontmatterImageGid = 'childMarkdownRemark___frontmatter___image___gid',
   ChildMarkdownRemarkFrontmatterImageRdev = 'childMarkdownRemark___frontmatter___image___rdev',
-  ChildMarkdownRemarkFrontmatterImageBlksize = 'childMarkdownRemark___frontmatter___image___blksize',
   ChildMarkdownRemarkFrontmatterImageIno = 'childMarkdownRemark___frontmatter___image___ino',
-  ChildMarkdownRemarkFrontmatterImageBlocks = 'childMarkdownRemark___frontmatter___image___blocks',
   ChildMarkdownRemarkFrontmatterImageAtimeMs = 'childMarkdownRemark___frontmatter___image___atimeMs',
   ChildMarkdownRemarkFrontmatterImageMtimeMs = 'childMarkdownRemark___frontmatter___image___mtimeMs',
   ChildMarkdownRemarkFrontmatterImageCtimeMs = 'childMarkdownRemark___frontmatter___image___ctimeMs',
   ChildMarkdownRemarkFrontmatterImageAtime = 'childMarkdownRemark___frontmatter___image___atime',
   ChildMarkdownRemarkFrontmatterImageMtime = 'childMarkdownRemark___frontmatter___image___mtime',
   ChildMarkdownRemarkFrontmatterImageCtime = 'childMarkdownRemark___frontmatter___image___ctime',
+  ChildMarkdownRemarkFrontmatterImageBirthtime = 'childMarkdownRemark___frontmatter___image___birthtime',
+  ChildMarkdownRemarkFrontmatterImageBirthtimeMs = 'childMarkdownRemark___frontmatter___image___birthtimeMs',
+  ChildMarkdownRemarkFrontmatterImageBlksize = 'childMarkdownRemark___frontmatter___image___blksize',
+  ChildMarkdownRemarkFrontmatterImageBlocks = 'childMarkdownRemark___frontmatter___image___blocks',
   ChildMarkdownRemarkFrontmatterImagePublicUrl = 'childMarkdownRemark___frontmatter___image___publicURL',
   ChildMarkdownRemarkFrontmatterImageId = 'childMarkdownRemark___frontmatter___image___id',
   ChildMarkdownRemarkFrontmatterImageChildren = 'childMarkdownRemark___frontmatter___image___children',
@@ -779,8 +767,6 @@ export enum FileFieldsEnum {
 }
 
 export type FileFilterInput = {
-  birthtime?: Maybe<DateQueryOperatorInput>;
-  birthtimeMs?: Maybe<FloatQueryOperatorInput>;
   sourceInstanceName?: Maybe<StringQueryOperatorInput>;
   absolutePath?: Maybe<StringQueryOperatorInput>;
   relativePath?: Maybe<StringQueryOperatorInput>;
@@ -803,21 +789,23 @@ export type FileFilterInput = {
   uid?: Maybe<IntQueryOperatorInput>;
   gid?: Maybe<IntQueryOperatorInput>;
   rdev?: Maybe<IntQueryOperatorInput>;
-  blksize?: Maybe<IntQueryOperatorInput>;
-  ino?: Maybe<IntQueryOperatorInput>;
-  blocks?: Maybe<IntQueryOperatorInput>;
+  ino?: Maybe<FloatQueryOperatorInput>;
   atimeMs?: Maybe<FloatQueryOperatorInput>;
   mtimeMs?: Maybe<FloatQueryOperatorInput>;
   ctimeMs?: Maybe<FloatQueryOperatorInput>;
   atime?: Maybe<DateQueryOperatorInput>;
   mtime?: Maybe<DateQueryOperatorInput>;
   ctime?: Maybe<DateQueryOperatorInput>;
+  birthtime?: Maybe<DateQueryOperatorInput>;
+  birthtimeMs?: Maybe<FloatQueryOperatorInput>;
+  blksize?: Maybe<IntQueryOperatorInput>;
+  blocks?: Maybe<IntQueryOperatorInput>;
   publicURL?: Maybe<StringQueryOperatorInput>;
+  childImageSharp?: Maybe<ImageSharpFilterInput>;
   id?: Maybe<StringQueryOperatorInput>;
   parent?: Maybe<NodeFilterInput>;
   children?: Maybe<NodeFilterListInput>;
   internal?: Maybe<InternalFilterInput>;
-  childImageSharp?: Maybe<ImageSharpFilterInput>;
   childMarkdownRemark?: Maybe<MarkdownRemarkFilterInput>;
 };
 
@@ -876,13 +864,13 @@ export enum ImageFormat {
 
 export type ImageSharp = Node & {
   __typename?: 'ImageSharp';
-  id: Scalars['ID'];
   fixed?: Maybe<ImageSharpFixed>;
   resolutions?: Maybe<ImageSharpResolutions>;
   fluid?: Maybe<ImageSharpFluid>;
   sizes?: Maybe<ImageSharpSizes>;
   original?: Maybe<ImageSharpOriginal>;
   resize?: Maybe<ImageSharpResize>;
+  id: Scalars['ID'];
   parent?: Maybe<Node>;
   children: Array<Node>;
   internal: Internal;
@@ -898,6 +886,9 @@ export type ImageSharpFixedArgs = {
   duotone?: Maybe<DuotoneGradient>;
   traceSVG?: Maybe<Potrace>;
   quality?: Maybe<Scalars['Int']>;
+  jpegQuality?: Maybe<Scalars['Int']>;
+  pngQuality?: Maybe<Scalars['Int']>;
+  webpQuality?: Maybe<Scalars['Int']>;
   toFormat?: Maybe<ImageFormat>;
   toFormatBase64?: Maybe<ImageFormat>;
   cropFocus?: Maybe<ImageCropFocus>;
@@ -917,6 +908,9 @@ export type ImageSharpResolutionsArgs = {
   duotone?: Maybe<DuotoneGradient>;
   traceSVG?: Maybe<Potrace>;
   quality?: Maybe<Scalars['Int']>;
+  jpegQuality?: Maybe<Scalars['Int']>;
+  pngQuality?: Maybe<Scalars['Int']>;
+  webpQuality?: Maybe<Scalars['Int']>;
   toFormat?: Maybe<ImageFormat>;
   toFormatBase64?: Maybe<ImageFormat>;
   cropFocus?: Maybe<ImageCropFocus>;
@@ -936,6 +930,9 @@ export type ImageSharpFluidArgs = {
   duotone?: Maybe<DuotoneGradient>;
   traceSVG?: Maybe<Potrace>;
   quality?: Maybe<Scalars['Int']>;
+  jpegQuality?: Maybe<Scalars['Int']>;
+  pngQuality?: Maybe<Scalars['Int']>;
+  webpQuality?: Maybe<Scalars['Int']>;
   toFormat?: Maybe<ImageFormat>;
   toFormatBase64?: Maybe<ImageFormat>;
   cropFocus?: Maybe<ImageCropFocus>;
@@ -957,6 +954,9 @@ export type ImageSharpSizesArgs = {
   duotone?: Maybe<DuotoneGradient>;
   traceSVG?: Maybe<Potrace>;
   quality?: Maybe<Scalars['Int']>;
+  jpegQuality?: Maybe<Scalars['Int']>;
+  pngQuality?: Maybe<Scalars['Int']>;
+  webpQuality?: Maybe<Scalars['Int']>;
   toFormat?: Maybe<ImageFormat>;
   toFormatBase64?: Maybe<ImageFormat>;
   cropFocus?: Maybe<ImageCropFocus>;
@@ -972,6 +972,9 @@ export type ImageSharpResizeArgs = {
   width?: Maybe<Scalars['Int']>;
   height?: Maybe<Scalars['Int']>;
   quality?: Maybe<Scalars['Int']>;
+  jpegQuality?: Maybe<Scalars['Int']>;
+  pngQuality?: Maybe<Scalars['Int']>;
+  webpQuality?: Maybe<Scalars['Int']>;
   jpegProgressive?: Maybe<Scalars['Boolean']>;
   pngCompressionLevel?: Maybe<Scalars['Int']>;
   pngCompressionSpeed?: Maybe<Scalars['Int']>;
@@ -1015,7 +1018,6 @@ export type ImageSharpEdge = {
 };
 
 export enum ImageSharpFieldsEnum {
-  Id = 'id',
   FixedBase64 = 'fixed___base64',
   FixedTracedSvg = 'fixed___tracedSVG',
   FixedAspectRatio = 'fixed___aspectRatio',
@@ -1069,6 +1071,7 @@ export enum ImageSharpFieldsEnum {
   ResizeHeight = 'resize___height',
   ResizeAspectRatio = 'resize___aspectRatio',
   ResizeOriginalName = 'resize___originalName',
+  Id = 'id',
   ParentId = 'parent___id',
   ParentParentId = 'parent___parent___id',
   ParentParentParentId = 'parent___parent___parent___id',
@@ -1157,13 +1160,13 @@ export enum ImageSharpFieldsEnum {
 }
 
 export type ImageSharpFilterInput = {
-  id?: Maybe<StringQueryOperatorInput>;
   fixed?: Maybe<ImageSharpFixedFilterInput>;
   resolutions?: Maybe<ImageSharpResolutionsFilterInput>;
   fluid?: Maybe<ImageSharpFluidFilterInput>;
   sizes?: Maybe<ImageSharpSizesFilterInput>;
   original?: Maybe<ImageSharpOriginalFilterInput>;
   resize?: Maybe<ImageSharpResizeFilterInput>;
+  id?: Maybe<StringQueryOperatorInput>;
   parent?: Maybe<NodeFilterInput>;
   children?: Maybe<NodeFilterListInput>;
   internal?: Maybe<InternalFilterInput>;
@@ -1174,10 +1177,10 @@ export type ImageSharpFixed = {
   base64?: Maybe<Scalars['String']>;
   tracedSVG?: Maybe<Scalars['String']>;
   aspectRatio?: Maybe<Scalars['Float']>;
-  width?: Maybe<Scalars['Float']>;
-  height?: Maybe<Scalars['Float']>;
-  src?: Maybe<Scalars['String']>;
-  srcSet?: Maybe<Scalars['String']>;
+  width: Scalars['Float'];
+  height: Scalars['Float'];
+  src: Scalars['String'];
+  srcSet: Scalars['String'];
   srcWebp?: Maybe<Scalars['String']>;
   srcSetWebp?: Maybe<Scalars['String']>;
   originalName?: Maybe<Scalars['String']>;
@@ -1200,12 +1203,12 @@ export type ImageSharpFluid = {
   __typename?: 'ImageSharpFluid';
   base64?: Maybe<Scalars['String']>;
   tracedSVG?: Maybe<Scalars['String']>;
-  aspectRatio?: Maybe<Scalars['Float']>;
-  src?: Maybe<Scalars['String']>;
-  srcSet?: Maybe<Scalars['String']>;
+  aspectRatio: Scalars['Float'];
+  src: Scalars['String'];
+  srcSet: Scalars['String'];
   srcWebp?: Maybe<Scalars['String']>;
   srcSetWebp?: Maybe<Scalars['String']>;
-  sizes?: Maybe<Scalars['String']>;
+  sizes: Scalars['String'];
   originalImg?: Maybe<Scalars['String']>;
   originalName?: Maybe<Scalars['String']>;
   presentationWidth?: Maybe<Scalars['Int']>;
@@ -1274,10 +1277,10 @@ export type ImageSharpResolutions = {
   base64?: Maybe<Scalars['String']>;
   tracedSVG?: Maybe<Scalars['String']>;
   aspectRatio?: Maybe<Scalars['Float']>;
-  width?: Maybe<Scalars['Float']>;
-  height?: Maybe<Scalars['Float']>;
-  src?: Maybe<Scalars['String']>;
-  srcSet?: Maybe<Scalars['String']>;
+  width: Scalars['Float'];
+  height: Scalars['Float'];
+  src: Scalars['String'];
+  srcSet: Scalars['String'];
   srcWebp?: Maybe<Scalars['String']>;
   srcSetWebp?: Maybe<Scalars['String']>;
   originalName?: Maybe<Scalars['String']>;
@@ -1300,12 +1303,12 @@ export type ImageSharpSizes = {
   __typename?: 'ImageSharpSizes';
   base64?: Maybe<Scalars['String']>;
   tracedSVG?: Maybe<Scalars['String']>;
-  aspectRatio?: Maybe<Scalars['Float']>;
-  src?: Maybe<Scalars['String']>;
-  srcSet?: Maybe<Scalars['String']>;
+  aspectRatio: Scalars['Float'];
+  src: Scalars['String'];
+  srcSet: Scalars['String'];
   srcWebp?: Maybe<Scalars['String']>;
   srcSetWebp?: Maybe<Scalars['String']>;
-  sizes?: Maybe<Scalars['String']>;
+  sizes: Scalars['String'];
   originalImg?: Maybe<Scalars['String']>;
   originalName?: Maybe<Scalars['String']>;
   presentationWidth?: Maybe<Scalars['Int']>;
@@ -1440,6 +1443,7 @@ export type MarkdownRemarkHeadingsArgs = {
 };
 
 export type MarkdownRemarkTableOfContentsArgs = {
+  absolute?: Maybe<Scalars['Boolean']>;
   pathToSlugField?: Maybe<Scalars['String']>;
   maxDepth?: Maybe<Scalars['Int']>;
   heading?: Maybe<Scalars['String']>;
@@ -1481,8 +1485,6 @@ export enum MarkdownRemarkFieldsEnum {
   FrontmatterAuthor = 'frontmatter___author',
   FrontmatterQuote = 'frontmatter___quote',
   FrontmatterOrder = 'frontmatter___order',
-  FrontmatterImageBirthtime = 'frontmatter___image___birthtime',
-  FrontmatterImageBirthtimeMs = 'frontmatter___image___birthtimeMs',
   FrontmatterImageSourceInstanceName = 'frontmatter___image___sourceInstanceName',
   FrontmatterImageAbsolutePath = 'frontmatter___image___absolutePath',
   FrontmatterImageRelativePath = 'frontmatter___image___relativePath',
@@ -1505,16 +1507,20 @@ export enum MarkdownRemarkFieldsEnum {
   FrontmatterImageUid = 'frontmatter___image___uid',
   FrontmatterImageGid = 'frontmatter___image___gid',
   FrontmatterImageRdev = 'frontmatter___image___rdev',
-  FrontmatterImageBlksize = 'frontmatter___image___blksize',
   FrontmatterImageIno = 'frontmatter___image___ino',
-  FrontmatterImageBlocks = 'frontmatter___image___blocks',
   FrontmatterImageAtimeMs = 'frontmatter___image___atimeMs',
   FrontmatterImageMtimeMs = 'frontmatter___image___mtimeMs',
   FrontmatterImageCtimeMs = 'frontmatter___image___ctimeMs',
   FrontmatterImageAtime = 'frontmatter___image___atime',
   FrontmatterImageMtime = 'frontmatter___image___mtime',
   FrontmatterImageCtime = 'frontmatter___image___ctime',
+  FrontmatterImageBirthtime = 'frontmatter___image___birthtime',
+  FrontmatterImageBirthtimeMs = 'frontmatter___image___birthtimeMs',
+  FrontmatterImageBlksize = 'frontmatter___image___blksize',
+  FrontmatterImageBlocks = 'frontmatter___image___blocks',
   FrontmatterImagePublicUrl = 'frontmatter___image___publicURL',
+  FrontmatterImageChildImageSharpId = 'frontmatter___image___childImageSharp___id',
+  FrontmatterImageChildImageSharpChildren = 'frontmatter___image___childImageSharp___children',
   FrontmatterImageId = 'frontmatter___image___id',
   FrontmatterImageParentId = 'frontmatter___image___parent___id',
   FrontmatterImageParentChildren = 'frontmatter___image___parent___children',
@@ -1529,8 +1535,6 @@ export enum MarkdownRemarkFieldsEnum {
   FrontmatterImageInternalMediaType = 'frontmatter___image___internal___mediaType',
   FrontmatterImageInternalOwner = 'frontmatter___image___internal___owner',
   FrontmatterImageInternalType = 'frontmatter___image___internal___type',
-  FrontmatterImageChildImageSharpId = 'frontmatter___image___childImageSharp___id',
-  FrontmatterImageChildImageSharpChildren = 'frontmatter___image___childImageSharp___children',
   FrontmatterImageChildMarkdownRemarkId = 'frontmatter___image___childMarkdownRemark___id',
   FrontmatterImageChildMarkdownRemarkExcerpt = 'frontmatter___image___childMarkdownRemark___excerpt',
   FrontmatterImageChildMarkdownRemarkRawMarkdownBody = 'frontmatter___image___childMarkdownRemark___rawMarkdownBody',
@@ -1744,7 +1748,6 @@ export type MarkdownWordCountFilterInput = {
   words?: Maybe<IntQueryOperatorInput>;
 };
 
-/** Node Interface */
 export type Node = {
   id: Scalars['ID'];
   parent?: Maybe<Node>;
@@ -1798,23 +1801,21 @@ export type Query = {
   __typename?: 'Query';
   file?: Maybe<File>;
   allFile: FileConnection;
+  directory?: Maybe<Directory>;
+  allDirectory: DirectoryConnection;
   imageSharp?: Maybe<ImageSharp>;
   allImageSharp: ImageSharpConnection;
   markdownRemark?: Maybe<MarkdownRemark>;
   allMarkdownRemark: MarkdownRemarkConnection;
   site?: Maybe<Site>;
   allSite: SiteConnection;
-  sitePage?: Maybe<SitePage>;
-  allSitePage: SitePageConnection;
   sitePlugin?: Maybe<SitePlugin>;
   allSitePlugin: SitePluginConnection;
-  directory?: Maybe<Directory>;
-  allDirectory: DirectoryConnection;
+  sitePage?: Maybe<SitePage>;
+  allSitePage: SitePageConnection;
 };
 
 export type QueryFileArgs = {
-  birthtime?: Maybe<DateQueryOperatorInput>;
-  birthtimeMs?: Maybe<FloatQueryOperatorInput>;
   sourceInstanceName?: Maybe<StringQueryOperatorInput>;
   absolutePath?: Maybe<StringQueryOperatorInput>;
   relativePath?: Maybe<StringQueryOperatorInput>;
@@ -1837,21 +1838,23 @@ export type QueryFileArgs = {
   uid?: Maybe<IntQueryOperatorInput>;
   gid?: Maybe<IntQueryOperatorInput>;
   rdev?: Maybe<IntQueryOperatorInput>;
-  blksize?: Maybe<IntQueryOperatorInput>;
-  ino?: Maybe<IntQueryOperatorInput>;
-  blocks?: Maybe<IntQueryOperatorInput>;
+  ino?: Maybe<FloatQueryOperatorInput>;
   atimeMs?: Maybe<FloatQueryOperatorInput>;
   mtimeMs?: Maybe<FloatQueryOperatorInput>;
   ctimeMs?: Maybe<FloatQueryOperatorInput>;
   atime?: Maybe<DateQueryOperatorInput>;
   mtime?: Maybe<DateQueryOperatorInput>;
   ctime?: Maybe<DateQueryOperatorInput>;
+  birthtime?: Maybe<DateQueryOperatorInput>;
+  birthtimeMs?: Maybe<FloatQueryOperatorInput>;
+  blksize?: Maybe<IntQueryOperatorInput>;
+  blocks?: Maybe<IntQueryOperatorInput>;
   publicURL?: Maybe<StringQueryOperatorInput>;
+  childImageSharp?: Maybe<ImageSharpFilterInput>;
   id?: Maybe<StringQueryOperatorInput>;
   parent?: Maybe<NodeFilterInput>;
   children?: Maybe<NodeFilterListInput>;
   internal?: Maybe<InternalFilterInput>;
-  childImageSharp?: Maybe<ImageSharpFilterInput>;
   childMarkdownRemark?: Maybe<MarkdownRemarkFilterInput>;
 };
 
@@ -1862,14 +1865,61 @@ export type QueryAllFileArgs = {
   limit?: Maybe<Scalars['Int']>;
 };
 
-export type QueryImageSharpArgs = {
+export type QueryDirectoryArgs = {
+  sourceInstanceName?: Maybe<StringQueryOperatorInput>;
+  absolutePath?: Maybe<StringQueryOperatorInput>;
+  relativePath?: Maybe<StringQueryOperatorInput>;
+  extension?: Maybe<StringQueryOperatorInput>;
+  size?: Maybe<IntQueryOperatorInput>;
+  prettySize?: Maybe<StringQueryOperatorInput>;
+  modifiedTime?: Maybe<DateQueryOperatorInput>;
+  accessTime?: Maybe<DateQueryOperatorInput>;
+  changeTime?: Maybe<DateQueryOperatorInput>;
+  birthTime?: Maybe<DateQueryOperatorInput>;
+  root?: Maybe<StringQueryOperatorInput>;
+  dir?: Maybe<StringQueryOperatorInput>;
+  base?: Maybe<StringQueryOperatorInput>;
+  ext?: Maybe<StringQueryOperatorInput>;
+  name?: Maybe<StringQueryOperatorInput>;
+  relativeDirectory?: Maybe<StringQueryOperatorInput>;
+  dev?: Maybe<IntQueryOperatorInput>;
+  mode?: Maybe<IntQueryOperatorInput>;
+  nlink?: Maybe<IntQueryOperatorInput>;
+  uid?: Maybe<IntQueryOperatorInput>;
+  gid?: Maybe<IntQueryOperatorInput>;
+  rdev?: Maybe<IntQueryOperatorInput>;
+  ino?: Maybe<FloatQueryOperatorInput>;
+  atimeMs?: Maybe<FloatQueryOperatorInput>;
+  mtimeMs?: Maybe<FloatQueryOperatorInput>;
+  ctimeMs?: Maybe<FloatQueryOperatorInput>;
+  atime?: Maybe<DateQueryOperatorInput>;
+  mtime?: Maybe<DateQueryOperatorInput>;
+  ctime?: Maybe<DateQueryOperatorInput>;
+  birthtime?: Maybe<DateQueryOperatorInput>;
+  birthtimeMs?: Maybe<FloatQueryOperatorInput>;
+  blksize?: Maybe<IntQueryOperatorInput>;
+  blocks?: Maybe<IntQueryOperatorInput>;
   id?: Maybe<StringQueryOperatorInput>;
+  parent?: Maybe<NodeFilterInput>;
+  children?: Maybe<NodeFilterListInput>;
+  internal?: Maybe<InternalFilterInput>;
+};
+
+export type QueryAllDirectoryArgs = {
+  filter?: Maybe<DirectoryFilterInput>;
+  sort?: Maybe<DirectorySortInput>;
+  skip?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+};
+
+export type QueryImageSharpArgs = {
   fixed?: Maybe<ImageSharpFixedFilterInput>;
   resolutions?: Maybe<ImageSharpResolutionsFilterInput>;
   fluid?: Maybe<ImageSharpFluidFilterInput>;
   sizes?: Maybe<ImageSharpSizesFilterInput>;
   original?: Maybe<ImageSharpOriginalFilterInput>;
   resize?: Maybe<ImageSharpResizeFilterInput>;
+  id?: Maybe<StringQueryOperatorInput>;
   parent?: Maybe<NodeFilterInput>;
   children?: Maybe<NodeFilterListInput>;
   internal?: Maybe<InternalFilterInput>;
@@ -1927,29 +1977,6 @@ export type QueryAllSiteArgs = {
   limit?: Maybe<Scalars['Int']>;
 };
 
-export type QuerySitePageArgs = {
-  id?: Maybe<StringQueryOperatorInput>;
-  parent?: Maybe<NodeFilterInput>;
-  children?: Maybe<NodeFilterListInput>;
-  internal?: Maybe<InternalFilterInput>;
-  path?: Maybe<StringQueryOperatorInput>;
-  internalComponentName?: Maybe<StringQueryOperatorInput>;
-  matchPath?: Maybe<StringQueryOperatorInput>;
-  component?: Maybe<StringQueryOperatorInput>;
-  componentChunkName?: Maybe<StringQueryOperatorInput>;
-  isCreatedByStatefulCreatePages?: Maybe<BooleanQueryOperatorInput>;
-  pluginCreator?: Maybe<SitePluginFilterInput>;
-  pluginCreatorId?: Maybe<StringQueryOperatorInput>;
-  componentPath?: Maybe<StringQueryOperatorInput>;
-};
-
-export type QueryAllSitePageArgs = {
-  filter?: Maybe<SitePageFilterInput>;
-  sort?: Maybe<SitePageSortInput>;
-  skip?: Maybe<Scalars['Int']>;
-  limit?: Maybe<Scalars['Int']>;
-};
-
 export type QuerySitePluginArgs = {
   id?: Maybe<StringQueryOperatorInput>;
   parent?: Maybe<NodeFilterInput>;
@@ -1973,49 +2000,25 @@ export type QueryAllSitePluginArgs = {
   limit?: Maybe<Scalars['Int']>;
 };
 
-export type QueryDirectoryArgs = {
+export type QuerySitePageArgs = {
   id?: Maybe<StringQueryOperatorInput>;
   parent?: Maybe<NodeFilterInput>;
   children?: Maybe<NodeFilterListInput>;
   internal?: Maybe<InternalFilterInput>;
-  sourceInstanceName?: Maybe<StringQueryOperatorInput>;
-  absolutePath?: Maybe<StringQueryOperatorInput>;
-  relativePath?: Maybe<StringQueryOperatorInput>;
-  extension?: Maybe<StringQueryOperatorInput>;
-  size?: Maybe<IntQueryOperatorInput>;
-  prettySize?: Maybe<StringQueryOperatorInput>;
-  modifiedTime?: Maybe<DateQueryOperatorInput>;
-  accessTime?: Maybe<DateQueryOperatorInput>;
-  changeTime?: Maybe<DateQueryOperatorInput>;
-  birthTime?: Maybe<DateQueryOperatorInput>;
-  root?: Maybe<StringQueryOperatorInput>;
-  dir?: Maybe<StringQueryOperatorInput>;
-  base?: Maybe<StringQueryOperatorInput>;
-  ext?: Maybe<StringQueryOperatorInput>;
-  name?: Maybe<StringQueryOperatorInput>;
-  relativeDirectory?: Maybe<StringQueryOperatorInput>;
-  dev?: Maybe<IntQueryOperatorInput>;
-  mode?: Maybe<IntQueryOperatorInput>;
-  nlink?: Maybe<IntQueryOperatorInput>;
-  uid?: Maybe<IntQueryOperatorInput>;
-  gid?: Maybe<IntQueryOperatorInput>;
-  rdev?: Maybe<IntQueryOperatorInput>;
-  blksize?: Maybe<IntQueryOperatorInput>;
-  ino?: Maybe<IntQueryOperatorInput>;
-  blocks?: Maybe<IntQueryOperatorInput>;
-  atimeMs?: Maybe<FloatQueryOperatorInput>;
-  mtimeMs?: Maybe<FloatQueryOperatorInput>;
-  ctimeMs?: Maybe<FloatQueryOperatorInput>;
-  birthtimeMs?: Maybe<FloatQueryOperatorInput>;
-  atime?: Maybe<DateQueryOperatorInput>;
-  mtime?: Maybe<DateQueryOperatorInput>;
-  ctime?: Maybe<DateQueryOperatorInput>;
-  birthtime?: Maybe<DateQueryOperatorInput>;
+  path?: Maybe<StringQueryOperatorInput>;
+  internalComponentName?: Maybe<StringQueryOperatorInput>;
+  matchPath?: Maybe<StringQueryOperatorInput>;
+  component?: Maybe<StringQueryOperatorInput>;
+  componentChunkName?: Maybe<StringQueryOperatorInput>;
+  isCreatedByStatefulCreatePages?: Maybe<BooleanQueryOperatorInput>;
+  pluginCreator?: Maybe<SitePluginFilterInput>;
+  pluginCreatorId?: Maybe<StringQueryOperatorInput>;
+  componentPath?: Maybe<StringQueryOperatorInput>;
 };
 
-export type QueryAllDirectoryArgs = {
-  filter?: Maybe<DirectoryFilterInput>;
-  sort?: Maybe<DirectorySortInput>;
+export type QueryAllSitePageArgs = {
+  filter?: Maybe<SitePageFilterInput>;
+  sort?: Maybe<SitePageSortInput>;
   skip?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
 };
@@ -2372,9 +2375,7 @@ export enum SitePageFieldsEnum {
   PluginCreatorPluginOptionsPluginsName = 'pluginCreator___pluginOptions___plugins___name',
   PluginCreatorPluginOptionsPluginsVersion = 'pluginCreator___pluginOptions___plugins___version',
   PluginCreatorPluginOptionsPluginsBrowserApIs = 'pluginCreator___pluginOptions___plugins___browserAPIs',
-  PluginCreatorPluginOptionsPluginsSsrApIs = 'pluginCreator___pluginOptions___plugins___ssrAPIs',
   PluginCreatorPluginOptionsPluginsPluginFilepath = 'pluginCreator___pluginOptions___plugins___pluginFilepath',
-  PluginCreatorPluginOptionsPath = 'pluginCreator___pluginOptions___path',
   PluginCreatorPluginOptionsName = 'pluginCreator___pluginOptions___name',
   PluginCreatorPluginOptionsPathPrefix = 'pluginCreator___pluginOptions___pathPrefix',
   PluginCreatorPluginOptionsMaxWidth = 'pluginCreator___pluginOptions___maxWidth',
@@ -2387,6 +2388,8 @@ export enum SitePageFieldsEnum {
   PluginCreatorPluginOptionsTracedSvg = 'pluginCreator___pluginOptions___tracedSVG',
   PluginCreatorPluginOptionsLoading = 'pluginCreator___pluginOptions___loading',
   PluginCreatorPluginOptionsDisableBgImageOnAlpha = 'pluginCreator___pluginOptions___disableBgImageOnAlpha',
+  PluginCreatorPluginOptionsDisableBgImage = 'pluginCreator___pluginOptions___disableBgImage',
+  PluginCreatorPluginOptionsPath = 'pluginCreator___pluginOptions___path',
   PluginCreatorPluginOptionsModulePath = 'pluginCreator___pluginOptions___modulePath',
   PluginCreatorPluginOptionsPathCheck = 'pluginCreator___pluginOptions___pathCheck',
   PluginCreatorNodeApIs = 'pluginCreator___nodeAPIs',
@@ -2397,6 +2400,7 @@ export enum SitePageFieldsEnum {
   PluginCreatorPackageJsonDescription = 'pluginCreator___packageJson___description',
   PluginCreatorPackageJsonVersion = 'pluginCreator___packageJson___version',
   PluginCreatorPackageJsonMain = 'pluginCreator___packageJson___main',
+  PluginCreatorPackageJsonAuthor = 'pluginCreator___packageJson___author',
   PluginCreatorPackageJsonLicense = 'pluginCreator___packageJson___license',
   PluginCreatorPackageJsonDependencies = 'pluginCreator___packageJson___dependencies',
   PluginCreatorPackageJsonDependenciesName = 'pluginCreator___packageJson___dependencies___name',
@@ -2593,10 +2597,9 @@ export enum SitePluginFieldsEnum {
   PluginOptionsPluginsPluginOptionsTracedSvg = 'pluginOptions___plugins___pluginOptions___tracedSVG',
   PluginOptionsPluginsPluginOptionsLoading = 'pluginOptions___plugins___pluginOptions___loading',
   PluginOptionsPluginsPluginOptionsDisableBgImageOnAlpha = 'pluginOptions___plugins___pluginOptions___disableBgImageOnAlpha',
+  PluginOptionsPluginsPluginOptionsDisableBgImage = 'pluginOptions___plugins___pluginOptions___disableBgImage',
   PluginOptionsPluginsBrowserApIs = 'pluginOptions___plugins___browserAPIs',
-  PluginOptionsPluginsSsrApIs = 'pluginOptions___plugins___ssrAPIs',
   PluginOptionsPluginsPluginFilepath = 'pluginOptions___plugins___pluginFilepath',
-  PluginOptionsPath = 'pluginOptions___path',
   PluginOptionsName = 'pluginOptions___name',
   PluginOptionsPathPrefix = 'pluginOptions___pathPrefix',
   PluginOptionsMaxWidth = 'pluginOptions___maxWidth',
@@ -2609,6 +2612,8 @@ export enum SitePluginFieldsEnum {
   PluginOptionsTracedSvg = 'pluginOptions___tracedSVG',
   PluginOptionsLoading = 'pluginOptions___loading',
   PluginOptionsDisableBgImageOnAlpha = 'pluginOptions___disableBgImageOnAlpha',
+  PluginOptionsDisableBgImage = 'pluginOptions___disableBgImage',
+  PluginOptionsPath = 'pluginOptions___path',
   PluginOptionsModulePath = 'pluginOptions___modulePath',
   PluginOptionsPathCheck = 'pluginOptions___pathCheck',
   NodeApIs = 'nodeAPIs',
@@ -2619,6 +2624,7 @@ export enum SitePluginFieldsEnum {
   PackageJsonDescription = 'packageJson___description',
   PackageJsonVersion = 'packageJson___version',
   PackageJsonMain = 'packageJson___main',
+  PackageJsonAuthor = 'packageJson___author',
   PackageJsonLicense = 'packageJson___license',
   PackageJsonDependencies = 'packageJson___dependencies',
   PackageJsonDependenciesName = 'packageJson___dependencies___name',
@@ -2664,6 +2670,7 @@ export type SitePluginPackageJson = {
   description?: Maybe<Scalars['String']>;
   version?: Maybe<Scalars['String']>;
   main?: Maybe<Scalars['String']>;
+  author?: Maybe<Scalars['String']>;
   license?: Maybe<Scalars['String']>;
   dependencies?: Maybe<Array<Maybe<SitePluginPackageJsonDependencies>>>;
   devDependencies?: Maybe<Array<Maybe<SitePluginPackageJsonDevDependencies>>>;
@@ -2706,6 +2713,7 @@ export type SitePluginPackageJsonFilterInput = {
   description?: Maybe<StringQueryOperatorInput>;
   version?: Maybe<StringQueryOperatorInput>;
   main?: Maybe<StringQueryOperatorInput>;
+  author?: Maybe<StringQueryOperatorInput>;
   license?: Maybe<StringQueryOperatorInput>;
   dependencies?: Maybe<SitePluginPackageJsonDependenciesFilterListInput>;
   devDependencies?: Maybe<SitePluginPackageJsonDevDependenciesFilterListInput>;
@@ -2731,7 +2739,6 @@ export type SitePluginPackageJsonPeerDependenciesFilterListInput = {
 export type SitePluginPluginOptions = {
   __typename?: 'SitePluginPluginOptions';
   plugins?: Maybe<Array<Maybe<SitePluginPluginOptionsPlugins>>>;
-  path?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   pathPrefix?: Maybe<Scalars['String']>;
   maxWidth?: Maybe<Scalars['Int']>;
@@ -2744,13 +2751,14 @@ export type SitePluginPluginOptions = {
   tracedSVG?: Maybe<Scalars['Boolean']>;
   loading?: Maybe<Scalars['String']>;
   disableBgImageOnAlpha?: Maybe<Scalars['Boolean']>;
+  disableBgImage?: Maybe<Scalars['Boolean']>;
+  path?: Maybe<Scalars['String']>;
   modulePath?: Maybe<Scalars['String']>;
   pathCheck?: Maybe<Scalars['Boolean']>;
 };
 
 export type SitePluginPluginOptionsFilterInput = {
   plugins?: Maybe<SitePluginPluginOptionsPluginsFilterListInput>;
-  path?: Maybe<StringQueryOperatorInput>;
   name?: Maybe<StringQueryOperatorInput>;
   pathPrefix?: Maybe<StringQueryOperatorInput>;
   maxWidth?: Maybe<IntQueryOperatorInput>;
@@ -2763,6 +2771,8 @@ export type SitePluginPluginOptionsFilterInput = {
   tracedSVG?: Maybe<BooleanQueryOperatorInput>;
   loading?: Maybe<StringQueryOperatorInput>;
   disableBgImageOnAlpha?: Maybe<BooleanQueryOperatorInput>;
+  disableBgImage?: Maybe<BooleanQueryOperatorInput>;
+  path?: Maybe<StringQueryOperatorInput>;
   modulePath?: Maybe<StringQueryOperatorInput>;
   pathCheck?: Maybe<BooleanQueryOperatorInput>;
 };
@@ -2775,7 +2785,6 @@ export type SitePluginPluginOptionsPlugins = {
   version?: Maybe<Scalars['String']>;
   pluginOptions?: Maybe<SitePluginPluginOptionsPluginsPluginOptions>;
   browserAPIs?: Maybe<Array<Maybe<Scalars['String']>>>;
-  ssrAPIs?: Maybe<Array<Maybe<Scalars['String']>>>;
   pluginFilepath?: Maybe<Scalars['String']>;
 };
 
@@ -2786,7 +2795,6 @@ export type SitePluginPluginOptionsPluginsFilterInput = {
   version?: Maybe<StringQueryOperatorInput>;
   pluginOptions?: Maybe<SitePluginPluginOptionsPluginsPluginOptionsFilterInput>;
   browserAPIs?: Maybe<StringQueryOperatorInput>;
-  ssrAPIs?: Maybe<StringQueryOperatorInput>;
   pluginFilepath?: Maybe<StringQueryOperatorInput>;
 };
 
@@ -2808,6 +2816,7 @@ export type SitePluginPluginOptionsPluginsPluginOptions = {
   tracedSVG?: Maybe<Scalars['Boolean']>;
   loading?: Maybe<Scalars['String']>;
   disableBgImageOnAlpha?: Maybe<Scalars['Boolean']>;
+  disableBgImage?: Maybe<Scalars['Boolean']>;
 };
 
 export type SitePluginPluginOptionsPluginsPluginOptionsFilterInput = {
@@ -2823,6 +2832,7 @@ export type SitePluginPluginOptionsPluginsPluginOptionsFilterInput = {
   tracedSVG?: Maybe<BooleanQueryOperatorInput>;
   loading?: Maybe<StringQueryOperatorInput>;
   disableBgImageOnAlpha?: Maybe<BooleanQueryOperatorInput>;
+  disableBgImage?: Maybe<BooleanQueryOperatorInput>;
 };
 
 export type SitePluginSortInput = {
@@ -2861,6 +2871,7 @@ export type StringQueryOperatorInput = {
   regex?: Maybe<Scalars['String']>;
   glob?: Maybe<Scalars['String']>;
 };
+
 export type GatsbyImageSharpFixedFragment = { __typename?: 'ImageSharpFixed' } & Pick<
   ImageSharpFixed,
   'base64' | 'width' | 'height' | 'src' | 'srcSet'
@@ -3051,23 +3062,6 @@ export type IndexPageQuery = { __typename?: 'Query' } & {
       { __typename?: 'MarkdownRemark' } & {
         frontmatter: Maybe<
           { __typename?: 'MarkdownRemarkFrontmatter' } & Pick<MarkdownRemarkFrontmatter, 'author' | 'quote'>
-        >;
-      }
-    >;
-  };
-};
-
-export type ManagePageQueryVariables = {};
-
-export type ManagePageQuery = { __typename?: 'Query' } & {
-  schedule: { __typename?: 'MarkdownRemarkConnection' } & {
-    nodes: Array<
-      { __typename?: 'MarkdownRemark' } & {
-        frontmatter: Maybe<
-          { __typename?: 'MarkdownRemarkFrontmatter' } & Pick<
-            MarkdownRemarkFrontmatter,
-            'title' | 'weekday' | 'timeOfDay' | 'time'
-          >
         >;
       }
     >;
