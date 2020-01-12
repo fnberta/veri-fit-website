@@ -3,7 +3,7 @@ import React from 'react';
 import { SubscriptionType, TrainingType } from '../../shared';
 import { FormField } from '../components/bulma/Forms';
 import { makeValidator } from '../utils/forms';
-import { getEndDate, getToday } from './dateTime';
+import { getEndDate } from './dateTime';
 import { getSubscriptionName, getTrainingName } from './displayNames';
 import { SubscriptionInput } from './repositories/ClientRepository';
 import { validSubscriptionTypes } from './subscriptionChecks';
