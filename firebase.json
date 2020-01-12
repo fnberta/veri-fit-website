@@ -1,0 +1,8 @@
+{
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "functions": {
+    "predeploy": "yarn --ignore-engines --cwd \"$RESOURCE_DIR\" build"
+  }
+}

@@ -1,9 +1,12 @@
 import styled from '@emotion/styled';
-import { Field, Form, Formik, FormikActions } from 'formik';
+import { ErrorMessage, Field, Form, Formik, FormikHelpers } from 'formik';
 import React, { useState } from 'react';
-import { FormField, HorizontalField, SubmitButton } from '../components/bulma/Forms';
+import Button from '../components/bulma/Button';
+import { Container, Section } from '../components/bulma/Page';
+import { FormField, HorizontalField } from '../components/bulma/Forms';
 import { Title } from '../components/bulma/Heading';
 import FindMe from '../components/FindMe';
+import { makeValidator } from '../utils/forms';
 import { parallax } from '../utils/styles';
 
 type NotificationType = 'success' | 'error';
@@ -14,7 +17,7 @@ interface FormValues {
   message: string;
 }
 
-const Section = styled.section(parallax(true), {
+const ParallaxSection = styled(Section)(parallax(true), {
   backgroundImage: `url(${require('../images/sunrise.jpg')})`,
 });
 
@@ -71,8 +74,6 @@ async function submitForm(values: FormValues): Promise<boolean> {
   }
 }
 
-const validate = (value: string) => (value.length === 0 ? 'Required' : undefined);
-
 const ContactMe: React.FC = () => {
   const [notificationType, setNotificationType] = useState<NotificationType>();
 
@@ -81,7 +82,7 @@ const ContactMe: React.FC = () => {
     setTimeout(() => setNotificationType(undefined), 3000);
   }
 
-  async function handleFormSubmit(values: FormValues, { setSubmitting }: FormikActions<FormValues>) {
+  async function handleFormSubmit(values: FormValues, { setSubmitting }: FormikHelpers<FormValues>) {
     setNotificationType(undefined);
     const successful = await submitForm(values);
     showNotification(successful ? 'success' : 'error');
@@ -92,70 +93,68 @@ const ContactMe: React.FC = () => {
     <Formik<FormValues>
       initialValues={initialValues}
       onSubmit={handleFormSubmit}
-      render={({ errors, isSubmitting }) => (
-        <Section id="contact" className="section">
-          <div className="container">
+      render={({ isSubmitting }) => (
+        <ParallaxSection id="contact">
+          <Container>
             <Title text="So findest du mich" size={1} className="has-text-light has-text-centered" />
             <FindMe />
             {notificationType && (
               <Notification type={notificationType} onCloseClick={() => setNotificationType(undefined)} />
             )}
             <Form name="contact" data-netlify="true" netlify-honeypot="bot-field">
-              <div className="is-none">
+              <div className="is-hidden">
                 <label>
                   Don't fill this out if you're human: <input name="bot-field" />
                 </label>
               </div>
               <HorizontalField>
                 <FormField
+                  label={<span className="has-text-light">Name</span>}
                   icon="fas fa-user"
-                  error={errors.name}
+                  error={<ErrorMessage name="name" />}
                   control={
                     <Field
                       className="input"
-                      aria-label="Name"
                       type="text"
                       name="name"
-                      placeholder="Name"
-                      validate={validate}
+                      validate={makeValidator('Name')}
                       disabled={isSubmitting}
                     />
                   }
                 />
                 <FormField
+                  label={<span className="has-text-light">Email</span>}
                   icon="fas fa-envelope"
-                  error={errors.email}
+                  error={<ErrorMessage name="email" />}
                   control={
                     <Field
                       className="input"
-                      aria-label="Email"
                       type="email"
                       name="email"
-                      placeholder="Email"
-                      validate={validate}
+                      validate={makeValidator('Email')}
                       disabled={isSubmitting}
                     />
                   }
                 />
               </HorizontalField>
               <FormField
-                error={errors.message}
+                label={<span className="has-text-light">Nachricht</span>}
+                error={<ErrorMessage name="message" />}
                 control={
                   <Field
                     className="textarea"
-                    aria-label="Nachricht"
-                    component="textarea"
+                    as="textarea"
                     name="message"
                     placeholder="Wie kann ich dir helfen?"
-                    validate={validate}
+                    validate={makeValidator('Nachricht')}
                     disabled={isSubmitting}
                   />
                 }
               />
-              <SubmitButton text="Senden" submitting={isSubmitting} />
+              <Button type="submit" text="Senden" intent="primary" loading={isSubmitting} disabled={isSubmitting} />
             </Form>
-          </div>
-        </Section>
+          </Container>
+        </ParallaxSection>
       )}
     />
   );

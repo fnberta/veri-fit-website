@@ -1,6 +1,7 @@
 import { graphql } from 'gatsby';
 import React from 'react';
 import Body from '../components/Body';
+import { Container, Section } from '../components/bulma/Page';
 import { Subtitle, Title } from '../components/bulma/Heading';
 import Layout from '../components/Layout';
 import { AgbPageQuery } from '../generatedGraphQL';
@@ -17,13 +18,13 @@ export interface TemplateProps {
 
 export const AgbTemplate: React.FC<TemplateProps> = ({ title, subtitle, body }) => (
   <Layout title="AGB">
-    <section className="section">
-      <div className="container">
+    <Section>
+      <Container>
         <Title text={title} size={1} />
         <Subtitle text={subtitle} size={3} />
         <Body data={body} />
-      </div>
-    </section>
+      </Container>
+    </Section>
   </Layout>
 );
 

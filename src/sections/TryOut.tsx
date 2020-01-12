@@ -1,9 +1,10 @@
 import styled from '@emotion/styled';
 import React from 'react';
+import { Container, Section } from '../components/bulma/Page';
 import { Title } from '../components/bulma/Heading';
 import { parallax } from '../utils/styles';
 
-const Section = styled.section(parallax(true), {
+const ParallaxSection = styled(Section)(parallax(true), {
   minHeight: '20rem',
   display: 'flex',
   alignItems: 'center',
@@ -11,14 +12,14 @@ const Section = styled.section(parallax(true), {
 });
 
 const TryOut: React.FC = () => (
-  <Section className="section">
-    <div className="container has-text-centered">
+  <ParallaxSection>
+    <Container className="has-text-centered">
       <Title className="has-text-light" text="Starte jetzt gleich mit einem Probetraining!" size={3} />
       <a className="button is-primary is-uppercase" role="button" href="#contact">
         Kontakt
       </a>
-    </div>
-  </Section>
+    </Container>
+  </ParallaxSection>
 );
 
 export default TryOut;

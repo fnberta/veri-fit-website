@@ -1,9 +1,8 @@
 import styled from '@emotion/styled';
 import React from 'react';
-import { ClassNameProps } from '../interfaces';
 import { range } from '../utils/numbers';
 
-export interface Props extends ClassNameProps {
+export interface Props extends React.HTMLProps<HTMLDivElement> {
   count: number;
   activeIdx: number;
   onDotClick: (idx: number) => void;
@@ -41,14 +40,14 @@ const Circle = styled.span<{ active: boolean }>(
   },
 );
 
-const Dot: React.FC<{ active: boolean; onClick: React.MouseEventHandler<HTMLElement> }> = ({ active, onClick }) => (
-  <DotLayout onClick={onClick}>
+const Dot: React.FC<React.HTMLProps<HTMLDivElement> & { active: boolean }> = ({ active, ...rest }) => (
+  <DotLayout {...rest}>
     <Circle active={active} />
   </DotLayout>
 );
 
-const Dots: React.FC<Props> = ({ count, activeIdx, onDotClick, className }) => (
-  <Layout className={className}>
+const Dots: React.FC<Props> = ({ count, activeIdx, onDotClick, ...rest }) => (
+  <Layout {...rest}>
     {range(0, count).map(idx => (
       <Dot key={idx} active={activeIdx === idx} onClick={() => onDotClick(idx)} />
     ))}

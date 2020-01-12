@@ -2,6 +2,7 @@ import Carousel from '@brainhubeu/react-carousel';
 import '@brainhubeu/react-carousel/lib/style.css';
 import styled from '@emotion/styled';
 import React, { useState } from 'react';
+import { Section } from '../components/bulma/Page';
 import Dots from '../components/Dots';
 import Testimonial, { Props as TestimonialProps } from '../components/Testimonial';
 import { parallax } from '../utils/styles';
@@ -10,7 +11,7 @@ export interface Props {
   data: TestimonialProps[];
 }
 
-const Section = styled.section(parallax(true), {
+const ParallaxSection = styled(Section)(parallax(true), {
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',
@@ -27,7 +28,7 @@ const Testimonials: React.FC<Props> = ({ data }) => {
   }
 
   return (
-    <Section className="section">
+    <ParallaxSection className="section">
       <Carousel
         className="block"
         value={activeSlideIdx}
@@ -41,7 +42,7 @@ const Testimonials: React.FC<Props> = ({ data }) => {
         ))}
       </Carousel>
       <Dots className="block" activeIdx={activeSlideIdx} onDotClick={handleSlideChange} count={data.length} />
-    </Section>
+    </ParallaxSection>
   );
 };
 

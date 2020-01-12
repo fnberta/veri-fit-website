@@ -1,12 +1,11 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 // TODO: fix a11y errors
 /* eslint-disable jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events, jsx-a11y/interactive-supports-focus, jsx-a11y/no-static-element-interactions */
 
 import cx from 'classnames';
 import React, { useEffect, useState } from 'react';
-
-const logoOrange = require('../images/logo_orange.png');
-const logoBlue = require('../images/logo_blue.png');
+import { Container } from './bulma/Page';
+import logoOrange from '../images/logo_orange.png';
+import logoBlue from '../images/logo_blue.png';
 
 export interface NavbarItemProps {
   name: string;
@@ -21,7 +20,7 @@ const NavbarItem: React.FC<NavbarItemProps> = ({ name, href, fixed, menuActive }
   </a>
 );
 
-const Navbar: React.FC<{}> = () => {
+const Navbar: React.FC = () => {
   const [fixed, setFixed] = useState(false);
   const [menuActive, setMenuActive] = useState(false);
 
@@ -44,7 +43,7 @@ const Navbar: React.FC<{}> = () => {
       role="navigation"
       aria-label="main navigation"
     >
-      <div className="container">
+      <Container>
         <div className="navbar-brand">
           <a className="navbar-item" href="#home">
             <img src={fixed ? logoBlue : logoOrange} title="Veri-Fit" alt="Veri-Fit" />
@@ -73,7 +72,7 @@ const Navbar: React.FC<{}> = () => {
             <NavbarItem name="Kontakt" href="#contact" fixed={fixed} menuActive={menuActive} />
           </div>
         </div>
-      </div>
+      </Container>
     </nav>
   );
 };
