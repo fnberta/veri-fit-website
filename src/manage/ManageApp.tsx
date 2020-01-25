@@ -47,11 +47,11 @@ const ManageApp: React.FC = () => {
         <Link to="manage/trainings">Trainings</Link>
         <PlainButton onClick={() => authRepo.singOut()}>Ausloggen</PlainButton>
       </Navbar>
-      <Router>
-        <Clients path="manage/clients" />
-        <Clients path="manage/clients/:clientId" />
-        <Trainings path="manage/trainings" />
-        <Redirect default={true} noThrow={true} from="/" to="manage/trainings" />
+      <Router basepath="/manage">
+        <Clients path="clients" />
+        <Clients path="clients/:clientId" />
+        <Trainings path="trainings" />
+        <Redirect default={true} noThrow={true} from="/" to="/manage/trainings" />
       </Router>
     </Layout>
   );

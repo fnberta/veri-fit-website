@@ -1,12 +1,16 @@
-import { ErrorMessage, Field, getIn, useFormikContext } from 'formik';
+import { ErrorMessage, Field, FormikErrors, getIn, useFormikContext } from 'formik';
 import React from 'react';
 import { SubscriptionType, TrainingType } from '../../shared';
 import { FormField } from '../components/bulma/Forms';
-import { makeValidator } from '../utils/forms';
 import { getEndDate } from './dateTime';
 import { getSubscriptionName, getTrainingName } from './displayNames';
 import { SubscriptionInput } from './repositories/ClientRepository';
 import { validSubscriptionTypes } from './subscriptionChecks';
+
+export interface Props {
+  namespace?: string;
+  disabled: boolean;
+}
 
 export interface SubscriptionFormValues {
   type: SubscriptionType;
@@ -17,9 +21,22 @@ export interface SubscriptionFormValues {
   paidAt: string; // YYYY-MM-DD
 }
 
-export interface Props {
-  namespace?: string;
-  disabled: boolean;
+export function validateSubscriptionForm(values: SubscriptionFormValues): FormikErrors<SubscriptionFormValues> {
+  const errors: FormikErrors<SubscriptionFormValues> = {};
+
+  if (values.start.length === 0) {
+    errors.start = 'Startpunkt is erforderlich';
+  }
+
+  if (values.trainingsLeft == null) {
+    errors.trainingsLeft = 'Trainings übrig ist erforderlich';
+  }
+
+  if (values.paid && values.paidAt.length === 0) {
+    errors.paidAt = 'Bezahlt am ist erforderlich';
+  }
+
+  return errors;
 }
 
 export function getDefaultTrainingsLeft(type: SubscriptionType): number {
@@ -36,7 +53,7 @@ export function getDefaultTrainingsLeft(type: SubscriptionType): number {
       return 9999;
   }
 }
-export function mapToSubscriptionInput(values: SubscriptionFormValues): SubscriptionInput {
+export function getSubscriptionInput(values: SubscriptionFormValues): SubscriptionInput {
   switch (values.type) {
     case SubscriptionType.SINGLE: {
       if (values.category === TrainingType.YOGA || values.category === TrainingType.PERSONAL) {
@@ -165,29 +182,13 @@ const SubscriptionFormFields: React.FC<Props> = ({ disabled, namespace }) => {
         <FormField
           label="Anzahl Trainings übrig"
           error={<ErrorMessage name={withNamespace('trainingsLeft')} />}
-          control={
-            <Field
-              className="input"
-              type="number"
-              name={withNamespace('trainingsLeft')}
-              validate={makeValidator('Trainings übrig')}
-              disabled={disabled}
-            />
-          }
+          control={<Field className="input" type="number" name={withNamespace('trainingsLeft')} disabled={disabled} />}
         />
       )}
       <FormField
         label="Startpunkt"
         error={<ErrorMessage name={withNamespace('start')} />}
-        control={
-          <Field
-            className="input"
-            type="date"
-            name={withNamespace('start')}
-            validate={makeValidator('Startpunkt')}
-            disabled={disabled}
-          />
-        }
+        control={<Field className="input" type="date" name={withNamespace('start')} disabled={disabled} />}
       />
       <FormField
         label="Kosten"
@@ -203,15 +204,7 @@ const SubscriptionFormFields: React.FC<Props> = ({ disabled, namespace }) => {
         <FormField
           label="Bezahlt am"
           error={<ErrorMessage name={withNamespace('paidAt')} />}
-          control={
-            <Field
-              className="input"
-              type="date"
-              name={withNamespace('paidAt')}
-              validate={makeValidator('Bezahlt am')}
-              disabled={disabled}
-            />
-          }
+          control={<Field className="input" type="date" name={withNamespace('paidAt')} disabled={disabled} />}
         />
       )}
     </>

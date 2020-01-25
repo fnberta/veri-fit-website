@@ -134,16 +134,24 @@ const ClientDetails: React.FC<Props> = ({ client }) => {
         <HeaderLayout className="block">
           <header>
             <Title size={3} text={client.name} />
-            <Subtitle className="has-text-grey" size={5} text={`Geboren am ${formatLocale(client.birthday)}`} />
+            {client.birthday != null && (
+              <Subtitle className="has-text-grey" size={5} text={`Geboren am ${formatLocale(client.birthday)}`} />
+            )}
           </header>
           <Link className="delete is-medium" to="/manage/clients" />
         </HeaderLayout>
         <div className="columns">
           <Block className="column">
-            <Title size={5} text="Kontaktdaten" />
             <div>
-              <div>{`${client.address.street} ${client.address.number}`}</div>
-              <div>{`${client.address.zip} ${client.address.city}`}</div>
+              <Title size={5} text="Kontaktdaten" />
+              {client.address != null ? (
+                <>
+                  <div>{`${client.address.street} ${client.address.number}`}</div>
+                  <div>{`${client.address.zip} ${client.address.city}`}</div>
+                </>
+              ) : (
+                <p>Keine Adresse gespeichert…</p>
+              )}
               <a href={`mailto:${client.email}`}>{client.email}</a>
               <div>{client.phone}</div>
             </div>
@@ -185,7 +193,7 @@ const ClientDetails: React.FC<Props> = ({ client }) => {
                 </tbody>
               </table>
             ) : (
-              <div>Noch keine Trainingszeiten gesetzt…</div>
+              <p>Noch keine Trainingszeiten gesetzt…</p>
             )}
           </Block>
         </div>
@@ -210,7 +218,7 @@ const ClientDetails: React.FC<Props> = ({ client }) => {
             </tbody>
           </table>
         ) : (
-          <div>Leider noch kein Training besucht…</div>
+          <p>Leider noch kein Training besucht…</p>
         )}
       </LayoutCard>
       {showAddSubscriptionDialog && (

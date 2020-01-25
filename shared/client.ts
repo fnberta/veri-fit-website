@@ -3,15 +3,15 @@ import { Subscription } from './subscription';
 
 export interface Client extends Entity {
   name: string;
-  email: string;
-  birthday: string; // YYYY-MM-DD
-  address: {
+  email?: string;
+  birthday?: string; // YYYY-MM-DD
+  address?: {
     street: string;
     number: string;
     zip: string;
     city: string;
   };
-  phone: string;
+  phone?: string;
   activeSubscriptions: Subscription[];
 }
 

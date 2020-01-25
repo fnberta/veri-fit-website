@@ -7,7 +7,7 @@ import { getToday } from './dateTime';
 import { useRepos } from './repositories/RepoContext';
 import SubscriptionFormFields, {
   getDefaultTrainingsLeft,
-  mapToSubscriptionInput,
+  getSubscriptionInput,
   SubscriptionFormValues,
 } from './SubscriptionFormFields';
 
@@ -35,7 +35,7 @@ const AddSubscriptionDialog: React.FC<Props> = ({ clientId, onSubscriptionAdded,
     values: SubscriptionFormValues,
     { setSubmitting }: FormikHelpers<SubscriptionFormValues>,
   ) {
-    const input = mapToSubscriptionInput(values);
+    const input = getSubscriptionInput(values);
     const subscription = await clientRepo.createSubscription(clientId, input);
     setSubmitting(false);
     onSubscriptionAdded(subscription);

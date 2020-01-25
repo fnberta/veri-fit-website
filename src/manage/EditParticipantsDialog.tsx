@@ -10,7 +10,6 @@ import { useRepos } from './repositories/RepoContext';
 export interface Props {
   session: Session;
   clients: Client[];
-
   onSessionUpdated: (session: Session) => void;
   onCancelClick: React.MouseEventHandler;
 }
@@ -31,7 +30,7 @@ const EditParticipantsDialog: React.FC<Props> = ({ session, clients, onSessionUp
   return (
     <Formik<FormValues>
       initialValues={{ clientIds: session.clientIds }}
-      isInitialValid={true}
+      validateOnMount={true}
       onSubmit={handleFormSubmission}
     >
       {({ isValid, isSubmitting, submitForm }) => (
