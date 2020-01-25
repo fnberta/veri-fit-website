@@ -1,16 +1,17 @@
-import { Form, Formik, FormikHelpers } from 'formik';
+import { Form, Formik, FormikErrors, FormikHelpers } from 'formik';
 import React from 'react';
 import { Client, SubscriptionType, TrainingType } from '../../shared';
 import Button from '../components/bulma/Button';
 import Dialog from '../components/bulma/Dialog';
-import ClientFormFields from './ClientFormFields';
+import ClientFormFields, { getClientInput, validateClientForm } from './ClientFormFields';
 import { getToday } from './dateTime';
 import { ClientInput } from './repositories/ClientRepository';
 import { useRepos } from './repositories/RepoContext';
 import SubscriptionFormFields, {
   getDefaultTrainingsLeft,
-  mapToSubscriptionInput,
+  getSubscriptionInput,
   SubscriptionFormValues,
+  validateSubscriptionForm,
 } from './SubscriptionFormFields';
 
 export interface Props {
@@ -18,8 +19,18 @@ export interface Props {
   onCancelClick: React.MouseEventHandler;
 }
 
-interface FormValues extends ClientInput {
+interface FormValues extends Required<ClientInput> {
   subscription: SubscriptionFormValues;
+}
+
+function validate(values: FormValues): FormikErrors<FormValues> {
+  const { subscription, ...clientValues } = values;
+  const clientErrors = validateClientForm(clientValues);
+  const subscriptionErrors = validateSubscriptionForm(subscription);
+  return {
+    ...clientErrors,
+    ...subscriptionErrors,
+  };
 }
 
 function getInitialValues(today: string): FormValues {
@@ -50,14 +61,19 @@ const AddClientDialog: React.FC<Props> = ({ onClientCreated, onCancelClick }) =>
   const { clientRepo } = useRepos();
 
   async function handleFormSubmission(values: FormValues, { setSubmitting }: FormikHelpers<FormValues>) {
-    const { subscription, ...clientInput } = values;
-    const client = await clientRepo.create(clientInput, mapToSubscriptionInput(subscription));
+    const { subscription, ...clientValues } = values;
+    const client = await clientRepo.create(getClientInput(clientValues), getSubscriptionInput(subscription));
     setSubmitting(false);
     onClientCreated(client);
   }
 
   return (
-    <Formik<FormValues> initialValues={getInitialValues(getToday())} onSubmit={handleFormSubmission}>
+    <Formik<FormValues>
+      initialValues={getInitialValues(getToday())}
+      validate={validate}
+      validateOnMount={true}
+      onSubmit={handleFormSubmission}
+    >
       {({ isSubmitting, isValid, submitForm }) => (
         <Dialog
           title="Neuer Teilnehmer"

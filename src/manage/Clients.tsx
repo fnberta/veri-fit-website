@@ -37,7 +37,7 @@ const ClientEntry: React.FC<{ client: Client }> = ({ client }) => {
   }
 
   return (
-    <Link to={client.id}>
+    <Link to={`/manage/clients/${client.id}`}>
       <ClientCard>
         <Title size={4} text={name} />
         {tags.length > 0 && <Tags>{tags}</Tags>}
