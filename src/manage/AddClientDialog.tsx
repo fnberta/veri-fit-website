@@ -3,9 +3,8 @@ import React from 'react';
 import { Client, SubscriptionType, TrainingType } from '../../shared';
 import Button from '../components/bulma/Button';
 import Dialog from '../components/bulma/Dialog';
-import ClientFormFields, { getClientInput, validateClientForm } from './ClientFormFields';
+import ClientFormFields, { ClientFormValues, getClientInput, validateClientForm } from './ClientFormFields';
 import { getToday } from './dateTime';
-import { ClientInput } from './repositories/ClientRepository';
 import { useRepos } from './repositories/RepoContext';
 import SubscriptionFormFields, {
   getDefaultTrainingsLeft,
@@ -19,7 +18,7 @@ export interface Props {
   onCancelClick: React.MouseEventHandler;
 }
 
-interface FormValues extends Required<ClientInput> {
+interface FormValues extends ClientFormValues {
   subscription: SubscriptionFormValues;
 }
 
