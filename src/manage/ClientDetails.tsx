@@ -58,7 +58,7 @@ const SubscriptionSummary: React.FC<{ subscription: Subscription; onSetPaidClick
     <SubscriptionEntry>
       <HeaderLayout>
         <header>
-          <Title text={getTrainingName(subscription.category)} size={6} />
+          <Title text={getTrainingName(subscription.trainingType)} size={6} />
           <Subtitle className="has-text-grey" text={getSubscriptionName(subscription.type)} size={6} />
         </header>
         {active ? (
@@ -211,7 +211,7 @@ const ClientDetails: React.FC<Props> = ({ client }) => {
               {sessions.map(session => (
                 <tr key={session.id}>
                   <td>{session.date}</td>
-                  <td>{getTrainingName(session.category)}</td>
+                  <td>{getTrainingName(session.type)}</td>
                   <td>{`${session.time.start} - ${session.time.end}`}</td>
                 </tr>
               ))}

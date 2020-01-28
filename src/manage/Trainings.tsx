@@ -1,13 +1,13 @@
 import { RouteComponentProps } from '@reach/router';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
-import { Client, Session, Time, Training } from '../../shared';
+import { Client, Session, Time } from '../../shared';
 import Button, { Buttons } from '../components/bulma/Button';
 import { Title } from '../components/bulma/Heading';
 import { Container, Section } from '../components/bulma/Page';
 import WeekSchedule, { TimeOfDay, Weekday, WeekdayEntry } from '../components/WeekSchedule';
-import AddEditTrainingDialog from './AddEditTrainingDialog';
-import EditParticipantsDialog from './EditParticipantsDialog';
+import AddTrainingDialog from './AddTrainingDialog';
+import EditSessionDialog from './EditSessionDialog';
 import { useRepos } from './repositories/RepoContext';
 import SessionCard from './SessionCard';
 
@@ -15,7 +15,7 @@ export type Props = RouteComponentProps;
 
 type Week = Record<Weekday, WeekdayEntry[]>;
 
-type TrainingDialog = { type: 'ADD' } | { type: 'EDIT'; training: Training };
+type AddEditDialog = { type: 'ADD' } | { type: 'EDIT'; session: Session };
 
 function mapNumericWeekday(weekday: number): Weekday {
   switch (weekday) {
@@ -51,8 +51,7 @@ function getTimeOfDay(time: Time): TimeOfDay {
 
 const Trainings: React.FC<Props> = () => {
   const [date, setDate] = useState(() => DateTime.local());
-  const [trainingDialog, setTrainingDialog] = useState<TrainingDialog>();
-  const [editSessionParticipants, setEditSessionParticipants] = useState<Session>();
+  const [addEditDialog, setAddEditDialog] = useState<AddEditDialog>();
   const [clients, setClients] = useState([] as Client[]);
   const [sessions, setSessions] = useState([] as Session[]);
   const { clientRepo, sessionRepo } = useRepos();
@@ -72,7 +71,7 @@ const Trainings: React.FC<Props> = () => {
           text="Hinzufügen"
           icon="fa-plus"
           intent="primary"
-          onClick={() => setTrainingDialog({ type: 'ADD' })}
+          onClick={() => setAddEditDialog({ type: 'ADD' })}
         />
         <Buttons>
           <Button text="Previous" onClick={() => setDate(prev => prev.minus({ weeks: 1 }))} />
@@ -92,9 +91,8 @@ const Trainings: React.FC<Props> = () => {
                   <SessionCard
                     session={curr}
                     clients={clients}
-                    onConfirmToggle={() => sessionRepo.update({ ...curr, confirmed: !curr.confirmed })}
-                    onEditParticipantsClick={() => setEditSessionParticipants(curr)}
-                    onEditTrainingClick={training => setTrainingDialog({ type: 'EDIT', training })}
+                    onConfirmToggle={() => sessionRepo.toggleConfirmed(curr)}
+                    onEditClick={() => setAddEditDialog({ type: 'EDIT', session: curr })}
                   />
                 ),
               });
@@ -111,33 +109,22 @@ const Trainings: React.FC<Props> = () => {
             },
           )}
         />
-        {trainingDialog?.type === 'ADD' && (
-          <AddEditTrainingDialog
+        {addEditDialog?.type === 'ADD' && (
+          <AddTrainingDialog
             clients={clients}
-            onTrainingChanged={() => {
-              setTrainingDialog(undefined);
+            onTrainingCreated={() => {
+              setAddEditDialog(undefined);
               sessionRepo.createForWeek(date.weekYear, date.weekNumber).catch(err => console.error(err));
             }}
-            onCancelClick={() => setTrainingDialog(undefined)}
+            onCancelClick={() => setAddEditDialog(undefined)}
           />
         )}
-        {trainingDialog?.type === 'EDIT' && (
-          <AddEditTrainingDialog
-            training={trainingDialog.training}
+        {addEditDialog?.type === 'EDIT' && (
+          <EditSessionDialog
+            session={addEditDialog.session}
             clients={clients}
-            onTrainingChanged={() => {
-              setTrainingDialog(undefined);
-              sessionRepo.createForWeek(date.weekYear, date.weekNumber).catch(err => console.error(err));
-            }}
-            onCancelClick={() => setTrainingDialog(undefined)}
-          />
-        )}
-        {editSessionParticipants && (
-          <EditParticipantsDialog
-            session={editSessionParticipants}
-            clients={clients}
-            onSessionUpdated={() => setEditSessionParticipants(undefined)}
-            onCancelClick={() => setEditSessionParticipants(undefined)}
+            onSessionChanged={() => setAddEditDialog(undefined)}
+            onCancelClick={() => setAddEditDialog(undefined)}
           />
         )}
       </Container>

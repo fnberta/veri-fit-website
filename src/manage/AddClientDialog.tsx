@@ -46,7 +46,7 @@ function getInitialValues(today: string): FormValues {
     phone: '',
     subscription: {
       type: SubscriptionType.LIMITED_10,
-      category: TrainingType.YOGA,
+      trainingType: TrainingType.YOGA,
       trainingsLeft: getDefaultTrainingsLeft(SubscriptionType.LIMITED_10),
       start: today,
       paid: false,

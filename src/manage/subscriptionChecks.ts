@@ -37,7 +37,7 @@ export function showSessionConfirm(clients: Client[], session: Session): boolean
   return clients
     .filter(client => session.clientIds.includes(client.id))
     .every(client => {
-      const subscription = client.activeSubscriptions.find(activeSub => activeSub.category === session.category);
+      const subscription = client.activeSubscriptions.find(activeSub => activeSub.trainingType === session.type);
       if (!subscription) {
         return false;
       } else if (subscription.type === SubscriptionType.BLOCK) {

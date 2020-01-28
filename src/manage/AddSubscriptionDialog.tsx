@@ -20,7 +20,7 @@ export interface Props {
 function getInitialValues(today: string): SubscriptionFormValues {
   return {
     type: SubscriptionType.LIMITED_10,
-    category: TrainingType.YOGA,
+    trainingType: TrainingType.YOGA,
     trainingsLeft: getDefaultTrainingsLeft(SubscriptionType.LIMITED_10),
     start: today,
     paid: false,

@@ -1,29 +1,62 @@
 import { Unsubscribe } from 'firebase';
 import { DateTime } from 'luxon';
-import { Collection, Session, parseSession } from '../../../shared';
+import {
+  Collection,
+  Session,
+  parseSession,
+  CreateSessionsPayload,
+  ChangeType,
+  UpdateSessionPayload,
+  TrainingInput,
+  SessionInput,
+} from '../../../shared';
 import { Firestore, Functions, HttpsCallable } from '../firebase';
 
 export default class SessionRepository {
   private readonly createSessions: HttpsCallable;
+  private readonly updateSession: HttpsCallable;
 
   constructor(private readonly db: Firestore, functions: Functions) {
     this.createSessions = functions.httpsCallable('createSessions');
+    this.updateSession = functions.httpsCallable('updateSession');
   }
 
   async createForWeek(year: number, weekNumber: number): Promise<void> {
-    await this.createSessions({
+    const payload: CreateSessionsPayload = {
       year,
       weekNumber,
-    });
+    };
+    await this.createSessions(payload);
   }
 
-  async update(session: Session): Promise<Session> {
-    const { id, ...rest } = session;
+  async update(type: ChangeType, session: Session, trainingInput: TrainingInput): Promise<Session> {
+    const date = DateTime.fromISO(session.date);
+    const sessionInput: SessionInput = {
+      ...session,
+      ...trainingInput,
+      date: date.set({ weekday: trainingInput.weekday }).toISODate(),
+    };
+    const payload: UpdateSessionPayload = {
+      type,
+      sessionId: session.id,
+      sessionInput,
+    };
+    await this.updateSession(payload);
+    return {
+      id: session.id,
+      ...sessionInput,
+    };
+  }
+
+  async toggleConfirmed(session: Session): Promise<Session> {
     await this.db
       .collection(Collection.SESSIONS)
-      .doc(id)
-      .update(rest);
-    return session;
+      .doc(session.id)
+      .update({ confirmed: !session.confirmed });
+    return {
+      ...session,
+      confirmed: !session.confirmed,
+    };
   }
 
   observeAllForClients(clientId: string, onChange: (sessions: Session[]) => void): Unsubscribe {

@@ -1,44 +1,44 @@
 import { Form, Formik, FormikHelpers } from 'formik';
 import React from 'react';
-import { Session, Client } from '../../shared';
+import { ChangeType, Client, Session, TrainingInput } from '../../shared';
 import Button from '../components/bulma/Button';
 import Dialog from '../components/bulma/Dialog';
-import { FormField } from '../components/bulma/Forms';
-import ParticipantsSelector from './ParticipantsSelector';
 import { useRepos } from './repositories/RepoContext';
+import TrainingFormFields from './TrainingFormFields';
 
 export interface Props {
   session: Session;
   clients: Client[];
-  onSessionUpdated: (session: Session) => void;
+  onSessionChanged: (session: Session) => void;
   onCancelClick: React.MouseEventHandler;
 }
 
-interface FormValues {
-  clientIds: string[];
+function getInitialValues(session: Session): TrainingInput {
+  return {
+    type: session.type,
+    weekday: session.weekday,
+    time: session.time,
+    clientIds: session.clientIds,
+  };
 }
 
-const EditParticipantsDialog: React.FC<Props> = ({ session, clients, onSessionUpdated, onCancelClick }) => {
+const EditSessionDialog: React.FC<Props> = ({ session, clients, onSessionChanged, onCancelClick }) => {
   const { sessionRepo } = useRepos();
 
-  async function handleFormSubmission(values: FormValues, { setSubmitting }: FormikHelpers<FormValues>) {
-    const updatedSession = await sessionRepo.update({ ...session, clientIds: values.clientIds });
+  async function handleFormSubmission(values: TrainingInput, { setSubmitting }: FormikHelpers<TrainingInput>) {
+    const changedSession = await sessionRepo.update(ChangeType.SINGLE, session, values);
     setSubmitting(false);
-    onSessionUpdated(updatedSession);
+    onSessionChanged(changedSession);
   }
 
   return (
-    <Formik<FormValues>
-      initialValues={{ clientIds: session.clientIds }}
-      validateOnMount={true}
-      onSubmit={handleFormSubmission}
-    >
+    <Formik<TrainingInput> onSubmit={handleFormSubmission} initialValues={getInitialValues(session)}>
       {({ isValid, isSubmitting, submitForm }) => (
         <Dialog
-          title={`${session.category} - ${session.date}`}
+          title="Training bearbeiten"
           body={
             <Form>
-              <FormField label="Teilnehmer" control={<ParticipantsSelector name="clientIds" clients={clients} />} />
+              <TrainingFormFields clients={clients} disabled={isSubmitting} />
             </Form>
           }
           footer={
@@ -61,4 +61,4 @@ const EditParticipantsDialog: React.FC<Props> = ({ session, clients, onSessionUp
   );
 };
 
-export default EditParticipantsDialog;
+export default EditSessionDialog;

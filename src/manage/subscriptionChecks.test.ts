@@ -8,7 +8,7 @@ describe('expires', () => {
     const result = isSubscriptionExpiring({
       id: 'random-id',
       type: SubscriptionType.UNLIMITED_10,
-      category: TrainingType.YOGA,
+      trainingType: TrainingType.YOGA,
       start: getToday(),
       trainingsLeft: 10,
     });
@@ -20,7 +20,7 @@ describe('expires', () => {
     const result = isSubscriptionExpiring({
       id: 'random-id',
       type: SubscriptionType.LIMITED_10,
-      category: TrainingType.YOGA,
+      trainingType: TrainingType.YOGA,
       start: today.minus({ weeks: 2 }).toISODate(),
       end: today.plus({ weeks: 2 }).toISODate(),
       trainingsLeft: 10,
@@ -33,7 +33,7 @@ describe('expires', () => {
     const result = isSubscriptionExpiring({
       id: 'random-id',
       type: SubscriptionType.LIMITED_10,
-      category: TrainingType.YOGA,
+      trainingType: TrainingType.YOGA,
       start: today.minus({ weeks: 2 }).toISODate(),
       end: today.plus({ weeks: 1 }).toISODate(),
       trainingsLeft: 10,
@@ -46,7 +46,7 @@ describe('expires', () => {
     const result = isSubscriptionExpiring({
       id: 'random-id',
       type: SubscriptionType.LIMITED_10,
-      category: TrainingType.YOGA,
+      trainingType: TrainingType.YOGA,
       start: today.minus({ weeks: 2 }).toISODate(),
       end: today.plus({ days: 2 }).toISODate(),
       trainingsLeft: 10,
@@ -61,7 +61,7 @@ describe('runs short', () => {
       doesSubscriptionRunShort({
         id: 'random-id',
         type: SubscriptionType.UNLIMITED_10,
-        category: TrainingType.YOGA,
+        trainingType: TrainingType.YOGA,
         start: getToday(),
         trainingsLeft: 10,
       }),
@@ -72,7 +72,7 @@ describe('runs short', () => {
       doesSubscriptionRunShort({
         id: 'random-id',
         type: SubscriptionType.BLOCK,
-        category: TrainingType.BOOST,
+        trainingType: TrainingType.BOOST,
         start: today.minus({ weeks: 2 }).toISODate(),
         end: today.plus({ weeks: 1 }).toISODate(),
       }),
@@ -84,7 +84,7 @@ describe('runs short', () => {
     const result = doesSubscriptionRunShort({
       id: 'random-id',
       type: SubscriptionType.LIMITED_10,
-      category: TrainingType.YOGA,
+      trainingType: TrainingType.YOGA,
       start: today.minus({ weeks: 2 }).toISODate(),
       end: today.plus({ weeks: 5 }).toISODate(),
       trainingsLeft: 3,
@@ -97,7 +97,7 @@ describe('runs short', () => {
     const result = doesSubscriptionRunShort({
       id: 'random-id',
       type: SubscriptionType.LIMITED_10,
-      category: TrainingType.YOGA,
+      trainingType: TrainingType.YOGA,
       start: today.minus({ weeks: 2 }).toISODate(),
       end: today.plus({ weeks: 4 }).toISODate(),
       trainingsLeft: 4,
@@ -110,7 +110,7 @@ describe('runs short', () => {
     const result = doesSubscriptionRunShort({
       id: 'random-id',
       type: SubscriptionType.LIMITED_10,
-      category: TrainingType.YOGA,
+      trainingType: TrainingType.YOGA,
       start: today.minus({ weeks: 2 }).toISODate(),
       end: today.plus({ weeks: 5 }).toISODate(),
       trainingsLeft: 7,
@@ -127,7 +127,7 @@ describe('show session confirm', () => {
         activeSubscriptions: [
           {
             type: SubscriptionType.LIMITED_10,
-            category: TrainingType.PERSONAL,
+            trainingType: TrainingType.PERSONAL,
             start: 'some-date',
             end: 'some-date',
             trainingsLeft: 5,
@@ -137,15 +137,16 @@ describe('show session confirm', () => {
     ] as Client[];
     const session: Session = {
       id: 'some-id',
-      trainingId: 'some-training-id',
-      category: TrainingType.YOGA,
-      clientIds: ['client-1'],
-      confirmed: false,
+      type: TrainingType.YOGA,
+      weekday: 1,
       time: {
         start: '',
         end: '',
       },
+      clientIds: ['client-1'],
+      trainingId: 'some-training-id',
       date: '',
+      confirmed: false,
     };
 
     const result = showSessionConfirm(clients, session);
@@ -158,7 +159,7 @@ describe('show session confirm', () => {
         activeSubscriptions: [
           {
             type: SubscriptionType.LIMITED_10,
-            category: TrainingType.YOGA,
+            trainingType: TrainingType.YOGA,
             start: 'some-date',
             end: 'some-date',
             trainingsLeft: 0,
@@ -168,15 +169,16 @@ describe('show session confirm', () => {
     ] as Client[];
     const session: Session = {
       id: 'some-id',
-      trainingId: 'some-training-id',
-      category: TrainingType.YOGA,
-      clientIds: ['client-1'],
-      confirmed: false,
+      type: TrainingType.YOGA,
+      weekday: 1,
       time: {
         start: '',
         end: '',
       },
+      clientIds: ['client-1'],
+      trainingId: 'some-training-id',
       date: '',
+      confirmed: false,
     };
 
     const result = showSessionConfirm(clients, session);
@@ -189,7 +191,7 @@ describe('show session confirm', () => {
         activeSubscriptions: [
           {
             type: SubscriptionType.BLOCK,
-            category: TrainingType.BOOST,
+            trainingType: TrainingType.BOOST,
             start: 'some-date',
             end: 'some-date',
           },
@@ -198,15 +200,16 @@ describe('show session confirm', () => {
     ] as Client[];
     const session: Session = {
       id: 'some-id',
-      trainingId: 'some-training-id',
-      category: TrainingType.BOOST,
-      clientIds: ['client-1'],
-      confirmed: false,
+      type: TrainingType.BOOST,
+      weekday: 1,
       time: {
         start: '',
         end: '',
       },
+      clientIds: ['client-1'],
+      trainingId: 'some-training-id',
       date: '',
+      confirmed: false,
     };
 
     const result = showSessionConfirm(clients, session);
@@ -219,7 +222,7 @@ describe('show session confirm', () => {
         activeSubscriptions: [
           {
             type: SubscriptionType.LIMITED_10,
-            category: TrainingType.YOGA,
+            trainingType: TrainingType.YOGA,
             start: 'some-date',
             end: 'some-date',
             trainingsLeft: 2,
@@ -229,15 +232,16 @@ describe('show session confirm', () => {
     ] as Client[];
     const session: Session = {
       id: 'some-id',
-      trainingId: 'some-training-id',
-      category: TrainingType.YOGA,
-      clientIds: ['client-1'],
-      confirmed: false,
+      type: TrainingType.YOGA,
+      weekday: 1,
       time: {
         start: '',
         end: '',
       },
+      clientIds: ['client-1'],
+      trainingId: 'some-training-id',
       date: '',
+      confirmed: false,
     };
 
     const result = showSessionConfirm(clients, session);
