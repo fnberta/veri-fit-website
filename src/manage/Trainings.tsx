@@ -18,8 +18,9 @@ type Week = Record<Weekday, WeekdayEntry[]>;
 
 type AddEditDialog = { type: 'ADD' } | { type: 'EDIT'; session: Session };
 
-function mapNumericWeekday(weekday: number): Weekday {
-  switch (weekday) {
+function getWeekday(iso: string): Weekday {
+  const date = DateTime.fromISO(iso);
+  switch (date.weekday) {
     case 1:
       return 'monday';
     case 2:
@@ -33,7 +34,7 @@ function mapNumericWeekday(weekday: number): Weekday {
     case 6:
       return 'saturday';
     default:
-      throw new Error('invalid');
+      throw new Error(`invalid weekday number: ${date.weekday}`);
   }
 }
 
@@ -52,14 +53,21 @@ function getTimeOfDay(time: Time): TimeOfDay {
 
 const getNextPath = (date: DateTime) => `/manage/trainings/${date.weekYear}/${date.weekNumber}`;
 
+function getDateFromPath(year: number | undefined, week: number | undefined): DateTime {
+  if (year == null || week == null) {
+    return DateTime.local();
+  } else {
+    return DateTime.fromObject({ weekYear: year, weekNumber: week });
+  }
+}
+
 const Trainings: React.FC<Props> = ({ year, week }) => {
   const [addEditDialog, setAddEditDialog] = useState<AddEditDialog>();
   const [clients, setClients] = useState([] as Client[]);
   const [sessions, setSessions] = useState([] as Session[]);
   const { clientRepo, sessionRepo } = useRepos();
 
-  const date =
-    year != null && week != null ? DateTime.fromObject({ weekYear: year, weekNumber: week }) : DateTime.local();
+  const date = getDateFromPath(year, week);
 
   useEffect(() => clientRepo.observeAll(setClients), [clientRepo]);
   useEffect(() => sessionRepo.observeAllForWeek(date.weekYear, date.weekNumber, setSessions), [
@@ -68,8 +76,9 @@ const Trainings: React.FC<Props> = ({ year, week }) => {
     date.weekNumber,
   ]);
   useEffect(() => {
-    sessionRepo.createForWeek(date.weekYear, date.weekNumber).catch(err => console.error(err));
-  }, [sessionRepo, date.weekYear, date.weekNumber]);
+    // TODO: show error to user
+    sessionRepo.createForYear(date.weekYear).catch(err => console.error(err));
+  }, [sessionRepo, date.weekYear]);
 
   return (
     <Section>
@@ -97,7 +106,7 @@ const Trainings: React.FC<Props> = ({ year, week }) => {
         <WeekSchedule
           {...sessions.reduce<Week>(
             (acc, curr) => {
-              const weekday = mapNumericWeekday(DateTime.fromISO(curr.date).weekday);
+              const weekday = getWeekday(curr.runsFrom);
               acc[weekday].push({
                 id: curr.id,
                 weekday,
@@ -127,10 +136,7 @@ const Trainings: React.FC<Props> = ({ year, week }) => {
         {addEditDialog?.type === 'ADD' && (
           <AddTrainingDialog
             clients={clients}
-            onTrainingCreated={() => {
-              setAddEditDialog(undefined);
-              sessionRepo.createForWeek(date.weekYear, date.weekNumber).catch(err => console.error(err));
-            }}
+            onTrainingCreated={() => setAddEditDialog(undefined)}
             onCancelClick={() => setAddEditDialog(undefined)}
           />
         )}

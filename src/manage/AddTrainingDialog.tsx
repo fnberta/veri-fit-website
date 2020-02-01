@@ -6,7 +6,7 @@ import Button from '../components/bulma/Button';
 import Dialog from '../components/bulma/Dialog';
 import { getToday } from './dateTime';
 import { useRepos } from './repositories/RepoContext';
-import TrainingFormFields from './TrainingFormFields';
+import TrainingFormFields, { validateTrainingForm } from './TrainingFormFields';
 
 export interface Props {
   clients: Client[];
@@ -24,7 +24,6 @@ function getInitialValues(runsFrom: string): TrainingInput {
   return {
     type: TrainingType.YOGA,
     runsFrom,
-    weekday: 1,
     time: {
       start: '',
       end: '',
@@ -43,7 +42,11 @@ const AddTrainingDialog: React.FC<Props> = ({ clients, onTrainingCreated, onCanc
   }
 
   return (
-    <Formik<TrainingInput> initialValues={getInitialValues(getToday())} onSubmit={handleFormSubmission}>
+    <Formik<TrainingInput>
+      initialValues={getInitialValues(getToday())}
+      validate={validateTrainingForm}
+      onSubmit={handleFormSubmission}
+    >
       {({ isValid, isSubmitting, submitForm }) => (
         <Dialog
           title="Neues Training"

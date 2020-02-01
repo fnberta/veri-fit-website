@@ -31,10 +31,19 @@ export default async function initRepositories(): Promise<RepoContextValues> {
   ]);
 
   const firebaseApp = firebase.initializeApp(firebaseConfig);
-  const db = firebaseApp.firestore();
-  const functions = firebaseApp.functions();
   const auth = firebaseApp.auth();
   auth.useDeviceLanguage();
+  const db = firebaseApp.firestore();
+  const functions = firebaseApp.functions();
+
+  if (window.location.hostname === 'localhost') {
+    db.settings({
+      host: 'localhost:8080',
+      ssl: false,
+    });
+    functions.useFunctionsEmulator('http://localhost:5001');
+  }
+
   const clientRepo = new ClientRepository(db);
   const sessionRepo = new SessionRepository(db, functions);
   const trainingRepo = new TrainingRepository(db);

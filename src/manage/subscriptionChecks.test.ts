@@ -138,7 +138,7 @@ describe('show session confirm', () => {
     const session: Session = {
       id: 'some-id',
       type: TrainingType.YOGA,
-      weekday: 1,
+      runsFrom: getToday(),
       time: {
         start: '',
         end: '',
@@ -170,7 +170,7 @@ describe('show session confirm', () => {
     const session: Session = {
       id: 'some-id',
       type: TrainingType.YOGA,
-      weekday: 1,
+      runsFrom: getToday(),
       time: {
         start: '',
         end: '',
@@ -201,7 +201,7 @@ describe('show session confirm', () => {
     const session: Session = {
       id: 'some-id',
       type: TrainingType.BOOST,
-      weekday: 1,
+      runsFrom: getToday(),
       time: {
         start: '',
         end: '',
@@ -233,7 +233,7 @@ describe('show session confirm', () => {
     const session: Session = {
       id: 'some-id',
       type: TrainingType.YOGA,
-      weekday: 1,
+      runsFrom: getToday(),
       time: {
         start: '',
         end: '',

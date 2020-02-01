@@ -2,7 +2,7 @@ import { ErrorMessage, Field, FormikErrors, getIn, useFormikContext } from 'form
 import React from 'react';
 import { SubscriptionType, TrainingType } from '../../shared';
 import { FormField } from '../components/bulma/Forms';
-import { getEndDate } from './dateTime';
+import { getEndDate, isValidISOString } from './dateTime';
 import { getSubscriptionName, getTrainingName } from './displayNames';
 import { SubscriptionInput } from './repositories/ClientRepository';
 import { validSubscriptionTypes } from './subscriptionChecks';
@@ -26,14 +26,20 @@ export function validateSubscriptionForm(values: SubscriptionFormValues): Formik
 
   if (values.start.length === 0) {
     errors.start = 'Startpunkt is erforderlich';
+  } else if (!isValidISOString(values.start)) {
+    errors.start = 'Datumsformat muss YYYY-MM-DD sein';
   }
 
   if (values.trainingsLeft == null) {
     errors.trainingsLeft = 'Trainings übrig ist erforderlich';
   }
 
-  if (values.paid && values.paidAt.length === 0) {
-    errors.paidAt = 'Bezahlt am ist erforderlich';
+  if (values.paid) {
+    if (values.paidAt.length === 0) {
+      errors.paidAt = 'Bezahlt am ist erforderlich';
+    } else if (!isValidISOString(values.paidAt)) {
+      errors.start = 'Datumsformat muss YYYY-MM-DD sein';
+    }
   }
 
   return errors;

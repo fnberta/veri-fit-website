@@ -5,7 +5,7 @@ import { ChangeType, Client, Session, TrainingInput } from '../../shared';
 import Button from '../components/bulma/Button';
 import Dialog from '../components/bulma/Dialog';
 import { useRepos } from './repositories/RepoContext';
-import TrainingFormFields from './TrainingFormFields';
+import TrainingFormFields, { validateTrainingForm } from './TrainingFormFields';
 
 export interface Props {
   session: Session;
@@ -23,7 +23,7 @@ const FooterLayout = styled.div({
 function getInitialValues(session: Session): TrainingInput {
   return {
     type: session.type,
-    weekday: session.weekday,
+    runsFrom: session.runsFrom,
     time: session.time,
     clientIds: session.clientIds,
   };
@@ -40,7 +40,11 @@ const EditSessionDialog: React.FC<Props> = ({ session, clients, onSessionChanged
   }
 
   return (
-    <Formik<TrainingInput> onSubmit={handleFormSubmission} initialValues={getInitialValues(session)}>
+    <Formik<TrainingInput>
+      initialValues={getInitialValues(session)}
+      validate={validateTrainingForm}
+      onSubmit={handleFormSubmission}
+    >
       {({ isValid, isSubmitting, submitForm }) => (
         <Dialog
           title="Training bearbeiten"

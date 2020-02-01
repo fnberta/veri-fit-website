@@ -14,36 +14,83 @@ import {
   UpdateSessionPayload,
 } from './shared';
 
-type QuerySnapshot = admin.firestore.QuerySnapshot;
+type Query = admin.firestore.Query;
+type Transaction = admin.firestore.Transaction;
+type UpdateFunction<T> = (transaction: Transaction) => Promise<T>;
 
 admin.initializeApp();
 const db = admin.firestore();
 
+// TODO: should run in a transaction, but no proper way to only create a session if it doesn't exists yet without crashing the transaction
 export const createSessions = functions.https.onCall(async data => {
-  const { year, weekNumber } = data as CreateSessionsPayload;
-  const date = DateTime.fromObject({ weekYear: year, weekNumber });
+  const { year } = data as CreateSessionsPayload;
+  const date = DateTime.fromObject({ weekYear: year });
+
   const querySnap = await db.collection(Collection.TRAININGS).get();
-  querySnap.docs.map(parseTraining).forEach(training => {
-    const input: SessionInput = {
-      trainingId: training.id,
-      clientIds: training.clientIds,
-      type: training.type,
-      weekday: training.weekday,
-      time: training.time,
-      date: date.set({ weekday: training.weekday }).toISODate(),
-      confirmed: false,
-    };
-    try {
-      db.collection(Collection.SESSIONS)
-        .doc(`${training.id}-${data.year}-${data.weekNumber}`)
-        .create(input);
-    } catch (e) {
-      // already exists, no-op
+  for (const snap of querySnap.docs) {
+    const training = parseTraining(snap);
+    const runsFrom = DateTime.fromISO(training.runsFrom);
+
+    if (runsFrom.weekYear <= date.weekYear) {
+      const sameYear = runsFrom.weekYear === date.weekYear;
+      for (let i = 1; i <= date.weeksInWeekYear; i++) {
+        if (!sameYear || i >= runsFrom.weekNumber) {
+          const thisWeek = runsFrom.set({ weekYear: date.weekYear, weekNumber: i });
+          const input: SessionInput = {
+            trainingId: training.id,
+            clientIds: training.clientIds,
+            type: training.type,
+            runsFrom: training.runsFrom,
+            time: training.time,
+            date: thisWeek.toISODate(),
+            confirmed: false,
+          };
+
+          try {
+            await db
+              .collection(Collection.SESSIONS)
+              .doc(`${training.id}-${thisWeek.weekYear}-${thisWeek.weekNumber}`)
+              .create(input);
+          } catch (e) {
+            // no-op, session already exists
+          }
+        }
+      }
     }
-  });
+  }
 });
 
-function getSessionsSnapForTraining(trainingId: string, startingFrom?: string): Promise<QuerySnapshot> {
+export const createSessionsOnTrainingCreated = functions.firestore
+  .document('trainings/{trainingId}')
+  .onCreate(async snap => {
+    const training = parseTraining(snap);
+    const runsFrom = DateTime.fromISO(training.runsFrom);
+
+    const batch = db.batch();
+    for (let i = 1; i <= runsFrom.weeksInWeekYear; i++) {
+      if (i >= runsFrom.weekNumber) {
+        const thisWeek = runsFrom.set({ weekNumber: i });
+        const input: SessionInput = {
+          trainingId: training.id,
+          type: training.type,
+          runsFrom: training.runsFrom,
+          time: training.time,
+          clientIds: training.clientIds,
+          date: thisWeek.toISODate(),
+          confirmed: false,
+        };
+
+        const ref = db
+          .collection(Collection.SESSIONS)
+          .doc(`${training.id}-${thisWeek.weekYear}-${thisWeek.weekNumber}`);
+        batch.set(ref, input);
+      }
+    }
+
+    await batch.commit();
+  });
+
+function getSessionsForTrainingQuery(trainingId: string, startingFrom?: string): Query {
   let query = db
     .collection(Collection.SESSIONS)
     .where('trainingId', '==', trainingId)
@@ -52,38 +99,39 @@ function getSessionsSnapForTraining(trainingId: string, startingFrom?: string): 
     query = query.where('date', '>=', startingFrom);
   }
 
-  return query.get();
+  return query;
 }
 
-async function updateTrainingAndSessions(sessionInput: SessionInput, includePast: boolean) {
-  const batch = db.batch();
-
+// TODO: should create new sessions if runsFrom changes to an earlier week
+function makeTrainingAndSessionsUpdater(sessionInput: SessionInput, includePast: boolean): UpdateFunction<void> {
   const trainingInput: TrainingInput = {
     type: sessionInput.type,
-    weekday: sessionInput.weekday,
+    runsFrom: sessionInput.runsFrom,
     time: sessionInput.time,
     clientIds: sessionInput.clientIds,
   };
-  const trainingSnap = await db
-    .collection(Collection.TRAININGS)
-    .doc(sessionInput.trainingId)
-    .get();
-  batch.update(trainingSnap.ref, trainingInput);
 
-  const sessionsSnap = await getSessionsSnapForTraining(
+  const trainingsRef = db.collection(Collection.TRAININGS).doc(sessionInput.trainingId);
+  const sessionsQuery = getSessionsForTrainingQuery(
     sessionInput.trainingId,
     includePast ? undefined : sessionInput.date,
   );
-  sessionsSnap.forEach(snap => {
-    const session = parseSession(snap);
-    const date = DateTime.fromISO(session.date);
-    batch.update(snap.ref, {
-      ...trainingInput,
-      date: date.set({ weekday: trainingInput.weekday }).toISODate(),
-    });
-  });
 
-  return batch.commit();
+  return async t => {
+    const sessionsSnap = await t.get(sessionsQuery);
+
+    t.update(trainingsRef, trainingInput);
+
+    sessionsSnap.forEach(snap => {
+      const session = parseSession(snap);
+      const date = DateTime.fromISO(session.date);
+      const { weekday } = DateTime.fromISO(trainingInput.runsFrom);
+      t.update(snap.ref, {
+        ...trainingInput,
+        date: date.set({ weekday }).toISODate(),
+      });
+    });
+  };
 }
 
 export const updateSession = functions.https.onCall(async data => {
@@ -98,20 +146,25 @@ export const updateSession = functions.https.onCall(async data => {
     }
     case ChangeType.ALL_FOLLOWING: {
       // TODO: ensure all sessions up to this date are created
-      await updateTrainingAndSessions(sessionInput, false);
+      await db.runTransaction(makeTrainingAndSessionsUpdater(sessionInput, false));
       break;
     }
     case ChangeType.ALL_NON_CONFIRMED: {
-      await updateTrainingAndSessions(sessionInput, true);
+      await db.runTransaction(makeTrainingAndSessionsUpdater(sessionInput, true));
       break;
     }
   }
 });
 
+/**
+ * Deletes all non-confirmed sessions of a training when it's deleted.
+ */
 export const deleteSessionsOnTrainingDeleted = functions.firestore
   .document('trainings/{trainingId}')
   .onDelete(async (snap, context) => {
-    const sessionsSnap = await getSessionsSnapForTraining(context.params.trainingId, DateTime.local().toISODate());
+    const training = parseTraining(snap);
+    const sessionsQuery = getSessionsForTrainingQuery(context.params.trainingId, training.runsFrom);
+    const sessionsSnap = await sessionsQuery.get();
     const batch = db.batch();
     sessionsSnap.forEach(snap => {
       batch.delete(snap.ref);
@@ -119,6 +172,11 @@ export const deleteSessionsOnTrainingDeleted = functions.firestore
     await batch.commit();
   });
 
+/**
+ * The activeSubscriptions field of a user is a duplication of all currently active subscriptions stored in the
+ * subscriptions sub-collection. This function updates this copy whenever a write (create/update/delete) happens to a
+ * subscription.
+ */
 export const setActiveSubscriptions = functions.firestore
   .document('clients/{clientId}/subscriptions/{subscriptionId}')
   .onWrite(async (change, context) => {
@@ -139,6 +197,9 @@ export const setActiveSubscriptions = functions.firestore
     return clientRef.update({ activeSubscriptions });
   });
 
+/**
+ * Updates the trainingsLeft field of a user's subscription when the confirmed status of a session is updated.
+ */
 export const updateTrainingsLeft = functions.firestore.document('sessions/{sessionId}').onUpdate(async change => {
   const before = parseSession(change.before);
   const after = parseSession(change.after);

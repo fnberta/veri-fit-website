@@ -22,6 +22,21 @@ describe('validate', () => {
     expect(result.name).toBeDefined();
   });
 
+  test('should container error for birthday if not invalid format', () => {
+    const result = validateClientForm({
+      ...OPTIONAL_FIELDS,
+      name: 'some-name',
+      birthday: '12.01.1999',
+      address: {
+        street: '',
+        number: '',
+        zip: '',
+        city: '',
+      },
+    });
+    expect(result.birthday).toBeDefined();
+  });
+
   test('should contain no errors if name is not empty and no part of address is given', () => {
     const result = validateClientForm({
       ...OPTIONAL_FIELDS,

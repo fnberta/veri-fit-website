@@ -2,7 +2,7 @@ import { ErrorMessage, Field, FormikErrors } from 'formik';
 import React from 'react';
 import { FormField } from '../components/bulma/Forms';
 import { makeValidator } from '../utils/forms';
-import { getToday } from './dateTime';
+import { getToday, isValidISOString } from './dateTime';
 import { ClientInput } from './repositories/ClientRepository';
 
 export interface Props {
@@ -16,6 +16,10 @@ export function validateClientForm(values: ClientFormValues): FormikErrors<Clien
 
   if (values.name.length === 0) {
     errors.name = 'Name ist erforderlich';
+  }
+
+  if (values.birthday.length > 0 && !isValidISOString(values.birthday)) {
+    errors.birthday = 'Datumsformat muss YYYY-MM-DD sein';
   }
 
   const streetValid = values.address.street.length > 0;
