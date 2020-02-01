@@ -1,4 +1,5 @@
 import { RouteComponentProps } from '@reach/router';
+import { Link } from 'gatsby';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
 import { Client, Session, Time } from '../../shared';
@@ -11,7 +12,7 @@ import EditSessionDialog from './EditSessionDialog';
 import { useRepos } from './repositories/RepoContext';
 import SessionCard from './SessionCard';
 
-export type Props = RouteComponentProps;
+export type Props = RouteComponentProps<{ year: number; week: number }>;
 
 type Week = Record<Weekday, WeekdayEntry[]>;
 
@@ -49,18 +50,26 @@ function getTimeOfDay(time: Time): TimeOfDay {
   return 'midday';
 }
 
-const Trainings: React.FC<Props> = () => {
-  const [date, setDate] = useState(() => DateTime.local());
+const getNextPath = (date: DateTime) => `/manage/trainings/${date.weekYear}/${date.weekNumber}`;
+
+const Trainings: React.FC<Props> = ({ year, week }) => {
   const [addEditDialog, setAddEditDialog] = useState<AddEditDialog>();
   const [clients, setClients] = useState([] as Client[]);
   const [sessions, setSessions] = useState([] as Session[]);
   const { clientRepo, sessionRepo } = useRepos();
 
+  const date =
+    year != null && week != null ? DateTime.fromObject({ weekYear: year, weekNumber: week }) : DateTime.local();
+
   useEffect(() => clientRepo.observeAll(setClients), [clientRepo]);
-  useEffect(() => sessionRepo.observeAllForWeek(date.weekYear, date.weekNumber, setSessions), [sessionRepo, date]);
+  useEffect(() => sessionRepo.observeAllForWeek(date.weekYear, date.weekNumber, setSessions), [
+    sessionRepo,
+    date.weekYear,
+    date.weekNumber,
+  ]);
   useEffect(() => {
     sessionRepo.createForWeek(date.weekYear, date.weekNumber).catch(err => console.error(err));
-  }, [sessionRepo, date]);
+  }, [sessionRepo, date.weekYear, date.weekNumber]);
 
   return (
     <Section>
@@ -74,9 +83,15 @@ const Trainings: React.FC<Props> = () => {
           onClick={() => setAddEditDialog({ type: 'ADD' })}
         />
         <Buttons>
-          <Button text="Previous" onClick={() => setDate(prev => prev.minus({ weeks: 1 }))} />
-          <Button text="Current" onClick={() => setDate(DateTime.local())} />
-          <Button text="Next" onClick={() => setDate(prev => prev.plus({ weeks: 1 }))} />
+          <Link className="button" to={getNextPath(date.minus({ weeks: 1 }))}>
+            Vorherige
+          </Link>
+          <Link className="button" to={getNextPath(DateTime.local())}>
+            Jetzt
+          </Link>
+          <Link className="button" to={getNextPath(date.plus({ weeks: 1 }))}>
+            Nächste
+          </Link>
         </Buttons>
         <Title size={4}>{`Woche ${date.weekNumber}`}</Title>
         <WeekSchedule
