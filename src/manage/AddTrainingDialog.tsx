@@ -4,6 +4,7 @@ import React from 'react';
 import { Client, Training, TrainingInput, TrainingType } from '../../shared';
 import Button from '../components/bulma/Button';
 import Dialog from '../components/bulma/Dialog';
+import { getToday } from './dateTime';
 import { useRepos } from './repositories/RepoContext';
 import TrainingFormFields from './TrainingFormFields';
 
@@ -19,15 +20,18 @@ const FooterLayout = styled.div({
   justifyContent: 'flex-end',
 });
 
-const initialValues: TrainingInput = {
-  type: TrainingType.YOGA,
-  weekday: 1,
-  time: {
-    start: '',
-    end: '',
-  },
-  clientIds: [],
-};
+function getInitialValues(runsFrom: string): TrainingInput {
+  return {
+    type: TrainingType.YOGA,
+    runsFrom,
+    weekday: 1,
+    time: {
+      start: '',
+      end: '',
+    },
+    clientIds: [],
+  };
+}
 
 const AddTrainingDialog: React.FC<Props> = ({ clients, onTrainingCreated, onCancelClick }) => {
   const { trainingRepo } = useRepos();
@@ -39,7 +43,7 @@ const AddTrainingDialog: React.FC<Props> = ({ clients, onTrainingCreated, onCanc
   }
 
   return (
-    <Formik<TrainingInput> initialValues={initialValues} onSubmit={handleFormSubmission}>
+    <Formik<TrainingInput> initialValues={getInitialValues(getToday())} onSubmit={handleFormSubmission}>
       {({ isValid, isSubmitting, submitForm }) => (
         <Dialog
           title="Neues Training"

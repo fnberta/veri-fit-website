@@ -14,6 +14,11 @@ export interface Props {
 const TrainingFormFields: React.FC<Props> = ({ clients, disabled }) => (
   <>
     <FormField
+      label="Startpunkt"
+      error={<ErrorMessage name="runsFrom" />}
+      control={<Field className="input" type="date" name="runsFrom" title="Startpunkt" disabled={disabled} />}
+    />
+    <FormField
       label="Typ"
       error={<ErrorMessage name="type" />}
       control={
@@ -33,7 +38,7 @@ const TrainingFormFields: React.FC<Props> = ({ clients, disabled }) => (
       error={<ErrorMessage name="weekday" />}
       control={
         <div className="select">
-          <Field as="select" name="weekday" disabled={disabled}>
+          <Field as="select" name="weekday" title="Wochentag" disabled={disabled}>
             <option value={1}>Montag</option>
             <option value={2}>Dienstag</option>
             <option value={3}>Mittwoch</option>
@@ -48,16 +53,16 @@ const TrainingFormFields: React.FC<Props> = ({ clients, disabled }) => (
     <FormField
       label="Startzeit"
       error={<ErrorMessage name="time.start" />}
-      control={<Field className="input" type="time" name="time.start" placeholder="Startzeit" disabled={disabled} />}
+      control={<Field className="input" type="time" name="time.start" title="Startzeit" disabled={disabled} />}
     />
     <FormField
       label="Endzeit"
       error={<ErrorMessage name="time.end" />}
-      control={<Field className="input" type="time" name="time.end" placeholder="Endzeit" disabled={disabled} />}
+      control={<Field className="input" type="time" name="time.end" title="Endzeit" disabled={disabled} />}
     />
     <FormField
       label="Teilnehmer"
-      control={<ParticipantsSelector name="clientIds" clients={clients} disabled={disabled} />}
+      control={<ParticipantsSelector name="clientIds" title="Teilnehmer" clients={clients} disabled={disabled} />}
     />
   </>
 );
