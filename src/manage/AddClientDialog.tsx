@@ -1,3 +1,4 @@
+import styled from '@emotion/styled';
 import { Form, Formik, FormikErrors, FormikHelpers } from 'formik';
 import React from 'react';
 import { Client, SubscriptionType, TrainingType } from '../../shared';
@@ -21,6 +22,12 @@ export interface Props {
 interface FormValues extends ClientFormValues {
   subscription: SubscriptionFormValues;
 }
+
+const FooterLayout = styled.div({
+  flex: '1',
+  display: 'flex',
+  justifyContent: 'flex-end',
+});
 
 function validate(values: FormValues): FormikErrors<FormValues> {
   const { subscription, ...clientValues } = values;
@@ -84,7 +91,8 @@ const AddClientDialog: React.FC<Props> = ({ onClientCreated, onCancelClick }) =>
             </Form>
           }
           footer={
-            <>
+            <FooterLayout>
+              <Button text="Verwerfen" disabled={isSubmitting} onClick={onCancelClick} />
               <Button
                 text="Erstellen"
                 type="submit"
@@ -93,8 +101,7 @@ const AddClientDialog: React.FC<Props> = ({ onClientCreated, onCancelClick }) =>
                 disabled={!isValid || isSubmitting}
                 onClick={submitForm}
               />
-              <Button text="Verwerfen" disabled={isSubmitting} onClick={onCancelClick} />
-            </>
+            </FooterLayout>
           }
         />
       )}

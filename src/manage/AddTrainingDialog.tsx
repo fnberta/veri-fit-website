@@ -1,3 +1,4 @@
+import styled from '@emotion/styled';
 import { Form, Formik, FormikHelpers } from 'formik';
 import React from 'react';
 import { Client, Training, TrainingInput, TrainingType } from '../../shared';
@@ -11,6 +12,12 @@ export interface Props {
   onTrainingCreated: (training: Training) => void;
   onCancelClick: React.MouseEventHandler;
 }
+
+const FooterLayout = styled.div({
+  flex: '1',
+  display: 'flex',
+  justifyContent: 'flex-end',
+});
 
 const initialValues: TrainingInput = {
   type: TrainingType.YOGA,
@@ -42,7 +49,8 @@ const AddTrainingDialog: React.FC<Props> = ({ clients, onTrainingCreated, onCanc
             </Form>
           }
           footer={
-            <>
+            <FooterLayout>
+              <Button text="Verwerfen" disabled={isSubmitting} onClick={onCancelClick} />
               <Button
                 text="Erstellen"
                 type="submit"
@@ -51,8 +59,7 @@ const AddTrainingDialog: React.FC<Props> = ({ clients, onTrainingCreated, onCanc
                 disabled={!isValid || isSubmitting}
                 onClick={submitForm}
               />
-              <Button text="Verwerfen" disabled={isSubmitting} onClick={onCancelClick} />
-            </>
+            </FooterLayout>
           }
           onCloseClick={onCancelClick}
         />
