@@ -53,7 +53,12 @@ const ManageApp: React.FC = () => {
         <Clients path="clients" />
         <Clients path="clients/:clientId" />
         <Trainings path="trainings/:year/:week" />
-        <Redirect default={true} noThrow={true} from="/" to={`/manage/trainings/${today.year}/${today.weekNumber}`} />
+        <Redirect
+          default={true}
+          noThrow={true}
+          from="/"
+          to={`/manage/trainings/${today.weekYear}/${today.weekNumber}`}
+        />
       </Router>
     </Layout>
   );
