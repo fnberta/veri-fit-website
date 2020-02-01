@@ -21,11 +21,8 @@ export default class SessionRepository {
     this.updateSession = functions.httpsCallable('updateSession');
   }
 
-  async createForWeek(year: number, weekNumber: number): Promise<void> {
-    const payload: CreateSessionsPayload = {
-      year,
-      weekNumber,
-    };
+  async createForYear(year: number): Promise<void> {
+    const payload: CreateSessionsPayload = { year };
     await this.createSessions(payload);
   }
 
@@ -34,7 +31,7 @@ export default class SessionRepository {
     const sessionInput: SessionInput = {
       ...session,
       ...trainingInput,
-      date: date.set({ weekday: trainingInput.weekday }).toISODate(),
+      date: date.set({ weekday: DateTime.fromISO(trainingInput.runsFrom).weekday }).toISODate(),
     };
     const payload: UpdateSessionPayload = {
       type,

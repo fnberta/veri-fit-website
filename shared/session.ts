@@ -11,7 +11,6 @@ export type SessionInput = Omit<Session, 'id'>;
 
 export interface CreateSessionsPayload {
   year: number;
-  weekNumber: number;
 }
 
 export enum ChangeType {

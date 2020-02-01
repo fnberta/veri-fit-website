@@ -67,3 +67,6 @@ yarn-error.log
 # build
 lib
 build
+
+# credentials
+credentials

@@ -9,7 +9,7 @@ export enum TrainingType {
 
 export interface Training extends Entity {
   type: TrainingType;
-  weekday: 1 | 2 | 3 | 4 | 5 | 6 | 7;
+  runsFrom: string; // YYYY-MM-DD
   time: Time;
   clientIds: string[];
 }

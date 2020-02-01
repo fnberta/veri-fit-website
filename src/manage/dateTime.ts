@@ -17,3 +17,7 @@ export function formatLocale(isoDate: string): string {
 export function getStartOfToday(): DateTime {
   return DateTime.local().startOf('day');
 }
+
+export function isValidISOString(value: string): boolean {
+  return DateTime.fromISO(value).isValid;
+}

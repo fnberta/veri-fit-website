@@ -3,6 +3,15 @@
     "rules": "firestore.rules"
   },
   "functions": {
-    "predeploy": "yarn --ignore-engines --cwd \"$RESOURCE_DIR\" build"
+    "predeploy": "yarn --ignore-engines --cwd \"$RESOURCE_DIR\" build",
+    "source": "functions"
+  },
+  "emulators": {
+    "functions": {
+      "port": 5001
+    },
+    "firestore": {
+      "port": 8080
+    }
   }
 }

@@ -4,19 +4,20 @@ import { Client } from '../../shared';
 
 export interface Props {
   name: string;
+  title: string;
   clients: Client[];
   disabled: boolean;
 }
 
 const MAX_PARTICIPANTS_SIZE = 5;
 
-const ParticipantsSelector: React.FC<Props> = ({ name, clients, disabled }) => {
+const ParticipantsSelector: React.FC<Props> = ({ name, title, clients, disabled }) => {
   const [field, meta, { setValue }] = useField(name);
   return (
     <div className="select is-multiple">
       <select
-        name="participants"
-        title="Teilnehmer"
+        name={name}
+        title={title}
         multiple={true}
         size={clients.length > MAX_PARTICIPANTS_SIZE ? MAX_PARTICIPANTS_SIZE : clients.length}
         value={meta.value}

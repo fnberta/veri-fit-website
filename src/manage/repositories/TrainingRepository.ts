@@ -1,4 +1,5 @@
 import { Unsubscribe } from 'firebase';
+import { DateTime } from 'luxon';
 import { Collection, parseTraining, Training, TrainingInput } from '../../../shared';
 import { Firestore } from '../firebase';
 
@@ -6,9 +7,10 @@ export default class TrainingRepository {
   constructor(private readonly db: Firestore) {}
 
   async create(input: TrainingInput): Promise<Training> {
+    const { weekday } = DateTime.fromISO(input.runsFrom);
     const ref = this.db
       .collection(Collection.TRAININGS)
-      .doc(`${input.type}-${input.weekday}-${input.time.start.replace(':', '')}-${input.time.end.replace(':', '')}`);
+      .doc(`${input.type}-${weekday}-${input.time.start.replace(':', '')}-${input.time.end.replace(':', '')}`);
     await ref.set(input);
     const snap = await ref.get();
     return parseTraining(snap);
