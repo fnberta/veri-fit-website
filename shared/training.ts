@@ -14,6 +14,8 @@ export interface Training extends Entity {
   clientIds: string[];
 }
 
+export type TrainingInput = Omit<Training, 'id'>;
+
 export function parseTraining(snap: Snapshot): Training {
   return {
     id: snap.id,

@@ -14,7 +14,7 @@ export interface Props {
 
 export interface SubscriptionFormValues {
   type: SubscriptionType;
-  category: TrainingType;
+  trainingType: TrainingType;
   trainingsLeft: number;
   start: string; // YYYY-MM-DD
   paid: boolean;
@@ -56,10 +56,10 @@ export function getDefaultTrainingsLeft(type: SubscriptionType): number {
 export function getSubscriptionInput(values: SubscriptionFormValues): SubscriptionInput {
   switch (values.type) {
     case SubscriptionType.SINGLE: {
-      if (values.category === TrainingType.YOGA || values.category === TrainingType.PERSONAL) {
+      if (values.trainingType === TrainingType.YOGA || values.trainingType === TrainingType.PERSONAL) {
         return {
           type: values.type,
-          category: values.category,
+          trainingType: values.trainingType,
           start: values.start,
           end: values.start,
           trainingsLeft: values.trainingsLeft,
@@ -70,10 +70,10 @@ export function getSubscriptionInput(values: SubscriptionFormValues): Subscripti
       throw new Error('invalid combination of training and subscription');
     }
     case SubscriptionType.LIMITED_10: {
-      if (values.category === TrainingType.YOGA || values.category === TrainingType.PERSONAL) {
+      if (values.trainingType === TrainingType.YOGA || values.trainingType === TrainingType.PERSONAL) {
         return {
           type: values.type,
-          category: values.category,
+          trainingType: values.trainingType,
           start: values.start,
           end: getEndDate(values.start, { months: 3 }),
           trainingsLeft: values.trainingsLeft,
@@ -84,10 +84,10 @@ export function getSubscriptionInput(values: SubscriptionFormValues): Subscripti
       throw new Error('invalid combination of training and subscription');
     }
     case SubscriptionType.LIMITED_20: {
-      if (values.category === TrainingType.YOGA) {
+      if (values.trainingType === TrainingType.YOGA) {
         return {
           type: values.type,
-          category: values.category,
+          trainingType: values.trainingType,
           start: values.start,
           end: getEndDate(values.start, { months: 6 }),
           trainingsLeft: values.trainingsLeft,
@@ -98,10 +98,10 @@ export function getSubscriptionInput(values: SubscriptionFormValues): Subscripti
       throw new Error('invalid combination of training and subscription');
     }
     case SubscriptionType.UNLIMITED_10: {
-      if (values.category === TrainingType.YOGA) {
+      if (values.trainingType === TrainingType.YOGA) {
         return {
           type: values.type,
-          category: values.category,
+          trainingType: values.trainingType,
           start: values.start,
           trainingsLeft: values.trainingsLeft,
           ...(values.paid && { paidAt: values.paidAt }),
@@ -111,10 +111,10 @@ export function getSubscriptionInput(values: SubscriptionFormValues): Subscripti
       throw new Error('invalid combination of training and subscription');
     }
     case SubscriptionType.BLOCK: {
-      if (values.category === TrainingType.HIIT || values.category === TrainingType.BOOST) {
+      if (values.trainingType === TrainingType.HIIT || values.trainingType === TrainingType.BOOST) {
         return {
           type: values.type,
-          category: values.category,
+          trainingType: values.trainingType,
           start: values.start,
           end: getEndDate(values.start, { weeks: 6 }),
           ...(values.paid && { paidAt: values.paidAt }),
@@ -131,12 +131,12 @@ const SubscriptionFormFields: React.FC<Props> = ({ disabled, namespace }) => {
 
   // this is not very type safe but good enough for now
   const { values, setFieldValue } = useFormikContext();
-  const category = getIn(values, withNamespace('category')) as TrainingType;
+  const trainingType = getIn(values, withNamespace('trainingType')) as TrainingType;
   const type = getIn(values, withNamespace('type')) as SubscriptionType;
   const trainingsLeft = getIn(values, withNamespace('trainingsLeft')) as number;
   const paid = getIn(values, withNamespace('paid')) as boolean;
 
-  const validTypes = validSubscriptionTypes[category];
+  const validTypes = validSubscriptionTypes[trainingType];
   if (!validTypes.includes(type)) {
     setFieldValue(withNamespace('type'), validTypes[0]);
   }
@@ -150,10 +150,10 @@ const SubscriptionFormFields: React.FC<Props> = ({ disabled, namespace }) => {
     <>
       <FormField
         label="Trainings-Typ"
-        error={<ErrorMessage name={withNamespace('category')} />}
+        error={<ErrorMessage name={withNamespace('trainingType')} />}
         control={
           <div className="select">
-            <Field as="select" name={withNamespace('category')}>
+            <Field as="select" name={withNamespace('trainingType')}>
               {Object.keys(validSubscriptionTypes).map(trainingType => (
                 <option key={trainingType} value={trainingType}>
                   {getTrainingName(trainingType as TrainingType)}
@@ -169,7 +169,7 @@ const SubscriptionFormFields: React.FC<Props> = ({ disabled, namespace }) => {
         control={
           <div className="select">
             <Field as="select" name={withNamespace('type')}>
-              {validSubscriptionTypes[category].map(type => (
+              {validSubscriptionTypes[trainingType].map(type => (
                 <option key={type} value={type}>
                   {getSubscriptionName(type)}
                 </option>

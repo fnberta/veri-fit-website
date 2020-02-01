@@ -1,3 +1,4 @@
+import styled from '@emotion/styled';
 import { Formik, FormikHelpers } from 'formik';
 import React from 'react';
 import { Subscription, SubscriptionType, TrainingType } from '../../shared';
@@ -17,10 +18,16 @@ export interface Props {
   onCancelClick: React.MouseEventHandler;
 }
 
+const FooterLayout = styled.div({
+  flex: '1',
+  display: 'flex',
+  justifyContent: 'flex-end',
+});
+
 function getInitialValues(today: string): SubscriptionFormValues {
   return {
     type: SubscriptionType.LIMITED_10,
-    category: TrainingType.YOGA,
+    trainingType: TrainingType.YOGA,
     trainingsLeft: getDefaultTrainingsLeft(SubscriptionType.LIMITED_10),
     start: today,
     paid: false,
@@ -48,7 +55,8 @@ const AddSubscriptionDialog: React.FC<Props> = ({ clientId, onSubscriptionAdded,
           title="Abo hinzufügen"
           body={<SubscriptionFormFields disabled={isSubmitting} />}
           footer={
-            <>
+            <FooterLayout>
+              <Button text="Verwerfen" disabled={isSubmitting} onClick={onCancelClick} />
               <Button
                 text="Speichern"
                 type="submit"
@@ -57,8 +65,7 @@ const AddSubscriptionDialog: React.FC<Props> = ({ clientId, onSubscriptionAdded,
                 disabled={!isValid || isSubmitting}
                 onClick={submitForm}
               />
-              <Button text="Verwerfen" disabled={isSubmitting} onClick={onCancelClick} />
-            </>
+            </FooterLayout>
           }
           onCloseClick={onCancelClick}
         />

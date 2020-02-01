@@ -1,3 +1,4 @@
+import styled from '@emotion/styled';
 import { Form, Formik, FormikHelpers } from 'formik';
 import React from 'react';
 import { Client } from '../../shared';
@@ -11,6 +12,12 @@ export interface Props {
   onClientUpdated: (client: Client) => void;
   onCancelClick: React.MouseEventHandler;
 }
+
+const FooterLayout = styled.div({
+  flex: '1',
+  display: 'flex',
+  justifyContent: 'flex-end',
+});
 
 function getInitialValues(client: Client): ClientFormValues {
   return {
@@ -53,7 +60,8 @@ const EditClientDialog: React.FC<Props> = ({ client, onClientUpdated, onCancelCl
             </Form>
           }
           footer={
-            <>
+            <FooterLayout>
+              <Button text="Verwerfen" disabled={isSubmitting} onClick={onCancelClick} />
               <Button
                 text="Speichern"
                 type="submit"
@@ -62,8 +70,7 @@ const EditClientDialog: React.FC<Props> = ({ client, onClientUpdated, onCancelCl
                 disabled={!dirty || !isValid || isSubmitting}
                 onClick={submitForm}
               />
-              <Button text="Verwerfen" disabled={isSubmitting} onClick={onCancelClick} />
-            </>
+            </FooterLayout>
           }
         />
       )}

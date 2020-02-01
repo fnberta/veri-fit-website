@@ -1,30 +1,40 @@
 import admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import { DateTime } from 'luxon';
-import { Collection, parseSession, parseSubscription, parseTraining, Session, SubscriptionType } from './shared';
+import {
+  ChangeType,
+  Collection,
+  CreateSessionsPayload,
+  parseSession,
+  parseSubscription,
+  parseTraining,
+  SessionInput,
+  SubscriptionType,
+  TrainingInput,
+  UpdateSessionPayload,
+} from './shared';
 
-type SessionInput = Omit<Session, 'id'>;
 type QuerySnapshot = admin.firestore.QuerySnapshot;
 
 admin.initializeApp();
 const db = admin.firestore();
 
 export const createSessions = functions.https.onCall(async data => {
-  const date = DateTime.fromObject({ weekYear: data.year, weekNumber: data.weekNumber });
+  const { year, weekNumber } = data as CreateSessionsPayload;
+  const date = DateTime.fromObject({ weekYear: year, weekNumber });
   const querySnap = await db.collection(Collection.TRAININGS).get();
   querySnap.docs.map(parseTraining).forEach(training => {
     const input: SessionInput = {
       trainingId: training.id,
       clientIds: training.clientIds,
-      category: training.type,
+      type: training.type,
+      weekday: training.weekday,
       time: training.time,
       date: date.set({ weekday: training.weekday }).toISODate(),
       confirmed: false,
     };
     try {
-      admin
-        .firestore()
-        .collection(Collection.SESSIONS)
+      db.collection(Collection.SESSIONS)
         .doc(`${training.id}-${data.year}-${data.weekNumber}`)
         .create(input);
     } catch (e) {
@@ -33,56 +43,78 @@ export const createSessions = functions.https.onCall(async data => {
   });
 });
 
-function getSessionsSnapForTraining(trainingId: string): Promise<QuerySnapshot> {
-  return db
+function getSessionsSnapForTraining(trainingId: string, startingFrom?: string): Promise<QuerySnapshot> {
+  let query = db
     .collection(Collection.SESSIONS)
     .where('trainingId', '==', trainingId)
-    .where('confirmed', '==', false)
-    .get();
+    .where('confirmed', '==', false);
+  if (startingFrom != null) {
+    query = query.where('date', '>=', startingFrom);
+  }
+
+  return query.get();
 }
 
-export const updateSessionsOnTrainingUpdated = functions.firestore
-  .document('trainings/{trainingId}')
-  .onUpdate(async (snap, context) => {
-    const { trainingId } = context.params;
-    const trainingSnap = await db
-      .collection(Collection.TRAININGS)
-      .doc(trainingId)
-      .get();
-    const training = parseTraining(trainingSnap);
+async function updateTrainingAndSessions(sessionInput: SessionInput, includePast: boolean) {
+  const batch = db.batch();
 
-    const now = DateTime.local();
-    const sessionsSnap = await getSessionsSnapForTraining(trainingId);
-    const batch = db.batch();
-    sessionsSnap.forEach(snap => {
-      const session = parseSession(snap);
-      const date = DateTime.fromISO(session.date);
-      if (date >= now) {
-        const input: SessionInput = {
-          trainingId: training.id,
-          clientIds: training.clientIds,
-          category: training.type,
-          time: training.time,
-          date: date.set({ weekday: training.weekday }).toISODate(),
-          confirmed: false,
-        };
-        batch.update(snap.ref, input);
-      }
+  const trainingInput: TrainingInput = {
+    type: sessionInput.type,
+    weekday: sessionInput.weekday,
+    time: sessionInput.time,
+    clientIds: sessionInput.clientIds,
+  };
+  const trainingSnap = await db
+    .collection(Collection.TRAININGS)
+    .doc(sessionInput.trainingId)
+    .get();
+  batch.update(trainingSnap.ref, trainingInput);
+
+  const sessionsSnap = await getSessionsSnapForTraining(
+    sessionInput.trainingId,
+    includePast ? undefined : sessionInput.date,
+  );
+  sessionsSnap.forEach(snap => {
+    const session = parseSession(snap);
+    const date = DateTime.fromISO(session.date);
+    batch.update(snap.ref, {
+      ...trainingInput,
+      date: date.set({ weekday: trainingInput.weekday }).toISODate(),
     });
-    await batch.commit();
   });
+
+  return batch.commit();
+}
+
+export const updateSession = functions.https.onCall(async data => {
+  const { type, sessionId, sessionInput } = data as UpdateSessionPayload;
+  switch (type) {
+    case ChangeType.SINGLE: {
+      await db
+        .collection(Collection.SESSIONS)
+        .doc(sessionId)
+        .update(sessionInput);
+      break;
+    }
+    case ChangeType.ALL_FOLLOWING: {
+      // TODO: ensure all sessions up to this date are created
+      await updateTrainingAndSessions(sessionInput, false);
+      break;
+    }
+    case ChangeType.ALL_NON_CONFIRMED: {
+      await updateTrainingAndSessions(sessionInput, true);
+      break;
+    }
+  }
+});
 
 export const deleteSessionsOnTrainingDeleted = functions.firestore
   .document('trainings/{trainingId}')
   .onDelete(async (snap, context) => {
-    const now = DateTime.local();
-    const sessionsSnap = await getSessionsSnapForTraining(context.params.trainingId);
+    const sessionsSnap = await getSessionsSnapForTraining(context.params.trainingId, DateTime.local().toISODate());
     const batch = db.batch();
     sessionsSnap.forEach(snap => {
-      const session = parseSession(snap);
-      if (DateTime.fromISO(session.date) >= now) {
-        batch.delete(snap.ref);
-      }
+      batch.delete(snap.ref);
     });
     await batch.commit();
   });
@@ -117,7 +149,7 @@ export const updateTrainingsLeft = functions.firestore.document('sessions/{sessi
           .collection(Collection.CLIENTS)
           .doc(clientId)
           .collection(Collection.SUBSCRIPTIONS)
-          .where('category', '==', after.category)
+          .where('trainingType', '==', after.type)
           .where('type', 'in', [
             SubscriptionType.SINGLE,
             SubscriptionType.LIMITED_10,

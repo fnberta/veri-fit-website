@@ -1,8 +1,6 @@
 import { Unsubscribe } from 'firebase';
-import { Collection, parseTraining, Training } from '../../../shared';
+import { Collection, parseTraining, Training, TrainingInput } from '../../../shared';
 import { Firestore } from '../firebase';
-
-export type TrainingInput = Omit<Training, 'id'>;
 
 export default class TrainingRepository {
   constructor(private readonly db: Firestore) {}

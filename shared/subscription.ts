@@ -16,14 +16,14 @@ export interface SubscriptionFields extends Entity {
 
 export interface YogaLimitedSubscription extends SubscriptionFields {
   type: SubscriptionType.SINGLE | SubscriptionType.LIMITED_10 | SubscriptionType.LIMITED_20;
-  category: TrainingType.YOGA;
+  trainingType: TrainingType.YOGA;
   end: string; // YYYY-MM-DD
   trainingsLeft: number;
 }
 
 export interface YogaUnlimitedSubscription extends SubscriptionFields {
   type: SubscriptionType.UNLIMITED_10;
-  category: TrainingType.YOGA;
+  trainingType: TrainingType.YOGA;
   trainingsLeft: number;
 }
 
@@ -31,19 +31,19 @@ export type YogaSubscription = YogaLimitedSubscription | YogaUnlimitedSubscripti
 
 export interface HiitSubscription extends SubscriptionFields {
   type: SubscriptionType.BLOCK;
-  category: TrainingType.HIIT;
+  trainingType: TrainingType.HIIT;
   end: string; // YYYY-MM-DD
 }
 
 export interface BoostSubscription extends SubscriptionFields {
   type: SubscriptionType.BLOCK;
-  category: TrainingType.BOOST;
+  trainingType: TrainingType.BOOST;
   end: string; // YYYY-MM-DD
 }
 
 export interface PersonalSubscription extends SubscriptionFields {
   type: SubscriptionType.SINGLE | SubscriptionType.LIMITED_10;
-  category: TrainingType.PERSONAL;
+  trainingType: TrainingType.PERSONAL;
   end: string; // YYYY-MM-DD
   trainingsLeft: number;
 }
