@@ -36,6 +36,20 @@ describe('validate', () => {
     expect(Object.keys(result)).toHaveLength(0);
   });
 
+  test('should contain no errors if name is not empty and complete address is given', () => {
+    const result = validateClientForm({
+      ...OPTIONAL_FIELDS,
+      name: 'some-name',
+      address: {
+        street: 'some-street',
+        number: 'some-number',
+        zip: 'some-zip',
+        city: 'some-city',
+      },
+    });
+    expect(Object.keys(result)).toHaveLength(0);
+  });
+
   test('should contain error for parts of address if one part is given', () => {
     const streetResult = validateClientForm({
       ...OPTIONAL_FIELDS,

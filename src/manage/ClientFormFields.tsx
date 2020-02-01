@@ -18,25 +18,27 @@ export function validateClientForm(values: ClientFormValues): FormikErrors<Clien
     errors.name = 'Name ist erforderlich';
   }
 
-  const streetEmpty = values.address.street.length === 0;
-  const numberEmpty = values.address.number.length === 0;
-  const zipEmpty = values.address.zip.length === 0;
-  const cityEmpty = values.address.city.length === 0;
-  if (streetEmpty && numberEmpty && zipEmpty && cityEmpty) {
-    // no-op, leaving out address completely is fine
+  const streetValid = values.address.street.length > 0;
+  const numberValid = values.address.number.length > 0;
+  const zipValid = values.address.zip.length > 0;
+  const cityValid = values.address.city.length > 0;
+  const allValid = streetValid && numberValid && zipValid && cityValid;
+  const allNonValid = !streetValid && !numberValid && !zipValid && !cityValid;
+  if (allValid || allNonValid) {
+    // no-op, leaving out address completely or filling it out completely is fine
   } else {
     // if one piece of the address is entered, the whole address needs to be there
     errors.address = {};
-    if (streetEmpty) {
+    if (!streetValid) {
       errors.address.street = 'Strasse ist erforderlich';
     }
-    if (numberEmpty) {
+    if (!numberValid) {
       errors.address.number = 'Strassennummer ist erforderlich';
     }
-    if (zipEmpty) {
+    if (!zipValid) {
       errors.address.zip = 'PLZ ist erforderlich';
     }
-    if (cityEmpty) {
+    if (!cityValid) {
       errors.address.city = 'Stadt ist erforderlich';
     }
   }
@@ -103,7 +105,7 @@ const ClientFormFields: React.FC<Props> = ({ disabled }) => (
       <FormField
         label="Hausnummer"
         error={<ErrorMessage name="address.number" />}
-        control={<Field className="input" type="number" name="address.number" disabled={disabled} />}
+        control={<Field className="input" type="text" name="address.number" disabled={disabled} />}
       />
     </div>
     <div>
