@@ -5,11 +5,11 @@ import { Link } from '@reach/router';
 import { Session, Subscription, SubscriptionType, Training, Client } from '../../shared';
 import Button, { Buttons } from '../components/bulma/Button';
 import Card from '../components/bulma/Card';
-import Dialog from '../components/bulma/Dialog';
 import { Subtitle, Title } from '../components/bulma/Heading';
 import { Tag, Tags } from '../components/bulma/Tags';
 import { verticallySpaced } from '../utils/styles';
 import AddSubscriptionDialog from './AddSubscriptionDialog';
+import ConfirmDeleteDialog from './ConfirmDeleteDialog';
 import { formatLocale, getToday } from './dateTime';
 import { getSubscriptionName, getTrainingName } from './displayNames';
 import EditClientDialog from './EditClientDialog';
@@ -18,6 +18,12 @@ import { useRepos } from './repositories/RepoContext';
 export interface Props {
   client: Client;
 }
+
+type ClientDialog =
+  | { type: 'EDIT' }
+  | { type: 'DELETE' }
+  | { type: 'SUBSCRIPTION_ADD' }
+  | { type: 'SUBSCRIPTION_DELETE'; subscription: Subscription };
 
 const LayoutCard = styled(Card)({
   gridColumn: '1 / -1',
@@ -46,10 +52,11 @@ const SubscriptionEntry = styled.li(verticallySpaced('0.75rem'), {
   padding: '0.75rem',
 });
 
-const SubscriptionSummary: React.FC<{ subscription: Subscription; onSetPaidClick: React.MouseEventHandler }> = ({
-  subscription,
-  onSetPaidClick,
-}) => {
+const SubscriptionSummary: React.FC<{
+  subscription: Subscription;
+  onSetPaidClick: React.MouseEventHandler;
+  onDeleteClick: React.MouseEventHandler;
+}> = ({ subscription, onSetPaidClick }) => {
   const active =
     subscription.type === SubscriptionType.SINGLE ||
     subscription.type === SubscriptionType.UNLIMITED_10 ||
@@ -112,9 +119,7 @@ const ClientDetails: React.FC<Props> = ({ client }) => {
   const [subscriptions, setSubscriptions] = useState([] as Subscription[]);
   const [sessions, setSessions] = useState([] as Session[]);
   const [trainings, setTrainings] = useState([] as Training[]);
-  const [showAddSubscriptionDialog, setAddSubscriptionDialog] = useState(false);
-  const [showDeleteDialog, setDeleteDialog] = useState(false);
-  const [showEditDialog, setEditDialog] = useState(false);
+  const [clientDialog, setClientDialog] = useState<ClientDialog>();
   const { clientRepo, sessionRepo, trainingRepo } = useRepos();
 
   useEffect(() => clientRepo.observeAllSubscriptions(client.id, setSubscriptions), [clientRepo, client.id]);
@@ -156,13 +161,13 @@ const ClientDetails: React.FC<Props> = ({ client }) => {
               <div>{client.phone}</div>
             </div>
             <Buttons>
-              <Button text="Ändern" icon="fa-edit" size="small" onClick={() => setEditDialog(true)} />
+              <Button text="Ändern" icon="fa-edit" size="small" onClick={() => setClientDialog({ type: 'EDIT' })} />
               <Button
                 text="Löschen"
                 icon="fa-trash"
                 size="small"
                 disabled={true}
-                onClick={() => setDeleteDialog(true)}
+                onClick={() => setClientDialog({ type: 'DELETE' })}
               />
             </Buttons>
           </Block>
@@ -174,10 +179,16 @@ const ClientDetails: React.FC<Props> = ({ client }) => {
                   key={subscription.id}
                   subscription={subscription}
                   onSetPaidClick={() => handleSetSubscriptionPaidClick(subscription)}
+                  onDeleteClick={() => setClientDialog({ type: 'SUBSCRIPTION_DELETE', subscription })}
                 />
               ))}
             </SubscriptionsLayout>
-            <Button text="Hinzufügen" icon="fa-plus" size="small" onClick={() => setAddSubscriptionDialog(true)} />
+            <Button
+              text="Hinzufügen"
+              icon="fa-plus"
+              size="small"
+              onClick={() => setClientDialog({ type: 'SUBSCRIPTION_ADD' })}
+            />
           </Block>
           <Block className="column">
             <Title size={5} text="Trainingszeiten" />
@@ -227,38 +238,38 @@ const ClientDetails: React.FC<Props> = ({ client }) => {
           <p>Leider noch kein Training besucht…</p>
         )}
       </LayoutCard>
-      {showAddSubscriptionDialog && (
-        <AddSubscriptionDialog
-          clientId={client.id}
-          onSubscriptionAdded={() => setAddSubscriptionDialog(false)}
-          onCancelClick={() => setAddSubscriptionDialog(false)}
-        />
-      )}
-      {showDeleteDialog && (
-        <Dialog
-          title="Löschen bestätigen"
-          body={<p>{`Bist du sicher, dass du ${client.name} löschen möchtest?`}</p>}
-          footer={
-            <>
-              <Button
-                text="Löschen"
-                intent="danger"
-                onClick={async () => {
-                  await clientRepo.delete(client.id);
-                  setDeleteDialog(false);
-                }}
-              />
-              <Button text="Abbrechen" onClick={() => setDeleteDialog(false)} />
-            </>
-          }
-          onCloseClick={() => setDeleteDialog(false)}
-        />
-      )}
-      {showEditDialog && (
+      {clientDialog?.type === 'EDIT' && (
         <EditClientDialog
           client={client}
-          onClientUpdated={() => setEditDialog(false)}
-          onCancelClick={() => setEditDialog(false)}
+          onClientUpdated={() => setClientDialog(undefined)}
+          onCancelClick={() => setClientDialog(undefined)}
+        />
+      )}
+      {clientDialog?.type === 'DELETE' && (
+        <ConfirmDeleteDialog
+          name={client.name}
+          onDeleteClick={async () => {
+            await clientRepo.delete(client.id);
+            setClientDialog(undefined);
+          }}
+          onCancelClick={() => setClientDialog(undefined)}
+        />
+      )}
+      {clientDialog?.type === 'SUBSCRIPTION_ADD' && (
+        <AddSubscriptionDialog
+          clientId={client.id}
+          onSubscriptionAdded={() => setClientDialog(undefined)}
+          onCancelClick={() => setClientDialog(undefined)}
+        />
+      )}
+      {clientDialog?.type === 'SUBSCRIPTION_DELETE' && (
+        <ConfirmDeleteDialog
+          name={getSubscriptionName(clientDialog.subscription.type)}
+          onDeleteClick={async () => {
+            await clientRepo.deleteSubscription(client.id, clientDialog.subscription.id);
+            setClientDialog(undefined);
+          }}
+          onCancelClick={() => setClientDialog(undefined)}
         />
       )}
     </>
