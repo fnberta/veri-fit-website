@@ -8,6 +8,7 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "build": "rm -rf lib && tsc",
+    "dev": "rm -rf lib && tsc --watch",
     "shell": "yarn build && firebase functions:shell",
     "start": "yarn shell",
     "logs": "firebase functions:log"

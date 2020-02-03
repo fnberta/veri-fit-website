@@ -29,7 +29,7 @@ export default class ClientRepository {
 
   async update(clientId: string, input: ClientInput): Promise<Client> {
     const ref = this.db.collection(Collection.CLIENTS).doc(clientId);
-    await ref.update(input);
+    await ref.set(input);
     const snap = await ref.get();
     return parseClient(snap);
   }
@@ -69,7 +69,7 @@ export default class ClientRepository {
       .doc(clientId)
       .collection(Collection.SUBSCRIPTIONS)
       .doc(subscriptionId);
-    await ref.update(input);
+    await ref.set(input);
 
     const snap = await ref.get();
     return parseSubscription(snap);

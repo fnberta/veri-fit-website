@@ -7,7 +7,6 @@ import {
   CreateSessionsPayload,
   ChangeType,
   UpdateSessionPayload,
-  TrainingInput,
   SessionInput,
 } from '../../../shared';
 import { Firestore, Functions, HttpsCallable } from '../firebase';
@@ -26,21 +25,15 @@ export default class SessionRepository {
     await this.createSessions(payload);
   }
 
-  async update(type: ChangeType, session: Session, trainingInput: TrainingInput): Promise<Session> {
-    const date = DateTime.fromISO(session.date);
-    const sessionInput: SessionInput = {
-      ...session,
-      ...trainingInput,
-      date: date.set({ weekday: DateTime.fromISO(trainingInput.runsFrom).weekday }).toISODate(),
-    };
+  async update(type: ChangeType, sessionId: string, sessionInput: SessionInput): Promise<Session> {
     const payload: UpdateSessionPayload = {
       type,
-      sessionId: session.id,
+      sessionId,
       sessionInput,
     };
     await this.updateSession(payload);
     return {
-      id: session.id,
+      id: sessionId,
       ...sessionInput,
     };
   }
