@@ -56,7 +56,7 @@ const SubscriptionSummary: React.FC<{
   subscription: Subscription;
   onSetPaidClick: React.MouseEventHandler;
   onDeleteClick: React.MouseEventHandler;
-}> = ({ subscription, onSetPaidClick }) => {
+}> = ({ subscription, onSetPaidClick, onDeleteClick }) => {
   const active =
     subscription.type === SubscriptionType.SINGLE ||
     subscription.type === SubscriptionType.UNLIMITED_10 ||
@@ -73,7 +73,7 @@ const SubscriptionSummary: React.FC<{
             {subscription.paidAt == null && (
               <Button title="Auf bezahlt setzen" icon="fa-dollar-sign" size="small" onClick={onSetPaidClick} />
             )}
-            <Button title="Abo löschen" icon="fa-trash" size="small" />
+            <Button title="Abo löschen" icon="fa-trash" size="small" onClick={onDeleteClick} />
           </Buttons>
         ) : (
           <Button title="Erneuern" icon="fa-redo" size="small" />
@@ -126,13 +126,6 @@ const ClientDetails: React.FC<Props> = ({ client }) => {
   useEffect(() => sessionRepo.observeAllForClients(client.id, setSessions), [sessionRepo, client.id]);
   useEffect(() => trainingRepo.observeAllForClients(client.id, setTrainings), [trainingRepo, client.id]);
 
-  async function handleSetSubscriptionPaidClick(subscription: Subscription) {
-    await clientRepo.updateSubscription(client.id, subscription.id, {
-      ...subscription,
-      paidAt: getToday(),
-    });
-  }
-
   return (
     <>
       <LayoutCard>
@@ -178,7 +171,12 @@ const ClientDetails: React.FC<Props> = ({ client }) => {
                 <SubscriptionSummary
                   key={subscription.id}
                   subscription={subscription}
-                  onSetPaidClick={() => handleSetSubscriptionPaidClick(subscription)}
+                  onSetPaidClick={async () => {
+                    await clientRepo.updateSubscription(client.id, subscription.id, {
+                      ...subscription,
+                      paidAt: getToday(),
+                    });
+                  }}
                   onDeleteClick={() => setClientDialog({ type: 'SUBSCRIPTION_DELETE', subscription })}
                 />
               ))}
@@ -264,7 +262,9 @@ const ClientDetails: React.FC<Props> = ({ client }) => {
       )}
       {clientDialog?.type === 'SUBSCRIPTION_DELETE' && (
         <ConfirmDeleteDialog
-          name={getSubscriptionName(clientDialog.subscription.type)}
+          name={`das Abo "${getTrainingName(clientDialog.subscription.trainingType)} - ${getSubscriptionName(
+            clientDialog.subscription.type,
+          )}"`}
           onDeleteClick={async () => {
             await clientRepo.deleteSubscription(client.id, clientDialog.subscription.id);
             setClientDialog(undefined);
