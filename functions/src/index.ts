@@ -104,6 +104,11 @@ function getSessionsForTrainingQuery(trainingId: string, startingFrom?: string):
 
 // TODO: should create new sessions if runsFrom changes to an earlier week
 function makeTrainingAndSessionsUpdater(sessionInput: SessionInput, includePast: boolean): UpdateFunction<void> {
+  const trainingsRef = db.collection(Collection.TRAININGS).doc(sessionInput.trainingId);
+  const sessionsQuery = getSessionsForTrainingQuery(
+    sessionInput.trainingId,
+    includePast ? undefined : sessionInput.date,
+  );
   const trainingInput: TrainingInput = {
     type: sessionInput.type,
     runsFrom: sessionInput.runsFrom,
@@ -111,23 +116,15 @@ function makeTrainingAndSessionsUpdater(sessionInput: SessionInput, includePast:
     clientIds: sessionInput.clientIds,
   };
 
-  const trainingsRef = db.collection(Collection.TRAININGS).doc(sessionInput.trainingId);
-  const sessionsQuery = getSessionsForTrainingQuery(
-    sessionInput.trainingId,
-    includePast ? undefined : sessionInput.date,
-  );
-
   return async t => {
     const sessionsSnap = await t.get(sessionsQuery);
-
-    t.update(trainingsRef, trainingInput);
-
+    t.set(trainingsRef, trainingInput);
     sessionsSnap.forEach(snap => {
       const session = parseSession(snap);
       const date = DateTime.fromISO(session.date);
-      const { weekday } = DateTime.fromISO(trainingInput.runsFrom);
-      t.update(snap.ref, {
-        ...trainingInput,
+      const { weekday } = DateTime.fromISO(sessionInput.runsFrom);
+      t.set(snap.ref, {
+        ...sessionInput,
         date: date.set({ weekday }).toISODate(),
       });
     });
@@ -141,7 +138,7 @@ export const updateSession = functions.https.onCall(async data => {
       await db
         .collection(Collection.SESSIONS)
         .doc(sessionId)
-        .update(sessionInput);
+        .set(sessionInput);
       break;
     }
     case ChangeType.ALL_FOLLOWING: {

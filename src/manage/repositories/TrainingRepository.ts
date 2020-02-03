@@ -33,11 +33,4 @@ export default class TrainingRepository {
         onChange(trainings);
       });
   }
-
-  async update(trainingId: string, input: TrainingInput): Promise<Training> {
-    const ref = this.db.collection(Collection.TRAININGS).doc(trainingId);
-    await ref.update(input);
-    const snap = await ref.get();
-    return parseTraining(snap);
-  }
 }

@@ -1,9 +1,11 @@
 import styled from '@emotion/styled';
-import { Form, Formik, FormikHelpers } from 'formik';
+import { ErrorMessage, Field, Form, Formik, FormikHelpers } from 'formik';
+import { DateTime } from 'luxon';
 import React, { useState } from 'react';
-import { ChangeType, Client, Session, TrainingInput } from '../../shared';
+import { ChangeType, Client, Session, SessionInput, TrainingInput } from '../../shared';
 import Button from '../components/bulma/Button';
 import Dialog from '../components/bulma/Dialog';
+import { FormField } from '../components/bulma/Forms';
 import { useRepos } from './repositories/RepoContext';
 import TrainingFormFields, { validateTrainingForm } from './TrainingFormFields';
 
@@ -14,18 +16,36 @@ export interface Props {
   onCancelClick: React.MouseEventHandler;
 }
 
+interface FormValues extends TrainingInput {
+  notes: string;
+}
+
 const FooterLayout = styled.div({
   flex: '1',
   display: 'flex',
   justifyContent: 'space-between',
 });
 
-function getInitialValues(session: Session): TrainingInput {
+function getSessionInput(session: Session, values: FormValues): SessionInput {
+  const date = DateTime.fromISO(session.date);
+  const sessionInput: SessionInput = {
+    ...session,
+    ...values,
+    date: date.set({ weekday: DateTime.fromISO(values.runsFrom).weekday }).toISODate(),
+  };
+  if (sessionInput.notes != null && sessionInput.notes.length === 0) {
+    delete sessionInput.notes;
+  }
+  return sessionInput;
+}
+
+function getInitialValues(session: Session): FormValues {
   return {
     type: session.type,
     runsFrom: session.runsFrom,
     time: session.time,
     clientIds: session.clientIds,
+    notes: session.notes ?? '',
   };
 }
 
@@ -33,14 +53,14 @@ const EditSessionDialog: React.FC<Props> = ({ session, clients, onSessionChanged
   const [changeType, setChangeType] = useState(ChangeType.SINGLE);
   const { sessionRepo } = useRepos();
 
-  async function handleFormSubmission(values: TrainingInput, { setSubmitting }: FormikHelpers<TrainingInput>) {
-    const changedSession = await sessionRepo.update(changeType, session, values);
+  async function handleFormSubmission(values: FormValues, { setSubmitting }: FormikHelpers<FormValues>) {
+    const changedSession = await sessionRepo.update(changeType, session.id, getSessionInput(session, values));
     setSubmitting(false);
     onSessionChanged(changedSession);
   }
 
   return (
-    <Formik<TrainingInput>
+    <Formik<FormValues>
       initialValues={getInitialValues(session)}
       validate={validateTrainingForm}
       onSubmit={handleFormSubmission}
@@ -51,6 +71,20 @@ const EditSessionDialog: React.FC<Props> = ({ session, clients, onSessionChanged
           body={
             <Form>
               <TrainingFormFields clients={clients} disabled={isSubmitting} />
+              <FormField
+                label="Notizen"
+                error={<ErrorMessage name="notes" />}
+                control={
+                  <Field
+                    className="textarea"
+                    as="textarea"
+                    type="text"
+                    name="notes"
+                    title="Notizen"
+                    disabled={isSubmitting}
+                  />
+                }
+              />
             </Form>
           }
           footer={
