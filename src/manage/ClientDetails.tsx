@@ -157,7 +157,13 @@ const ClientDetails: React.FC<Props> = ({ client }) => {
             </div>
             <Buttons>
               <Button text="Ändern" icon="fa-edit" size="small" onClick={() => setEditDialog(true)} />
-              <Button text="Löschen" icon="fa-trash" size="small" onClick={() => setDeleteDialog(true)} />
+              <Button
+                text="Löschen"
+                icon="fa-trash"
+                size="small"
+                disabled={true}
+                onClick={() => setDeleteDialog(true)}
+              />
             </Buttons>
           </Block>
           <Block className="column">
