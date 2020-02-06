@@ -186,7 +186,7 @@ export const setActiveSubscriptions = functions.firestore
 
       if (subscription.type === SubscriptionType.BLOCK) {
         const today = DateTime.local();
-        return today >= DateTime.fromISO(subscription.end);
+        return today <= DateTime.fromISO(subscription.end);
       }
 
       return subscription.trainingsLeft > 0;
