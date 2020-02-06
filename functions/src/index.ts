@@ -13,16 +13,45 @@ import {
   TrainingInput,
   UpdateSessionPayload,
 } from './shared';
+import firestore from '@google-cloud/firestore';
 
 type Query = admin.firestore.Query;
 type Transaction = admin.firestore.Transaction;
 type UpdateFunction<T> = (transaction: Transaction) => Promise<T>;
 
+const BACKUP_BUCKET = 'gs://veri-fit-db-backup';
+
 admin.initializeApp();
 const db = admin.firestore();
+const client = new firestore.v1.FirestoreAdminClient();
+
+/**
+ * Copies a backup of all collections in the database to a Google Storage bucket every 24 hours.
+ */
+export const backupDatabase = functions.pubsub
+  .schedule('every 24 hours')
+  .timeZone('Europe/Zurich')
+  .onRun(async () => {
+    const projectId = process.env.GCP_PROJECT || process.env.GCLOUD_PROJECT;
+    const databaseName = client.databasePath(projectId, '(default)');
+    try {
+      const res = await client.exportDocuments({
+        name: databaseName,
+        outputUriPrefix: BACKUP_BUCKET,
+        collectionIds: [], // means all collections
+      });
+      console.info(`operation: ${res[0]['name']} to backup db started`);
+    } catch (e) {
+      console.error('failed to backup db with', e);
+    }
+  });
 
 // TODO: should run in a transaction, but no proper way to only create a session if it doesn't exists yet without crashing the transaction
-export const createSessions = functions.https.onCall(async data => {
+export const createSessions = functions.https.onCall(async (data, context) => {
+  if (!context.auth) {
+    throw new functions.https.HttpsError('failed-precondition', 'The function must be called while authenticated.');
+  }
+
   const { year } = data as CreateSessionsPayload;
   const date = DateTime.fromObject({ weekYear: year });
 
@@ -131,7 +160,11 @@ function makeTrainingAndSessionsUpdater(sessionInput: SessionInput, includePast:
   };
 }
 
-export const updateSession = functions.https.onCall(async data => {
+export const updateSession = functions.https.onCall(async (data, context) => {
+  if (!context.auth) {
+    throw new functions.https.HttpsError('failed-precondition', 'The function must be called while authenticated.');
+  }
+
   const { type, sessionId, sessionInput } = data as UpdateSessionPayload;
   switch (type) {
     case ChangeType.SINGLE: {
