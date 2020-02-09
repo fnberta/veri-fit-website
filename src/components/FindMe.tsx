@@ -20,8 +20,8 @@ const FindMe: React.FC = () => (
     </div>
     <div className="column">
       <BulletItem icon="fa-at" title="Email">
-        <PlainLink href="mailto:info@veri-fit.ch" target="_blank">
-          info@veri-fit.ch
+        <PlainLink href="mailto:vlienhard@gmail.com" target="_blank">
+          vlienhard@gmail.com
         </PlainLink>
       </BulletItem>
     </div>
