@@ -1,3 +1,4 @@
+import firestore from '@google-cloud/firestore';
 import admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import { DateTime } from 'luxon';
@@ -8,12 +9,14 @@ import {
   parseSession,
   parseSubscription,
   parseTraining,
+  PersonalSubscription,
   SessionInput,
-  SubscriptionType,
   TrainingInput,
+  TrainingType,
   UpdateSessionPayload,
+  YogaSubscription,
 } from './shared';
-import firestore from '@google-cloud/firestore';
+import { isSubscriptionActive, pickSubscriptionId } from './subscriptions';
 
 type Query = admin.firestore.Query;
 type Transaction = admin.firestore.Transaction;
@@ -212,18 +215,7 @@ export const setActiveSubscriptions = functions.firestore
   .onWrite(async (change, context) => {
     const clientRef = db.collection(Collection.CLIENTS).doc(context.params.clientId);
     const subscriptionSnap = await clientRef.collection(Collection.SUBSCRIPTIONS).get();
-    const activeSubscriptions = subscriptionSnap.docs.map(parseSubscription).filter(subscription => {
-      if (subscription.paidAt == null) {
-        return true;
-      }
-
-      if (subscription.type === SubscriptionType.BLOCK) {
-        const today = DateTime.local();
-        return today <= DateTime.fromISO(subscription.end);
-      }
-
-      return subscription.trainingsLeft > 0;
-    });
+    const activeSubscriptions = subscriptionSnap.docs.map(parseSubscription).filter(isSubscriptionActive);
     return clientRef.update({ activeSubscriptions });
   });
 
@@ -233,7 +225,7 @@ export const setActiveSubscriptions = functions.firestore
 export const updateTrainingsLeft = functions.firestore.document('sessions/{sessionId}').onUpdate(async change => {
   const before = parseSession(change.before);
   const after = parseSession(change.after);
-  if (after.confirmed !== before.confirmed) {
+  if (after.confirmed !== before.confirmed && [TrainingType.YOGA, TrainingType.PERSONAL].includes(after.type)) {
     const clientSubscriptions = await Promise.all(
       after.clientIds.map(async clientId => {
         const query = await db
@@ -241,23 +233,18 @@ export const updateTrainingsLeft = functions.firestore.document('sessions/{sessi
           .doc(clientId)
           .collection(Collection.SUBSCRIPTIONS)
           .where('trainingType', '==', after.type)
-          .where('type', 'in', [
-            SubscriptionType.SINGLE,
-            SubscriptionType.LIMITED_10,
-            SubscriptionType.LIMITED_20,
-            SubscriptionType.UNLIMITED_10,
-          ])
           .get();
+        const subscriptions = query.docs.map(parseSubscription) as Array<YogaSubscription | PersonalSubscription>;
         return {
           clientId,
-          subscriptionIds: query.docs.map(snap => snap.id),
+          subscriptionId: pickSubscriptionId(after.confirmed, subscriptions),
         };
       }),
     );
 
-    const batch = db.batch();
-    clientSubscriptions.forEach(({ clientId, subscriptionIds }) => {
-      subscriptionIds.forEach(subscriptionId => {
+    if (clientSubscriptions.length > 0) {
+      const batch = db.batch();
+      clientSubscriptions.forEach(({ clientId, subscriptionId }) => {
         const ref = db
           .collection(Collection.CLIENTS)
           .doc(clientId)
@@ -265,7 +252,7 @@ export const updateTrainingsLeft = functions.firestore.document('sessions/{sessi
           .doc(subscriptionId);
         batch.update(ref, { trainingsLeft: admin.firestore.FieldValue.increment(after.confirmed ? -1 : 1) });
       });
-    });
-    await batch.commit();
+      await batch.commit();
+    }
   }
 });
