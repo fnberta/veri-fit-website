@@ -29,8 +29,9 @@ const FooterLayout = styled.div({
 function getSessionInput(session: Session, values: FormValues): SessionInput {
   const date = DateTime.fromISO(session.date);
   const sessionInput: SessionInput = {
-    ...session,
     ...values,
+    trainingId: session.trainingId,
+    confirmed: session.confirmed,
     date: date.set({ weekday: DateTime.fromISO(values.runsFrom).weekday }).toISODate(),
   };
   if (sessionInput.notes != null && sessionInput.notes.length === 0) {
