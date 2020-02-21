@@ -28,23 +28,6 @@ admin.initializeApp();
 const db = admin.firestore();
 const client = new firestore.v1.FirestoreAdminClient();
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
-export const clean = functions.https.onRequest(async (req, res) => {
-  const query = await db
-    .collection(Collection.SESSIONS)
-    .where('id', '>', '')
-    .get();
-  const batch = db.batch();
-  query.forEach(snap => {
-    const ref = db.collection(Collection.SESSIONS).doc(snap.id);
-    batch.update(ref, {
-      id: admin.firestore.FieldValue.delete(),
-    });
-  });
-  await batch.commit();
-  res.end();
-});
-
 /**
  * Copies a backup of all collections in the database to a Google Storage bucket every 24 hours.
  */
