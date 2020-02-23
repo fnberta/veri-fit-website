@@ -2,7 +2,7 @@ import { ErrorMessage, Field, FormikErrors, useFormikContext } from 'formik';
 import { DateTime } from 'luxon';
 import React from 'react';
 import { Client, TrainingInput, TrainingType } from '../../shared';
-import { FormField } from '../components/bulma/Forms';
+import { FormField } from '../components/Forms';
 import { isValidISOString } from './dateTime';
 import { getTrainingName } from './displayNames';
 import ParticipantsSelector from './ParticipantsSelector';
@@ -54,36 +54,38 @@ const TrainingFormFields: React.FC<Props> = ({ clients, disabled }) => {
         label="Typ"
         error={<ErrorMessage name="type" />}
         control={
-          <div className="select">
-            <Field as="select" name="type" disabled={disabled}>
-              {Object.keys(validSubscriptionTypes).map(trainingType => (
-                <option key={trainingType} value={trainingType}>
-                  {getTrainingName(trainingType as TrainingType)}
-                </option>
-              ))}
-            </Field>
-          </div>
+          <Field className="form-select" as="select" name="type" disabled={disabled}>
+            {Object.keys(validSubscriptionTypes).map(trainingType => (
+              <option key={trainingType} value={trainingType}>
+                {getTrainingName(trainingType as TrainingType)}
+              </option>
+            ))}
+          </Field>
         }
       />
       <FormField
+        className="mt-3"
         label="Startpunkt"
         error={<ErrorMessage name="runsFrom" />}
         help={`Training findet wöchentlich am ${DateTime.fromISO(values.runsFrom).weekdayLong} statt.`}
-        control={<Field className="input" type="date" name="runsFrom" title="Startpunkt" disabled={disabled} />}
+        control={<Field className="form-input" type="date" name="runsFrom" disabled={disabled} />}
       />
       <FormField
+        className="mt-3"
         label="Startzeit"
         error={<ErrorMessage name="time.start" />}
-        control={<Field className="input" type="time" name="time.start" title="Startzeit" disabled={disabled} />}
+        control={<Field className="form-input" type="time" name="time.start" disabled={disabled} />}
       />
       <FormField
+        className="mt-3"
         label="Endzeit"
         error={<ErrorMessage name="time.end" />}
-        control={<Field className="input" type="time" name="time.end" title="Endzeit" disabled={disabled} />}
+        control={<Field className="form-input" type="time" name="time.end" disabled={disabled} />}
       />
       <FormField
+        className="mt-3"
         label="Teilnehmer"
-        control={<ParticipantsSelector name="clientIds" title="Teilnehmer" clients={clients} disabled={disabled} />}
+        control={<ParticipantsSelector name="clientIds" clients={clients} disabled={disabled} />}
       />
     </>
   );

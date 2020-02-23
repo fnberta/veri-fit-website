@@ -1,20 +1,15 @@
-import { RouteComponentProps } from '@reach/router';
-import { Link } from 'gatsby';
+import { Link, RouteComponentProps } from '@reach/router';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
 import { Client, Session, Time } from '../../shared';
-import Button, { Buttons } from '../components/bulma/Button';
-import { Title } from '../components/bulma/Heading';
-import { Container, Section } from '../components/bulma/Page';
-import WeekSchedule, { TimeOfDay, Weekday, WeekdayEntry } from '../components/WeekSchedule';
+import { Button } from '../components/Button';
+import WeekSchedule, { TimeOfDay, Week, Weekday } from '../components/WeekSchedule';
 import AddTrainingDialog from './AddTrainingDialog';
 import EditSessionDialog from './EditSessionDialog';
 import { useRepos } from './repositories/RepoContext';
 import SessionCard from './SessionCard';
 
 export type Props = RouteComponentProps<{ year: number; week: number }>;
-
-type Week = Record<Weekday, WeekdayEntry[]>;
 
 type AddEditDialog = { type: 'ADD' } | { type: 'EDIT'; session: Session };
 
@@ -81,75 +76,89 @@ const Trainings: React.FC<Props> = ({ year, week }) => {
   }, [sessionRepo, date.weekYear]);
 
   return (
-    <Section>
-      <Container>
-        <Title size={1}>Trainings</Title>
-        <Button
-          className="block"
-          text="Hinzufügen"
-          icon="fa-plus"
-          intent="primary"
-          onClick={() => setAddEditDialog({ type: 'ADD' })}
-        />
-        <Buttons>
-          <Link className="button" to={getNextPath(date.minus({ weeks: 1 }))}>
-            Vorherige
+    <div className="flex-1 container mx-auto py-6 px-4">
+      <h1 className="hidden">Trainings</h1>
+      <div className="flex justify-between items-end">
+        <div>
+          <h2 className="text-xl md:text-2xl font-semibold">{`Woche ${date.weekNumber}`}</h2>
+          <p className="text-xs md:text-sm">{`${date.set({ weekday: 1 }).toLocaleString()} - ${date
+            .set({ weekday: 7 })
+            .toLocaleString()}`}</p>
+        </div>
+        <div className="ml-2">
+          <Link
+            className="inline-block btn btn-medium btn-outline rounded-none rounded-l"
+            aria-label="Vorherige Woche"
+            to={getNextPath(date.minus({ weeks: 1 }))}
+          >
+            <span className="fas fa-arrow-left" />
           </Link>
-          <Link className="button" to={getNextPath(DateTime.local())}>
-            Jetzt
+          <Link
+            className="relative inline-block btn btn-medium btn-outline rounded-none -ml-px"
+            aria-label="Diese Woche"
+            to={getNextPath(DateTime.local())}
+          >
+            <span className="fas fa-calendar-day" />
           </Link>
-          <Link className="button" to={getNextPath(date.plus({ weeks: 1 }))}>
-            Nächste
+          <Link
+            className="inline-block btn btn-medium btn-outline rounded-none rounded-r -ml-px"
+            aria-label="Nächste Woche"
+            to={getNextPath(date.plus({ weeks: 1 }))}
+          >
+            <span className="fas fa-arrow-right" />
           </Link>
-        </Buttons>
-        <Title size={4}>{`Woche ${date.weekNumber}`}</Title>
-        <WeekSchedule
-          {...sessions.reduce<Week>(
-            (acc, curr) => {
-              const weekday = getWeekday(curr.runsFrom);
-              acc[weekday].push({
-                id: curr.id,
-                weekday,
-                timeOfDay: getTimeOfDay(curr.time),
-                content: (
-                  <SessionCard
-                    session={curr}
-                    clients={clients}
-                    onConfirmToggle={() => sessionRepo.toggleConfirmed(curr)}
-                    onEditClick={() => setAddEditDialog({ type: 'EDIT', session: curr })}
-                  />
-                ),
-              });
+        </div>
+      </div>
+      <WeekSchedule
+        className="mt-4 p-4 bg-white rounded shadow"
+        {...sessions.reduce<Week>(
+          (acc, curr) => {
+            const weekday = getWeekday(curr.runsFrom);
+            acc[weekday].push({
+              id: curr.id,
+              weekday,
+              timeOfDay: getTimeOfDay(curr.time),
+              content: (
+                <SessionCard
+                  session={curr}
+                  clients={clients}
+                  onConfirmToggle={() => sessionRepo.toggleConfirmed(curr)}
+                  onEditClick={() => setAddEditDialog({ type: 'EDIT', session: curr })}
+                />
+              ),
+            });
 
-              return acc;
-            },
-            {
-              monday: [],
-              tuesday: [],
-              wednesday: [],
-              thursday: [],
-              friday: [],
-              saturday: [],
-            },
-          )}
+            return acc;
+          },
+          {
+            monday: [],
+            tuesday: [],
+            wednesday: [],
+            thursday: [],
+            friday: [],
+            saturday: [],
+          },
+        )}
+      />
+      <Button className="mt-4" onClick={() => setAddEditDialog({ type: 'ADD' })}>
+        Neues Training eröffnen
+      </Button>
+      {addEditDialog?.type === 'ADD' && (
+        <AddTrainingDialog
+          clients={clients}
+          onTrainingCreated={() => setAddEditDialog(undefined)}
+          onCancelClick={() => setAddEditDialog(undefined)}
         />
-        {addEditDialog?.type === 'ADD' && (
-          <AddTrainingDialog
-            clients={clients}
-            onTrainingCreated={() => setAddEditDialog(undefined)}
-            onCancelClick={() => setAddEditDialog(undefined)}
-          />
-        )}
-        {addEditDialog?.type === 'EDIT' && (
-          <EditSessionDialog
-            session={addEditDialog.session}
-            clients={clients}
-            onSessionChanged={() => setAddEditDialog(undefined)}
-            onCancelClick={() => setAddEditDialog(undefined)}
-          />
-        )}
-      </Container>
-    </Section>
+      )}
+      {addEditDialog?.type === 'EDIT' && (
+        <EditSessionDialog
+          session={addEditDialog.session}
+          clients={clients}
+          onSessionChanged={() => setAddEditDialog(undefined)}
+          onCancelClick={() => setAddEditDialog(undefined)}
+        />
+      )}
+    </div>
   );
 };
 

@@ -1,5 +1,5 @@
 import { DateTime, Duration } from 'luxon';
-import { Subscription, SubscriptionType, Client, Session, TrainingType } from '../../shared';
+import { Client, Session, Subscription, SubscriptionType, TrainingType } from '../../shared';
 import { getStartOfToday } from './dateTime';
 
 export const validSubscriptionTypes: Record<TrainingType, SubscriptionType[]> = {

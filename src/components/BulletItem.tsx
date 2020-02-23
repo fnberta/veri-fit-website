@@ -1,30 +1,19 @@
-import styled from '@emotion/styled';
 import React from 'react';
-import { Subtitle, Title } from './bulma/Heading';
-import Icon from './bulma/Icon';
+import cx from 'classnames';
 
 export interface Props {
   icon: string;
   title: string;
 }
 
-const Layout = styled.div({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-});
-
-const CircleIcon = styled(Icon)({
-  borderRadius: '50%',
-  marginBottom: '0.75rem',
-});
-
 const BulletItem: React.FC<Props> = ({ icon, title, children }) => (
-  <Layout className="has-text-centered">
-    <CircleIcon className="is-large fa-lg has-background-light" icon={icon} />
-    <Title className="has-text-light" text={title} size={4} />
-    <Subtitle className="has-text-light" text={children} size={6} />
-  </Layout>
+  <div className="flex flex-col items-center justify-center">
+    <div className="bg-orange-500 rounded-full h-16 w-16 flex items-center justify-center">
+      <span className={cx(icon, 'fill-current text-orange-200')} />
+    </div>
+    <h4 className="mt-4 text-2xl font-semibold">{title}</h4>
+    <div className="text-center">{children}</div>
+  </div>
 );
 
 export default BulletItem;

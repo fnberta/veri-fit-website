@@ -1,6 +1,6 @@
 import { ErrorMessage, Field, FormikErrors } from 'formik';
 import React from 'react';
-import { FormField } from '../components/bulma/Forms';
+import { FormField } from '../components/Forms';
 import { makeValidator } from '../utils/forms';
 import { getToday, isValidISOString } from './dateTime';
 import { ClientInput } from './repositories/ClientRepository';
@@ -75,55 +75,93 @@ export function getClientInput(values: ClientFormValues): ClientInput {
 
 const ClientFormFields: React.FC<Props> = ({ disabled }) => (
   <>
-    <FormField
-      label="Name"
-      icon="fas fa-user"
-      error={<ErrorMessage name="name" />}
-      control={<Field className="input" type="text" name="name" validate={makeValidator('Name')} disabled={disabled} />}
-    />
-    <FormField
-      label="Geburtstag"
-      icon="fas fa-birthday-cake"
-      error={<ErrorMessage name="birthday" />}
-      control={<Field className="input" type="date" name="birthday" max={getToday()} disabled={disabled} />}
-    />
-    <FormField
-      label="Email"
-      icon="fas fa-envelope"
-      error={<ErrorMessage name="email" />}
-      control={<Field className="input" type="email" name="email" disabled={disabled} />}
-    />
-    <FormField
-      label="Telefon"
-      icon="fas fa-phone"
-      error={<ErrorMessage name="phone" />}
-      control={<Field className="input" type="tel" name="phone" disabled={disabled} />}
-    />
-    <div>
-      <FormField
-        label="Strasse"
-        icon="fas fa-map-marker"
-        error={<ErrorMessage name="address.street" />}
-        control={<Field className="input" type="text" name="address.street" disabled={disabled} />}
-      />
-      <FormField
-        label="Hausnummer"
-        error={<ErrorMessage name="address.number" />}
-        control={<Field className="input" type="text" name="address.number" disabled={disabled} />}
-      />
+    <div className="p-4">
+      <h2 className="text-base font-semibold">Persönlich</h2>
+      <div className="mt-4">
+        <FormField
+          label="Name"
+          htmlFor="name"
+          icon="fas fa-user"
+          error={<ErrorMessage name="name" />}
+          control={
+            <Field
+              className="form-input w-full"
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Yoga Gott"
+              validate={makeValidator('Name')}
+              disabled={disabled}
+            />
+          }
+        />
+        <FormField
+          className="mt-3"
+          label="Geburtstag"
+          htmlFor="birthday"
+          icon="fas fa-birthday-cake"
+          error={<ErrorMessage name="birthday" />}
+          control={
+            <Field
+              className="form-input w-full"
+              type="date"
+              id="birthday"
+              name="birthday"
+              max={getToday()}
+              disabled={disabled}
+            />
+          }
+        />
+      </div>
     </div>
-    <div>
-      <FormField
-        label="PLZ"
-        error={<ErrorMessage name="address.zip" />}
-        control={<Field className="input" type="text" name="address.zip" disabled={disabled} />}
-      />
-      <FormField
-        label="Stadt"
-        icon="fas fa-city"
-        error={<ErrorMessage name="address.city" />}
-        control={<Field className="input" type="text" name="address.city" disabled={disabled} />}
-      />
+    <hr className="my-2" />
+    <div className="p-4">
+      <h2 className="text-base font-semibold">Kontakt</h2>
+      <div className="mt-4">
+        <FormField
+          label="Email"
+          icon="fas fa-envelope"
+          error={<ErrorMessage name="email" />}
+          control={<Field className="form-input w-full" type="email" name="email" disabled={disabled} />}
+        />
+        <FormField
+          className="mt-2"
+          label="Telefon"
+          icon="fas fa-phone"
+          error={<ErrorMessage name="phone" />}
+          control={<Field className="form-input w-full" type="tel" name="phone" disabled={disabled} />}
+        />
+        <div className="mt-2 flex">
+          <FormField
+            className="flex-1"
+            label="Strasse"
+            icon="fas fa-map-marker"
+            error={<ErrorMessage name="address.street" />}
+            control={<Field className="form-input w-full" type="text" name="address.street" disabled={disabled} />}
+          />
+          <FormField
+            className="ml-2 w-1/3"
+            label="Hausnummer"
+            error={<ErrorMessage name="address.number" />}
+            control={<Field className="form-input w-full" type="text" name="address.number" disabled={disabled} />}
+          />
+        </div>
+        <div className="mt-2 flex">
+          <FormField
+            className="w-1/3"
+            label="PLZ"
+            error={<ErrorMessage name="address.zip" />}
+            control={<Field className="form-input w-full" type="text" name="address.zip" disabled={disabled} />}
+          />
+          <FormField
+            className="ml-2 flex-1"
+            label="Stadt"
+            icon="fas fa-city"
+            error={<ErrorMessage name="address.city" />}
+            control={<Field className="form-input w-full" type="text" name="address.city" disabled={disabled} />}
+          />
+        </div>
+      </div>
     </div>
   </>
 );

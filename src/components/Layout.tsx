@@ -1,9 +1,7 @@
-import styled from '@emotion/styled';
 import '@fortawesome/fontawesome-free/js/all.min.js';
 import React from 'react';
-import Card from './bulma/Card';
 import DocHead from './DocHead';
-import './layout.scss';
+import './layout.css';
 
 export interface Props {
   title: string;
@@ -12,12 +10,8 @@ export interface Props {
 const Layout: React.FC<Props> = ({ title, children }) => (
   <>
     <DocHead title={title} />
-    {children}
+    <div className="antialiased text-gray-900 w-full h-full">{children}</div>
   </>
 );
 
 export default Layout;
-
-export const FullHeightCard = styled(Card)({
-  height: '100%',
-});

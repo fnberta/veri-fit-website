@@ -1,25 +1,17 @@
-import styled from '@emotion/styled';
 import React from 'react';
-import { Container, Section } from '../components/bulma/Page';
-import { Title } from '../components/bulma/Heading';
-import { parallax } from '../utils/styles';
-
-const ParallaxSection = styled(Section)(parallax(true), {
-  minHeight: '20rem',
-  display: 'flex',
-  alignItems: 'center',
-  backgroundImage: `url(${require('../images/warrior.jpg')})`,
-});
 
 const TryOut: React.FC = () => (
-  <ParallaxSection>
-    <Container className="has-text-centered">
-      <Title className="has-text-light" text="Starte jetzt gleich mit einem Probetraining!" size={3} />
-      <a className="button is-primary is-uppercase" role="button" href="#contact">
+  <section
+    className="parallax parallax-overlay"
+    style={{ backgroundImage: `url(${require('../images/warrior.jpg')})` }}
+  >
+    <div className="relative h-full container mx-auto px-8 py-20 flex flex-col items-center justify-center">
+      <p className="text-3xl text-white text-center">Starte jetzt gleich mit einem Probetraining!</p>
+      <a className="block mt-8 btn btn-large btn-orange uppercase tracking-wider" href="/#contact">
         Kontakt
       </a>
-    </Container>
-  </ParallaxSection>
+    </div>
+  </section>
 );
 
 export default TryOut;

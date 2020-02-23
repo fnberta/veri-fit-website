@@ -1,6 +1,5 @@
-import styled from '@emotion/styled';
 import React from 'react';
-import { Subtitle } from './bulma/Heading';
+import cx from 'classnames';
 
 export const WEEKDAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'] as const;
 export const TIMES_OF_DAY = ['morning', 'midday', 'evening'] as const;
@@ -17,52 +16,49 @@ export interface WeekdayEntry {
 
 export interface Props extends React.HTMLProps<HTMLDivElement> {
   monday: WeekdayEntry[];
-  tuesday?: WeekdayEntry[];
-  wednesday?: WeekdayEntry[];
-  thursday?: WeekdayEntry[];
-  friday?: WeekdayEntry[];
-  saturday?: WeekdayEntry[];
+  tuesday: WeekdayEntry[];
+  wednesday: WeekdayEntry[];
+  thursday: WeekdayEntry[];
+  friday: WeekdayEntry[];
+  saturday: WeekdayEntry[];
 }
 
-const Layout = styled.div({
-  width: '100%',
-  display: 'grid',
-  gridGap: '0.75rem',
-  gridTemplateColumns: '1fr',
-  '@media screen and (min-width: 1280px)': {
-    gridTemplateColumns: WEEKDAYS.map(day => `[${day}] 1fr`).join(' '),
-    gridTemplateRows: `auto ${TIMES_OF_DAY.map(time => `[${time}] 1fr`).join(' ')}`,
-  },
-});
+export type Week = Record<Weekday, WeekdayEntry[]>;
 
-const ScheduleItem = styled.div<{ weekday: Weekday; timeOfDay: TimeOfDay }>(({ weekday, timeOfDay }) => ({
-  '@media screen and (min-width: 1280px)': {
-    gridColumnStart: weekday,
-    gridRowStart: timeOfDay,
-  },
-}));
-
-const ScheduleBlock: React.FC<{ title: string; entries?: WeekdayEntry[] }> = ({ title, entries }) => (
+const Block: React.FC<{ title: string; entries: WeekdayEntry[] }> = ({ title, entries }) => (
   <>
-    <Subtitle className="is-marginless has-text-centered" text={title} size={4} />
-    {entries &&
-      entries.map(entry => (
-        <ScheduleItem key={entry.id} className="has-text-centered" weekday={entry.weekday} timeOfDay={entry.timeOfDay}>
+    <h2 className="uppercase tracking-wider text-center font-semibold">{title}</h2>
+    {entries
+      .sort((a, b) => TIMES_OF_DAY.indexOf(a.timeOfDay) - TIMES_OF_DAY.indexOf(b.timeOfDay))
+      .map(entry => (
+        <div
+          key={entry.id}
+          className={cx('flex flex-col items-center', `schedule-${entry.weekday} schedule-${entry.timeOfDay}`)}
+        >
           {entry.content}
-        </ScheduleItem>
+        </div>
       ))}
   </>
 );
 
-const WeekSchedule: React.FC<Props> = ({ monday, tuesday, wednesday, thursday, friday, saturday, ...rest }) => (
-  <Layout {...rest}>
-    <ScheduleBlock title="Montag" entries={monday} />
-    <ScheduleBlock title="Dienstag" entries={tuesday} />
-    <ScheduleBlock title="Mittwoch" entries={wednesday} />
-    <ScheduleBlock title="Donnerstag" entries={thursday} />
-    <ScheduleBlock title="Freitag" entries={friday} />
-    <ScheduleBlock title="Samstag" entries={saturday} />
-  </Layout>
+const WeekSchedule: React.FC<Props> = ({
+  monday,
+  tuesday,
+  wednesday,
+  thursday,
+  friday,
+  saturday,
+  className,
+  ...rest
+}) => (
+  <div className={cx('schedule-grid', className)} {...rest}>
+    <Block title="Montag" entries={monday} />
+    <Block title="Dienstag" entries={tuesday} />
+    <Block title="Mittwoch" entries={wednesday} />
+    <Block title="Donnerstag" entries={thursday} />
+    <Block title="Freitag" entries={friday} />
+    <Block title="Samstag" entries={saturday} />
+  </div>
 );
 
 export default WeekSchedule;

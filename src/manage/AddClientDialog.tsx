@@ -1,9 +1,7 @@
-import styled from '@emotion/styled';
 import { Form, Formik, FormikErrors, FormikHelpers } from 'formik';
 import React from 'react';
 import { Client, SubscriptionType, TrainingType } from '../../shared';
-import Button from '../components/bulma/Button';
-import Dialog from '../components/bulma/Dialog';
+import Dialog from '../components/Dialog';
 import ClientFormFields, { ClientFormValues, getClientInput, validateClientForm } from './ClientFormFields';
 import { getToday } from './dateTime';
 import { useRepos } from './repositories/RepoContext';
@@ -13,21 +11,16 @@ import SubscriptionFormFields, {
   SubscriptionFormValues,
   validateSubscriptionForm,
 } from './SubscriptionFormFields';
+import { Button } from '../components/Button';
 
 export interface Props {
   onClientCreated: (client: Client) => void;
-  onCancelClick: React.MouseEventHandler;
+  onCancelClick: () => void;
 }
 
 interface FormValues extends ClientFormValues {
   subscription: SubscriptionFormValues;
 }
-
-const FooterLayout = styled.div({
-  flex: '1',
-  display: 'flex',
-  justifyContent: 'flex-end',
-});
 
 function validate(values: FormValues): FormikErrors<FormValues> {
   const { subscription, ...clientValues } = values;
@@ -83,26 +76,36 @@ const AddClientDialog: React.FC<Props> = ({ onClientCreated, onCancelClick }) =>
       {({ isSubmitting, isValid, submitForm }) => (
         <Dialog
           title="Neuer Teilnehmer"
-          onCloseClick={onCancelClick}
           body={
             <Form>
               <ClientFormFields disabled={isSubmitting} />
-              <SubscriptionFormFields disabled={isSubmitting} namespace="subscription" />
+              <hr className="my-2" />
+              <div className="p-4">
+                <h2 className="text-base font-semibold">Abo</h2>
+                <div className="mt-4">
+                  <SubscriptionFormFields disabled={isSubmitting} namespace="subscription" />
+                </div>
+              </div>
             </Form>
           }
           footer={
-            <FooterLayout>
-              <Button text="Verwerfen" disabled={isSubmitting} onClick={onCancelClick} />
+            <div className="p-4 flex justify-end">
+              <Button disabled={isSubmitting} onClick={onCancelClick}>
+                Verwerfen
+              </Button>
               <Button
-                text="Erstellen"
+                className="ml-2"
                 type="submit"
-                intent="primary"
+                color="orange"
                 loading={isSubmitting}
-                disabled={!isValid || isSubmitting}
+                disabled={!isValid}
                 onClick={submitForm}
-              />
-            </FooterLayout>
+              >
+                Erstellen
+              </Button>
+            </div>
           }
+          onCloseClick={onCancelClick}
         />
       )}
     </Formik>

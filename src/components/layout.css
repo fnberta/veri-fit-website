@@ -1,0 +1,210 @@
+html,
+body {
+  height: 100%;
+  width: 100%;
+  scroll-behavior: smooth;
+}
+
+#___gatsby,
+#___gatsby > * {
+  height: 100%;
+  width: 100%;
+}
+
+/* purgecss start ignore */
+@tailwind base;
+@tailwind components;
+/* purgecss end ignore */
+
+.link {
+  @apply text-blue-500 underline;
+}
+.link:hover {
+  @apply text-blue-700;
+}
+
+.section-header {
+  @apply text-5xl font-semibold leading-tight break-words;
+}
+
+.content h4 {
+  @apply text-xl font-semibold leading-tight mb-2;
+}
+
+.content p {
+  @apply text-base text-gray-700 mb-4;
+}
+
+.btn {
+  @apply font-semibold rounded transition-all duration-200;
+}
+.btn:focus {
+  @apply outline-none shadow-outline;
+}
+.btn:disabled {
+  @apply opacity-50 cursor-not-allowed pointer-events-none;
+}
+
+.btn-small {
+  @apply text-xs py-1 px-2;
+}
+
+.btn-medium {
+  @apply text-sm py-2 px-4;
+}
+
+.btn-large {
+  @apply text-xl py-3 px-5;
+}
+
+.btn-huge {
+  @apply text-xl py-4 px-8;
+}
+
+.btn-outline {
+  @apply bg-transparent border border-gray-500;
+}
+.btn-outline:hover {
+  @apply border-transparent bg-gray-400;
+}
+.btn-outline:active {
+  @apply bg-gray-500;
+}
+
+.btn-orange {
+  @apply bg-orange-500 text-orange-800;
+}
+.btn-orange:hover {
+  @apply bg-orange-400;
+}
+.btn-orange:active {
+  @apply bg-orange-600;
+}
+
+.btn-red {
+  @apply bg-red-500 text-white;
+}
+.btn-red:hover {
+  @apply bg-red-400;
+}
+.btn-red:active {
+  @apply bg-red-600;
+}
+
+.btn-gray {
+  @apply bg-gray-300 text-gray-700;
+}
+.btn-gray:hover {
+  @apply bg-gray-200;
+}
+.btn-gray:active {
+  @apply bg-gray-400;
+}
+
+.tag {
+  @apply px-2 inline-block rounded-full text-xs font-semibold uppercase tracking-wide;
+}
+
+.tag-gray {
+  @apply bg-gray-200 text-gray-800;
+}
+
+.tag-blue {
+  @apply bg-blue-200 text-blue-800;
+}
+
+.tag-green {
+  @apply bg-green-200 text-green-800;
+}
+
+.tag-red {
+  @apply bg-red-200 text-red-800;
+}
+
+.table thead tr th {
+  @apply px-4 py-2 border-b-2 text-left font-semibold;
+}
+.table tbody tr td {
+  @apply px-4 py-2 border-b;
+}
+.table tbody tr:last-child td {
+  @apply border-b-0;
+}
+
+.parallax {
+  @apply bg-center bg-no-repeat bg-scroll bg-cover;
+}
+@screen lg {
+  .parallax {
+    @apply bg-fixed;
+  }
+}
+
+.parallax-overlay {
+  @apply relative;
+}
+.parallax-overlay::before {
+  @apply absolute inset-0 w-full h-full bg-black opacity-50;
+  content: '';
+}
+
+.schedule-grid {
+  @apply w-full grid gap-4;
+  grid-template-columns: 1fr;
+}
+
+@screen md {
+  .schedule-grid {
+    grid-template-columns: [monday] 1fr [tuesday] 1fr [wednesday] 1fr [thursday] 1fr [friday] 1fr [saturday] 1fr;
+    grid-template-rows: auto [morning] 1fr [midday] 1fr [evening] 1fr;
+  }
+}
+
+@screen md {
+  .schedule-monday {
+    grid-column-start: monday;
+  }
+  .schedule-tuesday {
+    grid-column-start: tuesday;
+  }
+  .schedule-wednesday {
+    grid-column-start: wednesday;
+  }
+  .schedule-thursday {
+    grid-column-start: thursday;
+  }
+  .schedule-friday {
+    grid-column-start: friday;
+  }
+  .schedule-saturday {
+    grid-column-start: saturday;
+  }
+
+  .schedule-morning {
+    grid-row-start: morning;
+  }
+  .schedule-midday {
+    grid-row-start: midday;
+  }
+  .schedule-evening {
+    grid-row-start: evening;
+  }
+}
+
+.spinner {
+  @apply w-4 h-4 border-2 border-gray-800 rounded-full;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  animation: spin 500ms linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@tailwind utilities;
