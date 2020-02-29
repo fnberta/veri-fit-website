@@ -247,4 +247,44 @@ describe('show session confirm', () => {
     const result = showSessionConfirm(clients, session);
     expect(result).toBe(true);
   });
+
+  test('show return true if session has clients with a multiple matching non-block subscriptions, where at least one (which might not be the first) has trainings left', () => {
+    const clients = [
+      {
+        id: 'client-1',
+        activeSubscriptions: [
+          {
+            type: SubscriptionType.LIMITED_10,
+            trainingType: TrainingType.YOGA,
+            start: 'some-date',
+            end: 'some-date',
+            trainingsLeft: 0,
+          },
+          {
+            type: SubscriptionType.LIMITED_10,
+            trainingType: TrainingType.YOGA,
+            start: 'some-date',
+            end: 'some-date',
+            trainingsLeft: 2,
+          },
+        ],
+      },
+    ] as Client[];
+    const session: Session = {
+      id: 'some-id',
+      type: TrainingType.YOGA,
+      runsFrom: getToday(),
+      time: {
+        start: '',
+        end: '',
+      },
+      clientIds: ['client-1'],
+      trainingId: 'some-training-id',
+      date: '',
+      confirmed: false,
+    };
+
+    const result = showSessionConfirm(clients, session);
+    expect(result).toBe(true);
+  });
 });

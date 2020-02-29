@@ -36,14 +36,17 @@ export function isSubscriptionExpiring(subscription: Subscription): boolean {
 export function showSessionConfirm(clients: Client[], session: Session): boolean {
   return clients
     .filter(client => session.clientIds.includes(client.id))
-    .every(client => {
-      const subscription = client.activeSubscriptions.find(activeSub => activeSub.trainingType === session.type);
-      if (!subscription) {
-        return false;
-      } else if (subscription.type === SubscriptionType.BLOCK) {
-        return true;
-      } else {
-        return subscription.trainingsLeft > 0;
-      }
-    });
+    .every(client =>
+      client.activeSubscriptions.some(activeSub => {
+        if (activeSub.trainingType !== session.type) {
+          return false;
+        }
+
+        if (activeSub.type === SubscriptionType.BLOCK) {
+          return true;
+        } else {
+          return activeSub.trainingsLeft > 0;
+        }
+      }),
+    );
 }
