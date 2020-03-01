@@ -22,7 +22,7 @@ const Testimonials: React.FC<Props> = ({ data }) => {
       className="flex items-center justify-center parallax parallax-overlay"
       style={{ backgroundImage: `url(${require('../images/testimonials.jpg')})` }}
     >
-      <div className="container mx-auto px-8 py-20">
+      <div className="container mx-auto px-8 py-20 flex items-center justify-center">
         <Carousel value={activeSlideIdx} infinite={true} centered={true} autoPlay={5000} onChange={handleSlideChange}>
           {data.map((data, idx) => (
             <Testimonial key={`${data.author}-${idx}`} {...data} />
@@ -32,7 +32,7 @@ const Testimonials: React.FC<Props> = ({ data }) => {
           {range(0, data.length).map(idx => (
             <button
               key={idx}
-              className="btn w-6 h-6 flex items-center justify-center cursor-pointer"
+              className="w-6 h-6 flex items-center justify-center cursor-pointer"
               onClick={() => handleSlideChange(idx)}
             >
               <span

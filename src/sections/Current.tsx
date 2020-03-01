@@ -6,7 +6,7 @@ const Current: React.FC = () => (
     style={{ minHeight: '20rem', backgroundImage: `url(${require('../images/sunrise.jpg')})` }}
   >
     <div className="container mx-auto">
-      <h1 className="section-header text-white">Aktuell: Training über die Festtage!</h1>
+      <h1 className="text-5xl font-semibold leading-tight text-white">Aktuell: Training über die Festtage!</h1>
       <div className="text-white">
         <p>Yoga Mi 26.12.18 & Mi 2.01.19 um 12.05-13.00 Uhr</p>
         <p>Yoga Sa 29.12.18 & Sa 5.01.19 um 9.15-10.15 Uhr</p>

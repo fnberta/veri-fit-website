@@ -6,7 +6,6 @@ import { IndexPageQuery } from '../generatedGraphQL';
 import AboutMe from '../sections/AboutMe';
 import ContactMe from '../sections/ContactMe';
 import Hero from '../sections/Hero';
-import LocationMap from '../sections/LocationMap';
 import Offers, { OfferData } from '../sections/Offers';
 import Schedule, { ScheduleEntryData } from '../sections/Schedule';
 import Testimonials from '../sections/Testimonials';
@@ -47,23 +46,9 @@ const IndexPage: React.FC<Props> = ({ data }) => {
       <Offers data={data.offers.nodes.map(node => ({ ...node.frontmatter, html: node.html } as OfferData))} />
       <TryOut />
       <Schedule entries={data.schedule.nodes.map(node => node.frontmatter as ScheduleEntryData)} />
-      <Testimonials data={data.testimonials.nodes.map(node => node.frontmatter as TestimonialProps)} />
       <AboutMe vera={data.vera!} />
       <ContactMe />
-      <LocationMap />
-      <section className="p-4 flex flex-col items-center justify-center">
-        <p className="text-center">
-          Copyright 2020 by Vera Lienhard
-          <br />
-          <span className="mt-2 text-center">
-            {'Es gelten die '}
-            <Link className="link" to="/agb/">
-              allgemeinen Geschäftsbedingungen
-            </Link>
-            .
-          </span>
-        </p>
-      </section>
+      <Testimonials data={data.testimonials.nodes.map(node => node.frontmatter as TestimonialProps)} />
     </Layout>
   );
 };

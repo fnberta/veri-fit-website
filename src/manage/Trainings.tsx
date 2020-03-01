@@ -2,7 +2,7 @@ import { Link, RouteComponentProps } from '@reach/router';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
 import { Client, Session, Time } from '../../shared';
-import { Button } from '../components/Button';
+import { Button, LinkIconButton } from '../components/Button';
 import WeekSchedule, { TimeOfDay, Week, Weekday } from '../components/WeekSchedule';
 import AddTrainingDialog from './AddTrainingDialog';
 import EditSessionDialog from './EditSessionDialog';
@@ -86,27 +86,27 @@ const Trainings: React.FC<Props> = ({ year, week }) => {
             .toLocaleString()}`}</p>
         </div>
         <div className="ml-2">
-          <Link
-            className="inline-block btn btn-medium btn-outline rounded-none rounded-l"
+          <LinkIconButton
+            className="rounded-none rounded-l"
+            icon="fa-arrow-left"
+            shape="outlined"
             aria-label="Vorherige Woche"
             to={getNextPath(date.minus({ weeks: 1 }))}
-          >
-            <span className="fas fa-arrow-left" />
-          </Link>
-          <Link
-            className="relative inline-block btn btn-medium btn-outline rounded-none -ml-px"
+          />
+          <LinkIconButton
+            className="relative rounded-none -ml-px"
+            icon="fa-calendar-day"
+            shape="outlined"
             aria-label="Diese Woche"
             to={getNextPath(DateTime.local())}
-          >
-            <span className="fas fa-calendar-day" />
-          </Link>
-          <Link
-            className="inline-block btn btn-medium btn-outline rounded-none rounded-r -ml-px"
+          />
+          <LinkIconButton
+            className="rounded-none rounded-r -ml-px"
+            icon="fa-arrow-right"
+            shape="outlined"
             aria-label="Nächste Woche"
             to={getNextPath(date.plus({ weeks: 1 }))}
-          >
-            <span className="fas fa-arrow-right" />
-          </Link>
+          />
         </div>
       </div>
       <WeekSchedule

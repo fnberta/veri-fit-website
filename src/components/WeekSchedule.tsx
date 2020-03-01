@@ -27,13 +27,13 @@ export type Week = Record<Weekday, WeekdayEntry[]>;
 
 const Block: React.FC<{ title: string; entries: WeekdayEntry[] }> = ({ title, entries }) => (
   <>
-    <h2 className="uppercase tracking-wider text-center font-semibold">{title}</h2>
+    <h2 className="mb-2 text-center font-semibold uppercase tracking-wider">{title}</h2>
     {entries
       .sort((a, b) => TIMES_OF_DAY.indexOf(a.timeOfDay) - TIMES_OF_DAY.indexOf(b.timeOfDay))
       .map(entry => (
         <div
           key={entry.id}
-          className={cx('flex flex-col items-center', `schedule-${entry.weekday} schedule-${entry.timeOfDay}`)}
+          className={cx('flex flex-col items-stretch', `schedule-${entry.weekday} schedule-${entry.timeOfDay}`)}
         >
           {entry.content}
         </div>

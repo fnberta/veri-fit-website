@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
 import { Session, Subscription, SubscriptionType, Training, Client } from '../../shared';
-import { Button } from '../components/Button';
+import { Button, IconButton } from '../components/Button';
 import AddSubscriptionDialog from './AddSubscriptionDialog';
 import ConfirmDeleteDialog from './ConfirmDeleteDialog';
 import { formatLocale, getToday } from './dateTime';
@@ -37,28 +37,35 @@ const SubscriptionSummary: React.FC<{
         </header>
         <div>
           {subscription.paidAt == null && (
-            <button
-              className="w-8 l-8 btn btn-small btn-outline rounded-none rounded-l"
+            <IconButton
+              className="rounded-none rounded-l"
+              shape="outlined"
+              size="small"
+              icon="fa-dollar-sign"
               title="Auf bezahlt setzen"
               aria-label="Auf bezahlt setzen"
               onClick={onSetPaidClick}
-            >
-              <span className="fas fa-dollar-sign fill-current" />
-            </button>
+            />
           )}
           {active ? (
-            <button
-              className="relative w-8 l-8 btn btn-small btn-outline rounded-none rounded-r -ml-px"
+            <IconButton
+              className="rounded-none rounded-r -ml-px"
+              shape="outlined"
+              size="small"
+              icon="fa-trash"
               title="Abo löschen"
               aria-label="Abo löschen"
               onClick={onDeleteClick}
-            >
-              <span className="fas fa-trash fill-current" />
-            </button>
+            />
           ) : (
-            <button className="btn btn-small btn-outline" title="Erneuern" aria-label="Erneuern">
-              <span className="fas fa-redo fill-current" />
-            </button>
+            <IconButton
+              className="rounded-none rounded-r -ml-px"
+              shape="outlined"
+              size="small"
+              icon="fa-redo"
+              title="Erneuern"
+              aria-label="Erneuern"
+            />
           )}
         </div>
       </div>

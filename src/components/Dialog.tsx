@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { IconButton } from './Button';
 import Portal from './Portal';
 
 export interface Props {
@@ -27,16 +28,21 @@ const Dialog: React.FC<Props> = ({ title, body, footer, onCloseClick }) => {
 
   return (
     <Portal>
-      <div className="fixed inset-0 flex items-center justify-center overflow-hidden">
-        <span className="absolute w-full h-full bg-gray-900 opacity-75 pointer-events-none" />
-        <div className="relative w-full max-w-md max-h-full h-full md:h-auto bg-white md:rounded shadow-xl overflow-hidden flex flex-col">
-          <div className="p-4 bg-gray-100 flex justify-between items-center border-b">
+      <div className="fixed inset-0 sm:p-4 flex items-center justify-center overflow-hidden">
+        <span className="absolute inset-0 bg-gray-900 opacity-75 pointer-events-none" />
+        <div className="relative w-full sm:max-w-lg max-h-full h-full sm:h-auto bg-white sm:rounded shadow-xl overflow-hidden flex flex-col">
+          <div className="p-4 bg-gray-100 flex justify-between items-center">
             <h1 className="text-2xl font-semibold">{title}</h1>
-            <button className="btn btn-medium" aria-label="Schliessen" onClick={onCloseClick}>
-              <span className="fas fa-times" />
-            </button>
+            <IconButton
+              className="hover:bg-gray-200 active:bg-gray-400"
+              color="none"
+              icon="fa-times"
+              title="Schliessen"
+              aria-label="Schliessen"
+              onClick={onCloseClick}
+            />
           </div>
-          <div className="overflow-auto border-b flex-grow">{body}</div>
+          <div className="overflow-auto flex-grow">{body}</div>
           <div className="bg-gray-100">{footer}</div>
         </div>
       </div>

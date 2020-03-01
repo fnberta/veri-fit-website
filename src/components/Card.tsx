@@ -6,7 +6,7 @@ export interface Props extends React.HTMLProps<HTMLDivElement> {
 }
 
 const Card: React.FC<Props> = ({ image, className, children, ...rest }) => (
-  <div className={cx('bg-white shadow-lg rounded overflow-hidden', className)} {...rest}>
+  <div className={cx('bg-white shadow rounded overflow-hidden', className)} {...rest}>
     {image && <div className="w-full">{image}</div>}
     <div className="px-6 py-4">{children}</div>
   </div>

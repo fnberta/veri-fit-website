@@ -2,19 +2,8 @@ module.exports = {
   theme: {
     extend: {},
   },
-  variants: [
-    'responsive',
-    'group-hover',
-    'focus-within',
-    'first',
-    'last',
-    'odd',
-    'even',
-    'hover',
-    'focus',
-    'active',
-    'visited',
-    'disabled',
-  ],
-  plugins: [require('@tailwindcss/custom-forms')],
+  variants: {
+    backgroundColor: ['responsive', 'hover', 'focus', 'active'],
+  },
+  plugins: [require('@tailwindcss/ui')],
 };

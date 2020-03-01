@@ -46,7 +46,7 @@ const Offer: React.FC<Props> = ({ title, subtitle, image, body, prices, classNam
               {price.validity && <div className="text-xs">{`(gültig für ${price.validity})`}</div>}
             </td>
             <td>
-              <span className="uppercase tracking-wide">chf </span>
+              <span className="text-gray-700 uppercase tracking-wider">chf </span>
               <span className="text-2xl">{price.price.toLocaleString()}</span>
             </td>
           </tr>

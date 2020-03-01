@@ -16,7 +16,7 @@ const SessionCard: React.FC<Props> = ({ session, clients, onConfirmToggle, onEdi
   <div className="bg-white rounded overflow-hidden border">
     <div className="px-4 py-2 flex flex-col items-start">
       <header className="flex flex-col items-start">
-        <h2 className="text-xs text-gray-600 uppercase tracking-wide font-semibold">{`${session.time.start} - ${session.time.end}`}</h2>
+        <h2 className="text-xs text-gray-600 uppercase tracking-wider font-semibold">{`${session.time.start} - ${session.time.end}`}</h2>
         <h1 className="text-lg font-semibold leading-tight">{getTrainingName(session.type)}</h1>
       </header>
       <p className="mt-2 text-gray-600 text-sm">{`${session.clientIds.length} Teilnehmer`}</p>

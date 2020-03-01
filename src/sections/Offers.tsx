@@ -19,23 +19,18 @@ export interface Props {
 const Offers: React.FC<Props> = ({ data }) => (
   <section id="offer" className="bg-gray-100">
     <div className="container mx-auto px-8 py-20">
-      <div className="flex flex-col items-center text-center">
-        <h1 className="section-header">Training für dich!</h1>
-        <div className="max-w-3xl mt-6 text-lg">
-          <p className="text-gray-700">
-            Kraft, Stabilität, Beweglichkeit, Athletik, Elastizität, Ausdauer, Freude, Energie, Entspannung, Gesundheit,
-            Haltung, Wohlbefinden – Gerne unterstütze ich dich beim Erreichen deiner Trainingsziele!
-          </p>
-          <p className="mt-4 text-xl font-semibold">
-            Finde dein optimales <span className="text-orange-500">Training</span>
-            {'  – für dein '}
-            <span className="text-orange-500">Wohlbefinden</span>
-            {'  – für deinen '}
-            <span className="text-orange-500">Erfolg</span> – für dich!
-          </p>
-        </div>
+      <div className="grid lg:grid-cols-3 gap-6 items-center">
+        <h1 className="text-6xl font-bold leading-tight">
+          <span className="text-orange-500">Training</span>
+          <br className="hidden lg:inline" />
+          <span className="lg:hidden"> </span>für dich!
+        </h1>
+        <p className="lg:col-span-2 text-2xl text-gray-700">
+          Kraft, Stabilität, Beweglichkeit, Athletik, Elastizität, Ausdauer, Freude, Energie, Entspannung, Gesundheit,
+          Haltung, Wohlbefinden – Gerne unterstütze ich dich beim Erreichen deiner Trainingsziele!
+        </p>
       </div>
-      <div className="mt-8 grid gap-4 md:grid-cols-2">
+      <div className="mt-8 grid gap-6 md:grid-cols-2">
         {data
           .sort((a, b) => a.order - b.order)
           .map((data, idx) => (

@@ -1,7 +1,7 @@
 import { Link, RouteComponentProps } from '@reach/router';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Client } from '../../shared';
-import { Button } from '../components/Button';
+import { Button, LinkButton } from '../components/Button';
 import AddClientDialog from './AddClientDialog';
 import { useRepos } from './repositories/RepoContext';
 import { doesSubscriptionRunShort, isSubscriptionExpiring } from './subscriptionChecks';
@@ -37,10 +37,13 @@ const Clients: React.FC<Props> = ({ clientId }) => {
           </Button>
         </div>
       </div>
-      <Link className={cx(!clientId && 'hidden', 'md:hidden btn btn-medium self-end')} to="/manage/clients">
-        <span className="fas fa-times" />
-        Schliessen
-      </Link>
+      <LinkButton
+        className={cx(!clientId && 'hidden', 'md:hidden self-start')}
+        to="/manage/clients"
+        icon="fa-arrow-left"
+      >
+        Zurück
+      </LinkButton>
       {filteredClients.length > 0 ? (
         <>
           <input

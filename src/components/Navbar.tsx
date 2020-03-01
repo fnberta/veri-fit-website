@@ -2,6 +2,7 @@ import cx from 'classnames';
 import React, { isValidElement, useState } from 'react';
 import logoBlue from '../images/logo_blue.png';
 import logoOrange from '../images/logo_orange.png';
+import { IconButton } from './Button';
 
 export interface Props extends React.HTMLProps<HTMLDivElement> {
   variant: 'bright' | 'dark' | 'transparent';
@@ -27,7 +28,7 @@ function getClasses(variant: Props['variant'], open: boolean) {
       return {
         nav: open && 'bg-white',
         header: 'absolute inset-x-0 bg-transparent',
-        text: open ? brightText : 'text-white hover:text-gray-400',
+        text: open ? brightText : 'text-white hover:text-gray-200',
         logo: logoOrange,
       };
   }
@@ -49,16 +50,14 @@ const Navbar: React.FC<Props> = ({ variant, sticky, children, className, ...rest
     >
       <div className="px-4 py-2 flex justify-between items-center">
         <img className="w-16" src={logo} alt="Veri-Fit" />
-        <button
-          className="btn btn-medium sm:hidden"
+        <IconButton
+          className={cx('sm:hidden', text)}
+          color="none"
+          icon="fa-bars"
           aria-label="Menu"
           aria-expanded={open}
           onClick={() => setOpen(prev => !prev)}
-        >
-          <div className={text}>
-            <span className="fas fa-bars fill-current" />
-          </div>
-        </button>
+        />
       </div>
       <nav className={cx(nav)}>
         <ul className={cx('px-4 py-2 -mt-1 sm:mt-0 sm:-ml-2 sm:flex', open ? 'block' : 'hidden')}>
