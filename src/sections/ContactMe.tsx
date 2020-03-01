@@ -133,7 +133,7 @@ const ContactMe: React.FC = () => {
               </a>
             </BulletItem>
           </div>
-          <div className="container mx-auto px-8 py-20 grid gap-12 md:grid-cols-5 items-start">
+          <div className="container mx-auto px-8 pb-20 pt-32 grid gap-12 md:grid-cols-5 items-start">
             {notificationType && (
               <Notification
                 className="md:col-span-5"
@@ -141,7 +141,7 @@ const ContactMe: React.FC = () => {
                 onCloseClick={() => setNotificationType(undefined)}
               />
             )}
-            <p className="md:col-span-2 text-6xl text-white font-semibold leading-tight">
+            <p className="md:col-span-2 text-5xl xl:text-6xl text-white font-semibold leading-tight">
               Ich freue mich auf <br />
               <span className="text-orange-500">deine Nachricht!</span>
             </p>
