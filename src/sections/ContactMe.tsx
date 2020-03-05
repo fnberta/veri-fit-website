@@ -109,7 +109,7 @@ const ContactMe: React.FC = () => {
     <Formik<FormValues> initialValues={initialValues} onSubmit={handleFormSubmit}>
       {({ isSubmitting, isValid }) => (
         <section id="contact" className="bg-gray-900 flex flex-col">
-          <div className="relative w-9/12 -mt-20 p-6 self-center bg-white rounded-lg shadow-xl grid gap-4 md:grid-cols-3 items-start">
+          <div className="relative w-9/12 -mt-20 px-6 py-4 self-center bg-white rounded-lg shadow-xl grid gap-4 md:grid-cols-3 items-start">
             <BulletItem icon="fas fa-location-arrow" title="Location">
               <a
                 className="link"

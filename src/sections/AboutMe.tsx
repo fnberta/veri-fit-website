@@ -39,7 +39,7 @@ const AboutMe: React.FC<Props> = ({ vera }) => (
         className="lg:col-span-2"
         image={<Image fluid={vera.childImageSharp!.fluid as FluidObject} alt="Vera Lienhard" style={IMG_STYLE} />}
       >
-        <ul className=" text-lg text-gray-700">
+        <ul className="text-lg text-gray-700">
           <ExperienceItem>Master Sportwissenschaft Universität Bern</ExperienceItem>
           <ExperienceItem>Konditionstrainerin SwissOlympic</ExperienceItem>
           <ExperienceItem>Medizinische Trainingstherapeutin MTT</ExperienceItem>

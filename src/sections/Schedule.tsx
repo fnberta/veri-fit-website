@@ -59,8 +59,8 @@ const Schedule: React.FC<Props> = ({ entries }) => (
           </p>
         </div>
       </div>
-      <WeekSchedule className="mt-12" {...getWeek(entries)} />
-      <p className="mt-12 lg:text-center">
+      <WeekSchedule className="mt-16" {...getWeek(entries)} />
+      <p className="mt-16 lg:text-center">
         {'Eine Übersicht aller Stunden findest du auch in meinem aktuellen '}
         <a className="link" href="/assets/VeriFit_Flyer_Herbst19.pdf" target="_blank">
           Flyer
