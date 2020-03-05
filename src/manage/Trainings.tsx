@@ -1,15 +1,17 @@
-import { Link, RouteComponentProps } from '@reach/router';
+import { RouteComponentProps } from '@reach/router';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
 import { Client, Session, Time } from '../../shared';
 import { Button, LinkIconButton } from '../components/Button';
 import WeekSchedule, { TimeOfDay, Week, Weekday } from '../components/WeekSchedule';
+import { ClassNameProps } from '../utils/types';
 import AddTrainingDialog from './AddTrainingDialog';
 import EditSessionDialog from './EditSessionDialog';
 import { useRepos } from './repositories/RepoContext';
 import SessionCard from './SessionCard';
+import cx from 'classnames';
 
-export type Props = RouteComponentProps<{ year: number; week: number }>;
+export type Props = RouteComponentProps<{ year: number; week: number }> & ClassNameProps;
 
 type AddEditDialog = { type: 'ADD' } | { type: 'EDIT'; session: Session };
 
@@ -56,7 +58,7 @@ function getDateFromPath(year: number | undefined, week: number | undefined): Da
   }
 }
 
-const Trainings: React.FC<Props> = ({ year, week }) => {
+const Trainings: React.FC<Props> = ({ year, week, className }) => {
   const [addEditDialog, setAddEditDialog] = useState<AddEditDialog>();
   const [clients, setClients] = useState([] as Client[]);
   const [sessions, setSessions] = useState([] as Session[]);
@@ -76,89 +78,91 @@ const Trainings: React.FC<Props> = ({ year, week }) => {
   }, [sessionRepo, date.weekYear]);
 
   return (
-    <div className="flex-1 container mx-auto py-6 px-4">
-      <h1 className="hidden">Trainings</h1>
-      <div className="flex justify-between items-end">
-        <div>
-          <h2 className="text-xl md:text-2xl font-semibold">{`Woche ${date.weekNumber}`}</h2>
-          <p className="text-xs md:text-sm">{`${date.set({ weekday: 1 }).toLocaleString()} - ${date
-            .set({ weekday: 7 })
-            .toLocaleString()}`}</p>
+    <section className={cx('bg-gray-100 overflow-auto', className)}>
+      <div className="container mx-auto py-6 px-4">
+        <h1 className="hidden">Trainings</h1>
+        <div className="flex justify-between items-center">
+          <div>
+            <h2 className="text-xl md:text-2xl font-semibold">{`Woche ${date.weekNumber}`}</h2>
+            <p className="text-xs md:text-sm">{`${date.set({ weekday: 1 }).toLocaleString()} - ${date
+              .set({ weekday: 7 })
+              .toLocaleString()}`}</p>
+          </div>
+          <div className="ml-2">
+            <LinkIconButton
+              className="rounded-none rounded-l"
+              icon="fa-arrow-left"
+              shape="outlined"
+              aria-label="Vorherige Woche"
+              to={getNextPath(date.minus({ weeks: 1 }))}
+            />
+            <LinkIconButton
+              className="relative rounded-none -ml-px"
+              icon="fa-calendar-day"
+              shape="outlined"
+              aria-label="Diese Woche"
+              to={getNextPath(DateTime.local())}
+            />
+            <LinkIconButton
+              className="rounded-none rounded-r -ml-px"
+              icon="fa-arrow-right"
+              shape="outlined"
+              aria-label="Nächste Woche"
+              to={getNextPath(date.plus({ weeks: 1 }))}
+            />
+          </div>
         </div>
-        <div className="ml-2">
-          <LinkIconButton
-            className="rounded-none rounded-l"
-            icon="fa-arrow-left"
-            shape="outlined"
-            aria-label="Vorherige Woche"
-            to={getNextPath(date.minus({ weeks: 1 }))}
-          />
-          <LinkIconButton
-            className="relative rounded-none -ml-px"
-            icon="fa-calendar-day"
-            shape="outlined"
-            aria-label="Diese Woche"
-            to={getNextPath(DateTime.local())}
-          />
-          <LinkIconButton
-            className="rounded-none rounded-r -ml-px"
-            icon="fa-arrow-right"
-            shape="outlined"
-            aria-label="Nächste Woche"
-            to={getNextPath(date.plus({ weeks: 1 }))}
-          />
-        </div>
-      </div>
-      <WeekSchedule
-        className="mt-4 p-4 bg-white rounded shadow"
-        {...sessions.reduce<Week>(
-          (acc, curr) => {
-            const weekday = getWeekday(curr.runsFrom);
-            acc[weekday].push({
-              id: curr.id,
-              weekday,
-              timeOfDay: getTimeOfDay(curr.time),
-              content: (
-                <SessionCard
-                  session={curr}
-                  clients={clients}
-                  onConfirmToggle={() => sessionRepo.toggleConfirmed(curr)}
-                  onEditClick={() => setAddEditDialog({ type: 'EDIT', session: curr })}
-                />
-              ),
-            });
+        <WeekSchedule
+          className="mt-4 p-4 bg-white rounded shadow"
+          {...sessions.reduce<Week>(
+            (acc, curr) => {
+              const weekday = getWeekday(curr.runsFrom);
+              acc[weekday].push({
+                id: curr.id,
+                weekday,
+                timeOfDay: getTimeOfDay(curr.time),
+                content: (
+                  <SessionCard
+                    session={curr}
+                    clients={clients}
+                    onConfirmToggle={() => sessionRepo.toggleConfirmed(curr)}
+                    onEditClick={() => setAddEditDialog({ type: 'EDIT', session: curr })}
+                  />
+                ),
+              });
 
-            return acc;
-          },
-          {
-            monday: [],
-            tuesday: [],
-            wednesday: [],
-            thursday: [],
-            friday: [],
-            saturday: [],
-          },
+              return acc;
+            },
+            {
+              monday: [],
+              tuesday: [],
+              wednesday: [],
+              thursday: [],
+              friday: [],
+              saturday: [],
+            },
+          )}
+        />
+        <Button className="mt-4" onClick={() => setAddEditDialog({ type: 'ADD' })}>
+          Neues Training eröffnen
+        </Button>
+        {addEditDialog?.type === 'ADD' && (
+          <AddTrainingDialog
+            clients={clients}
+            onTrainingCreated={() => setAddEditDialog(undefined)}
+            onCancelClick={() => setAddEditDialog(undefined)}
+          />
         )}
-      />
-      <Button className="mt-4" onClick={() => setAddEditDialog({ type: 'ADD' })}>
-        Neues Training eröffnen
-      </Button>
-      {addEditDialog?.type === 'ADD' && (
-        <AddTrainingDialog
-          clients={clients}
-          onTrainingCreated={() => setAddEditDialog(undefined)}
-          onCancelClick={() => setAddEditDialog(undefined)}
-        />
-      )}
-      {addEditDialog?.type === 'EDIT' && (
-        <EditSessionDialog
-          session={addEditDialog.session}
-          clients={clients}
-          onSessionChanged={() => setAddEditDialog(undefined)}
-          onCancelClick={() => setAddEditDialog(undefined)}
-        />
-      )}
-    </div>
+        {addEditDialog?.type === 'EDIT' && (
+          <EditSessionDialog
+            session={addEditDialog.session}
+            clients={clients}
+            onSessionChanged={() => setAddEditDialog(undefined)}
+            onCancelClick={() => setAddEditDialog(undefined)}
+          />
+        )}
+      </div>
+    </section>
   );
 };
 

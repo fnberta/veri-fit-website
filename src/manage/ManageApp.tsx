@@ -4,13 +4,14 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '../components/Button';
 import Layout from '../components/Layout';
 import Clients from './Clients';
+import { UserCredential } from './firebase';
 import { useRepos } from './repositories/RepoContext';
 import Trainings from './Trainings';
 import Navbar from '../components/Navbar';
 
 const ManageApp: React.FC = () => {
   const [loggedIn, setLoggedIn] = useState(false);
-  const [logInResult, setLoginResult] = useState();
+  const [logInResult, setLoginResult] = useState<UserCredential>();
   const { authRepo } = useRepos();
 
   useEffect(() => authRepo.observeAuthState(user => setLoggedIn(user != null)), [authRepo]);
@@ -44,14 +45,14 @@ const ManageApp: React.FC = () => {
   const today = DateTime.local();
   return (
     <Layout title="Verwalten">
-      <div className="h-full w-full flex flex-col min-h-0">
+      <div className="h-full w-full flex flex-col overflow-hidden">
         <Navbar variant="dark">
           <Link to="manage/clients">Kunden</Link>
           <Link to="manage/trainings">Trainings</Link>
         </Navbar>
-        <Router className="flex-auto flex flex-col min-h-0 bg-gray-100" basepath="/manage">
-          <Clients path="clients/*clientId" />
-          <Trainings path="trainings/:year/:week" />
+        <Router className="flex-auto flex overflow-hidden" basepath="/manage">
+          <Clients className="flex-auto" path="clients/*clientId" />
+          <Trainings className="flex-auto" path="trainings/:year/:week" />
           <Redirect
             default={true}
             noThrow={true}
