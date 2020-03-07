@@ -19,18 +19,16 @@ export interface Props {
 const Offers: React.FC<Props> = ({ data }) => (
   <section id="offer" className="bg-gray-100">
     <div className="container mx-auto px-8 py-20">
-      <div className="grid lg:grid-cols-3 gap-6 items-center">
-        <h1 className="text-6xl font-bold leading-tight">
-          <span className="text-orange-500">Training</span>
-          <br className="hidden lg:inline" />
-          <span className="lg:hidden"> </span>für dich!
+      <div className="-mt-6 -ml-16 flex flex-wrap items-center">
+        <h1 className="mt-6 ml-16 text-5xl font-bold leading-tight">
+          <span className="text-orange-500">Training</span> für dich!
         </h1>
-        <p className="lg:col-span-2 text-2xl text-gray-700">
+        <p className="w-1/2 mt-6 ml-16 flex-auto text-xl text-gray-700">
           Kraft, Stabilität, Beweglichkeit, Athletik, Elastizität, Ausdauer, Freude, Energie, Entspannung, Gesundheit,
           Haltung, Wohlbefinden – Gerne unterstütze ich dich beim Erreichen deiner Trainingsziele!
         </p>
       </div>
-      <div className="mt-8 grid gap-6 md:grid-cols-2">
+      <div className="mt-8 offer-grid">
         {data
           .sort((a, b) => a.order - b.order)
           .map((data, idx) => (

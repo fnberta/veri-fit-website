@@ -29,16 +29,16 @@ const Notification: React.FC<{
       case 'success':
         return {
           classes: {
-            pill: 'bg-orange-400 text-orange-900',
-            close: 'hover:bg-orange-300 active:bg-orange-500',
+            pill: 'bg-orange-300 text-orange-800',
+            close: 'hover:bg-orange-200 active:bg-orange-400',
           },
           text: 'Herzlichen Dank für deine Nachricht! Ich melde mich sofort bei dir.',
         };
       case 'error':
         return {
           classes: {
-            pill: 'bg-red-400 text-red-900',
-            close: 'hover:bg-red-300 active:bg-red-500',
+            pill: 'bg-red-300 text-red-800',
+            close: 'hover:bg-red-200 active:bg-red-400',
           },
           text: 'Da ist etwas schief gegangen. Bitte versuche es nochmals!',
         };
@@ -48,7 +48,7 @@ const Notification: React.FC<{
   const { classes, text } = getContentForType();
   return (
     <div
-      className={cx('px-4 py-2 leading-none rounded-full flex items-center', classes.pill, className)}
+      className={cx('px-4 py-2 leading-tight rounded-lg flex items-center', classes.pill, className)}
       role="alert"
       {...rest}
     >
@@ -106,47 +106,47 @@ const ContactMe: React.FC = () => {
   }
 
   return (
-    <Formik<FormValues> initialValues={initialValues} onSubmit={handleFormSubmit}>
-      {({ isSubmitting, isValid }) => (
-        <section id="contact" className="bg-gray-900 flex flex-col">
-          <div className="relative w-9/12 -mt-20 px-6 py-4 self-center bg-white rounded-lg shadow-xl grid gap-4 md:grid-cols-3 items-start">
-            <BulletItem icon="fas fa-location-arrow" title="Location">
-              <a
-                className="link"
-                href="https://www.google.ch/maps?q=Lagerplatz+6+Winterthur"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Lagerplatz 6, Winterthur
-                <br />
-                1. OG – Raum 111
-              </a>
-            </BulletItem>
-            <BulletItem icon="fas fa-at" title="Email">
-              <a className="link" href="mailto:vlienhard@gmail.com" target="_blank" rel="noopener noreferrer">
-                vlienhard@gmail.com
-              </a>
-            </BulletItem>
-            <BulletItem icon="fas fa-phone" title="Telefon">
-              <a className="link" href="tel:+41793952033">
-                +41 79 395 20 33
-              </a>
-            </BulletItem>
-          </div>
-          <div className="container mx-auto px-8 pb-20 pt-32 grid gap-12 md:grid-cols-5 items-start">
-            {notificationType && (
-              <Notification
-                className="md:col-span-5"
-                type={notificationType}
-                onCloseClick={() => setNotificationType(undefined)}
-              />
-            )}
-            <p className="md:col-span-2 text-5xl xl:text-6xl text-white font-semibold leading-tight">
-              Ich freue mich auf <br />
-              <span className="text-orange-500">deine Nachricht!</span>
-            </p>
+    <section id="contact" className="bg-gray-900 flex flex-col">
+      <div className="relative w-9/12 -mt-20 px-6 py-4 self-center bg-white rounded-lg shadow-xl grid gap-4 md:grid-cols-3 items-start">
+        <BulletItem icon="fas fa-location-arrow" title="Location">
+          <a
+            className="link"
+            href="https://www.google.ch/maps?q=Lagerplatz+6+Winterthur"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Lagerplatz 6, Winterthur
+            <br />
+            1. OG – Raum 111
+          </a>
+        </BulletItem>
+        <BulletItem icon="fas fa-at" title="Email">
+          <a className="link" href="mailto:vlienhard@gmail.com" target="_blank" rel="noopener noreferrer">
+            vlienhard@gmail.com
+          </a>
+        </BulletItem>
+        <BulletItem icon="fas fa-phone" title="Telefon">
+          <a className="link" href="tel:+41793952033">
+            +41 79 395 20 33
+          </a>
+        </BulletItem>
+      </div>
+      <div className="container mx-auto px-8 pb-20 pt-24 grid gap-12 md:grid-cols-5">
+        {notificationType && (
+          <Notification
+            className="md:col-span-5"
+            type={notificationType}
+            onCloseClick={() => setNotificationType(undefined)}
+          />
+        )}
+        <p className="md:col-span-2 text-5xl text-white font-semibold leading-tight">
+          Ich freue mich auf
+          <span className="text-orange-500"> deine Nachricht!</span>
+        </p>
+        <Formik<FormValues> initialValues={initialValues} onSubmit={handleFormSubmit}>
+          {({ isSubmitting, isValid }) => (
             <Form
-              className="h-full md:col-span-3 flex flex-col"
+              className="md:col-span-3 -ml-4 -mt-4 flex flex-wrap items-start content-center"
               name="contact"
               data-netlify="true"
               netlify-honeypot="bot-field"
@@ -156,38 +156,38 @@ const ContactMe: React.FC = () => {
                   Don't fill this out if you're human: <input name="bot-field" />
                 </label>
               </div>
-              <div className="grid md:grid-cols-2 gap-4 items-start">
-                <FormField
-                  label={<span className="text-white font-semibold">Name</span>}
-                  icon="fas fa-user"
-                  error={<ErrorMessage name="name" />}
-                  control={
-                    <Field
-                      className="form-input w-full"
-                      type="text"
-                      name="name"
-                      validate={makeValidator('Name')}
-                      disabled={isSubmitting}
-                    />
-                  }
-                />
-                <FormField
-                  label={<span className="text-white font-semibold">Email</span>}
-                  icon="fas fa-envelope"
-                  error={<ErrorMessage name="email" />}
-                  control={
-                    <Field
-                      className="form-input w-full"
-                      type="email"
-                      name="email"
-                      validate={makeValidator('Email')}
-                      disabled={isSubmitting}
-                    />
-                  }
-                />
-              </div>
               <FormField
-                className="mt-4"
+                className="w-56 ml-4 mt-4 flex-auto"
+                label={<span className="text-white font-semibold">Name</span>}
+                icon="fas fa-user"
+                error={<ErrorMessage name="name" />}
+                control={
+                  <Field
+                    className="form-input w-full"
+                    type="text"
+                    name="name"
+                    validate={makeValidator('Name')}
+                    disabled={isSubmitting}
+                  />
+                }
+              />
+              <FormField
+                className="w-56 ml-4 mt-4 flex-auto"
+                label={<span className="text-white font-semibold">Email</span>}
+                icon="fas fa-envelope"
+                error={<ErrorMessage name="email" />}
+                control={
+                  <Field
+                    className="form-input w-full"
+                    type="email"
+                    name="email"
+                    validate={makeValidator('Email')}
+                    disabled={isSubmitting}
+                  />
+                }
+              />
+              <FormField
+                className="w-full ml-4 mt-4"
                 label={<span className="text-white font-semibold">Nachricht</span>}
                 error={<ErrorMessage name="message" />}
                 control={
@@ -202,8 +202,7 @@ const ContactMe: React.FC = () => {
                 }
               />
               <Button
-                className="mt-4"
-                style={{ justifySelf: 'start' }}
+                className="ml-4 mt-4"
                 type="submit"
                 color="orange"
                 loading={isSubmitting}
@@ -212,10 +211,10 @@ const ContactMe: React.FC = () => {
                 Senden
               </Button>
             </Form>
-          </div>
-        </section>
-      )}
-    </Formik>
+          )}
+        </Formik>
+      </div>
+    </section>
   );
 };
 

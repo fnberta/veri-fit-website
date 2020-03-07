@@ -73,7 +73,7 @@ export const query = graphql`
   }
 
   query IndexPage {
-    logo: file(relativePath: { eq: "logo_orange.png" }) {
+    logo: file(relativePath: { eq: "logo_orange_white.png" }) {
       ...FluidImageNoBase64
     }
     vera: file(relativePath: { eq: "vera.jpg" }) {

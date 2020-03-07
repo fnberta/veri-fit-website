@@ -9,7 +9,7 @@ export interface Props {
 const Hero: React.FC<Props> = ({ logo }) => (
   <section
     id="home"
-    className="h-screen pt-16 parallax flex items-center"
+    className="h-screen pt-16 parallax flex"
     style={{ backgroundImage: `url(${require('../images/hero.jpg')})` }}
   >
     <div className="px-12 py-6 w-full sm:w-3/5">

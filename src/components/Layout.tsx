@@ -10,7 +10,7 @@ export interface Props {
 const Layout: React.FC<Props> = ({ title, children }) => (
   <>
     <DocHead title={title} />
-    <div className="antialiased text-gray-900 w-full h-full">{children}</div>
+    {children}
   </>
 );
 

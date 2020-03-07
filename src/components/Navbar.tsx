@@ -1,7 +1,7 @@
 import cx from 'classnames';
 import React, { isValidElement, useState } from 'react';
-import logoBlue from '../images/logo_blue.png';
-import logoOrange from '../images/logo_orange.png';
+import logoBlack from '../images/logo_orange_black.png';
+import logoWhite from '../images/logo_orange_white.png';
 import { IconButton } from './Button';
 
 export interface Props extends React.HTMLProps<HTMLDivElement> {
@@ -16,20 +16,20 @@ function getClasses(variant: Props['variant'], open: boolean) {
       return {
         header: 'bg-white',
         text: brightText,
-        logo: logoBlue,
+        logo: logoBlack,
       };
     case 'dark':
       return {
         header: 'bg-gray-900',
         text: 'text-white hover:bg-gray-700 hover:text-orange-500',
-        logo: logoOrange,
+        logo: logoWhite,
       };
     case 'transparent':
       return {
-        nav: open && 'bg-white',
+        nav: open && 'relative z-10 bg-white',
         header: 'absolute inset-x-0 bg-transparent',
         text: open ? brightText : 'text-white hover:text-gray-200',
-        logo: logoOrange,
+        logo: logoWhite,
       };
   }
 }

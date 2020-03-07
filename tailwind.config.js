@@ -1,6 +1,10 @@
 module.exports = {
   theme: {
-    extend: {},
+    extend: {
+      flexGrow: {
+        full: 9999,
+      },
+    },
   },
   variants: {
     backgroundColor: ['responsive', 'hover', 'focus', 'active'],

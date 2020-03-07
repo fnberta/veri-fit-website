@@ -45,22 +45,20 @@ function getWeek(entries: ScheduleEntryData[]): Week {
 const Schedule: React.FC<Props> = ({ entries }) => (
   <section id="schedule" className="bg-gray-900">
     <div className="container mx-auto px-8 py-20 text-white">
-      <div className="grid lg:grid-cols-5 gap-6 items-center">
-        <h1 className="lg:col-span-2 text-5xl text-orange-500 font-bold leading-tight">Stundenplan</h1>
-        <div className="lg:col-span-3 text-xl text-white">
-          <p>
-            {
-              'Ich freue mich auf deinen Besuch in einer meiner Gruppenstunden! Um einen Termin für ein Personal Training zu vereinbaren, '
-            }
-            <a className="link" href="/#contact">
-              melde
-            </a>
-            {' dich doch gleich direkt bei mir.'}
-          </p>
-        </div>
+      <div className="-ml-16 -mt-6 flex flex-wrap">
+        <h1 className="ml-16 mt-6 text-5xl text-orange-500 font-bold leading-tight">Stundenplan</h1>
+        <p className="w-1/2 flex-auto ml-16 mt-6 text-xl text-white">
+          {
+            'Ich freue mich auf deinen Besuch in einer meiner Gruppenstunden! Um einen Termin für ein Personal Training zu vereinbaren, '
+          }
+          <a className="link" href="/#contact">
+            melde
+          </a>
+          {' dich doch gleich direkt bei mir.'}
+        </p>
       </div>
-      <WeekSchedule className="mt-16" {...getWeek(entries)} />
-      <p className="mt-16 lg:text-center">
+      <WeekSchedule className="mt-12" {...getWeek(entries)} />
+      <p className="mt-12 lg:text-center">
         {'Eine Übersicht aller Stunden findest du auch in meinem aktuellen '}
         <a className="link" href="/assets/VeriFit_Flyer_Herbst19.pdf" target="_blank">
           Flyer

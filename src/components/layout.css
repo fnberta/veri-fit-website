@@ -1,20 +1,33 @@
+/* purgecss start ignore */
+@tailwind base;
+@tailwind components;
+
 html,
 body {
-  height: 100%;
-  width: 100%;
+  @apply h-full w-full antialiased text-gray-900;
   scroll-behavior: smooth;
 }
 
 #___gatsby,
 #___gatsby > * {
-  height: 100%;
-  width: 100%;
+  @apply h-full w-full;
 }
 
-/* purgecss start ignore */
-@tailwind base;
-@tailwind components;
-/* purgecss end ignore */
+.justify-items-stretch {
+  justify-items: stretch;
+}
+.justify-items-start {
+  justify-items: flex-start;
+}
+.justify-items-center {
+  justify-items: center;
+}
+.justify-items-end {
+  justify-items: flex-end;
+}
+.justify-items-baseline {
+  justify-items: baseline;
+}
 
 .link {
   @apply text-blue-500;
@@ -88,8 +101,13 @@ body {
   content: '';
 }
 
+.offer-grid {
+  @apply grid gap-6;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+}
+
 .schedule-grid {
-  @apply w-full grid gap-4;
+  @apply grid gap-4;
   grid-template-columns: 1fr;
 }
 
@@ -147,4 +165,5 @@ body {
   }
 }
 
+/* purgecss end ignore */
 @tailwind utilities;
