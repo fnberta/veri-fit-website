@@ -1,7 +1,7 @@
 import { ErrorMessage, Field, FormikErrors, getIn, useFormikContext } from 'formik';
 import React from 'react';
 import { SubscriptionType, TrainingType } from '../../shared';
-import { FormField } from '../components/bulma/Forms';
+import { FormField } from '../components/Forms';
 import { getEndDate, isValidISOString } from './dateTime';
 import { getSubscriptionName, getTrainingName } from './displayNames';
 import { SubscriptionInput } from './repositories/ClientRepository';
@@ -59,6 +59,7 @@ export function getDefaultTrainingsLeft(type: SubscriptionType): number {
       return 9999;
   }
 }
+
 export function getSubscriptionInput(values: SubscriptionFormValues): SubscriptionInput {
   switch (values.type) {
     case SubscriptionType.SINGLE: {
@@ -155,62 +156,75 @@ const SubscriptionFormFields: React.FC<Props> = ({ disabled, namespace }) => {
   return (
     <>
       <FormField
+        className=""
         label="Trainings-Typ"
         error={<ErrorMessage name={withNamespace('trainingType')} />}
         control={
-          <div className="select">
-            <Field as="select" name={withNamespace('trainingType')}>
-              {Object.keys(validSubscriptionTypes).map(trainingType => (
-                <option key={trainingType} value={trainingType}>
-                  {getTrainingName(trainingType as TrainingType)}
-                </option>
-              ))}
-            </Field>
-          </div>
+          <Field className="form-select w-full" as="select" name={withNamespace('trainingType')}>
+            {Object.keys(validSubscriptionTypes).map(trainingType => (
+              <option key={trainingType} value={trainingType}>
+                {getTrainingName(trainingType as TrainingType)}
+              </option>
+            ))}
+          </Field>
         }
       />
-      <FormField
-        label="Abo-Typ"
-        error={<ErrorMessage name={withNamespace('type')} />}
-        control={
-          <div className="select">
-            <Field as="select" name={withNamespace('type')}>
+      <div className="mt-2 flex">
+        <FormField
+          className="w-2/3"
+          label="Abo-Typ"
+          error={<ErrorMessage name={withNamespace('type')} />}
+          control={
+            <Field className="form-select" as="select" name={withNamespace('type')}>
               {validSubscriptionTypes[trainingType].map(type => (
                 <option key={type} value={type}>
                   {getSubscriptionName(type)}
                 </option>
               ))}
             </Field>
-          </div>
-        }
-      />
-      {type !== SubscriptionType.BLOCK && (
-        <FormField
-          label="Anzahl Trainings übrig"
-          error={<ErrorMessage name={withNamespace('trainingsLeft')} />}
-          control={<Field className="input" type="number" name={withNamespace('trainingsLeft')} disabled={disabled} />}
+          }
         />
-      )}
+        {type !== SubscriptionType.BLOCK && (
+          <FormField
+            className="ml-2 flex-1"
+            label="Trainings übrig"
+            error={<ErrorMessage name={withNamespace('trainingsLeft')} />}
+            control={
+              <Field
+                className="form-input w-full"
+                type="number"
+                name={withNamespace('trainingsLeft')}
+                disabled={disabled}
+              />
+            }
+          />
+        )}
+      </div>
       <FormField
+        className="mt-2"
         label="Startpunkt"
         error={<ErrorMessage name={withNamespace('start')} />}
-        control={<Field className="input" type="date" name={withNamespace('start')} disabled={disabled} />}
+        control={<Field className="form-input w-full" type="date" name={withNamespace('start')} disabled={disabled} />}
       />
       <FormField
+        className="mt-2"
         label="Kosten"
         error={<ErrorMessage name={withNamespace('paid')} />}
         control={
-          <>
-            <Field className="checkbox" type="checkbox" name={withNamespace('paid')} disabled={disabled} />
-            {' Bereits bezahlt'}
-          </>
+          <div className="inline-flex items-center">
+            <Field className="form-checkbox" type="checkbox" name={withNamespace('paid')} disabled={disabled} />
+            <span className="ml-2 text-base">{' Bereits bezahlt'}</span>
+          </div>
         }
       />
       {paid && (
         <FormField
+          className="mt-2"
           label="Bezahlt am"
           error={<ErrorMessage name={withNamespace('paidAt')} />}
-          control={<Field className="input" type="date" name={withNamespace('paidAt')} disabled={disabled} />}
+          control={
+            <Field className="form-input w-full" type="date" name={withNamespace('paidAt')} disabled={disabled} />
+          }
         />
       )}
     </>

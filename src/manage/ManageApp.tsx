@@ -1,27 +1,17 @@
-import styled from '@emotion/styled';
 import { Link, Redirect, Router } from '@reach/router';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
-import Button from '../components/bulma/Button';
+import { Button } from '../components/Button';
 import Layout from '../components/Layout';
-import Navbar from '../components/Navbar2';
 import Clients from './Clients';
+import { UserCredential } from './firebase';
 import { useRepos } from './repositories/RepoContext';
 import Trainings from './Trainings';
-
-const PlainButton = styled.button({
-  border: 'none',
-  font: 'inherit',
-  background: 'none',
-  cursor: 'pointer',
-  '&:hover': {
-    color: '#fd892c',
-  },
-});
+import Navbar from '../components/Navbar';
 
 const ManageApp: React.FC = () => {
   const [loggedIn, setLoggedIn] = useState(false);
-  const [logInResult, setLoginResult] = useState();
+  const [logInResult, setLoginResult] = useState<UserCredential>();
   const { authRepo } = useRepos();
 
   useEffect(() => authRepo.observeAuthState(user => setLoggedIn(user != null)), [authRepo]);
@@ -29,14 +19,25 @@ const ManageApp: React.FC = () => {
     authRepo.getRedirectResult().then(setLoginResult);
   }, [authRepo]);
 
-  if (!logInResult) {
-    return <div>loading…</div>;
-  }
-
-  if (!loggedIn) {
+  if (!logInResult || !loggedIn) {
     return (
-      <div>
-        <Button text="Login with Google" intent="primary" onClick={() => authRepo.signIn()} />
+      <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+        <div className="w-1/2 bg-white p-4 rounded shadow">
+          {!loggedIn && (
+            <header className="flex flex-col items-center justify-center">
+              <h1 className="text-3xl font-semibold">Willkommen!</h1>
+              <Button
+                className="mt-4"
+                size="large"
+                color="orange"
+                loading={!logInResult}
+                onClick={() => authRepo.signIn()}
+              >
+                Login with Google
+              </Button>
+            </header>
+          )}
+        </div>
       </div>
     );
   }
@@ -44,22 +45,22 @@ const ManageApp: React.FC = () => {
   const today = DateTime.local();
   return (
     <Layout title="Verwalten">
-      <Navbar fixed={true} logo={<img src={require('../images/logo_blue.png')} title="Veri-Fit" alt="Veri-Fit" />}>
-        <Link to="manage/clients">Kunden</Link>
-        <Link to="manage/trainings">Trainings</Link>
-        <PlainButton onClick={() => authRepo.singOut()}>Ausloggen</PlainButton>
-      </Navbar>
-      <Router basepath="/manage">
-        <Clients path="clients" />
-        <Clients path="clients/:clientId" />
-        <Trainings path="trainings/:year/:week" />
-        <Redirect
-          default={true}
-          noThrow={true}
-          from="/"
-          to={`/manage/trainings/${today.weekYear}/${today.weekNumber}`}
-        />
-      </Router>
+      <div className="h-full w-full flex flex-col overflow-hidden">
+        <Navbar variant="dark">
+          <Link to="manage/clients">Kunden</Link>
+          <Link to="manage/trainings">Trainings</Link>
+        </Navbar>
+        <Router className="flex-auto flex overflow-hidden" basepath="/manage">
+          <Clients className="flex-auto" path="clients/*clientId" />
+          <Trainings className="flex-auto" path="trainings/:year/:week" />
+          <Redirect
+            default={true}
+            noThrow={true}
+            from="/"
+            to={`/manage/trainings/${today.weekYear}/${today.weekNumber}`}
+          />
+        </Router>
+      </div>
     </Layout>
   );
 };

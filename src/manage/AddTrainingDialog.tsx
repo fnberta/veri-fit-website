@@ -1,9 +1,8 @@
-import styled from '@emotion/styled';
 import { Form, Formik, FormikHelpers } from 'formik';
 import React from 'react';
 import { Client, Training, TrainingInput, TrainingType } from '../../shared';
-import Button from '../components/bulma/Button';
-import Dialog from '../components/bulma/Dialog';
+import { Button } from '../components/Button';
+import Dialog from '../components/Dialog';
 import { getToday } from './dateTime';
 import { useRepos } from './repositories/RepoContext';
 import TrainingFormFields, { validateTrainingForm } from './TrainingFormFields';
@@ -11,14 +10,8 @@ import TrainingFormFields, { validateTrainingForm } from './TrainingFormFields';
 export interface Props {
   clients: Client[];
   onTrainingCreated: (training: Training) => void;
-  onCancelClick: React.MouseEventHandler;
+  onCancelClick: () => void;
 }
-
-const FooterLayout = styled.div({
-  flex: '1',
-  display: 'flex',
-  justifyContent: 'flex-end',
-});
 
 function getInitialValues(runsFrom: string): TrainingInput {
   return {
@@ -51,22 +44,26 @@ const AddTrainingDialog: React.FC<Props> = ({ clients, onTrainingCreated, onCanc
         <Dialog
           title="Neues Training"
           body={
-            <Form>
+            <Form className="p-4">
               <TrainingFormFields clients={clients} disabled={isSubmitting} />
             </Form>
           }
           footer={
-            <FooterLayout>
-              <Button text="Verwerfen" disabled={isSubmitting} onClick={onCancelClick} />
+            <div className="flex justify-end p-4">
+              <Button disabled={isSubmitting} onClick={onCancelClick}>
+                Verwerfen
+              </Button>
               <Button
-                text="Erstellen"
+                className="ml-2"
                 type="submit"
-                intent="primary"
+                color="orange"
                 loading={isSubmitting}
-                disabled={!isValid || isSubmitting}
+                disabled={!isValid}
                 onClick={submitForm}
-              />
-            </FooterLayout>
+              >
+                Erstellen
+              </Button>
+            </div>
           }
           onCloseClick={onCancelClick}
         />

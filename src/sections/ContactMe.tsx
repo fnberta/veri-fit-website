@@ -1,13 +1,10 @@
-import styled from '@emotion/styled';
 import { ErrorMessage, Field, Form, Formik, FormikHelpers } from 'formik';
 import React, { useState } from 'react';
-import Button from '../components/bulma/Button';
-import { Container, Section } from '../components/bulma/Page';
-import { FormField, HorizontalField } from '../components/bulma/Forms';
-import { Title } from '../components/bulma/Heading';
-import FindMe from '../components/FindMe';
+import BulletItem from '../components/BulletItem';
+import { Button, IconButton } from '../components/Button';
+import { FormField } from '../components/Forms';
 import { makeValidator } from '../utils/forms';
-import { parallax } from '../utils/styles';
+import cx from 'classnames';
 
 type NotificationType = 'success' | 'error';
 
@@ -17,36 +14,55 @@ interface FormValues {
   message: string;
 }
 
-const ParallaxSection = styled(Section)(parallax(true), {
-  backgroundImage: `url(${require('../images/sunrise.jpg')})`,
-});
-
 const initialValues: FormValues = {
   name: '',
   email: '',
   message: '',
 };
 
-const Notification: React.FC<{ type: NotificationType; onCloseClick: React.MouseEventHandler<HTMLButtonElement> }> = ({
-  type,
-  onCloseClick,
-}) => {
-  switch (type) {
-    case 'success':
-      return (
-        <div className="notification is-primary">
-          <button className="delete" onClick={onCloseClick} />
-          Herzlichen Dank für deine Nachricht! Ich melde mich sofort bei dir.
-        </div>
-      );
-    case 'error':
-      return (
-        <div className="notification is-danger">
-          <button className="delete" onClick={onCloseClick} />
-          Da ist etwas schief gegangen. Bitte versuche es nochmals!
-        </div>
-      );
+const Notification: React.FC<{
+  type: NotificationType;
+  onCloseClick: React.MouseEventHandler<HTMLButtonElement>;
+} & React.HTMLProps<HTMLDivElement>> = ({ type, onCloseClick, className, ...rest }) => {
+  function getContentForType() {
+    switch (type) {
+      case 'success':
+        return {
+          classes: {
+            pill: 'bg-orange-300 text-orange-800',
+            close: 'hover:bg-orange-200 active:bg-orange-400',
+          },
+          text: 'Herzlichen Dank für deine Nachricht! Ich melde mich sofort bei dir.',
+        };
+      case 'error':
+        return {
+          classes: {
+            pill: 'bg-red-300 text-red-800',
+            close: 'hover:bg-red-200 active:bg-red-400',
+          },
+          text: 'Da ist etwas schief gegangen. Bitte versuche es nochmals!',
+        };
+    }
   }
+
+  const { classes, text } = getContentForType();
+  return (
+    <div
+      className={cx('px-4 py-2 leading-tight rounded-lg flex items-center', classes.pill, className)}
+      role="alert"
+      {...rest}
+    >
+      <span className="font-semibold text-left flex-auto">{text}</span>
+      <IconButton
+        className={cx('ml-2', classes.close)}
+        color="none"
+        icon="fa-times"
+        title="Schliessen"
+        aria-label="Schliessen"
+        onClick={onCloseClick}
+      />
+    </div>
+  );
 };
 
 function urlEncode(data: { [key: string]: string }): string {
@@ -90,31 +106,68 @@ const ContactMe: React.FC = () => {
   }
 
   return (
-    <Formik<FormValues>
-      initialValues={initialValues}
-      onSubmit={handleFormSubmit}
-      render={({ isSubmitting }) => (
-        <ParallaxSection id="contact">
-          <Container>
-            <Title text="So findest du mich" size={1} className="has-text-light has-text-centered" />
-            <FindMe />
-            {notificationType && (
-              <Notification type={notificationType} onCloseClick={() => setNotificationType(undefined)} />
-            )}
-            <Form name="contact" data-netlify="true" netlify-honeypot="bot-field">
-              <div className="is-hidden">
-                <label>
-                  Don't fill this out if you're human: <input name="bot-field" />
-                </label>
-              </div>
-              <HorizontalField>
+    <section id="contact" className="bg-gray-900 flex flex-col">
+      <header>
+        <h1 className="sr-only">Kontakt</h1>
+      </header>
+      <div className="relative w-9/12 -mt-20 p-6 self-center bg-white rounded-lg shadow-xl grid gap-6 md:grid-cols-3 items-start">
+        <BulletItem icon="fas fa-location-arrow" title="Location">
+          <a
+            className="link"
+            href="https://www.google.ch/maps?q=Lagerplatz+6+Winterthur"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Lagerplatz 6, Winterthur
+            <br />
+            1. OG – Raum 111
+          </a>
+        </BulletItem>
+        <BulletItem icon="fas fa-at" title="Email">
+          <a className="link" href="mailto:vlienhard@gmail.com" target="_blank" rel="noopener noreferrer">
+            vlienhard@gmail.com
+          </a>
+        </BulletItem>
+        <BulletItem icon="fas fa-phone" title="Telefon">
+          <a className="link" href="tel:+41793952033">
+            +41 79 395 20 33
+          </a>
+        </BulletItem>
+      </div>
+      <div className="max-w-screen-xl mx-auto px-8 pb-20 pt-24">
+        <div className="-mt-12 -ml-12 flex flex-wrap">
+          {notificationType && (
+            <Notification
+              className="w-full mt-12 ml-12"
+              type={notificationType}
+              onCloseClick={() => setNotificationType(undefined)}
+            />
+          )}
+          <p className="flex-1 mt-12 ml-12 text-5xl text-white font-semibold leading-tight">
+            Ich freue mich auf
+            <span className="text-orange-500"> deine Nachricht!</span>
+          </p>
+          <Formik<FormValues> initialValues={initialValues} onSubmit={handleFormSubmit}>
+            {({ isSubmitting, isValid }) => (
+              <Form
+                className="flex-1 flex-grow-2 mt-8 ml-8 flex flex-wrap items-start content-center"
+                name="contact"
+                data-netlify="true"
+                netlify-honeypot="bot-field"
+              >
+                <div className="hidden">
+                  <label>
+                    Don't fill this out if you're human: <input name="bot-field" />
+                  </label>
+                </div>
                 <FormField
-                  label={<span className="has-text-light">Name</span>}
+                  className="w-64 ml-4 mt-4 flex-auto"
+                  label={<span className="text-white font-semibold">Name</span>}
                   icon="fas fa-user"
                   error={<ErrorMessage name="name" />}
                   control={
                     <Field
-                      className="input"
+                      className="form-input"
                       type="text"
                       name="name"
                       validate={makeValidator('Name')}
@@ -123,12 +176,13 @@ const ContactMe: React.FC = () => {
                   }
                 />
                 <FormField
-                  label={<span className="has-text-light">Email</span>}
+                  className="w-64 ml-4 mt-4 flex-auto"
+                  label={<span className="text-white font-semibold">Email</span>}
                   icon="fas fa-envelope"
                   error={<ErrorMessage name="email" />}
                   control={
                     <Field
-                      className="input"
+                      className="form-input"
                       type="email"
                       name="email"
                       validate={makeValidator('Email')}
@@ -136,27 +190,36 @@ const ContactMe: React.FC = () => {
                     />
                   }
                 />
-              </HorizontalField>
-              <FormField
-                label={<span className="has-text-light">Nachricht</span>}
-                error={<ErrorMessage name="message" />}
-                control={
-                  <Field
-                    className="textarea"
-                    as="textarea"
-                    name="message"
-                    placeholder="Wie kann ich dir helfen?"
-                    validate={makeValidator('Nachricht')}
-                    disabled={isSubmitting}
-                  />
-                }
-              />
-              <Button type="submit" text="Senden" intent="primary" loading={isSubmitting} disabled={isSubmitting} />
-            </Form>
-          </Container>
-        </ParallaxSection>
-      )}
-    />
+                <FormField
+                  className="w-full ml-4 mt-4"
+                  label={<span className="text-white font-semibold">Nachricht</span>}
+                  error={<ErrorMessage name="message" />}
+                  control={
+                    <Field
+                      className="form-textarea"
+                      as="textarea"
+                      name="message"
+                      placeholder="Wie kann ich dir helfen?"
+                      validate={makeValidator('Nachricht')}
+                      disabled={isSubmitting}
+                    />
+                  }
+                />
+                <Button
+                  className="ml-4 mt-4"
+                  type="submit"
+                  color="orange"
+                  loading={isSubmitting}
+                  disabled={isSubmitting || !isValid}
+                >
+                  Senden
+                </Button>
+              </Form>
+            )}
+          </Formik>
+        </div>
+      </div>
+    </section>
   );
 };
 

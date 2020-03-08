@@ -11,7 +11,7 @@ const ManagePage: React.FC = () => {
   }, []);
 
   if (!repos) {
-    return <div>loading…</div>;
+    return null;
   }
 
   return (

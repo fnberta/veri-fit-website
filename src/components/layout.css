@@ -1,0 +1,171 @@
+@import url('https://rsms.me/inter/inter.css');
+
+/* purgecss start ignore */
+@tailwind base;
+@tailwind components;
+
+html,
+body {
+  @apply h-full w-full antialiased text-gray-900;
+  scroll-behavior: smooth;
+}
+
+#___gatsby,
+#___gatsby > * {
+  @apply h-full w-full;
+}
+
+.justify-items-stretch {
+  justify-items: stretch;
+}
+.justify-items-start {
+  justify-items: flex-start;
+}
+.justify-items-center {
+  justify-items: center;
+}
+.justify-items-end {
+  justify-items: flex-end;
+}
+.justify-items-baseline {
+  justify-items: baseline;
+}
+
+.link {
+  @apply text-blue-500;
+}
+.link:hover {
+  @apply text-blue-700 underline;
+}
+
+.content h4 {
+  @apply text-xl font-semibold leading-tight mb-2;
+}
+
+.content p {
+  @apply text-base text-gray-700 mb-4;
+}
+
+.btn {
+  @apply rounded font-semibold transition-all duration-200;
+}
+.btn:focus {
+  @apply outline-none shadow-outline;
+}
+.btn:disabled {
+  @apply opacity-50 cursor-not-allowed;
+}
+
+.tag {
+  @apply px-2 inline-block rounded-full text-xs font-semibold uppercase tracking-wider;
+}
+
+.tag-gray {
+  @apply bg-gray-200 text-gray-800;
+}
+
+.tag-blue {
+  @apply bg-blue-200 text-blue-800;
+}
+
+.tag-green {
+  @apply bg-green-200 text-green-800;
+}
+
+.tag-red {
+  @apply bg-red-200 text-red-800;
+}
+
+.table thead tr th {
+  @apply px-4 py-2 border-b-2 text-xs text-gray-500 text-left uppercase tracking-wider;
+}
+.table tbody tr td {
+  @apply px-4 py-2 border-b;
+}
+.table tbody tr:last-child td {
+  @apply border-b-0;
+}
+
+.parallax {
+  @apply bg-center bg-no-repeat bg-scroll bg-cover;
+}
+@screen lg {
+  .parallax {
+    @apply bg-fixed;
+  }
+}
+
+.parallax-overlay {
+  @apply relative;
+}
+.parallax-overlay::before {
+  @apply absolute inset-0 w-full h-full bg-black opacity-50;
+  content: '';
+}
+
+.offer-grid {
+  @apply grid gap-6;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+}
+
+.schedule-grid {
+  @apply grid gap-4;
+  grid-template-columns: 1fr;
+}
+
+@screen md {
+  .schedule-grid {
+    grid-template-columns: [monday] 1fr [tuesday] 1fr [wednesday] 1fr [thursday] 1fr [friday] 1fr [saturday] 1fr;
+    grid-template-rows: auto [morning] 1fr [midday] 1fr [evening] 1fr;
+  }
+}
+
+@screen md {
+  .schedule-monday {
+    grid-column-start: monday;
+  }
+  .schedule-tuesday {
+    grid-column-start: tuesday;
+  }
+  .schedule-wednesday {
+    grid-column-start: wednesday;
+  }
+  .schedule-thursday {
+    grid-column-start: thursday;
+  }
+  .schedule-friday {
+    grid-column-start: friday;
+  }
+  .schedule-saturday {
+    grid-column-start: saturday;
+  }
+
+  .schedule-morning {
+    grid-row-start: morning;
+  }
+  .schedule-midday {
+    grid-row-start: midday;
+  }
+  .schedule-evening {
+    grid-row-start: evening;
+  }
+}
+
+.spinner {
+  @apply w-4 h-4 border-2 border-gray-800 rounded-full;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  animation: spin 500ms linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* purgecss end ignore */
+@tailwind utilities;

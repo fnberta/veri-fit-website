@@ -1,79 +1,79 @@
-// TODO: fix a11y errors
-/* eslint-disable jsx-a11y/anchor-is-valid, jsx-a11y/click-events-have-key-events, jsx-a11y/interactive-supports-focus, jsx-a11y/no-static-element-interactions */
-
 import cx from 'classnames';
-import React, { useEffect, useState } from 'react';
-import { Container } from './bulma/Page';
-import logoOrange from '../images/logo_orange.png';
-import logoBlue from '../images/logo_blue.png';
+import React, { isValidElement, useState } from 'react';
+import logoBlack from '../images/logo_orange_black.png';
+import logoWhite from '../images/logo_orange_white.png';
+import { IconButton } from './Button';
 
-export interface NavbarItemProps {
-  name: string;
-  href: string;
-  fixed: boolean;
-  menuActive: boolean;
+export interface Props extends React.HTMLProps<HTMLDivElement> {
+  variant: 'bright' | 'dark' | 'transparent';
+  sticky?: boolean;
 }
 
-const NavbarItem: React.FC<NavbarItemProps> = ({ name, href, fixed, menuActive }) => (
-  <a className={cx('navbar-item', { 'has-text-light': !fixed && !menuActive })} role="button" href={href}>
-    {name}
-  </a>
-);
+function getClasses(variant: Props['variant'], open: boolean) {
+  const brightText = 'text-gray-900 hover:bg-gray-200 hover:text-orange-500';
+  switch (variant) {
+    case 'bright':
+      return {
+        header: 'bg-white',
+        text: brightText,
+        logo: logoBlack,
+      };
+    case 'dark':
+      return {
+        header: 'bg-gray-900',
+        text: 'text-white hover:bg-gray-700 hover:text-orange-500',
+        logo: logoWhite,
+      };
+    case 'transparent':
+      return {
+        nav: open && 'bg-white',
+        header: 'absolute z-10 inset-x-0 bg-transparent',
+        text: open ? brightText : 'text-white hover:text-gray-200',
+        logo: logoWhite,
+      };
+  }
+}
 
-const Navbar: React.FC = () => {
-  const [fixed, setFixed] = useState(false);
-  const [menuActive, setMenuActive] = useState(false);
+const Navbar: React.FC<Props> = ({ variant, sticky, children, className, ...rest }) => {
+  const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    function handleScroll() {
-      const el = window.document.getElementById('home');
-      if (el) {
-        const { bottom } = el.getBoundingClientRect();
-        setFixed(bottom <= 0);
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
+  const { header, nav, text, logo } = getClasses(variant, open);
   return (
-    <nav
-      className={cx('navbar', fixed ? ['is-fixed-top', 'has-shadow'] : ['is-transparent', 'is-top'])}
-      role="navigation"
-      aria-label="main navigation"
+    <header
+      className={cx(
+        'sm:flex sm:justify-between sm:items-center',
+        header,
+        sticky && 'fixed inset-x-0 z-50 shadow',
+        className,
+      )}
+      {...rest}
     >
-      <Container>
-        <div className="navbar-brand">
-          <a className="navbar-item" href="#home">
-            <img src={fixed ? logoBlue : logoOrange} title="Veri-Fit" alt="Veri-Fit" />
-          </a>
-          <a
-            role="button"
-            className={cx('navbar-burger', 'burger', {
-              'is-active': menuActive,
-              'has-text-light': !fixed,
-            })}
-            aria-label="menu"
-            aria-expanded="false"
-            onClick={() => setMenuActive(active => !active)}
-          >
-            <span aria-hidden="true" />
-            <span aria-hidden="true" />
-            <span aria-hidden="true" />
-          </a>
-        </div>
-        <div className={cx('navbar-menu', { 'is-active': menuActive })}>
-          <div className="navbar-end" onClick={() => setMenuActive(false)}>
-            <NavbarItem name="Home" href="#home" fixed={fixed} menuActive={menuActive} />
-            <NavbarItem name="Angebot" href="#offer" fixed={fixed} menuActive={menuActive} />
-            <NavbarItem name="Stundenplan" href="#schedule" fixed={fixed} menuActive={menuActive} />
-            <NavbarItem name="Über mich" href="#about" fixed={fixed} menuActive={menuActive} />
-            <NavbarItem name="Kontakt" href="#contact" fixed={fixed} menuActive={menuActive} />
-          </div>
-        </div>
-      </Container>
-    </nav>
+      <div className="px-4 py-2 flex justify-between items-center">
+        <img className="w-20" src={logo} alt="Veri-Fit" />
+        <IconButton
+          className={cx('sm:hidden', text)}
+          color="none"
+          icon="fa-bars"
+          aria-label="Menu"
+          aria-expanded={open}
+          onClick={() => setOpen(prev => !prev)}
+        />
+      </div>
+      <nav className={cx(nav)}>
+        <ul className={cx('px-4 py-2 -mt-1 sm:mt-0 sm:-ml-2 sm:flex', open ? 'block' : 'hidden')}>
+          {React.Children.map(children, child => (
+            <li className="mt-1 sm:mt-0 sm:ml-2 flex">
+              {isValidElement(child)
+                ? React.cloneElement(child, {
+                    className: cx('flex-auto px-2 py-1 rounded', text, child.props.className),
+                    onClick: () => setOpen(false),
+                  })
+                : null}
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </header>
   );
 };
 

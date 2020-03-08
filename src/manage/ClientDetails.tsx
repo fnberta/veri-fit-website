@@ -1,13 +1,7 @@
-import styled from '@emotion/styled';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
-import { Link } from '@reach/router';
 import { Session, Subscription, SubscriptionType, Training, Client } from '../../shared';
-import Button, { Buttons } from '../components/bulma/Button';
-import Card from '../components/bulma/Card';
-import { Subtitle, Title } from '../components/bulma/Heading';
-import { Tag, Tags } from '../components/bulma/Tags';
-import { verticallySpaced } from '../utils/styles';
+import { Button, IconButton } from '../components/Button';
 import AddSubscriptionDialog from './AddSubscriptionDialog';
 import ConfirmDeleteDialog from './ConfirmDeleteDialog';
 import { formatLocale, getToday } from './dateTime';
@@ -15,7 +9,7 @@ import { getSubscriptionName, getTrainingName } from './displayNames';
 import EditClientDialog from './EditClientDialog';
 import { useRepos } from './repositories/RepoContext';
 
-export interface Props {
+export interface Props extends React.HTMLProps<HTMLDivElement> {
   client: Client;
 }
 
@@ -24,33 +18,6 @@ type ClientDialog =
   | { type: 'DELETE' }
   | { type: 'SUBSCRIPTION_ADD' }
   | { type: 'SUBSCRIPTION_DELETE'; subscription: Subscription };
-
-const LayoutCard = styled(Card)({
-  gridColumn: '1 / -1',
-});
-
-const HeaderLayout = styled.div({
-  display: 'flex',
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  alignItems: 'baseline',
-});
-
-const Block = styled.div(verticallySpaced('0.75rem'));
-
-const SubscriptionsLayout = styled.ul({
-  border: '1px solid hsl(0, 0%, 71%)',
-  padding: '0.75rem',
-  maxHeight: '15rem',
-  overflow: 'auto',
-  'li:not(:last-child)': {
-    borderBottom: '1px solid hsl(0, 0%, 86%)',
-  },
-});
-
-const SubscriptionEntry = styled.li(verticallySpaced('0.75rem'), {
-  padding: '0.75rem',
-});
 
 const SubscriptionSummary: React.FC<{
   subscription: Subscription;
@@ -62,32 +29,55 @@ const SubscriptionSummary: React.FC<{
     subscription.type === SubscriptionType.UNLIMITED_10 ||
     DateTime.fromISO(subscription.end) > DateTime.local();
   return (
-    <SubscriptionEntry>
-      <HeaderLayout>
+    <>
+      <div className="flex justify-between items-start">
         <header>
-          <Title text={getTrainingName(subscription.trainingType)} size={6} />
-          <Subtitle className="has-text-grey" text={getSubscriptionName(subscription.type)} size={6} />
+          <p className="text-xs text-gray-600 uppercase tracking-wider">{getSubscriptionName(subscription.type)}</p>
+          <h3 className="text-base font-semibold">{getTrainingName(subscription.trainingType)}</h3>
         </header>
-        {active ? (
-          <Buttons>
-            {subscription.paidAt == null && (
-              <Button title="Auf bezahlt setzen" icon="fa-dollar-sign" size="small" onClick={onSetPaidClick} />
-            )}
-            <Button title="Abo löschen" icon="fa-trash" size="small" onClick={onDeleteClick} />
-          </Buttons>
-        ) : (
-          <Button title="Erneuern" icon="fa-redo" size="small" />
-        )}
-      </HeaderLayout>
-      <div>
+        <div>
+          {subscription.paidAt == null && (
+            <IconButton
+              className="rounded-none rounded-l"
+              shape="outlined"
+              size="small"
+              icon="fa-dollar-sign"
+              title="Auf bezahlt setzen"
+              aria-label="Auf bezahlt setzen"
+              onClick={onSetPaidClick}
+            />
+          )}
+          {active ? (
+            <IconButton
+              className="rounded-none rounded-r -ml-px"
+              shape="outlined"
+              size="small"
+              icon="fa-trash"
+              title="Abo löschen"
+              aria-label="Abo löschen"
+              onClick={onDeleteClick}
+            />
+          ) : (
+            <IconButton
+              className="rounded-none rounded-r -ml-px"
+              shape="outlined"
+              size="small"
+              icon="fa-redo"
+              title="Erneuern"
+              aria-label="Erneuern"
+            />
+          )}
+        </div>
+      </div>
+      <div className="mt-2">
         {subscription.type === SubscriptionType.SINGLE || subscription.type === SubscriptionType.UNLIMITED_10 ? (
-          <div>
+          <div className="text-sm">
             {'Gültig ab '}
             <strong>{formatLocale(subscription.start)}</strong>
             {'.'}
           </div>
         ) : (
-          <div>
+          <div className="text-sm">
             {'Läuft vom '}
             <strong>{formatLocale(subscription.start)}</strong>
             {' bis zum '}
@@ -96,26 +86,26 @@ const SubscriptionSummary: React.FC<{
           </div>
         )}
         {subscription.type !== SubscriptionType.BLOCK && (
-          <div>
+          <div className="text-sm">
             {'Noch '}
             <strong>{`${subscription.trainingsLeft} Trainings`}</strong>
             {' übrig.'}
           </div>
         )}
       </div>
-      <Tags>
-        {active ? <Tag text="Aktiv" intent="info" /> : <Tag text="Abgelaufen" intent="light" />}
+      <div className="mt-2 -ml-1">
+        {active ? <div className="ml-1 tag tag-blue">Aktiv</div> : <div className="tag tag-red">Abgelaufen</div>}
         {subscription.paidAt ? (
-          <Tag text={`Bezahlt am ${formatLocale(subscription.paidAt)}`} intent="success" />
+          <div className="ml-1 tag tag-green">{`Bezahlt am ${formatLocale(subscription.paidAt)}`}</div>
         ) : (
-          <Tag text="Unbezahlt" intent="danger" />
+          <div className="ml-1 tag tag-red">Unbezahlt</div>
         )}
-      </Tags>
-    </SubscriptionEntry>
+      </div>
+    </>
   );
 };
 
-const ClientDetails: React.FC<Props> = ({ client }) => {
+const ClientDetails: React.FC<Props> = ({ client, className, ...rest }) => {
   const [subscriptions, setSubscriptions] = useState([] as Subscription[]);
   const [sessions, setSessions] = useState([] as Session[]);
   const [trainings, setTrainings] = useState([] as Training[]);
@@ -127,21 +117,18 @@ const ClientDetails: React.FC<Props> = ({ client }) => {
   useEffect(() => trainingRepo.observeAllForClients(client.id, setTrainings), [trainingRepo, client.id]);
 
   return (
-    <>
-      <LayoutCard>
-        <HeaderLayout className="block">
-          <header>
-            <Title size={3} text={client.name} />
-            {client.birthday != null && (
-              <Subtitle className="has-text-grey" size={5} text={`Geboren am ${formatLocale(client.birthday)}`} />
-            )}
-          </header>
-          <Link className="delete is-medium" to="/manage/clients" />
-        </HeaderLayout>
-        <div className="columns">
-          <Block className="column">
-            <div>
-              <Title size={5} text="Kontaktdaten" />
+    <section className={className} {...rest}>
+      <header>
+        <h1 className="text-3xl font-semibold">{client.name}</h1>
+        {client.birthday != null && (
+          <p className="text-base text-gray-600">{`Geboren am ${formatLocale(client.birthday)}`}</p>
+        )}
+      </header>
+      <div className="mt-4 grid lg:grid-cols-9 lg:grid-rows-2 gap-4">
+        <div className="lg:col-span-2">
+          <div>
+            <h2 className="text-xl font-semibold">Kontaktdaten</h2>
+            <div className="mt-3">
               {client.address != null ? (
                 <>
                   <div>{`${client.address.street} ${client.address.number}`}</div>
@@ -153,45 +140,56 @@ const ClientDetails: React.FC<Props> = ({ client }) => {
               <a href={`mailto:${client.email}`}>{client.email}</a>
               <div>{client.phone}</div>
             </div>
-            <Buttons>
-              <Button text="Ändern" icon="fa-edit" size="small" onClick={() => setClientDialog({ type: 'EDIT' })} />
-              <Button
-                text="Löschen"
-                icon="fa-trash"
-                size="small"
-                disabled={true}
-                onClick={() => setClientDialog({ type: 'DELETE' })}
-              />
-            </Buttons>
-          </Block>
-          <Block className="column">
-            <Title size={5} text="Abo(s)" />
-            <SubscriptionsLayout>
-              {subscriptions.map(subscription => (
-                <SubscriptionSummary
-                  key={subscription.id}
-                  subscription={subscription}
-                  onSetPaidClick={async () => {
-                    await clientRepo.updateSubscription(client.id, subscription.id, {
-                      ...subscription,
-                      paidAt: getToday(),
-                    });
-                  }}
-                  onDeleteClick={() => setClientDialog({ type: 'SUBSCRIPTION_DELETE', subscription })}
-                />
-              ))}
-            </SubscriptionsLayout>
+          </div>
+          <div className="mt-2">
+            <Button size="small" icon="fa-edit" onClick={() => setClientDialog({ type: 'EDIT' })}>
+              Ändern
+            </Button>
             <Button
-              text="Hinzufügen"
-              icon="fa-plus"
+              className="ml-2"
               size="small"
+              icon="fa-trash"
+              disabled={true}
+              onClick={() => setClientDialog({ type: 'DELETE' })}
+            >
+              Löschen
+            </Button>
+          </div>
+        </div>
+        <div className="lg:col-span-3">
+          <h2 className="text-xl font-semibold">Abo(s)</h2>
+          <div className="mt-3">
+            <ul className="h-56 px-2 border overflow-auto">
+              {subscriptions.map(subscription => (
+                <li key={subscription.id} className="py-4 px-2 border-b last:border-b-0">
+                  <SubscriptionSummary
+                    subscription={subscription}
+                    onSetPaidClick={async () => {
+                      await clientRepo.updateSubscription(client.id, subscription.id, {
+                        ...subscription,
+                        paidAt: getToday(),
+                      });
+                    }}
+                    onDeleteClick={() => setClientDialog({ type: 'SUBSCRIPTION_DELETE', subscription })}
+                  />
+                </li>
+              ))}
+            </ul>
+            <Button
+              className="mt-2"
+              size="small"
+              icon="fa-plus"
               onClick={() => setClientDialog({ type: 'SUBSCRIPTION_ADD' })}
-            />
-          </Block>
-          <Block className="column">
-            <Title size={5} text="Trainingszeiten" />
+            >
+              Hinzufügen
+            </Button>
+          </div>
+        </div>
+        <div className="lg:col-span-4">
+          <h2 className="text-xl font-semibold">Trainingszeiten</h2>
+          <div className="mt-3">
             {trainings.length > 0 ? (
-              <table className="table is-striped is-fullwidth">
+              <table className="w-full table table-auto">
                 <thead>
                   <tr>
                     <th>Training</th>
@@ -210,32 +208,36 @@ const ClientDetails: React.FC<Props> = ({ client }) => {
             ) : (
               <p>Noch keine Trainingszeiten gesetzt…</p>
             )}
-          </Block>
+          </div>
         </div>
-        <Title size={5}>Anwesenheit</Title>
-        {sessions.length > 0 ? (
-          <table className="table is-striped is-fullwidth">
-            <thead>
-              <tr>
-                <th>Datum</th>
-                <th>Training</th>
-                <th>Zeit</th>
-              </tr>
-            </thead>
-            <tbody>
-              {sessions.map(session => (
-                <tr key={session.id}>
-                  <td>{session.date}</td>
-                  <td>{getTrainingName(session.type)}</td>
-                  <td>{`${session.time.start} - ${session.time.end}`}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <p>Leider noch kein Training besucht…</p>
-        )}
-      </LayoutCard>
+        <div className="lg:col-span-9">
+          <h2 className="text-xl font-semibold">Anwesenheit</h2>
+          <div className="mt-3">
+            {sessions.length > 0 ? (
+              <table className="w-full table table-auto">
+                <thead>
+                  <tr>
+                    <th>Datum</th>
+                    <th>Training</th>
+                    <th>Zeit</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {sessions.map(session => (
+                    <tr key={session.id}>
+                      <td>{session.date}</td>
+                      <td>{getTrainingName(session.type)}</td>
+                      <td>{`${session.time.start} - ${session.time.end}`}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <p>Leider noch kein Training besucht…</p>
+            )}
+          </div>
+        </div>
+      </div>
       {clientDialog?.type === 'EDIT' && (
         <EditClientDialog
           client={client}
@@ -272,7 +274,7 @@ const ClientDetails: React.FC<Props> = ({ client }) => {
           onCancelClick={() => setClientDialog(undefined)}
         />
       )}
-    </>
+    </section>
   );
 };
 

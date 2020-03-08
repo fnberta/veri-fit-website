@@ -1,20 +1,17 @@
 import { RouteComponentProps } from '@reach/router';
-import { Link } from 'gatsby';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
 import { Client, Session, Time } from '../../shared';
-import Button, { Buttons } from '../components/bulma/Button';
-import { Title } from '../components/bulma/Heading';
-import { Container, Section } from '../components/bulma/Page';
-import WeekSchedule, { TimeOfDay, Weekday, WeekdayEntry } from '../components/WeekSchedule';
+import { Button, LinkIconButton } from '../components/Button';
+import WeekSchedule, { TimeOfDay, Week, Weekday } from '../components/WeekSchedule';
+import { ClassNameProps } from '../utils/types';
 import AddTrainingDialog from './AddTrainingDialog';
 import EditSessionDialog from './EditSessionDialog';
 import { useRepos } from './repositories/RepoContext';
 import SessionCard from './SessionCard';
+import cx from 'classnames';
 
-export type Props = RouteComponentProps<{ year: number; week: number }>;
-
-type Week = Record<Weekday, WeekdayEntry[]>;
+export type Props = RouteComponentProps<{ year: number; week: number }> & ClassNameProps;
 
 type AddEditDialog = { type: 'ADD' } | { type: 'EDIT'; session: Session };
 
@@ -61,7 +58,7 @@ function getDateFromPath(year: number | undefined, week: number | undefined): Da
   }
 }
 
-const Trainings: React.FC<Props> = ({ year, week }) => {
+const Trainings: React.FC<Props> = ({ year, week, className }) => {
   const [addEditDialog, setAddEditDialog] = useState<AddEditDialog>();
   const [clients, setClients] = useState([] as Client[]);
   const [sessions, setSessions] = useState([] as Session[]);
@@ -81,29 +78,42 @@ const Trainings: React.FC<Props> = ({ year, week }) => {
   }, [sessionRepo, date.weekYear]);
 
   return (
-    <Section>
-      <Container>
-        <Title size={1}>Trainings</Title>
-        <Button
-          className="block"
-          text="Hinzufügen"
-          icon="fa-plus"
-          intent="primary"
-          onClick={() => setAddEditDialog({ type: 'ADD' })}
-        />
-        <Buttons>
-          <Link className="button" to={getNextPath(date.minus({ weeks: 1 }))}>
-            Vorherige
-          </Link>
-          <Link className="button" to={getNextPath(DateTime.local())}>
-            Jetzt
-          </Link>
-          <Link className="button" to={getNextPath(date.plus({ weeks: 1 }))}>
-            Nächste
-          </Link>
-        </Buttons>
-        <Title size={4}>{`Woche ${date.weekNumber}`}</Title>
+    <section className={cx('bg-gray-100 overflow-auto', className)}>
+      <div className="w-full max-w-screen-xl mx-auto py-6 px-4">
+        <div className="flex justify-between items-center">
+          <header>
+            <h1 className="sr-only">Trainings</h1>
+            <h2 className="text-xl md:text-2xl font-semibold">{`Woche ${date.weekNumber}`}</h2>
+            <p className="text-xs md:text-sm">{`${date.set({ weekday: 1 }).toLocaleString()} - ${date
+              .set({ weekday: 7 })
+              .toLocaleString()}`}</p>
+          </header>
+          <div className="ml-2">
+            <LinkIconButton
+              className="rounded-none rounded-l"
+              icon="fa-arrow-left"
+              shape="outlined"
+              aria-label="Vorherige Woche"
+              to={getNextPath(date.minus({ weeks: 1 }))}
+            />
+            <LinkIconButton
+              className="relative rounded-none -ml-px"
+              icon="fa-calendar-day"
+              shape="outlined"
+              aria-label="Diese Woche"
+              to={getNextPath(DateTime.local())}
+            />
+            <LinkIconButton
+              className="rounded-none rounded-r -ml-px"
+              icon="fa-arrow-right"
+              shape="outlined"
+              aria-label="Nächste Woche"
+              to={getNextPath(date.plus({ weeks: 1 }))}
+            />
+          </div>
+        </div>
         <WeekSchedule
+          className="mt-4 p-4 bg-white rounded shadow"
           {...sessions.reduce<Week>(
             (acc, curr) => {
               const weekday = getWeekday(curr.runsFrom);
@@ -133,6 +143,14 @@ const Trainings: React.FC<Props> = ({ year, week }) => {
             },
           )}
         />
+        <div className="mt-4 flex">
+          <Button icon="fa-plus" onClick={() => setAddEditDialog({ type: 'ADD' })}>
+            Neue Trainingsreihe
+          </Button>
+          <Button className="ml-2" icon="fa-plus" disabled={true}>
+            Neues Einzeltraining
+          </Button>
+        </div>
         {addEditDialog?.type === 'ADD' && (
           <AddTrainingDialog
             clients={clients}
@@ -148,8 +166,8 @@ const Trainings: React.FC<Props> = ({ year, week }) => {
             onCancelClick={() => setAddEditDialog(undefined)}
           />
         )}
-      </Container>
-    </Section>
+      </div>
+    </section>
   );
 };
 

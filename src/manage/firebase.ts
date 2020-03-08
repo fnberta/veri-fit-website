@@ -10,6 +10,7 @@ export type Functions = functions.Functions;
 export type Auth = auth.Auth;
 export type HttpsCallable = functions.HttpsCallable;
 export type AuthProvider = auth.GoogleAuthProvider;
+export type UserCredential = auth.UserCredential;
 export type User = FirebaseUser;
 
 const firebaseConfig = {

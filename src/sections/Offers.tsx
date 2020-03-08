@@ -1,10 +1,7 @@
-import { Link } from 'gatsby';
 import Image, { FluidObject } from 'gatsby-image';
 import React from 'react';
-import { Title } from '../components/bulma/Heading';
 import Offer, { Price } from '../components/Offer';
 import { FluidImageFragment } from '../generatedGraphQL';
-import { Container } from '../components/bulma/Page';
 
 export interface OfferData {
   order: number;
@@ -20,39 +17,32 @@ export interface Props {
 }
 
 const Offers: React.FC<Props> = ({ data }) => (
-  <section id="offer" className="section has-background-light">
-    <Container>
-      <Title className="has-text-centered" text="Training für dich!" size={1} />
-      <div className="content has-text-centered">
-        <p>
+  <section id="offer" className="bg-gray-100">
+    <div className="max-w-screen-xl mx-auto px-8 py-20">
+      <header className="-mt-6 -ml-16 flex flex-wrap items-center">
+        <h1 className="mt-6 ml-16 text-5xl font-bold leading-tight">
+          <span className="text-orange-500">Training</span> für dich!
+        </h1>
+        <p className="w-1/2 mt-6 ml-16 flex-auto text-xl text-gray-700">
           Kraft, Stabilität, Beweglichkeit, Athletik, Elastizität, Ausdauer, Freude, Energie, Entspannung, Gesundheit,
           Haltung, Wohlbefinden – Gerne unterstütze ich dich beim Erreichen deiner Trainingsziele!
         </p>
-        <p className="has-text-weight-bold">
-          Finde dein optimales Training – für dein Wohlbefinden – für deinen Erfolg – für dich!
-        </p>
-      </div>
-      <div className="columns is-multiline">
+      </header>
+      <div className="mt-8 offer-grid">
         {data
           .sort((a, b) => a.order - b.order)
           .map((data, idx) => (
-            <div key={`${data.title}-${idx}`} className="column is-6">
-              <Offer
-                title={data.title}
-                subtitle={data.subtitle}
-                image={<Image fluid={data.image.childImageSharp!.fluid as FluidObject} alt="Training image" />}
-                prices={data.prices}
-                body={data.html}
-              />
-            </div>
+            <Offer
+              key={`${data.title}-${idx}`}
+              title={data.title}
+              subtitle={data.subtitle}
+              image={<Image fluid={data.image.childImageSharp!.fluid as FluidObject} alt="Training image" />}
+              prices={data.prices}
+              body={data.html}
+            />
           ))}
       </div>
-      <div className="content has-text-centered">
-        <p>
-          Es gelten die <Link to="/agb/">allgemeinen Geschäftsbedingungen</Link>
-        </p>
-      </div>
-    </Container>
+    </div>
   </section>
 );
 

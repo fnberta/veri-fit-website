@@ -1,9 +1,8 @@
-import styled from '@emotion/styled';
-import { Formik, FormikHelpers } from 'formik';
+import { Formik, FormikHelpers, Form } from 'formik';
 import React from 'react';
 import { Subscription, SubscriptionType, TrainingType } from '../../shared';
-import Button from '../components/bulma/Button';
-import Dialog from '../components/bulma/Dialog';
+import { Button } from '../components/Button';
+import Dialog from '../components/Dialog';
 import { getToday } from './dateTime';
 import { useRepos } from './repositories/RepoContext';
 import SubscriptionFormFields, {
@@ -15,14 +14,8 @@ import SubscriptionFormFields, {
 export interface Props {
   clientId: string;
   onSubscriptionAdded: (subscription: Subscription) => void;
-  onCancelClick: React.MouseEventHandler;
+  onCancelClick: () => void;
 }
-
-const FooterLayout = styled.div({
-  flex: '1',
-  display: 'flex',
-  justifyContent: 'flex-end',
-});
 
 function getInitialValues(today: string): SubscriptionFormValues {
   return {
@@ -53,19 +46,27 @@ const AddSubscriptionDialog: React.FC<Props> = ({ clientId, onSubscriptionAdded,
       {({ isValid, isSubmitting, submitForm }) => (
         <Dialog
           title="Abo hinzufügen"
-          body={<SubscriptionFormFields disabled={isSubmitting} />}
+          body={
+            <Form className="p-4">
+              <SubscriptionFormFields disabled={isSubmitting} />
+            </Form>
+          }
           footer={
-            <FooterLayout>
-              <Button text="Verwerfen" disabled={isSubmitting} onClick={onCancelClick} />
+            <div className="flex justify-end p-4">
+              <Button disabled={isSubmitting} onClick={onCancelClick}>
+                Verwerfen
+              </Button>
               <Button
-                text="Speichern"
+                className="ml-2"
                 type="submit"
-                intent="primary"
+                color="orange"
                 loading={isSubmitting}
-                disabled={!isValid || isSubmitting}
+                disabled={!isValid}
                 onClick={submitForm}
-              />
-            </FooterLayout>
+              >
+                Speichern
+              </Button>
+            </div>
           }
           onCloseClick={onCancelClick}
         />

@@ -1,13 +1,11 @@
-import styled from '@emotion/styled';
+import { Link } from 'gatsby';
 import React from 'react';
-import { Container } from '../components/bulma/Page';
-import { Subtitle, Title } from '../components/bulma/Heading';
-import ScheduleItem from '../components/ScheduleItem';
+import WeekSchedule, { TimeOfDay, Weekday, Week } from '../components/WeekSchedule';
 
 export interface ScheduleEntryData {
   title: string;
-  weekday: string;
-  timeOfDay: string;
+  weekday: Weekday;
+  timeOfDay: TimeOfDay;
   time: string;
 }
 
@@ -15,79 +13,64 @@ export interface Props {
   entries: ScheduleEntryData[];
 }
 
-interface ByWeekday {
-  [key: string]: ScheduleEntryData[];
-}
-
-const WEEKDAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-const TIMES_OF_DAY = ['morning', 'midday', 'evening'];
-
-const Layout = styled.div({
-  width: '100%',
-  display: 'grid',
-  gridGap: '0.75em',
-  gridTemplateColumns: '1fr',
-  '@media screen and (min-width: 769px)': {
-    gridTemplateColumns: WEEKDAYS.map(day => `[${day}] 1fr`).join(' '),
-    gridTemplateRows: `auto ${TIMES_OF_DAY.map(time => `[${time}] 1fr`).join(' ')}`,
-  },
-});
-
-const ItemsBlock: React.FC<{ title: string; entries?: ScheduleEntryData[] }> = ({ title, entries }) => (
-  <>
-    <Subtitle className="is-marginless" text={title} size={4} />
-    {entries &&
-      entries.map((entry, idx) => <ScheduleItem key={`${entry.weekday}-${entry.timeOfDay}-${idx}`} {...entry} />)}
-  </>
+export const ScheduleItem: React.FC<Pick<ScheduleEntryData, 'title' | 'time'>> = ({ title, time }) => (
+  <div className="p-4 bg-white rounded shadow text-center">
+    <h2 className="text-lg text-gray-900 font-semibold">{title}</h2>
+    <p className="text-gray-700">{time}</p>
+  </div>
 );
 
-function getByWeekday(entries: ScheduleEntryData[]): ByWeekday {
-  const byWeekday = entries.reduce<ByWeekday>((acc, curr) => {
-    const list = acc[curr.weekday];
-    if (list) {
-      list.push(curr);
-    } else {
-      acc[curr.weekday] = [curr];
-    }
-
-    return acc;
-  }, {});
-
-  Object.keys(byWeekday)
-    .map(key => byWeekday[key])
-    .forEach(day => day.sort((a, b) => TIMES_OF_DAY.indexOf(a.timeOfDay) - TIMES_OF_DAY.indexOf(b.timeOfDay)));
-
-  return byWeekday;
+function getWeek(entries: ScheduleEntryData[]): Week {
+  return entries.reduce<Week>(
+    (acc, { title, weekday, timeOfDay, time }) => {
+      acc[weekday].push({
+        id: `${weekday}-${timeOfDay}-${title}`,
+        weekday,
+        timeOfDay,
+        content: <ScheduleItem title={title} time={time} />,
+      });
+      return acc;
+    },
+    {
+      monday: [],
+      tuesday: [],
+      wednesday: [],
+      thursday: [],
+      friday: [],
+      saturday: [],
+    },
+  );
 }
 
-const Schedule: React.FC<Props> = ({ entries }) => {
-  const { monday, tuesday, wednesday, thursday, friday, saturday } = getByWeekday(entries);
-  return (
-    <section id="schedule" className="section has-background-light">
-      <Container className="has-text-centered">
-        <Title text="Stundenplan" size={1} />
-        <p className="block">
-          Die Zeiten für die Gruppenstunden findest du hier. Ich freue mich auf deinen Besuch! <br /> Um einen Termin
-          für ein Personal Training zu vereinbaren, <a href="#contact">melde</a> dich doch gleich direkt bei mir.
-        </p>
-        <Layout className="block">
-          <ItemsBlock title="Montag" entries={monday} />
-          <ItemsBlock title="Dienstag" entries={tuesday} />
-          <ItemsBlock title="Mittwoch" entries={wednesday} />
-          <ItemsBlock title="Donnerstag" entries={thursday} />
-          <ItemsBlock title="Freitag" entries={friday} />
-          <ItemsBlock title="Samstag" entries={saturday} />
-        </Layout>
-        <p className="block">
-          {'Eine Übersicht aller Stunden findest du auch in meinem aktuellen '}
-          <a href="/assets/VeriFit_Flyer_Herbst19.pdf" target="_blank">
-            Flyer
+const Schedule: React.FC<Props> = ({ entries }) => (
+  <section id="schedule" className="bg-gray-900">
+    <div className="max-w-screen-xl mx-auto px-8 py-20 text-white">
+      <header className="-ml-16 -mt-6 flex flex-wrap">
+        <h1 className="ml-16 mt-6 text-5xl text-orange-500 font-bold leading-tight">Stundenplan</h1>
+        <p className="w-1/2 flex-auto ml-16 mt-6 text-xl text-white">
+          {
+            'Ich freue mich auf deinen Besuch in einer meiner Gruppenstunden! Um einen Termin für ein Personal Training zu vereinbaren, '
+          }
+          <a className="link" href="/#contact">
+            melde
           </a>
-          {'.'}
+          {' dich doch gleich direkt bei mir.'}
         </p>
-      </Container>
-    </section>
-  );
-};
+      </header>
+      <WeekSchedule className="mt-12" {...getWeek(entries)} />
+      <p className="mt-12 lg:text-center">
+        {'Eine Übersicht aller Stunden findest du auch in meinem aktuellen '}
+        <a className="link" href="/assets/VeriFit_Flyer_Herbst19.pdf" target="_blank">
+          Flyer
+        </a>
+        .{' Es gelten die '}
+        <Link className="link" to="/agb/">
+          allgemeinen Geschäftsbedingungen
+        </Link>
+        .
+      </p>
+    </div>
+  </section>
+);
 
 export default Schedule;
