@@ -24,8 +24,8 @@ const ManageApp: React.FC = () => {
       <div className="w-full h-full bg-gray-100 flex items-center justify-center">
         <div className="w-1/2 bg-white p-4 rounded shadow">
           {!loggedIn && (
-            <div className="flex flex-col items-center justify-center">
-              <h1 className="text-3xl">Willkommen!</h1>
+            <header className="flex flex-col items-center justify-center">
+              <h1 className="text-3xl font-semibold">Willkommen!</h1>
               <Button
                 className="mt-4"
                 size="large"
@@ -35,7 +35,7 @@ const ManageApp: React.FC = () => {
               >
                 Login with Google
               </Button>
-            </div>
+            </header>
           )}
         </div>
       </div>

@@ -79,15 +79,15 @@ const Trainings: React.FC<Props> = ({ year, week, className }) => {
 
   return (
     <section className={cx('bg-gray-100 overflow-auto', className)}>
-      <div className="container mx-auto py-6 px-4">
-        <h1 className="hidden">Trainings</h1>
+      <div className="w-full max-w-screen-xl mx-auto py-6 px-4">
         <div className="flex justify-between items-center">
-          <div>
+          <header>
+            <h1 className="sr-only">Trainings</h1>
             <h2 className="text-xl md:text-2xl font-semibold">{`Woche ${date.weekNumber}`}</h2>
             <p className="text-xs md:text-sm">{`${date.set({ weekday: 1 }).toLocaleString()} - ${date
               .set({ weekday: 7 })
               .toLocaleString()}`}</p>
-          </div>
+          </header>
           <div className="ml-2">
             <LinkIconButton
               className="rounded-none rounded-l"
@@ -143,9 +143,14 @@ const Trainings: React.FC<Props> = ({ year, week, className }) => {
             },
           )}
         />
-        <Button className="mt-4" onClick={() => setAddEditDialog({ type: 'ADD' })}>
-          Neues Training eröffnen
-        </Button>
+        <div className="mt-4 flex">
+          <Button icon="fa-plus" onClick={() => setAddEditDialog({ type: 'ADD' })}>
+            Neue Trainingsreihe
+          </Button>
+          <Button className="ml-2" icon="fa-plus" disabled={true}>
+            Neues Einzeltraining
+          </Button>
+        </div>
         {addEditDialog?.type === 'ADD' && (
           <AddTrainingDialog
             clients={clients}

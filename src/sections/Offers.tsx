@@ -18,8 +18,8 @@ export interface Props {
 
 const Offers: React.FC<Props> = ({ data }) => (
   <section id="offer" className="bg-gray-100">
-    <div className="container mx-auto px-8 py-20">
-      <div className="-mt-6 -ml-16 flex flex-wrap items-center">
+    <div className="max-w-screen-xl mx-auto px-8 py-20">
+      <header className="-mt-6 -ml-16 flex flex-wrap items-center">
         <h1 className="mt-6 ml-16 text-5xl font-bold leading-tight">
           <span className="text-orange-500">Training</span> für dich!
         </h1>
@@ -27,7 +27,7 @@ const Offers: React.FC<Props> = ({ data }) => (
           Kraft, Stabilität, Beweglichkeit, Athletik, Elastizität, Ausdauer, Freude, Energie, Entspannung, Gesundheit,
           Haltung, Wohlbefinden – Gerne unterstütze ich dich beim Erreichen deiner Trainingsziele!
         </p>
-      </div>
+      </header>
       <div className="mt-8 offer-grid">
         {data
           .sort((a, b) => a.order - b.order)

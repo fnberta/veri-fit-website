@@ -1,4 +1,4 @@
-import { graphql, Link } from 'gatsby';
+import { graphql } from 'gatsby';
 import React, { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
 import Navbar from '../components/Navbar';
@@ -42,7 +42,7 @@ const IndexPage: React.FC<Props> = ({ data }) => {
         <a href="/#about">Über mich</a>
         <a href="/#contact">Kontakt</a>
       </Navbar>
-      <Hero logo={data.logo!} />
+      <Hero />
       <Offers data={data.offers.nodes.map(node => ({ ...node.frontmatter, html: node.html } as OfferData))} />
       <TryOut />
       <Schedule entries={data.schedule.nodes.map(node => node.frontmatter as ScheduleEntryData)} />
@@ -73,9 +73,6 @@ export const query = graphql`
   }
 
   query IndexPage {
-    logo: file(relativePath: { eq: "logo_orange_white.png" }) {
-      ...FluidImageNoBase64
-    }
     vera: file(relativePath: { eq: "vera.jpg" }) {
       ...FluidImage
     }

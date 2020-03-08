@@ -16,7 +16,7 @@ export interface TemplateProps {
 
 export const AgbTemplate: React.FC<TemplateProps> = ({ title, subtitle, body }) => (
   <Layout title="AGB">
-    <section className="container mx-auto px-8 py-20">
+    <section className="max-w-screen-xl mx-auto px-8 py-20">
       <h1 className="text-5xl font-semibold leading-tight">{title}</h1>
       <h2 className="text-3xl text-gray-800 leading-tight">{subtitle}</h2>
       <Body className="mt-6" body={body} />

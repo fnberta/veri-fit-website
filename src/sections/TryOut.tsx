@@ -6,9 +6,9 @@ const TryOut: React.FC = () => (
     className="parallax parallax-overlay"
     style={{ backgroundImage: `url(${require('../images/warrior.jpg')})` }}
   >
-    <div className="relative h-full container mx-auto px-8 py-20">
+    <div className="relative max-w-screen-xl mx-auto px-8 py-20">
       <div className="-mt-12 -ml-12 flex flex-wrap items-center font-bold">
-        <div className="flex-auto mt-12 ml-12 font-bold">
+        <div className="w-3/5 flex-auto mt-12 ml-12 font-bold">
           <p className="text-4xl leading-tight">
             <span className="text-white">Let's do this!</span>
             <br />

@@ -107,7 +107,10 @@ const ContactMe: React.FC = () => {
 
   return (
     <section id="contact" className="bg-gray-900 flex flex-col">
-      <div className="relative w-9/12 -mt-20 px-6 py-4 self-center bg-white rounded-lg shadow-xl grid gap-4 md:grid-cols-3 items-start">
+      <header>
+        <h1 className="sr-only">Kontakt</h1>
+      </header>
+      <div className="relative w-9/12 -mt-20 p-6 self-center bg-white rounded-lg shadow-xl grid gap-6 md:grid-cols-3 items-start">
         <BulletItem icon="fas fa-location-arrow" title="Location">
           <a
             className="link"
@@ -131,7 +134,7 @@ const ContactMe: React.FC = () => {
           </a>
         </BulletItem>
       </div>
-      <div className="container mx-auto px-8 pb-20 pt-24">
+      <div className="max-w-screen-xl mx-auto px-8 pb-20 pt-24">
         <div className="-mt-12 -ml-12 flex flex-wrap">
           {notificationType && (
             <Notification
@@ -140,14 +143,14 @@ const ContactMe: React.FC = () => {
               onCloseClick={() => setNotificationType(undefined)}
             />
           )}
-          <p className="w-64 flex-auto mt-12 ml-12 text-5xl text-white font-semibold leading-tight">
+          <p className="flex-1 mt-12 ml-12 text-5xl text-white font-semibold leading-tight">
             Ich freue mich auf
             <span className="text-orange-500"> deine Nachricht!</span>
           </p>
           <Formik<FormValues> initialValues={initialValues} onSubmit={handleFormSubmit}>
             {({ isSubmitting, isValid }) => (
               <Form
-                className="flex-1 flex-grow-5 mt-8 ml-8 flex flex-wrap items-start content-center"
+                className="flex-1 flex-grow-2 mt-8 ml-8 flex flex-wrap items-start content-center"
                 name="contact"
                 data-netlify="true"
                 netlify-honeypot="bot-field"
@@ -158,13 +161,13 @@ const ContactMe: React.FC = () => {
                   </label>
                 </div>
                 <FormField
-                  className="w-56 ml-4 mt-4 flex-auto"
+                  className="w-64 ml-4 mt-4 flex-auto"
                   label={<span className="text-white font-semibold">Name</span>}
                   icon="fas fa-user"
                   error={<ErrorMessage name="name" />}
                   control={
                     <Field
-                      className="form-input w-full"
+                      className="form-input"
                       type="text"
                       name="name"
                       validate={makeValidator('Name')}
@@ -173,13 +176,13 @@ const ContactMe: React.FC = () => {
                   }
                 />
                 <FormField
-                  className="w-56 ml-4 mt-4 flex-auto"
+                  className="w-64 ml-4 mt-4 flex-auto"
                   label={<span className="text-white font-semibold">Email</span>}
                   icon="fas fa-envelope"
                   error={<ErrorMessage name="email" />}
                   control={
                     <Field
-                      className="form-input w-full"
+                      className="form-input"
                       type="email"
                       name="email"
                       validate={makeValidator('Email')}
@@ -193,7 +196,7 @@ const ContactMe: React.FC = () => {
                   error={<ErrorMessage name="message" />}
                   control={
                     <Field
-                      className="form-textarea w-full"
+                      className="form-textarea"
                       as="textarea"
                       name="message"
                       placeholder="Wie kann ich dir helfen?"

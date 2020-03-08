@@ -44,8 +44,8 @@ function getWeek(entries: ScheduleEntryData[]): Week {
 
 const Schedule: React.FC<Props> = ({ entries }) => (
   <section id="schedule" className="bg-gray-900">
-    <div className="container mx-auto px-8 py-20 text-white">
-      <div className="-ml-16 -mt-6 flex flex-wrap">
+    <div className="max-w-screen-xl mx-auto px-8 py-20 text-white">
+      <header className="-ml-16 -mt-6 flex flex-wrap">
         <h1 className="ml-16 mt-6 text-5xl text-orange-500 font-bold leading-tight">Stundenplan</h1>
         <p className="w-1/2 flex-auto ml-16 mt-6 text-xl text-white">
           {
@@ -56,7 +56,7 @@ const Schedule: React.FC<Props> = ({ entries }) => (
           </a>
           {' dich doch gleich direkt bei mir.'}
         </p>
-      </div>
+      </header>
       <WeekSchedule className="mt-12" {...getWeek(entries)} />
       <p className="mt-12 lg:text-center">
         {'Eine Übersicht aller Stunden findest du auch in meinem aktuellen '}

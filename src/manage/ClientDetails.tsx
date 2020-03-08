@@ -117,7 +117,7 @@ const ClientDetails: React.FC<Props> = ({ client, className, ...rest }) => {
   useEffect(() => trainingRepo.observeAllForClients(client.id, setTrainings), [trainingRepo, client.id]);
 
   return (
-    <div className={className} {...rest}>
+    <section className={className} {...rest}>
       <header>
         <h1 className="text-3xl font-semibold">{client.name}</h1>
         {client.birthday != null && (
@@ -274,7 +274,7 @@ const ClientDetails: React.FC<Props> = ({ client, className, ...rest }) => {
           onCancelClick={() => setClientDialog(undefined)}
         />
       )}
-    </div>
+    </section>
   );
 };
 

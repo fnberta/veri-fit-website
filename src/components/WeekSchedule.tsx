@@ -27,7 +27,7 @@ export type Week = Record<Weekday, WeekdayEntry[]>;
 
 const Block: React.FC<{ title: string; entries: WeekdayEntry[] }> = ({ title, entries }) => (
   <>
-    <h2 className="mb-2 text-center font-semibold uppercase tracking-wider">{title}</h2>
+    <h3 className="mb-2 text-center font-semibold uppercase tracking-wider">{title}</h3>
     {entries
       .sort((a, b) => TIMES_OF_DAY.indexOf(a.timeOfDay) - TIMES_OF_DAY.indexOf(b.timeOfDay))
       .map(entry => (

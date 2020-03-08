@@ -30,15 +30,13 @@ const Clients: React.FC<Props> = ({ clientId, className }) => {
   const selectedClient = clients.find(client => client.id === clientId);
   return (
     <section className={cx('flex bg-gray-100', className)}>
-      <div className="container mx-auto py-6 px-4 flex flex-col min-h-0">
-        <div className={cx(clientId && 'hidden', 'md:block')}>
-          <div className="flex justify-between items-baseline">
-            <h1 className="text-xl md:text-2xl font-semibold">Kunden</h1>
-            <Button icon="fa-plus" onClick={() => setAddDialogOpen(true)}>
-              Hinzufügen
-            </Button>
-          </div>
-        </div>
+      <div className="w-full max-w-screen-xl mx-auto py-6 px-4 flex flex-col min-h-0">
+        <header className={cx(clientId && 'hidden', 'md:flex flex justify-between items-baseline')}>
+          <h1 className="text-xl md:text-2xl font-semibold">Kunden</h1>
+          <Button icon="fa-plus" onClick={() => setAddDialogOpen(true)}>
+            Hinzufügen
+          </Button>
+        </header>
         <LinkButton
           className={cx(!clientId && 'hidden', 'md:hidden self-start')}
           to="/manage/clients"

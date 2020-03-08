@@ -15,6 +15,6 @@ export const FormField: React.FC<FormFieldProps> = ({ control, label, error, htm
       {label}
     </label>
     {control}
-    <p className="text-xs text-red-500">{error}</p>
+    {error && <p className="text-xs text-red-500">{error}</p>}
   </div>
 );

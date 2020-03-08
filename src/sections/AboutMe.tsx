@@ -7,10 +7,10 @@ export interface Props {
   vera: FluidImageFragment;
 }
 
-const IMG_STYLE = { maxHeight: 350 };
+const IMG_STYLE = { maxHeight: 300 };
 
 const ExperienceItem: React.FC = ({ children }) => (
-  <li className="flex items-center">
+  <li className="flex items-baseline">
     <span className="fas fa-check fill-current" />
     <span className="ml-4">{children}</span>
   </li>
@@ -18,13 +18,11 @@ const ExperienceItem: React.FC = ({ children }) => (
 
 const AboutMe: React.FC<Props> = ({ vera }) => (
   <section id="about" className="bg-gray-100">
-    <div className="container mx-auto px-8 pt-20 pb-40">
+    <div className="max-w-screen-xl mx-auto px-8 pt-20 pb-40">
       <div className="-ml-12 -mt-12 flex flex-wrap justify-center">
-        <div className="w-2/5 flex-auto ml-12 mt-12">
-          <header>
-            <h1 className="text-lg uppercase tracking-wider text-gray-800">Über mich</h1>
-            <h2 className="text-5xl font-semibold leading-none">Vera Lienhard</h2>
-          </header>
+        <header className="w-2/5 flex-auto ml-12 mt-12">
+          <h1 className="text-lg uppercase tracking-wider text-gray-800">Über mich</h1>
+          <h2 className="text-5xl font-semibold leading-none">Vera Lienhard</h2>
           <p className="mt-8 text-xl text-gray-700">
             Es ist meine Überzeugung, dass durch die richtige Trainingsintervention fast alle bewegungsbezogenen Ziele
             erreicht und körperliche Beschwerden gelindert werden können. Mit diversen Aus- und Weiterbildungen in den
@@ -35,7 +33,7 @@ const AboutMe: React.FC<Props> = ({ vera }) => (
           <p className="mt-4 text-2xl text-gray-800 font-semibold leading-snug">
             Für Fragen zum Training oder zu mir stehe ich dir gerne zur Verfügung!
           </p>
-        </div>
+        </header>
         <Card
           className="ml-12 mt-12"
           image={<Image fluid={vera.childImageSharp!.fluid as FluidObject} alt="Vera Lienhard" style={IMG_STYLE} />}

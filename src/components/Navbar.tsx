@@ -26,8 +26,8 @@ function getClasses(variant: Props['variant'], open: boolean) {
       };
     case 'transparent':
       return {
-        nav: open && 'relative z-10 bg-white',
-        header: 'absolute inset-x-0 bg-transparent',
+        nav: open && 'bg-white',
+        header: 'absolute z-10 inset-x-0 bg-transparent',
         text: open ? brightText : 'text-white hover:text-gray-200',
         logo: logoWhite,
       };
@@ -49,7 +49,7 @@ const Navbar: React.FC<Props> = ({ variant, sticky, children, className, ...rest
       {...rest}
     >
       <div className="px-4 py-2 flex justify-between items-center">
-        <img className="w-16" src={logo} alt="Veri-Fit" />
+        <img className="w-20" src={logo} alt="Veri-Fit" />
         <IconButton
           className={cx('sm:hidden', text)}
           color="none"

@@ -15,10 +15,10 @@ export interface Props {
 const SessionCard: React.FC<Props> = ({ session, clients, onConfirmToggle, onEditClick }) => (
   <div className="bg-white rounded overflow-hidden border">
     <div className="px-4 py-2 flex flex-col items-start">
-      <header className="flex flex-col items-start">
-        <h2 className="text-xs text-gray-600 uppercase tracking-wider font-semibold">{`${session.time.start} - ${session.time.end}`}</h2>
-        <h1 className="text-lg font-semibold leading-tight">{getTrainingName(session.type)}</h1>
-      </header>
+      <div className="flex flex-col items-start">
+        <h5 className="text-xs text-gray-600 uppercase tracking-wider font-semibold">{`${session.time.start} - ${session.time.end}`}</h5>
+        <h4 className="text-lg font-semibold leading-tight">{getTrainingName(session.type)}</h4>
+      </div>
       <p className="mt-2 text-gray-600 text-sm">{`${session.clientIds.length} Teilnehmer`}</p>
     </div>
     <footer className="flex items-center justify-end bg-gray-100 px-4 py-2">

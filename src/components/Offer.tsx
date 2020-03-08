@@ -26,10 +26,8 @@ function getPriceTypeDisplay(type: number): string {
 
 const Offer: React.FC<Props> = ({ title, subtitle, image, body, prices, className, ...rest }) => (
   <Card className={className} image={image} {...rest}>
-    <header>
-      <h1 className="text-2xl font-semibold leading-tight">{title}</h1>
-      <h2 className="text-xl text-gray-800 leading-tight">{subtitle}</h2>
-    </header>
+    <h2 className="text-2xl font-semibold leading-tight">{title}</h2>
+    <h3 className="text-xl text-gray-800 leading-tight">{subtitle}</h3>
     <Body className="mt-4" body={body} />
     <table className="mt-4 table w-full">
       <thead>

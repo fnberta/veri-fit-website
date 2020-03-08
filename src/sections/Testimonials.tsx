@@ -22,6 +22,9 @@ const Testimonials: React.FC<Props> = ({ data }) => {
       className="parallax parallax-overlay"
       style={{ backgroundImage: `url(${require('../images/testimonials.jpg')})` }}
     >
+      <header>
+        <h1 className="sr-only">Testimonials</h1>
+      </header>
       <div className="max-w-5xl mx-auto px-8 py-20">
         <Carousel value={activeSlideIdx} infinite={true} centered={true} autoPlay={5000} onChange={handleSlideChange}>
           {data.map((data, idx) => (

@@ -131,7 +131,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
   </button>
 );
 
-export type AnchorButtonProps = React.HTMLProps<HTMLAnchorElement> & ButtonStyleProps & ButtonContentProps;
+export type AnchorButtonProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & ButtonStyleProps & ButtonContentProps;
 
 export const AnchorButton: React.FC<AnchorButtonProps> = ({
   color,
