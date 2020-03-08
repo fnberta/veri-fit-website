@@ -22,7 +22,7 @@ module.exports = {
     },
   },
   variants: {
-    borderWith: ['responsive', 'last'],
+    borderWidth: ['responsive', 'last'],
   },
   plugins: [require('@tailwindcss/ui')],
 };
