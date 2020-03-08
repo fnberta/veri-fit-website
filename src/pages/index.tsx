@@ -6,10 +6,9 @@ import { IndexPageQuery } from '../generatedGraphQL';
 import AboutMe from '../sections/AboutMe';
 import ContactMe from '../sections/ContactMe';
 import Hero from '../sections/Hero';
+import LocationMap from '../sections/LocationMap';
 import Offers, { OfferData } from '../sections/Offers';
 import Schedule, { ScheduleEntryData } from '../sections/Schedule';
-import Testimonials from '../sections/Testimonials';
-import { Props as TestimonialProps } from '../components/Testimonial';
 import TryOut from '../sections/TryOut';
 
 export interface Props {
@@ -48,7 +47,7 @@ const IndexPage: React.FC<Props> = ({ data }) => {
       <Schedule entries={data.schedule.nodes.map(node => node.frontmatter as ScheduleEntryData)} />
       <AboutMe vera={data.vera!} />
       <ContactMe />
-      <Testimonials data={data.testimonials.nodes.map(node => node.frontmatter as TestimonialProps)} />
+      <LocationMap />
     </Layout>
   );
 };

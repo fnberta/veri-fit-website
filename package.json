@@ -18,7 +18,7 @@
     "gen-graphql": "graphql-codegen --config gql.yml"
   },
   "dependencies": {
-    "@brainhubeu/react-carousel": "^1.12.18",
+    "@brainhubeu/react-carousel": "~1.10.65",
     "@fortawesome/fontawesome-free": "^5.12.1",
     "classnames": "^2.2.6",
     "firebase": "^7.10.0",
