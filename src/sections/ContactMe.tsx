@@ -131,88 +131,90 @@ const ContactMe: React.FC = () => {
           </a>
         </BulletItem>
       </div>
-      <div className="container mx-auto px-8 pb-20 pt-24 grid gap-12 md:grid-cols-5">
-        {notificationType && (
-          <Notification
-            className="md:col-span-5"
-            type={notificationType}
-            onCloseClick={() => setNotificationType(undefined)}
-          />
-        )}
-        <p className="md:col-span-2 text-5xl text-white font-semibold leading-tight">
-          Ich freue mich auf
-          <span className="text-orange-500"> deine Nachricht!</span>
-        </p>
-        <Formik<FormValues> initialValues={initialValues} onSubmit={handleFormSubmit}>
-          {({ isSubmitting, isValid }) => (
-            <Form
-              className="md:col-span-3 -ml-4 -mt-4 flex flex-wrap items-start content-center"
-              name="contact"
-              data-netlify="true"
-              netlify-honeypot="bot-field"
-            >
-              <div className="hidden">
-                <label>
-                  Don't fill this out if you're human: <input name="bot-field" />
-                </label>
-              </div>
-              <FormField
-                className="w-56 ml-4 mt-4 flex-auto"
-                label={<span className="text-white font-semibold">Name</span>}
-                icon="fas fa-user"
-                error={<ErrorMessage name="name" />}
-                control={
-                  <Field
-                    className="form-input w-full"
-                    type="text"
-                    name="name"
-                    validate={makeValidator('Name')}
-                    disabled={isSubmitting}
-                  />
-                }
-              />
-              <FormField
-                className="w-56 ml-4 mt-4 flex-auto"
-                label={<span className="text-white font-semibold">Email</span>}
-                icon="fas fa-envelope"
-                error={<ErrorMessage name="email" />}
-                control={
-                  <Field
-                    className="form-input w-full"
-                    type="email"
-                    name="email"
-                    validate={makeValidator('Email')}
-                    disabled={isSubmitting}
-                  />
-                }
-              />
-              <FormField
-                className="w-full ml-4 mt-4"
-                label={<span className="text-white font-semibold">Nachricht</span>}
-                error={<ErrorMessage name="message" />}
-                control={
-                  <Field
-                    className="form-textarea w-full"
-                    as="textarea"
-                    name="message"
-                    placeholder="Wie kann ich dir helfen?"
-                    validate={makeValidator('Nachricht')}
-                    disabled={isSubmitting}
-                  />
-                }
-              />
-              <Button
-                className="ml-4 mt-4"
-                type="submit"
-                color="orange"
-                loading={isSubmitting}
-                disabled={isSubmitting || !isValid}
-              >
-                Senden
-              </Button>
-            </Form>
+      <div className="container mx-auto px-8 pb-20 pt-24">
+        <div className="-mt-12 -ml-12 flex flex-wrap">
+          {notificationType && (
+            <Notification
+              className="w-full mt-12 ml-12"
+              type={notificationType}
+              onCloseClick={() => setNotificationType(undefined)}
+            />
           )}
-        </Formik>
+          <p className="w-64 flex-auto mt-12 ml-12 text-5xl text-white font-semibold leading-tight">
+            Ich freue mich auf
+            <span className="text-orange-500"> deine Nachricht!</span>
+          </p>
+          <Formik<FormValues> initialValues={initialValues} onSubmit={handleFormSubmit}>
+            {({ isSubmitting, isValid }) => (
+              <Form
+                className="flex-1 flex-grow-5 mt-8 ml-8 flex flex-wrap items-start content-center"
+                name="contact"
+                data-netlify="true"
+                netlify-honeypot="bot-field"
+              >
+                <div className="hidden">
+                  <label>
+                    Don't fill this out if you're human: <input name="bot-field" />
+                  </label>
+                </div>
+                <FormField
+                  className="w-56 ml-4 mt-4 flex-auto"
+                  label={<span className="text-white font-semibold">Name</span>}
+                  icon="fas fa-user"
+                  error={<ErrorMessage name="name" />}
+                  control={
+                    <Field
+                      className="form-input w-full"
+                      type="text"
+                      name="name"
+                      validate={makeValidator('Name')}
+                      disabled={isSubmitting}
+                    />
+                  }
+                />
+                <FormField
+                  className="w-56 ml-4 mt-4 flex-auto"
+                  label={<span className="text-white font-semibold">Email</span>}
+                  icon="fas fa-envelope"
+                  error={<ErrorMessage name="email" />}
+                  control={
+                    <Field
+                      className="form-input w-full"
+                      type="email"
+                      name="email"
+                      validate={makeValidator('Email')}
+                      disabled={isSubmitting}
+                    />
+                  }
+                />
+                <FormField
+                  className="w-full ml-4 mt-4"
+                  label={<span className="text-white font-semibold">Nachricht</span>}
+                  error={<ErrorMessage name="message" />}
+                  control={
+                    <Field
+                      className="form-textarea w-full"
+                      as="textarea"
+                      name="message"
+                      placeholder="Wie kann ich dir helfen?"
+                      validate={makeValidator('Nachricht')}
+                      disabled={isSubmitting}
+                    />
+                  }
+                />
+                <Button
+                  className="ml-4 mt-4"
+                  type="submit"
+                  color="orange"
+                  loading={isSubmitting}
+                  disabled={isSubmitting || !isValid}
+                >
+                  Senden
+                </Button>
+              </Form>
+            )}
+          </Formik>
+        </div>
       </div>
     </section>
   );
