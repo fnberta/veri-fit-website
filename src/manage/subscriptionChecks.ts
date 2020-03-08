@@ -21,7 +21,8 @@ export function doesSubscriptionRunShort(subscription: Subscription): boolean {
 
   const { end, trainingsLeft } = subscription;
   const diff = DateTime.fromISO(end).diff(getStartOfToday());
-  return trainingsLeft > diff.as('weeks');
+  // TODO: with getStartOfToday, Math.round should not be needed
+  return trainingsLeft > Math.round(diff.as('weeks'));
 }
 
 export function isSubscriptionExpiring(subscription: Subscription): boolean {

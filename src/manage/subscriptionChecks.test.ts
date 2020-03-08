@@ -92,7 +92,7 @@ describe('runs short', () => {
     expect(result).toBe(false);
   });
 
-  test('should return false if type is not UNLIMITED_10 or BLOCK and trainings left equals the amount of weeks left', () => {
+  test.only('should return false if type is not UNLIMITED_10 or BLOCK and trainings left equals the amount of weeks left', () => {
     const today = DateTime.local();
     const result = doesSubscriptionRunShort({
       id: 'random-id',

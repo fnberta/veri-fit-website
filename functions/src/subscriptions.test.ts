@@ -1,7 +1,8 @@
+import { DateTime } from 'luxon';
 import { PersonalSubscription, SubscriptionType, TrainingType, YogaSubscription } from './shared';
 import { isSubscriptionActive, pickSubscriptionId } from './subscriptions';
 
-describe('check wether subscription is active', () => {
+describe('check whether subscription is active', () => {
   test('should return true if subscription is unpaid', () => {
     expect(
       isSubscriptionActive({
@@ -15,14 +16,15 @@ describe('check wether subscription is active', () => {
     ).toBe(true);
   });
 
-  test('should return true if subscription is paid and block', () => {
+  test('should return true if subscription is paid, block and end date is in the future', () => {
+    const today = DateTime.local();
     expect(
       isSubscriptionActive({
         id: 'some-id',
         type: SubscriptionType.BLOCK,
         trainingType: TrainingType.BOOST,
-        start: '2020-01-01',
-        end: '2020-03-01',
+        start: today.toISODate(),
+        end: today.plus({ months: 2 }).toISODate(),
         paidAt: '2020-01-01',
       }),
     ).toBe(true);
