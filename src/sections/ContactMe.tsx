@@ -163,12 +163,14 @@ const ContactMe: React.FC = () => {
                 <FormField
                   className="w-64 ml-4 mt-4 flex-auto"
                   label={<span className="text-white font-semibold">Name</span>}
+                  htmlFor="name"
                   icon="fas fa-user"
                   error={<ErrorMessage name="name" />}
                   control={
                     <Field
                       className="form-input"
                       type="text"
+                      id="name"
                       name="name"
                       validate={makeValidator('Name')}
                       disabled={isSubmitting}
@@ -178,12 +180,14 @@ const ContactMe: React.FC = () => {
                 <FormField
                   className="w-64 ml-4 mt-4 flex-auto"
                   label={<span className="text-white font-semibold">Email</span>}
+                  htmlFor="email"
                   icon="fas fa-envelope"
                   error={<ErrorMessage name="email" />}
                   control={
                     <Field
                       className="form-input"
                       type="email"
+                      id="email"
                       name="email"
                       validate={makeValidator('Email')}
                       disabled={isSubmitting}
@@ -193,11 +197,13 @@ const ContactMe: React.FC = () => {
                 <FormField
                   className="w-full ml-4 mt-4"
                   label={<span className="text-white font-semibold">Nachricht</span>}
+                  htmlFor="message"
                   error={<ErrorMessage name="message" />}
                   control={
                     <Field
                       className="form-textarea"
                       as="textarea"
+                      id="message"
                       name="message"
                       placeholder="Wie kann ich dir helfen?"
                       validate={makeValidator('Nachricht')}
