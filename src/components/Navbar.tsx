@@ -3,6 +3,7 @@ import React, { isValidElement, useState } from 'react';
 import logoBlack from '../images/logo_orange_black.png';
 import logoWhite from '../images/logo_orange_white.png';
 import { IconButton } from './Button';
+import Icon from './Icon';
 
 export interface Props extends React.HTMLProps<HTMLDivElement> {
   variant: 'bright' | 'dark' | 'transparent';
@@ -53,7 +54,7 @@ const Navbar: React.FC<Props> = ({ variant, sticky, children, className, ...rest
         <IconButton
           className={cx('sm:hidden', text)}
           color="none"
-          icon="fa-bars"
+          icon={<Icon className="h-6 w-6" name="menu" />}
           aria-label="Menu"
           aria-expanded={open}
           onClick={() => setOpen(prev => !prev)}

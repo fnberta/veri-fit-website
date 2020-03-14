@@ -1,6 +1,7 @@
 import { Link, LinkProps } from '@reach/router';
 import cx from 'classnames';
-import React from 'react';
+import React, { isValidElement } from 'react';
+import Icon, { IconName } from './Icon';
 
 export interface ButtonStyleProps {
   color?: 'gray' | 'orange' | 'red' | 'none';
@@ -9,7 +10,7 @@ export interface ButtonStyleProps {
 }
 
 export interface ButtonContentProps {
-  icon?: string;
+  icon?: IconName | React.ReactElement;
   loading?: boolean;
   children?: React.ReactNode;
 }
@@ -68,14 +69,14 @@ const ButtonContent: React.FC<ButtonContentProps> = ({ icon, loading, children }
   }
 
   if (icon) {
-    const iconSpan = <span className={`fas ${icon} fill-current`} />;
+    const iconElement = isValidElement(icon) ? icon : <Icon name={icon} />;
     return children ? (
-      <div>
-        {iconSpan}
+      <div className="flex items-center">
+        {iconElement}
         <span className="ml-2">{children}</span>
       </div>
     ) : (
-      iconSpan
+      iconElement
     );
   }
 
@@ -105,7 +106,7 @@ export const Button: React.FC<ButtonProps> = ({
 );
 
 export interface IconButtonContentProps {
-  icon: string;
+  icon: IconName | React.ReactElement;
   loading?: boolean;
   'aria-label': string;
 }

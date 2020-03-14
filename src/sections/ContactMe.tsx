@@ -56,7 +56,7 @@ const Notification: React.FC<{
       <IconButton
         className={cx('ml-2', classes.close)}
         color="none"
-        icon="fa-times"
+        icon="x"
         title="Schliessen"
         aria-label="Schliessen"
         onClick={onCloseClick}
@@ -111,7 +111,7 @@ const ContactMe: React.FC = () => {
         <h1 className="sr-only">Kontakt</h1>
       </header>
       <div className="relative w-9/12 -mt-20 p-6 self-center bg-white rounded-lg shadow-xl grid gap-6 md:grid-cols-3 items-start">
-        <BulletItem icon="fas fa-location-arrow" title="Location">
+        <BulletItem icon="location-marker" title="Location">
           <a
             className="link"
             href="https://www.google.ch/maps?q=Lagerplatz+6+Winterthur"
@@ -123,12 +123,12 @@ const ContactMe: React.FC = () => {
             1. OG – Raum 111
           </a>
         </BulletItem>
-        <BulletItem icon="fas fa-at" title="Email">
+        <BulletItem icon="at-symbol" title="Email">
           <a className="link" href="mailto:vlienhard@gmail.com" target="_blank" rel="noopener noreferrer">
             vlienhard@gmail.com
           </a>
         </BulletItem>
-        <BulletItem icon="fas fa-phone" title="Telefon">
+        <BulletItem icon="phone-outgoing" title="Telefon">
           <a className="link" href="tel:+41793952033">
             +41 79 395 20 33
           </a>
@@ -164,7 +164,6 @@ const ContactMe: React.FC = () => {
                   className="w-64 ml-4 mt-4 flex-auto"
                   label={<span className="text-white font-semibold">Name</span>}
                   htmlFor="name"
-                  icon="fas fa-user"
                   error={<ErrorMessage name="name" />}
                   control={
                     <Field
@@ -181,7 +180,6 @@ const ContactMe: React.FC = () => {
                   className="w-64 ml-4 mt-4 flex-auto"
                   label={<span className="text-white font-semibold">Email</span>}
                   htmlFor="email"
-                  icon="fas fa-envelope"
                   error={<ErrorMessage name="email" />}
                   control={
                     <Field

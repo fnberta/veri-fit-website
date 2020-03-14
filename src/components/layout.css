@@ -15,22 +15,6 @@ body {
   @apply h-full w-full;
 }
 
-.justify-items-stretch {
-  justify-items: stretch;
-}
-.justify-items-start {
-  justify-items: flex-start;
-}
-.justify-items-center {
-  justify-items: center;
-}
-.justify-items-end {
-  justify-items: flex-end;
-}
-.justify-items-baseline {
-  justify-items: baseline;
-}
-
 .link {
   @apply text-blue-500;
 }
@@ -47,7 +31,7 @@ body {
 }
 
 .btn {
-  @apply rounded font-semibold transition-all duration-200;
+  @apply inline-block rounded font-semibold leading-tight transition-all duration-200;
 }
 .btn:focus {
   @apply outline-none shadow-outline;
@@ -57,7 +41,7 @@ body {
 }
 
 .tag {
-  @apply px-2 inline-block rounded-full text-xs font-semibold uppercase tracking-wider;
+  @apply inline-block px-2 rounded-full text-xs font-semibold uppercase tracking-wider;
 }
 
 .tag-gray {
@@ -151,8 +135,21 @@ body {
   }
 }
 
+.dialog-transition-enter > span {
+  @apply opacity-0;
+}
+.dialog-transition-enter-active > span {
+  @apply opacity-75;
+}
+.dialog-transition-enter > div {
+  @apply scale-90;
+}
+.dialog-transition-enter-active > div {
+  @apply scale-100;
+}
+
 .spinner {
-  @apply w-4 h-4 border-2 border-gray-800 rounded-full;
+  @apply w-4 h-4 border-2 border-gray-700 rounded-full;
   border-right-color: transparent;
   border-top-color: transparent;
   animation: spin 500ms linear infinite;

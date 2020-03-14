@@ -1,7 +1,7 @@
 import { Form, Formik, FormikErrors, FormikHelpers } from 'formik';
 import React from 'react';
 import { Client, SubscriptionType, TrainingType } from '../../shared';
-import Dialog from '../components/Dialog';
+import { DialogBody, DialogFooter, DialogHeader } from '../components/Dialog';
 import ClientFormFields, { ClientFormValues, getClientInput, validateClientForm } from './ClientFormFields';
 import { getToday } from './dateTime';
 import { useRepos } from './repositories/RepoContext';
@@ -56,7 +56,7 @@ function getInitialValues(today: string): FormValues {
   };
 }
 
-const AddClientDialog: React.FC<Props> = ({ onClientCreated, onCancelClick }) => {
+const AddClientDialogContent: React.FC<Props> = ({ onClientCreated, onCancelClick }) => {
   const { clientRepo } = useRepos();
 
   async function handleFormSubmission(values: FormValues, { setSubmitting }: FormikHelpers<FormValues>) {
@@ -67,49 +67,50 @@ const AddClientDialog: React.FC<Props> = ({ onClientCreated, onCancelClick }) =>
   }
 
   return (
-    <Formik<FormValues>
-      initialValues={getInitialValues(getToday())}
-      validate={validate}
-      validateOnMount={true}
-      onSubmit={handleFormSubmission}
-    >
-      {({ isSubmitting, isValid, submitForm }) => (
-        <Dialog
-          title="Neuer Teilnehmer"
-          body={
-            <Form>
-              <ClientFormFields disabled={isSubmitting} />
-              <hr className="my-2" />
-              <div className="p-4">
-                <h2 className="text-base font-semibold">Abo</h2>
-                <div className="mt-4">
-                  <SubscriptionFormFields disabled={isSubmitting} namespace="subscription" />
+    <>
+      <DialogHeader title="Neuer Teilnehmer" onCloseClick={onCancelClick} />
+      <Formik<FormValues>
+        initialValues={getInitialValues(getToday())}
+        validate={validate}
+        validateOnMount={true}
+        onSubmit={handleFormSubmission}
+      >
+        {({ isSubmitting, isValid, submitForm }) => (
+          <>
+            <DialogBody>
+              <Form>
+                <ClientFormFields disabled={isSubmitting} />
+                <hr className="my-2" />
+                <div className="p-4">
+                  <h2 className="text-base font-semibold">Abo</h2>
+                  <div className="mt-4">
+                    <SubscriptionFormFields disabled={isSubmitting} namespace="subscription" />
+                  </div>
                 </div>
+              </Form>
+            </DialogBody>
+            <DialogFooter>
+              <div className="p-4 flex justify-end">
+                <Button disabled={isSubmitting} onClick={onCancelClick}>
+                  Verwerfen
+                </Button>
+                <Button
+                  className="ml-2"
+                  type="submit"
+                  color="orange"
+                  loading={isSubmitting}
+                  disabled={!isValid}
+                  onClick={submitForm}
+                >
+                  Erstellen
+                </Button>
               </div>
-            </Form>
-          }
-          footer={
-            <div className="p-4 flex justify-end">
-              <Button disabled={isSubmitting} onClick={onCancelClick}>
-                Verwerfen
-              </Button>
-              <Button
-                className="ml-2"
-                type="submit"
-                color="orange"
-                loading={isSubmitting}
-                disabled={!isValid}
-                onClick={submitForm}
-              >
-                Erstellen
-              </Button>
-            </div>
-          }
-          onCloseClick={onCancelClick}
-        />
-      )}
-    </Formik>
+            </DialogFooter>
+          </>
+        )}
+      </Formik>
+    </>
   );
 };
 
-export default AddClientDialog;
+export default AddClientDialogContent;

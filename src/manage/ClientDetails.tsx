@@ -2,11 +2,12 @@ import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
 import { Session, Subscription, SubscriptionType, Training, Client } from '../../shared';
 import { Button, IconButton } from '../components/Button';
-import AddSubscriptionDialog from './AddSubscriptionDialog';
-import ConfirmDeleteDialog from './ConfirmDeleteDialog';
+import Dialog from '../components/Dialog';
+import AddSubscriptionDialogContent from './AddSubscriptionDialogContent';
+import ConfirmDeleteDialogContent from './ConfirmDeleteDialogContent';
 import { formatLocale, getToday } from './dateTime';
 import { getSubscriptionName, getTrainingName } from './displayNames';
-import EditClientDialog from './EditClientDialog';
+import EditClientDialogContent from './EditClientDialogContent';
 import { useRepos } from './repositories/RepoContext';
 
 export interface Props extends React.HTMLProps<HTMLDivElement> {
@@ -41,7 +42,7 @@ const SubscriptionSummary: React.FC<{
               className="rounded-none rounded-l"
               shape="outlined"
               size="small"
-              icon="fa-dollar-sign"
+              icon="currency-yen"
               title="Auf bezahlt setzen"
               aria-label="Auf bezahlt setzen"
               onClick={onSetPaidClick}
@@ -52,7 +53,7 @@ const SubscriptionSummary: React.FC<{
               className="rounded-none rounded-r -ml-px"
               shape="outlined"
               size="small"
-              icon="fa-trash"
+              icon="trash"
               title="Abo löschen"
               aria-label="Abo löschen"
               onClick={onDeleteClick}
@@ -62,7 +63,7 @@ const SubscriptionSummary: React.FC<{
               className="rounded-none rounded-r -ml-px"
               shape="outlined"
               size="small"
-              icon="fa-redo"
+              icon="document-duplicate"
               title="Erneuern"
               aria-label="Erneuern"
             />
@@ -124,31 +125,39 @@ const ClientDetails: React.FC<Props> = ({ client, className, ...rest }) => {
           <p className="text-base text-gray-600">{`Geboren am ${formatLocale(client.birthday)}`}</p>
         )}
       </header>
-      <div className="mt-4 grid lg:grid-cols-9 lg:grid-rows-2 gap-4">
-        <div className="lg:col-span-2">
+      <div className="mt-2 -ml-6 flex flex-wrap">
+        <div className="mt-6 ml-6">
           <div>
             <h2 className="text-xl font-semibold">Kontaktdaten</h2>
-            <div className="mt-3">
+            <div className="mt-2">
               {client.address != null ? (
-                <>
-                  <div>{`${client.address.street} ${client.address.number}`}</div>
-                  <div>{`${client.address.zip} ${client.address.city}`}</div>
-                </>
+                <a
+                  className="block link"
+                  href={`https://www.google.ch/maps?q=${client.address.street}+${client.address.number}+${client.address.zip}+${client.address.city}`}
+                >
+                  {`${client.address.street} ${client.address.number}`}
+                  <br />
+                  {`${client.address.zip} ${client.address.city}`}
+                </a>
               ) : (
                 <p>Keine Adresse gespeichert…</p>
               )}
-              <a href={`mailto:${client.email}`}>{client.email}</a>
-              <div>{client.phone}</div>
+              <a className="block link" href={`mailto:${client.email}`}>
+                {client.email}
+              </a>
+              <a className="block link" href={`tel:${client.phone}`}>
+                {client.phone}
+              </a>
             </div>
           </div>
-          <div className="mt-2">
-            <Button size="small" icon="fa-edit" onClick={() => setClientDialog({ type: 'EDIT' })}>
+          <div className="-ml-2 flex flex-wrap">
+            <Button className="mt-2 ml-2" size="small" icon="pencil" onClick={() => setClientDialog({ type: 'EDIT' })}>
               Ändern
             </Button>
             <Button
-              className="ml-2"
+              className="mt-2 ml-2"
               size="small"
-              icon="fa-trash"
+              icon="user-remove"
               disabled={true}
               onClick={() => setClientDialog({ type: 'DELETE' })}
             >
@@ -156,9 +165,9 @@ const ClientDetails: React.FC<Props> = ({ client, className, ...rest }) => {
             </Button>
           </div>
         </div>
-        <div className="lg:col-span-3">
-          <h2 className="text-xl font-semibold">Abo(s)</h2>
-          <div className="mt-3">
+        <div className="mt-6 ml-6">
+          <h2 className="text-xl font-semibold">Abos</h2>
+          <div className="mt-2">
             <ul className="h-56 px-2 border overflow-auto">
               {subscriptions.map(subscription => (
                 <li key={subscription.id} className="py-4 px-2 border-b last:border-b-0">
@@ -178,16 +187,16 @@ const ClientDetails: React.FC<Props> = ({ client, className, ...rest }) => {
             <Button
               className="mt-2"
               size="small"
-              icon="fa-plus"
+              icon="document-add"
               onClick={() => setClientDialog({ type: 'SUBSCRIPTION_ADD' })}
             >
               Hinzufügen
             </Button>
           </div>
         </div>
-        <div className="lg:col-span-4">
+        <div className="mt-6 ml-6 flex-auto">
           <h2 className="text-xl font-semibold">Trainingszeiten</h2>
-          <div className="mt-3">
+          <div className="mt-2">
             {trainings.length > 0 ? (
               <table className="w-full table table-auto">
                 <thead>
@@ -210,9 +219,9 @@ const ClientDetails: React.FC<Props> = ({ client, className, ...rest }) => {
             )}
           </div>
         </div>
-        <div className="lg:col-span-9">
+        <div className="mt-6 ml-6 flex-auto">
           <h2 className="text-xl font-semibold">Anwesenheit</h2>
-          <div className="mt-3">
+          <div className="mt-2">
             {sessions.length > 0 ? (
               <table className="w-full table table-auto">
                 <thead>
@@ -238,42 +247,44 @@ const ClientDetails: React.FC<Props> = ({ client, className, ...rest }) => {
           </div>
         </div>
       </div>
-      {clientDialog?.type === 'EDIT' && (
-        <EditClientDialog
-          client={client}
-          onClientUpdated={() => setClientDialog(undefined)}
-          onCancelClick={() => setClientDialog(undefined)}
-        />
-      )}
-      {clientDialog?.type === 'DELETE' && (
-        <ConfirmDeleteDialog
-          name={client.name}
-          onDeleteClick={async () => {
-            await clientRepo.delete(client.id);
-            setClientDialog(undefined);
-          }}
-          onCancelClick={() => setClientDialog(undefined)}
-        />
-      )}
-      {clientDialog?.type === 'SUBSCRIPTION_ADD' && (
-        <AddSubscriptionDialog
-          clientId={client.id}
-          onSubscriptionAdded={() => setClientDialog(undefined)}
-          onCancelClick={() => setClientDialog(undefined)}
-        />
-      )}
-      {clientDialog?.type === 'SUBSCRIPTION_DELETE' && (
-        <ConfirmDeleteDialog
-          name={`das Abo "${getTrainingName(clientDialog.subscription.trainingType)} - ${getSubscriptionName(
-            clientDialog.subscription.type,
-          )}"`}
-          onDeleteClick={async () => {
-            await clientRepo.deleteSubscription(client.id, clientDialog.subscription.id);
-            setClientDialog(undefined);
-          }}
-          onCancelClick={() => setClientDialog(undefined)}
-        />
-      )}
+      <Dialog open={clientDialog != null} onCloseClick={() => setClientDialog(undefined)}>
+        {clientDialog?.type === 'EDIT' && (
+          <EditClientDialogContent
+            client={client}
+            onClientUpdated={() => setClientDialog(undefined)}
+            onCancelClick={() => setClientDialog(undefined)}
+          />
+        )}
+        {clientDialog?.type === 'DELETE' && (
+          <ConfirmDeleteDialogContent
+            name={client.name}
+            onDeleteClick={async () => {
+              await clientRepo.delete(client.id);
+              setClientDialog(undefined);
+            }}
+            onCancelClick={() => setClientDialog(undefined)}
+          />
+        )}
+        {clientDialog?.type === 'SUBSCRIPTION_ADD' && (
+          <AddSubscriptionDialogContent
+            clientId={client.id}
+            onSubscriptionAdded={() => setClientDialog(undefined)}
+            onCancelClick={() => setClientDialog(undefined)}
+          />
+        )}
+        {clientDialog?.type === 'SUBSCRIPTION_DELETE' && (
+          <ConfirmDeleteDialogContent
+            name={`das Abo "${getTrainingName(clientDialog.subscription.trainingType)} - ${getSubscriptionName(
+              clientDialog.subscription.type,
+            )}"`}
+            onDeleteClick={async () => {
+              await clientRepo.deleteSubscription(client.id, clientDialog.subscription.id);
+              setClientDialog(undefined);
+            }}
+            onCancelClick={() => setClientDialog(undefined)}
+          />
+        )}
+      </Dialog>
     </section>
   );
 };

@@ -2,8 +2,9 @@ import { Link, RouteComponentProps } from '@reach/router';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Client } from '../../shared';
 import { Button, LinkButton } from '../components/Button';
+import Dialog from '../components/Dialog';
 import { ClassNameProps } from '../utils/types';
-import AddClientDialog from './AddClientDialog';
+import AddClientDialogContent from './AddClientDialogContent';
 import { useRepos } from './repositories/RepoContext';
 import { doesSubscriptionRunShort, isSubscriptionExpiring } from './subscriptionChecks';
 import ClientDetails from './ClientDetails';
@@ -11,11 +12,12 @@ import cx from 'classnames';
 
 export type Props = RouteComponentProps<{ clientId?: string }> & ClassNameProps;
 
-const Clients: React.FC<Props> = ({ clientId, className }) => {
+const ClientsContent: React.FC<{
+  clients: Client[];
+  selectedClientId?: string;
+  onAddUserClick: React.MouseEventHandler;
+}> = ({ clients, selectedClientId, onAddUserClick }) => {
   const [filter, setFilter] = useState('');
-  const [clients, setClients] = useState([] as Client[]);
-  const [addDialogOpen, setAddDialogOpen] = useState(false);
-  const { clientRepo } = useRepos();
 
   const filteredClients = useMemo(() => {
     if (filter.length > 0) {
@@ -25,120 +27,139 @@ const Clients: React.FC<Props> = ({ clientId, className }) => {
     }
   }, [clients, filter]);
 
+  const selectedClient = clients.find(client => client.id === selectedClientId);
+  const hasClients = clients.length > 0;
+  return (
+    <>
+      <LinkButton
+        className={cx(!selectedClient && 'hidden', 'lg:hidden self-start')}
+        to="/manage/clients"
+        icon="arrow-left"
+      >
+        Zurück
+      </LinkButton>
+      {hasClients ? (
+        <>
+          <input
+            className={cx(selectedClient && 'hidden', 'lg:block', 'form-input w-full mt-4')}
+            type="search"
+            aria-label="Kundennamen"
+            placeholder="Filtern…"
+            value={filter}
+            onChange={e => setFilter(e.currentTarget.value)}
+          />
+          {filteredClients.length > 0 ? (
+            <>
+              <div className="flex-auto mt-4 flex min-h-0">
+                <ul
+                  className={cx(
+                    selectedClient && 'hidden',
+                    'lg:w-1/5 flex-auto lg:flex-initial lg:flex lg:flex-col bg-white rounded shadow overflow-auto',
+                  )}
+                >
+                  {filteredClients.map(client => {
+                    const { name, activeSubscriptions } = client;
+                    const tags = [] as React.ReactNode[];
+                    if (activeSubscriptions.some(subscription => subscription.paidAt == null)) {
+                      tags.push(
+                        <span key="unpaid" className="ml-1 tag tag-red">
+                          Unbezahlt
+                        </span>,
+                      );
+                    }
+                    if (activeSubscriptions.some(isSubscriptionExpiring)) {
+                      tags.push(
+                        <span key="expires" className="ml-1 tag tag-blue">
+                          Läuft ab
+                        </span>,
+                      );
+                    }
+                    if (activeSubscriptions.some(doesSubscriptionRunShort)) {
+                      tags.push(
+                        <span key="runs-short" className="ml-1 tag tag-blue">
+                          Wird knapp
+                        </span>,
+                      );
+                    }
+
+                    return (
+                      <li
+                        key={client.id}
+                        className={cx('border-b hover:bg-gray-200', selectedClientId === client.id && 'bg-gray-300')}
+                      >
+                        <Link
+                          className="block p-4"
+                          to={selectedClientId === client.id ? '/manage/clients' : `/manage/clients/${client.id}`}
+                        >
+                          <h2 className="text-xl">{name}</h2>
+                          {tags.length > 0 && <div className="-ml-1">{tags}</div>}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+                <div
+                  className={cx(
+                    !selectedClient && 'hidden',
+                    'lg:block flex-1 lg:ml-4 p-4 bg-white rounded shadow overflow-auto',
+                  )}
+                >
+                  {selectedClient ? (
+                    <ClientDetails client={selectedClient} />
+                  ) : (
+                    <div className="h-full flex flex-col items-center justify-center">
+                      <p className="mt-4 text-lg text-center">Wähle einen Kunden aus um Details zu sehen.</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </>
+          ) : (
+            <div className="flex-auto mt-4 flex flex-col items-center justify-center">
+              <p className="mt-8 text-xl text-center">Keine Kunden gefunden…</p>
+            </div>
+          )}
+        </>
+      ) : (
+        <div className="flex-auto mt-4 flex flex-col items-center justify-center">
+          <div>
+            <span className="far fa-user fa-7x" />
+          </div>
+          <p className="mt-8 text-xl text-center">Starte dein Business und füge einen Kunden hinzu.</p>
+          <Button className="mt-4" size="large" color="orange" icon="user-add" onClick={onAddUserClick}>
+            Hinzufügen
+          </Button>
+        </div>
+      )}
+    </>
+  );
+};
+
+const Clients: React.FC<Props> = ({ clientId, className }) => {
+  const [clients, setClients] = useState<Client[]>();
+  const [addDialogOpen, setAddDialogOpen] = useState(false);
+  const { clientRepo } = useRepos();
+
   useEffect(() => clientRepo.observeAll(setClients), [clientRepo]);
 
-  const selectedClient = clients.find(client => client.id === clientId);
   return (
     <section className={cx('flex bg-gray-100', className)}>
       <div className="w-full max-w-screen-xl mx-auto py-6 px-4 flex flex-col min-h-0">
-        <header className={cx(clientId && 'hidden', 'md:flex flex justify-between items-baseline')}>
-          <h1 className="text-xl md:text-2xl font-semibold">Kunden</h1>
-          <Button icon="fa-plus" onClick={() => setAddDialogOpen(true)}>
+        <header className={cx(clientId ? 'hidden' : 'flex', 'lg:flex justify-between items-baseline')}>
+          <h1 className="text-2xl font-semibold">Kunden</h1>
+          <Button icon="user-add" onClick={() => setAddDialogOpen(true)}>
             Hinzufügen
           </Button>
         </header>
-        <LinkButton
-          className={cx(!clientId && 'hidden', 'md:hidden self-start')}
-          to="/manage/clients"
-          icon="fa-arrow-left"
-        >
-          Zurück
-        </LinkButton>
-        {filteredClients.length > 0 ? (
-          <>
-            <input
-              className={cx(clientId && 'hidden', 'md:block', 'form-input w-full mt-4')}
-              type="search"
-              aria-label="Kundennamen"
-              placeholder="Filtern…"
-              value={filter}
-              onChange={e => setFilter(e.currentTarget.value)}
-            />
-            <div className="flex-auto mt-4 flex min-h-0">
-              <ul
-                className={cx(
-                  clientId && 'hidden',
-                  'md:flex md:flex-col md:w-1/5 flex-auto md:flex-initial bg-white rounded shadow overflow-auto',
-                )}
-              >
-                {filteredClients.map(client => {
-                  const { name, activeSubscriptions } = client;
-                  const tags = [] as React.ReactNode[];
-                  if (activeSubscriptions.some(subscription => subscription.paidAt == null)) {
-                    tags.push(
-                      <span key="unpaid" className="ml-1 tag tag-red">
-                        Unbezahlt
-                      </span>,
-                    );
-                  }
-
-                  if (activeSubscriptions.some(isSubscriptionExpiring)) {
-                    tags.push(
-                      <span key="expires" className="ml-1 tag tag-blue">
-                        Läuft ab
-                      </span>,
-                    );
-                  }
-                  if (activeSubscriptions.some(doesSubscriptionRunShort)) {
-                    tags.push(
-                      <span key="runs-short" className="ml-1 tag tag-blue">
-                        Wird knapp
-                      </span>,
-                    );
-                  }
-
-                  return (
-                    <li
-                      key={client.id}
-                      className={cx('border-b hover:bg-gray-200', clientId === client.id && 'bg-gray-300')}
-                    >
-                      <Link
-                        className="block p-4"
-                        to={clientId === client.id ? '/manage/clients' : `/manage/clients/${client.id}`}
-                      >
-                        <h2 className="text-xl">{name}</h2>
-                        {tags.length > 0 && <div className="-ml-1">{tags}</div>}
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-              <div
-                className={cx(
-                  !clientId && 'hidden',
-                  'md:block flex-1 md:ml-4 p-4 bg-white rounded shadow overflow-auto',
-                )}
-              >
-                {selectedClient ? (
-                  <ClientDetails client={selectedClient} />
-                ) : (
-                  <div className="h-full flex flex-col items-center justify-center">
-                    <div>
-                      <span className="fas fa-user fa-5x" />
-                    </div>
-                    <p className="mt-4 text-lg text-center">Wähle einen Kunden aus um Details zu sehen.</p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </>
-        ) : (
-          <div className="flex-auto mt-4 flex flex-col items-center justify-center">
-            <div>
-              <span className="far fa-user fa-7x" />
-            </div>
-            <p className="mt-8 text-xl text-center">Starte dein Business und füge einen Kunden hinzu.</p>
-            <Button className="mt-4" size="large" color="orange" icon="fa-plus" onClick={() => setAddDialogOpen(true)}>
-              Hinzufügen
-            </Button>
-          </div>
+        {clients && (
+          <ClientsContent clients={clients} selectedClientId={clientId} onAddUserClick={() => setAddDialogOpen(true)} />
         )}
-        {addDialogOpen && (
-          <AddClientDialog
+        <Dialog open={addDialogOpen} onCloseClick={() => setAddDialogOpen(false)}>
+          <AddClientDialogContent
             onClientCreated={() => setAddDialogOpen(false)}
             onCancelClick={() => setAddDialogOpen(false)}
           />
-        )}
+        </Dialog>
       </div>
     </section>
   );
