@@ -1,5 +1,5 @@
 import React from 'react';
-import Offer from '../components/Offer';
+import Offer from '../landing/Offer';
 import { PreviewProps } from './cms';
 
 const OfferPreview: React.FC<PreviewProps> = ({ entry, widgetFor, widgetsFor, getAsset }) => {

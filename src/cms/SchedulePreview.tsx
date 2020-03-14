@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScheduleItem } from '../sections/Schedule';
+import { ScheduleItem } from '../landing/Schedule';
 import { PreviewProps } from './cms';
 
 const SchedulePreview: React.FC<PreviewProps> = ({ entry }) => (

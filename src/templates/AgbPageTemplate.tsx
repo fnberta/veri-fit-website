@@ -1,7 +1,7 @@
 import { graphql } from 'gatsby';
 import React from 'react';
-import Body from '../components/Body';
-import Layout from '../components/Layout';
+import Body from '../common/components/Body';
+import Layout from '../common/components/Layout';
 import { AgbPageQuery } from '../generatedGraphQL';
 
 export interface Props {

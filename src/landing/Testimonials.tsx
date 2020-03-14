@@ -2,8 +2,8 @@ import Carousel from '@brainhubeu/react-carousel';
 import '@brainhubeu/react-carousel/lib/style.css';
 import cx from 'classnames';
 import React, { useState } from 'react';
-import Testimonial, { Props as TestimonialProps } from '../components/Testimonial';
-import { range } from '../utils/numbers';
+import Testimonial, { Props as TestimonialProps } from './Testimonial';
+import { range } from '../common/utils/numbers';
 
 export interface Props {
   data: TestimonialProps[];

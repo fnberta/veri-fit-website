@@ -1,7 +1,7 @@
 import cx from 'classnames';
 import React, { isValidElement, useState } from 'react';
-import logoBlack from '../images/logo_orange_black.png';
-import logoWhite from '../images/logo_orange_white.png';
+import logoBlack from '../../images/logo_orange_black.png';
+import logoWhite from '../../images/logo_orange_white.png';
 import { IconButton } from './Button';
 import Icon from './Icon';
 

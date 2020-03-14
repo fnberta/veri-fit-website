@@ -1,6 +1,6 @@
 import { Unsubscribe } from 'firebase';
 import { Collection, parseSubscription, parseClient, Subscription, Client } from '../../../shared';
-import { DistributiveOmit } from '../../utils/types';
+import { DistributiveOmit } from '../../common/utils/types';
 import { Firestore } from '../firebase';
 
 export type ClientInput = Omit<Client, 'id'>;

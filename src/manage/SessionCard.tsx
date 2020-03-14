@@ -3,7 +3,7 @@ import { Client, Session } from '../../shared';
 import { getToday } from './dateTime';
 import { getTrainingName } from './displayNames';
 import { showSessionConfirm } from './subscriptionChecks';
-import { Button } from '../components/Button';
+import { Button } from '../common/components/Button';
 
 export interface Props {
   session: Session;

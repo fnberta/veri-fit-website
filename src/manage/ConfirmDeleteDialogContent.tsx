@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button } from '../components/Button';
-import { DialogBody, DialogFooter, DialogHeader } from '../components/Dialog';
+import { Button } from '../common/components/Button';
+import { DialogBody, DialogFooter, DialogHeader } from '../common/components/Dialog';
 
 export interface Props {
   name: string;

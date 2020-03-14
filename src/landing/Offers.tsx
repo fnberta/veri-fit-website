@@ -1,6 +1,6 @@
 import Image, { FluidObject } from 'gatsby-image';
 import React from 'react';
-import Offer, { Price } from '../components/Offer';
+import Offer, { Price } from './Offer';
 import { FluidImageFragment } from '../generatedGraphQL';
 
 export interface OfferData {
