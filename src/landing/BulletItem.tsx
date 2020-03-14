@@ -1,6 +1,6 @@
 import React from 'react';
 import cx from 'classnames';
-import Icon, { IconName } from './Icon';
+import Icon, { IconName } from '../common/components/Icon';
 
 export interface Props extends React.HTMLProps<HTMLDivElement> {
   icon: IconName;

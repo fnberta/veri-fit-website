@@ -1,9 +1,9 @@
 import { ErrorMessage, Field, Form, Formik, FormikHelpers } from 'formik';
 import React, { useState } from 'react';
-import BulletItem from '../components/BulletItem';
-import { Button, IconButton } from '../components/Button';
-import { FormField } from '../components/Forms';
-import { makeValidator } from '../utils/forms';
+import BulletItem from './BulletItem';
+import { Button, IconButton } from '../common/components/Button';
+import { FormField } from '../common/components/Forms';
+import { makeValidator } from '../common/utils/forms';
 import cx from 'classnames';
 
 type NotificationType = 'success' | 'error';

@@ -1,15 +1,15 @@
 import { graphql } from 'gatsby';
 import React, { useEffect, useState } from 'react';
-import Layout from '../components/Layout';
-import Navbar from '../components/Navbar';
+import Layout from '../common/components/Layout';
+import Navbar from '../common/components/Navbar';
 import { IndexPageQuery } from '../generatedGraphQL';
-import AboutMe from '../sections/AboutMe';
-import ContactMe from '../sections/ContactMe';
-import Hero from '../sections/Hero';
-import LocationMap from '../sections/LocationMap';
-import Offers, { OfferData } from '../sections/Offers';
-import Schedule, { ScheduleEntryData } from '../sections/Schedule';
-import TryOut from '../sections/TryOut';
+import AboutMe from '../landing/AboutMe';
+import ContactMe from '../landing/ContactMe';
+import Hero from '../landing/Hero';
+import LocationMap from '../landing/LocationMap';
+import Offers, { OfferData } from '../landing/Offers';
+import Schedule, { ScheduleEntryData } from '../landing/Schedule';
+import TryOut from '../landing/TryOut';
 
 export interface Props {
   data: IndexPageQuery;

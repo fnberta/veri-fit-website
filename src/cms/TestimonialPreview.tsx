@@ -1,5 +1,5 @@
 import React from 'react';
-import Testimonial from '../components/Testimonial';
+import Testimonial from '../landing/Testimonial';
 import { PreviewProps } from './cms';
 
 const TestimonialPreview: React.FC<PreviewProps> = ({ entry }) => (

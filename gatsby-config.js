@@ -48,21 +48,21 @@ module.exports = {
       resolve: 'gatsby-source-filesystem',
       options: {
         name: 'testimonials',
-        path: `${__dirname}/src/testimonials`,
+        path: `${__dirname}/src/landing/testimonials`,
       },
     },
     {
       resolve: 'gatsby-source-filesystem',
       options: {
         name: 'offers',
-        path: `${__dirname}/src/offers`,
+        path: `${__dirname}/src/landing/offers`,
       },
     },
     {
       resolve: 'gatsby-source-filesystem',
       options: {
         name: 'schedule',
-        path: `${__dirname}/src/schedule`,
+        path: `${__dirname}/src/landing/schedule`,
       },
     },
     'gatsby-plugin-typescript',

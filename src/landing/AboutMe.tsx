@@ -1,8 +1,8 @@
 import Image, { FluidObject } from 'gatsby-image';
 import React from 'react';
-import Card from '../components/Card';
+import Card from '../common/components/Card';
 import { FluidImageFragment } from '../generatedGraphQL';
-import Icon from '../components/Icon';
+import Icon from '../common/components/Icon';
 
 export interface Props {
   vera: FluidImageFragment;

@@ -1,8 +1,8 @@
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
 import { Session, Subscription, SubscriptionType, Training, Client } from '../../shared';
-import { Button, IconButton } from '../components/Button';
-import Dialog from '../components/Dialog';
+import { Button, IconButton } from '../common/components/Button';
+import Dialog from '../common/components/Dialog';
 import AddSubscriptionDialogContent from './AddSubscriptionDialogContent';
 import ConfirmDeleteDialogContent from './ConfirmDeleteDialogContent';
 import { formatLocale, getToday } from './dateTime';

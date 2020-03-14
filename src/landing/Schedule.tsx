@@ -1,6 +1,6 @@
 import { Link } from 'gatsby';
 import React from 'react';
-import WeekSchedule, { TimeOfDay, Weekday, Week } from '../components/WeekSchedule';
+import WeekSchedule, { TimeOfDay, Weekday, Week } from '../common/components/WeekSchedule';
 
 export interface ScheduleEntryData {
   title: string;

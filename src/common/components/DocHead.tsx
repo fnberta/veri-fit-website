@@ -1,7 +1,7 @@
 import { graphql, useStaticQuery } from 'gatsby';
 import React from 'react';
 import Helmet from 'react-helmet';
-import { MetadataQuery, SiteSiteMetadata } from '../generatedGraphQL';
+import { MetadataQuery, SiteSiteMetadata } from '../../generatedGraphQL';
 
 export type Meta = JSX.IntrinsicElements['meta'];
 
