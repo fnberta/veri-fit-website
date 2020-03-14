@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/camelcase */
+
 module.exports = {
   siteMetadata: {
     title: 'Veri-Fit',
@@ -74,5 +76,18 @@ module.exports = {
       },
     },
     'gatsby-plugin-netlify',
+    {
+      resolve: 'gatsby-plugin-manifest',
+      options: {
+        name: 'Veri-Fit',
+        scope: '/manage/',
+        start_url: '/',
+        background_color: '#27303f',
+        theme_color: '#ff5a1f',
+        display: 'standalone',
+        icon: 'src/images/logo_icon.png',
+      },
+    },
+    'gatsby-plugin-offline',
   ],
 };
