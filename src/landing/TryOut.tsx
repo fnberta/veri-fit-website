@@ -1,5 +1,5 @@
 import React from 'react';
-import { AnchorButton } from '../components/Button';
+import { AnchorButton } from '../common/components/Button';
 
 const TryOut: React.FC = () => (
   <section

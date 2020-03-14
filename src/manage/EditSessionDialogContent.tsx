@@ -2,11 +2,11 @@ import { ErrorMessage, Field, Form, Formik, FormikHelpers } from 'formik';
 import { DateTime } from 'luxon';
 import React, { useState } from 'react';
 import { ChangeType, Client, Session, SessionInput, TrainingInput } from '../../shared';
-import { DialogBody, DialogFooter, DialogHeader } from '../components/Dialog';
-import { FormField } from '../components/Forms';
+import { DialogBody, DialogFooter, DialogHeader } from '../common/components/Dialog';
+import { FormField } from '../common/components/Forms';
 import { useRepos } from './repositories/RepoContext';
 import TrainingFormFields, { validateTrainingForm } from './TrainingFormFields';
-import { Button } from '../components/Button';
+import { Button } from '../common/components/Button';
 
 export interface Props {
   session: Session;

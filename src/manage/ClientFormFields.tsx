@@ -1,7 +1,7 @@
 import { ErrorMessage, Field, FormikErrors } from 'formik';
 import React from 'react';
-import { FormField } from '../components/Forms';
-import { makeValidator } from '../utils/forms';
+import { FormField } from '../common/components/Forms';
+import { makeValidator } from '../common/utils/forms';
 import { getToday, isValidISOString } from './dateTime';
 import { ClientInput } from './repositories/ClientRepository';
 

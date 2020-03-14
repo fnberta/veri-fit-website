@@ -1,8 +1,8 @@
 import { Form, Formik, FormikHelpers } from 'formik';
 import React from 'react';
 import { Client, Training, TrainingInput, TrainingType } from '../../shared';
-import { Button } from '../components/Button';
-import { DialogBody, DialogFooter, DialogHeader } from '../components/Dialog';
+import { Button } from '../common/components/Button';
+import { DialogBody, DialogFooter, DialogHeader } from '../common/components/Dialog';
 import { getToday } from './dateTime';
 import { useRepos } from './repositories/RepoContext';
 import TrainingFormFields, { validateTrainingForm } from './TrainingFormFields';

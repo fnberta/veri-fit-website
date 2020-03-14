@@ -1,6 +1,6 @@
 import React from 'react';
-import Body from './Body';
-import Card from './Card';
+import Body from '../common/components/Body';
+import Card from '../common/components/Card';
 
 export interface Price {
   price: number;

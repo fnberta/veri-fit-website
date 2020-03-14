@@ -2,7 +2,7 @@ import { ErrorMessage, Field, FormikErrors, useFormikContext } from 'formik';
 import { DateTime } from 'luxon';
 import React from 'react';
 import { Client, TrainingInput, TrainingType } from '../../shared';
-import { FormField } from '../components/Forms';
+import { FormField } from '../common/components/Forms';
 import { isValidISOString } from './dateTime';
 import { getTrainingName } from './displayNames';
 import ParticipantsSelector from './ParticipantsSelector';

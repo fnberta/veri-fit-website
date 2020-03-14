@@ -1,13 +1,13 @@
 import { Link, Redirect, Router } from '@reach/router';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
-import { Button } from '../components/Button';
-import Layout from '../components/Layout';
+import { Button } from '../common/components/Button';
+import Layout from '../common/components/Layout';
 import Clients from './Clients';
 import { UserCredential } from './firebase';
 import { useRepos } from './repositories/RepoContext';
 import Trainings from './Trainings';
-import Navbar from '../components/Navbar';
+import Navbar from '../common/components/Navbar';
 
 const ManageApp: React.FC = () => {
   const [loggedIn, setLoggedIn] = useState(false);

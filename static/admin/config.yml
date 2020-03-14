@@ -21,7 +21,7 @@ collections:
   - name: 'offers'
     label: 'Offers'
     label_singular: 'Offer'
-    folder: 'src/offers'
+    folder: 'src/landing/offers'
     create: true
     slug: '{{slug}}'
     fields:
@@ -48,7 +48,7 @@ collections:
       - { name: 'body', label: 'Text', widget: 'markdown' }
   - name: 'schedule'
     label: 'Schedule'
-    folder: 'src/schedule'
+    folder: 'src/landing/schedule'
     create: true
     slug: '{{slug}}-{{weekday}}-{{timeOfDay}}'
     fields:
@@ -75,7 +75,7 @@ collections:
   - name: 'testimonials'
     label: 'Testimonials'
     label_singular: 'Testimonial'
-    folder: 'src/testimonials'
+    folder: 'src/landing/testimonials'
     create: true
     identifier_field: 'author'
     slug: '{{year}}-{{month}}-{{day}}-{{slug}}'

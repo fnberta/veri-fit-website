@@ -1,7 +1,7 @@
 import { ErrorMessage, Field, FormikErrors, getIn, useFormikContext } from 'formik';
 import React from 'react';
 import { SubscriptionType, TrainingType } from '../../shared';
-import { FormField } from '../components/Forms';
+import { FormField } from '../common/components/Forms';
 import { getEndDate, isValidISOString } from './dateTime';
 import { getSubscriptionName, getTrainingName } from './displayNames';
 import { SubscriptionInput } from './repositories/ClientRepository';
