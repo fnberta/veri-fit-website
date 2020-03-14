@@ -80,8 +80,9 @@ module.exports = {
       resolve: 'gatsby-plugin-manifest',
       options: {
         name: 'Veri-Fit',
+        short_name: 'Veri-Fit',
         scope: '/manage/',
-        start_url: '/',
+        start_url: '/manage/',
         background_color: '#27303f',
         theme_color: '#ff5a1f',
         display: 'standalone',
