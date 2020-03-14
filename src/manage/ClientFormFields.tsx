@@ -81,7 +81,6 @@ const ClientFormFields: React.FC<Props> = ({ disabled }) => (
         <FormField
           label="Name"
           htmlFor="name"
-          icon="fas fa-user"
           error={<ErrorMessage name="name" />}
           control={
             <Field
@@ -99,7 +98,6 @@ const ClientFormFields: React.FC<Props> = ({ disabled }) => (
           className="mt-3"
           label="Geburtstag"
           htmlFor="birthday"
-          icon="fas fa-birthday-cake"
           error={<ErrorMessage name="birthday" />}
           control={
             <Field
@@ -120,45 +118,55 @@ const ClientFormFields: React.FC<Props> = ({ disabled }) => (
       <div className="mt-4">
         <FormField
           label="Email"
-          icon="fas fa-envelope"
+          htmlFor="email"
           error={<ErrorMessage name="email" />}
-          control={<Field className="form-input w-full" type="email" name="email" disabled={disabled} />}
+          control={<Field className="form-input w-full" type="email" id="email" name="email" disabled={disabled} />}
         />
         <FormField
           className="mt-2"
           label="Telefon"
-          icon="fas fa-phone"
+          htmlFor="phone"
           error={<ErrorMessage name="phone" />}
-          control={<Field className="form-input w-full" type="tel" name="phone" disabled={disabled} />}
+          control={<Field className="form-input w-full" type="tel" id="phone" name="phone" disabled={disabled} />}
         />
         <div className="mt-2 flex">
           <FormField
             className="flex-1"
             label="Strasse"
-            icon="fas fa-map-marker"
+            htmlFor="street"
             error={<ErrorMessage name="address.street" />}
-            control={<Field className="form-input w-full" type="text" name="address.street" disabled={disabled} />}
+            control={
+              <Field className="form-input w-full" type="text" id="street" name="address.street" disabled={disabled} />
+            }
           />
           <FormField
             className="ml-2 w-1/3"
             label="Hausnummer"
+            htmlFor="number"
             error={<ErrorMessage name="address.number" />}
-            control={<Field className="form-input w-full" type="text" name="address.number" disabled={disabled} />}
+            control={
+              <Field className="form-input w-full" type="text" id="number" name="address.number" disabled={disabled} />
+            }
           />
         </div>
         <div className="mt-2 flex">
           <FormField
             className="w-1/3"
             label="PLZ"
+            htmlFor="zip"
             error={<ErrorMessage name="address.zip" />}
-            control={<Field className="form-input w-full" type="text" name="address.zip" disabled={disabled} />}
+            control={
+              <Field className="form-input w-full" type="text" id="zip" name="address.zip" disabled={disabled} />
+            }
           />
           <FormField
             className="ml-2 flex-1"
             label="Stadt"
-            icon="fas fa-city"
+            htmlFor="city"
             error={<ErrorMessage name="address.city" />}
-            control={<Field className="form-input w-full" type="text" name="address.city" disabled={disabled} />}
+            control={
+              <Field className="form-input w-full" type="text" id="city" name="address.city" disabled={disabled} />
+            }
           />
         </div>
       </div>

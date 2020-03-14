@@ -158,9 +158,10 @@ const SubscriptionFormFields: React.FC<Props> = ({ disabled, namespace }) => {
       <FormField
         className=""
         label="Trainings-Typ"
+        htmlFor="trainingType"
         error={<ErrorMessage name={withNamespace('trainingType')} />}
         control={
-          <Field className="form-select w-full" as="select" name={withNamespace('trainingType')}>
+          <Field className="form-select w-full" as="select" id="trainingType" name={withNamespace('trainingType')}>
             {Object.keys(validSubscriptionTypes).map(trainingType => (
               <option key={trainingType} value={trainingType}>
                 {getTrainingName(trainingType as TrainingType)}
@@ -173,9 +174,10 @@ const SubscriptionFormFields: React.FC<Props> = ({ disabled, namespace }) => {
         <FormField
           className="w-2/3"
           label="Abo-Typ"
+          htmlFor="type"
           error={<ErrorMessage name={withNamespace('type')} />}
           control={
-            <Field className="form-select" as="select" name={withNamespace('type')}>
+            <Field className="form-select" as="select" id="type" name={withNamespace('type')}>
               {validSubscriptionTypes[trainingType].map(type => (
                 <option key={type} value={type}>
                   {getSubscriptionName(type)}
@@ -188,11 +190,13 @@ const SubscriptionFormFields: React.FC<Props> = ({ disabled, namespace }) => {
           <FormField
             className="ml-2 flex-1"
             label="Trainings übrig"
+            htmlFor="trainingsLeft"
             error={<ErrorMessage name={withNamespace('trainingsLeft')} />}
             control={
               <Field
                 className="form-input w-full"
                 type="number"
+                id="trainingsLeft"
                 name={withNamespace('trainingsLeft')}
                 disabled={disabled}
               />
@@ -203,16 +207,32 @@ const SubscriptionFormFields: React.FC<Props> = ({ disabled, namespace }) => {
       <FormField
         className="mt-2"
         label="Startpunkt"
+        htmlFor="start"
         error={<ErrorMessage name={withNamespace('start')} />}
-        control={<Field className="form-input w-full" type="date" name={withNamespace('start')} disabled={disabled} />}
+        control={
+          <Field
+            className="form-input w-full"
+            type="date"
+            id="start"
+            name={withNamespace('start')}
+            disabled={disabled}
+          />
+        }
       />
       <FormField
         className="mt-2"
         label="Kosten"
+        htmlFor="paid"
         error={<ErrorMessage name={withNamespace('paid')} />}
         control={
           <div className="inline-flex items-center">
-            <Field className="form-checkbox" type="checkbox" name={withNamespace('paid')} disabled={disabled} />
+            <Field
+              className="form-checkbox"
+              type="checkbox"
+              id="paid"
+              name={withNamespace('paid')}
+              disabled={disabled}
+            />
             <span className="ml-2 text-base">{' Bereits bezahlt'}</span>
           </div>
         }
@@ -221,9 +241,16 @@ const SubscriptionFormFields: React.FC<Props> = ({ disabled, namespace }) => {
         <FormField
           className="mt-2"
           label="Bezahlt am"
+          htmlFor="paidAt"
           error={<ErrorMessage name={withNamespace('paidAt')} />}
           control={
-            <Field className="form-input w-full" type="date" name={withNamespace('paidAt')} disabled={disabled} />
+            <Field
+              className="form-input w-full"
+              type="date"
+              id="paidAt"
+              name={withNamespace('paidAt')}
+              disabled={disabled}
+            />
           }
         />
       )}

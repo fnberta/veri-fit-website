@@ -2,6 +2,7 @@ import Image, { FluidObject } from 'gatsby-image';
 import React from 'react';
 import Card from '../components/Card';
 import { FluidImageFragment } from '../generatedGraphQL';
+import Icon from '../components/Icon';
 
 export interface Props {
   vera: FluidImageFragment;
@@ -10,8 +11,8 @@ export interface Props {
 const IMG_STYLE = { maxHeight: 300 };
 
 const ExperienceItem: React.FC = ({ children }) => (
-  <li className="flex items-baseline">
-    <span className="fas fa-check fill-current" />
+  <li className="flex items-center">
+    <Icon className="h-6 w-6" name="check" />
     <span className="ml-4">{children}</span>
   </li>
 );

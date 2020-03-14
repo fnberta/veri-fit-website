@@ -4,7 +4,6 @@ import cx from 'classnames';
 export interface FormFieldProps extends Omit<React.HTMLProps<HTMLDivElement>, 'label'> {
   label: React.ReactNode;
   control: React.ReactNode;
-  icon?: string;
   help?: string;
   error?: React.ReactNode;
 }

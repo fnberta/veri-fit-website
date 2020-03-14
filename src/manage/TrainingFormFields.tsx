@@ -52,9 +52,10 @@ const TrainingFormFields: React.FC<Props> = ({ clients, disabled }) => {
     <>
       <FormField
         label="Typ"
+        htmlFor="type"
         error={<ErrorMessage name="type" />}
         control={
-          <Field className="form-select" as="select" name="type" disabled={disabled}>
+          <Field className="form-select" as="select" id="type" name="type" disabled={disabled}>
             {Object.keys(validSubscriptionTypes).map(trainingType => (
               <option key={trainingType} value={trainingType}>
                 {getTrainingName(trainingType as TrainingType)}
@@ -66,26 +67,30 @@ const TrainingFormFields: React.FC<Props> = ({ clients, disabled }) => {
       <FormField
         className="mt-3"
         label="Startpunkt"
+        htmlFor="runsFrom"
         error={<ErrorMessage name="runsFrom" />}
         help={`Training findet wöchentlich am ${DateTime.fromISO(values.runsFrom).weekdayLong} statt.`}
-        control={<Field className="form-input" type="date" name="runsFrom" disabled={disabled} />}
+        control={<Field className="form-input" type="date" id="runsFrom" name="runsFrom" disabled={disabled} />}
       />
       <FormField
         className="mt-3"
         label="Startzeit"
+        htmlFor="start"
         error={<ErrorMessage name="time.start" />}
-        control={<Field className="form-input" type="time" name="time.start" disabled={disabled} />}
+        control={<Field className="form-input" type="time" id="start" name="time.start" disabled={disabled} />}
       />
       <FormField
         className="mt-3"
         label="Endzeit"
+        htmlFor="end"
         error={<ErrorMessage name="time.end" />}
-        control={<Field className="form-input" type="time" name="time.end" disabled={disabled} />}
+        control={<Field className="form-input" type="time" id="end" name="time.end" disabled={disabled} />}
       />
       <FormField
         className="mt-3"
         label="Teilnehmer"
-        control={<ParticipantsSelector name="clientIds" clients={clients} disabled={disabled} />}
+        htmlFor="clientIds"
+        control={<ParticipantsSelector id="clientIds" name="clientIds" clients={clients} disabled={disabled} />}
       />
     </>
   );

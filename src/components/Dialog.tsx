@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
+import { CSSTransition } from 'react-transition-group';
 import { IconButton } from './Button';
 import Portal from './Portal';
+import cx from 'classnames';
 
-export interface Props {
-  title: string;
-  body: React.ReactNode;
-  footer: React.ReactNode;
+export interface Props extends React.HTMLProps<HTMLDivElement> {
+  open: boolean;
   onCloseClick: () => void;
 }
 
-const Dialog: React.FC<Props> = ({ title, body, footer, onCloseClick }) => {
+const Dialog: React.FC<Props> = ({ open, onCloseClick, children, className, ...rest }) => {
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === 'Escape') {
@@ -28,26 +28,50 @@ const Dialog: React.FC<Props> = ({ title, body, footer, onCloseClick }) => {
 
   return (
     <Portal>
-      <aside className="fixed inset-0 sm:p-4 flex items-center justify-center overflow-hidden">
-        <span className="absolute inset-0 bg-gray-900 opacity-75 pointer-events-none" />
-        <div className="relative w-full sm:max-w-lg max-h-full h-full sm:h-auto bg-white sm:rounded shadow-xl overflow-hidden flex flex-col">
-          <header className="p-4 bg-gray-100 flex justify-between items-center">
-            <h1 className="text-2xl font-semibold">{title}</h1>
-            <IconButton
-              className="hover:bg-gray-200 active:bg-gray-400"
-              color="none"
-              icon="fa-times"
-              title="Schliessen"
-              aria-label="Schliessen"
-              onClick={onCloseClick}
-            />
-          </header>
-          <div className="overflow-auto flex-grow">{body}</div>
-          <div className="bg-gray-100">{footer}</div>
-        </div>
-      </aside>
+      <CSSTransition in={open} timeout={200} unmountOnExit={true} classNames="dialog-transition">
+        <aside
+          className={cx('fixed inset-0 sm:p-4 flex items-center justify-center overflow-hidden', className)}
+          {...rest}
+        >
+          <span className="absolute inset-0 bg-gray-900 pointer-events-none opacity-75 transition-opacity duration-200" />
+          <div className="relative w-full sm:max-w-lg max-h-full h-full sm:h-auto bg-white sm:rounded shadow-xl overflow-hidden flex flex-col transition-all duration-200 transform scale-100">
+            {children}
+          </div>
+        </aside>
+      </CSSTransition>
     </Portal>
   );
 };
 
 export default Dialog;
+
+export interface DialogHeaderProps extends React.HTMLProps<HTMLDivElement> {
+  title: string;
+  onCloseClick: React.MouseEventHandler;
+}
+
+export const DialogHeader: React.FC<DialogHeaderProps> = ({ title, onCloseClick, className, ...rest }) => (
+  <header className={cx('relative p-4 bg-gray-100 flex justify-between items-center shadow', className)} {...rest}>
+    <h1 className="text-2xl font-semibold">{title}</h1>
+    <IconButton
+      className="hover:bg-gray-200 active:bg-gray-400"
+      color="none"
+      icon="x"
+      title="Schliessen"
+      aria-label="Schliessen"
+      onClick={onCloseClick}
+    />
+  </header>
+);
+
+export const DialogBody: React.FC<React.HTMLProps<HTMLDivElement>> = ({ children, className, ...rest }) => (
+  <div className={cx('overflow-auto flex-grow', className)} {...rest}>
+    {children}
+  </div>
+);
+
+export const DialogFooter: React.FC<React.HTMLProps<HTMLDivElement>> = ({ children, className, ...rest }) => (
+  <div className={cx('bg-gray-100', className)} {...rest}>
+    {children}
+  </div>
+);

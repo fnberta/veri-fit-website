@@ -1,4 +1,3 @@
-import '@fortawesome/fontawesome-free/js/all.min.js';
 import React from 'react';
 import DocHead from './DocHead';
 import './layout.css';

@@ -3,10 +3,11 @@ import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
 import { Client, Session, Time } from '../../shared';
 import { Button, LinkIconButton } from '../components/Button';
+import Dialog from '../components/Dialog';
 import WeekSchedule, { TimeOfDay, Week, Weekday } from '../components/WeekSchedule';
 import { ClassNameProps } from '../utils/types';
-import AddTrainingDialog from './AddTrainingDialog';
-import EditSessionDialog from './EditSessionDialog';
+import AddTrainingDialogContent from './AddTrainingDialogContent';
+import EditSessionDialogContent from './EditSessionDialogContent';
 import { useRepos } from './repositories/RepoContext';
 import SessionCard from './SessionCard';
 import cx from 'classnames';
@@ -91,21 +92,21 @@ const Trainings: React.FC<Props> = ({ year, week, className }) => {
           <div className="ml-2">
             <LinkIconButton
               className="rounded-none rounded-l"
-              icon="fa-arrow-left"
+              icon="arrow-left"
               shape="outlined"
               aria-label="Vorherige Woche"
               to={getNextPath(date.minus({ weeks: 1 }))}
             />
             <LinkIconButton
               className="relative rounded-none -ml-px"
-              icon="fa-calendar-day"
+              icon="calendar"
               shape="outlined"
               aria-label="Diese Woche"
               to={getNextPath(DateTime.local())}
             />
             <LinkIconButton
               className="rounded-none rounded-r -ml-px"
-              icon="fa-arrow-right"
+              icon="arrow-right"
               shape="outlined"
               aria-label="Nächste Woche"
               to={getNextPath(date.plus({ weeks: 1 }))}
@@ -144,28 +145,30 @@ const Trainings: React.FC<Props> = ({ year, week, className }) => {
           )}
         />
         <div className="mt-4 flex">
-          <Button icon="fa-plus" onClick={() => setAddEditDialog({ type: 'ADD' })}>
+          <Button icon="document-add" onClick={() => setAddEditDialog({ type: 'ADD' })}>
             Neue Trainingsreihe
           </Button>
-          <Button className="ml-2" icon="fa-plus" disabled={true}>
+          <Button className="ml-2" icon="plus" disabled={true}>
             Neues Einzeltraining
           </Button>
         </div>
-        {addEditDialog?.type === 'ADD' && (
-          <AddTrainingDialog
+        <Dialog open={addEditDialog?.type === 'ADD'} onCloseClick={() => setAddEditDialog(undefined)}>
+          <AddTrainingDialogContent
             clients={clients}
             onTrainingCreated={() => setAddEditDialog(undefined)}
             onCancelClick={() => setAddEditDialog(undefined)}
           />
-        )}
-        {addEditDialog?.type === 'EDIT' && (
-          <EditSessionDialog
-            session={addEditDialog.session}
-            clients={clients}
-            onSessionChanged={() => setAddEditDialog(undefined)}
-            onCancelClick={() => setAddEditDialog(undefined)}
-          />
-        )}
+        </Dialog>
+        <Dialog open={addEditDialog?.type === 'EDIT'} onCloseClick={() => setAddEditDialog(undefined)}>
+          {addEditDialog?.type === 'EDIT' && (
+            <EditSessionDialogContent
+              session={addEditDialog.session}
+              clients={clients}
+              onSessionChanged={() => setAddEditDialog(undefined)}
+              onCancelClick={() => setAddEditDialog(undefined)}
+            />
+          )}
+        </Dialog>
       </div>
     </section>
   );
