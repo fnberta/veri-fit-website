@@ -154,7 +154,7 @@ const Clients: React.FC<Props> = ({ clientId, className }) => {
         {clients && (
           <ClientsContent clients={clients} selectedClientId={clientId} onAddUserClick={() => setAddDialogOpen(true)} />
         )}
-        <Dialog open={addDialogOpen} onCloseClick={() => setAddDialogOpen(false)}>
+        <Dialog open={addDialogOpen} onCancel={() => setAddDialogOpen(false)}>
           <AddClientDialogContent
             onClientCreated={() => setAddDialogOpen(false)}
             onCancelClick={() => setAddDialogOpen(false)}

@@ -152,14 +152,14 @@ const Trainings: React.FC<Props> = ({ year, week, className }) => {
             Neues Einzeltraining
           </Button>
         </div>
-        <Dialog open={addEditDialog?.type === 'ADD'} onCloseClick={() => setAddEditDialog(undefined)}>
+        <Dialog open={addEditDialog?.type === 'ADD'} onCancel={() => setAddEditDialog(undefined)}>
           <AddTrainingDialogContent
             clients={clients}
             onTrainingCreated={() => setAddEditDialog(undefined)}
             onCancelClick={() => setAddEditDialog(undefined)}
           />
         </Dialog>
-        <Dialog open={addEditDialog?.type === 'EDIT'} onCloseClick={() => setAddEditDialog(undefined)}>
+        <Dialog open={addEditDialog?.type === 'EDIT'} onCancel={() => setAddEditDialog(undefined)}>
           {addEditDialog?.type === 'EDIT' && (
             <EditSessionDialogContent
               session={addEditDialog.session}
