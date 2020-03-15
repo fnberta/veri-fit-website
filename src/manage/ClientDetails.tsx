@@ -247,7 +247,7 @@ const ClientDetails: React.FC<Props> = ({ client, className, ...rest }) => {
           </div>
         </div>
       </div>
-      <Dialog open={clientDialog != null} onCloseClick={() => setClientDialog(undefined)}>
+      <Dialog open={clientDialog != null} onCancel={() => setClientDialog(undefined)}>
         {clientDialog?.type === 'EDIT' && (
           <EditClientDialogContent
             client={client}

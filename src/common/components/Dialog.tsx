@@ -1,44 +1,77 @@
-import React, { useEffect } from 'react';
-import { CSSTransition } from 'react-transition-group';
+import cx from 'classnames';
+import React, { useEffect, useRef } from 'react';
 import { IconButton } from './Button';
 import Portal from './Portal';
-import cx from 'classnames';
+import dialogPolyfill from 'dialog-polyfill';
 
-export interface Props extends React.HTMLProps<HTMLDivElement> {
+export interface Props extends React.HTMLProps<HTMLDialogElement> {
   open: boolean;
-  onCloseClick: () => void;
+  onCancel: () => void;
 }
 
-const Dialog: React.FC<Props> = ({ open, onCloseClick, children, className, ...rest }) => {
+const Dialog: React.FC<Props> = ({ open, onCancel, children, className, ...rest }) => {
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const onCancelRef = useRef(onCancel);
+
   useEffect(() => {
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === 'Escape') {
-        onCloseClick();
-      }
+    onCancelRef.current = onCancel;
+  }, [onCancel]);
+
+  useEffect(() => {
+    const { current } = dialogRef;
+    if (current) {
+      dialogPolyfill.registerDialog(current);
+    }
+  }, []);
+
+  useEffect(() => {
+    function handleCancelEvent() {
+      onCancelRef.current();
     }
 
-    window.document.addEventListener('keydown', handleKeyDown);
-    return () => window.document.removeEventListener('keydown', handleKeyDown);
-  });
+    const { current } = dialogRef;
+    if (current) {
+      current.addEventListener('cancel', handleCancelEvent);
+    }
+
+    return () => {
+      if (current) {
+        current.removeEventListener('cancel', handleCancelEvent);
+      }
+    };
+  }, []);
 
   useEffect(() => {
-    document.documentElement.classList.add('overflow-hidden');
+    const { current } = dialogRef;
+    if (!current) {
+      return;
+    }
+
+    if (open) {
+      if (!current.open) {
+        current.showModal();
+      }
+    } else if (current.open) {
+      current.close();
+    }
+  }, [open]);
+
+  useEffect(() => {
+    if (open) {
+      document.documentElement.classList.add('overflow-hidden');
+    } else {
+      document.documentElement.classList.remove('overflow-hidden');
+    }
     return () => document.documentElement.classList.remove('overflow-hidden');
-  }, []);
+  }, [open]);
 
   return (
     <Portal>
-      <CSSTransition in={open} timeout={200} unmountOnExit={true} classNames="dialog-transition">
-        <aside
-          className={cx('fixed inset-0 sm:p-4 flex items-center justify-center overflow-hidden', className)}
-          {...rest}
-        >
-          <span className="absolute inset-0 bg-gray-900 pointer-events-none opacity-75 transition-opacity duration-200" />
-          <div className="relative w-full sm:max-w-lg max-h-full h-full sm:h-auto bg-white sm:rounded shadow-xl overflow-hidden flex flex-col transition-all duration-200 transform scale-100">
-            {children}
-          </div>
-        </aside>
-      </CSSTransition>
+      <dialog ref={dialogRef} className={className} aria-labelledby="dialog-header" {...rest}>
+        <div className="w-full sm:max-w-lg max-h-full h-full sm:h-auto bg-white sm:rounded shadow-xl overflow-hidden flex flex-col">
+          {children}
+        </div>
+      </dialog>
     </Portal>
   );
 };
@@ -52,7 +85,9 @@ export interface DialogHeaderProps extends React.HTMLProps<HTMLDivElement> {
 
 export const DialogHeader: React.FC<DialogHeaderProps> = ({ title, onCloseClick, className, ...rest }) => (
   <header className={cx('relative p-4 bg-gray-100 flex justify-between items-center shadow', className)} {...rest}>
-    <h1 className="text-2xl font-semibold">{title}</h1>
+    <h1 id="dialog-header" className="text-2xl font-semibold">
+      {title}
+    </h1>
     <IconButton
       className="hover:bg-gray-200 active:bg-gray-400"
       color="none"
