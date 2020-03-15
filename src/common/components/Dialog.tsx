@@ -1,8 +1,7 @@
 import cx from 'classnames';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { IconButton } from './Button';
 import Portal from './Portal';
-import dialogPolyfill from 'dialog-polyfill';
 
 export interface Props extends React.HTMLProps<HTMLDialogElement> {
   open: boolean;
@@ -10,6 +9,7 @@ export interface Props extends React.HTMLProps<HTMLDialogElement> {
 }
 
 const Dialog: React.FC<Props> = ({ open, onCancel, children, className, ...rest }) => {
+  const [registered, setRegistered] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const onCancelRef = useRef(onCancel);
 
@@ -19,10 +19,13 @@ const Dialog: React.FC<Props> = ({ open, onCancel, children, className, ...rest 
 
   useEffect(() => {
     const { current } = dialogRef;
-    if (current) {
-      dialogPolyfill.registerDialog(current);
+    if (current && !registered) {
+      import('dialog-polyfill').then(polyfill => {
+        polyfill.default.registerDialog(current);
+        setRegistered(true);
+      });
     }
-  }, []);
+  }, [registered]);
 
   useEffect(() => {
     function handleCancelEvent() {
@@ -43,7 +46,7 @@ const Dialog: React.FC<Props> = ({ open, onCancel, children, className, ...rest 
 
   useEffect(() => {
     const { current } = dialogRef;
-    if (!current) {
+    if (!current || !registered) {
       return;
     }
 
@@ -54,7 +57,7 @@ const Dialog: React.FC<Props> = ({ open, onCancel, children, className, ...rest 
     } else if (current.open) {
       current.close();
     }
-  }, [open]);
+  }, [open, registered]);
 
   useEffect(() => {
     if (open) {
