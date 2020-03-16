@@ -1,19 +1,36 @@
 import { Form, Formik, FormikHelpers } from 'formik';
 import React from 'react';
-import { Client, Training, TrainingInput, TrainingType } from '../../shared';
+import { Client, Session, SessionInput, TrainingInput, TrainingType } from '../../shared';
 import { Button } from '../common/components/Button';
 import { DialogBody, DialogFooter, DialogHeader } from '../common/components/Dialog';
 import { getToday } from './dateTime';
 import { useRepos } from './repositories/RepoContext';
-import TrainingFormFields, { validateTrainingForm } from './TrainingFormFields';
+import SessionFormFields from './SessionFormFields';
+import { validateTrainingForm } from './TrainingFormFields';
 
 export interface Props {
   clients: Client[];
-  onTrainingCreated: (training: Training) => void;
+  onSessionAdded: (session: Session) => void;
   onCancelClick: () => void;
 }
 
-function getInitialValues(runsFrom: string): TrainingInput {
+interface FormValues extends TrainingInput {
+  notes: string;
+}
+
+function getSessionInput(values: FormValues): SessionInput {
+  const input: SessionInput = {
+    ...values,
+    confirmed: false,
+    date: values.runsFrom,
+  };
+  if (input.notes != null && input.notes.length === 0) {
+    delete input.notes;
+  }
+  return input;
+}
+
+function getInitialValues(runsFrom: string): FormValues {
   return {
     type: TrainingType.YOGA,
     runsFrom,
@@ -22,22 +39,23 @@ function getInitialValues(runsFrom: string): TrainingInput {
       end: '',
     },
     clientIds: [],
+    notes: '',
   };
 }
 
-const AddTrainingDialogContent: React.FC<Props> = ({ clients, onTrainingCreated, onCancelClick }) => {
-  const { trainingRepo } = useRepos();
+const AddSessionDialogContent: React.FC<Props> = ({ clients, onSessionAdded, onCancelClick }) => {
+  const { sessionRepo } = useRepos();
 
-  async function handleFormSubmission(values: TrainingInput, { setSubmitting }: FormikHelpers<TrainingInput>) {
-    const training = await trainingRepo.create(values);
+  async function handleFormSubmission(values: FormValues, { setSubmitting }: FormikHelpers<FormValues>) {
+    const session = await sessionRepo.createSingle(getSessionInput(values));
     setSubmitting(false);
-    onTrainingCreated(training);
+    onSessionAdded(session);
   }
 
   return (
     <>
-      <DialogHeader title="Neue Trainingsreihe" onCloseClick={onCancelClick} />
-      <Formik<TrainingInput>
+      <DialogHeader title="Neues Einzeltraining" onCloseClick={onCancelClick} />
+      <Formik<FormValues>
         initialValues={getInitialValues(getToday())}
         validate={validateTrainingForm}
         onSubmit={handleFormSubmission}
@@ -46,7 +64,7 @@ const AddTrainingDialogContent: React.FC<Props> = ({ clients, onTrainingCreated,
           <>
             <DialogBody>
               <Form className="p-4">
-                <TrainingFormFields clients={clients} disabled={isSubmitting} />
+                <SessionFormFields clients={clients} disabled={isSubmitting} />
               </Form>
             </DialogBody>
             <DialogFooter>
@@ -62,7 +80,7 @@ const AddTrainingDialogContent: React.FC<Props> = ({ clients, onTrainingCreated,
                   disabled={!isValid}
                   onClick={submitForm}
                 >
-                  Erstellen
+                  Speichern
                 </Button>
               </div>
             </DialogFooter>
@@ -73,4 +91,4 @@ const AddTrainingDialogContent: React.FC<Props> = ({ clients, onTrainingCreated,
   );
 };
 
-export default AddTrainingDialogContent;
+export default AddSessionDialogContent;

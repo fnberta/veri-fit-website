@@ -135,12 +135,13 @@ function getSessionsForTrainingQuery(trainingId: string, startingFrom?: string):
 }
 
 // TODO: should create new sessions if runsFrom changes to an earlier week
-function makeTrainingAndSessionsUpdater(sessionInput: SessionInput, includePast: boolean): UpdateFunction<void> {
-  const trainingsRef = db.collection(Collection.TRAININGS).doc(sessionInput.trainingId);
-  const sessionsQuery = getSessionsForTrainingQuery(
-    sessionInput.trainingId,
-    includePast ? undefined : sessionInput.date,
-  );
+function makeTrainingAndSessionsUpdater(
+  sessionInput: SessionInput,
+  trainingId: string,
+  includePast: boolean,
+): UpdateFunction<void> {
+  const trainingsRef = db.collection(Collection.TRAININGS).doc(trainingId);
+  const sessionsQuery = getSessionsForTrainingQuery(trainingId, includePast ? undefined : sessionInput.date);
   const trainingInput: TrainingInput = {
     type: sessionInput.type,
     runsFrom: sessionInput.runsFrom,
@@ -157,6 +158,7 @@ function makeTrainingAndSessionsUpdater(sessionInput: SessionInput, includePast:
       const { weekday } = DateTime.fromISO(sessionInput.runsFrom);
       t.set(snap.ref, {
         ...sessionInput,
+        trainingId,
         date: date.set({ weekday }).toISODate(),
       });
     });
@@ -169,22 +171,30 @@ export const updateSession = functions.https.onCall(async (data, context) => {
   }
 
   const { type, sessionId, sessionInput } = data as UpdateSessionPayload;
-  switch (type) {
-    case ChangeType.SINGLE: {
-      await db
-        .collection(Collection.SESSIONS)
-        .doc(sessionId)
-        .set(sessionInput);
-      break;
+  if (type === ChangeType.SINGLE) {
+    await db
+      .collection(Collection.SESSIONS)
+      .doc(sessionId)
+      .set(sessionInput);
+  } else {
+    const { trainingId } = sessionInput;
+    if (trainingId == null) {
+      throw new functions.https.HttpsError(
+        'invalid-argument',
+        'The function must be called with a session that is associated with a training.',
+      );
     }
-    case ChangeType.ALL_FOLLOWING: {
-      // TODO: ensure all sessions up to this date are created
-      await db.runTransaction(makeTrainingAndSessionsUpdater(sessionInput, false));
-      break;
-    }
-    case ChangeType.ALL_NON_CONFIRMED: {
-      await db.runTransaction(makeTrainingAndSessionsUpdater(sessionInput, true));
-      break;
+
+    switch (type) {
+      case ChangeType.ALL_FOLLOWING: {
+        // TODO: ensure all sessions up to this date are created
+        await db.runTransaction(makeTrainingAndSessionsUpdater(sessionInput, trainingId, false));
+        break;
+      }
+      case ChangeType.ALL_NON_CONFIRMED: {
+        await db.runTransaction(makeTrainingAndSessionsUpdater(sessionInput, trainingId, true));
+        break;
+      }
     }
   }
 });

@@ -13,6 +13,10 @@ export interface Time {
   end: string; // hh:mm
 }
 
+export function getTimeForId({ start, end }: Time): string {
+  return `${start.replace(':', '')}-${end.replace(':', '')}`;
+}
+
 export const Collection = {
   CLIENTS: 'clients',
   SUBSCRIPTIONS: 'subscriptions',
