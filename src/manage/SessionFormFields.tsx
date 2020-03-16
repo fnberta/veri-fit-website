@@ -1,7 +1,12 @@
 import { ErrorMessage, Field } from 'formik';
 import React from 'react';
+import { TrainingInput } from '../../shared';
 import { FormField } from '../common/components/Forms';
 import TrainingFormFields, { Props } from './TrainingFormFields';
+
+export interface SessionFormValues extends TrainingInput {
+  notes: string;
+}
 
 const SessionFormFields: React.FC<Props> = ({ clients, disabled }) => (
   <>

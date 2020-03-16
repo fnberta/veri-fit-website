@@ -1,11 +1,11 @@
 import { Form, Formik, FormikHelpers } from 'formik';
 import React from 'react';
-import { Client, Session, SessionInput, TrainingInput, TrainingType } from '../../shared';
+import { Client, Session, SessionInput, TrainingType } from '../../shared';
 import { Button } from '../common/components/Button';
 import { DialogBody, DialogFooter, DialogHeader } from '../common/components/Dialog';
 import { getToday } from './dateTime';
 import { useRepos } from './repositories/RepoContext';
-import SessionFormFields from './SessionFormFields';
+import SessionFormFields, { SessionFormValues } from './SessionFormFields';
 import { validateTrainingForm } from './TrainingFormFields';
 
 export interface Props {
@@ -14,11 +14,7 @@ export interface Props {
   onCancelClick: () => void;
 }
 
-interface FormValues extends TrainingInput {
-  notes: string;
-}
-
-function getSessionInput(values: FormValues): SessionInput {
+function getSessionInput(values: SessionFormValues): SessionInput {
   const input: SessionInput = {
     ...values,
     confirmed: false,
@@ -30,7 +26,7 @@ function getSessionInput(values: FormValues): SessionInput {
   return input;
 }
 
-function getInitialValues(runsFrom: string): FormValues {
+function getInitialValues(runsFrom: string): SessionFormValues {
   return {
     type: TrainingType.YOGA,
     runsFrom,
@@ -46,7 +42,7 @@ function getInitialValues(runsFrom: string): FormValues {
 const AddSessionDialogContent: React.FC<Props> = ({ clients, onSessionAdded, onCancelClick }) => {
   const { sessionRepo } = useRepos();
 
-  async function handleFormSubmission(values: FormValues, { setSubmitting }: FormikHelpers<FormValues>) {
+  async function handleFormSubmission(values: SessionFormValues, { setSubmitting }: FormikHelpers<SessionFormValues>) {
     const session = await sessionRepo.createSingle(getSessionInput(values));
     setSubmitting(false);
     onSessionAdded(session);
@@ -55,7 +51,7 @@ const AddSessionDialogContent: React.FC<Props> = ({ clients, onSessionAdded, onC
   return (
     <>
       <DialogHeader title="Neues Einzeltraining" onCloseClick={onCancelClick} />
-      <Formik<FormValues>
+      <Formik<SessionFormValues>
         initialValues={getInitialValues(getToday())}
         validate={validateTrainingForm}
         onSubmit={handleFormSubmission}

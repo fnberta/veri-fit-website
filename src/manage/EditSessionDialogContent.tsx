@@ -1,11 +1,11 @@
 import { Form, Formik, FormikHelpers } from 'formik';
 import { DateTime } from 'luxon';
 import React, { useState } from 'react';
-import { ChangeType, Client, Session, SessionInput, TrainingInput } from '../../shared';
+import { ChangeType, Client, Session, SessionInput } from '../../shared';
 import { Button } from '../common/components/Button';
 import { DialogBody, DialogFooter, DialogHeader } from '../common/components/Dialog';
 import { useRepos } from './repositories/RepoContext';
-import SessionFormFields from './SessionFormFields';
+import SessionFormFields, { SessionFormValues } from './SessionFormFields';
 import { validateTrainingForm } from './TrainingFormFields';
 
 export interface Props {
@@ -15,11 +15,7 @@ export interface Props {
   onCancelClick: () => void;
 }
 
-interface FormValues extends TrainingInput {
-  notes: string;
-}
-
-function getSessionInput(session: Session, values: FormValues): SessionInput {
+function getSessionInput(session: Session, values: SessionFormValues): SessionInput {
   const date = DateTime.fromISO(session.date);
   const input: SessionInput = {
     ...values,
@@ -35,7 +31,7 @@ function getSessionInput(session: Session, values: FormValues): SessionInput {
   return input;
 }
 
-function getInitialValues(session: Session): FormValues {
+function getInitialValues(session: Session): SessionFormValues {
   return {
     type: session.type,
     runsFrom: session.runsFrom,
@@ -49,7 +45,7 @@ const EditSessionDialogContent: React.FC<Props> = ({ session, clients, onSession
   const [changeType, setChangeType] = useState(ChangeType.SINGLE);
   const { sessionRepo } = useRepos();
 
-  async function handleFormSubmission(values: FormValues, { setSubmitting }: FormikHelpers<FormValues>) {
+  async function handleFormSubmission(values: SessionFormValues, { setSubmitting }: FormikHelpers<SessionFormValues>) {
     const changedSession = await sessionRepo.update(changeType, session.id, getSessionInput(session, values));
     setSubmitting(false);
     onSessionChanged(changedSession);
@@ -58,7 +54,7 @@ const EditSessionDialogContent: React.FC<Props> = ({ session, clients, onSession
   return (
     <>
       <DialogHeader title="Training bearbeiten" onCloseClick={onCancelClick} />
-      <Formik<FormValues>
+      <Formik<SessionFormValues>
         initialValues={getInitialValues(session)}
         validate={validateTrainingForm}
         onSubmit={handleFormSubmission}
