@@ -6,6 +6,7 @@ import { Button, LinkIconButton } from '../common/components/Button';
 import Dialog from '../common/components/Dialog';
 import WeekSchedule, { TimeOfDay, Week, Weekday } from '../common/components/WeekSchedule';
 import { ClassNameProps } from '../common/utils/types';
+import AddSessionDialogContent from './AddSessionDialogContent';
 import AddTrainingDialogContent from './AddTrainingDialogContent';
 import EditSessionDialogContent from './EditSessionDialogContent';
 import { useRepos } from './repositories/RepoContext';
@@ -14,7 +15,7 @@ import cx from 'classnames';
 
 export type Props = RouteComponentProps<{ year: number; week: number }> & ClassNameProps;
 
-type AddEditDialog = { type: 'ADD' } | { type: 'EDIT'; session: Session };
+type AddEditDialog = { type: 'ADD_TRAINING' } | { type: 'ADD_SESSION' } | { type: 'EDIT'; session: Session };
 
 function getWeekday(iso: string): Weekday {
   const date = DateTime.fromISO(iso);
@@ -145,21 +146,28 @@ const Trainings: React.FC<Props> = ({ year, week, className }) => {
           )}
         />
         <div className="mt-4 flex">
-          <Button icon="document-add" onClick={() => setAddEditDialog({ type: 'ADD' })}>
+          <Button icon="document-add" onClick={() => setAddEditDialog({ type: 'ADD_TRAINING' })}>
             Neue Trainingsreihe
           </Button>
-          <Button className="ml-2" icon="plus" disabled={true}>
+          <Button className="ml-2" icon="plus" onClick={() => setAddEditDialog({ type: 'ADD_SESSION' })}>
             Neues Einzeltraining
           </Button>
         </div>
-        <Dialog open={addEditDialog?.type === 'ADD'} onCancel={() => setAddEditDialog(undefined)}>
-          <AddTrainingDialogContent
-            clients={clients}
-            onTrainingCreated={() => setAddEditDialog(undefined)}
-            onCancelClick={() => setAddEditDialog(undefined)}
-          />
-        </Dialog>
-        <Dialog open={addEditDialog?.type === 'EDIT'} onCancel={() => setAddEditDialog(undefined)}>
+        <Dialog open={addEditDialog != null} onCancel={() => setAddEditDialog(undefined)}>
+          {addEditDialog?.type === 'ADD_TRAINING' && (
+            <AddTrainingDialogContent
+              clients={clients}
+              onTrainingCreated={() => setAddEditDialog(undefined)}
+              onCancelClick={() => setAddEditDialog(undefined)}
+            />
+          )}
+          {addEditDialog?.type === 'ADD_SESSION' && (
+            <AddSessionDialogContent
+              clients={clients}
+              onSessionAdded={() => setAddEditDialog(undefined)}
+              onCancelClick={() => setAddEditDialog(undefined)}
+            />
+          )}
           {addEditDialog?.type === 'EDIT' && (
             <EditSessionDialogContent
               session={addEditDialog.session}

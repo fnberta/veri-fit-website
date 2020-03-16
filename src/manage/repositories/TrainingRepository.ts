@@ -1,6 +1,6 @@
 import { Unsubscribe } from 'firebase';
 import { DateTime } from 'luxon';
-import { Collection, parseTraining, Training, TrainingInput } from '../../../shared';
+import { Collection, getTimeForId, parseTraining, Training, TrainingInput } from '../../../shared';
 import { Firestore } from '../firebase';
 
 export default class TrainingRepository {
@@ -8,9 +8,7 @@ export default class TrainingRepository {
 
   async create(input: TrainingInput): Promise<Training> {
     const { weekday } = DateTime.fromISO(input.runsFrom);
-    const ref = this.db
-      .collection(Collection.TRAININGS)
-      .doc(`${input.type}-${weekday}-${input.time.start.replace(':', '')}-${input.time.end.replace(':', '')}`);
+    const ref = this.db.collection(Collection.TRAININGS).doc(`${input.type}-${weekday}-${getTimeForId(input.time)}`);
     await ref.set(input);
     const snap = await ref.get();
     return parseTraining(snap);

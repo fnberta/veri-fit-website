@@ -2,7 +2,7 @@ import { Snapshot } from './common';
 import { Training } from './training';
 
 export interface Session extends Training {
-  trainingId: string;
+  trainingId?: string;
   date: string; // YYYY-MM-DD
   confirmed: boolean;
   notes?: string;
