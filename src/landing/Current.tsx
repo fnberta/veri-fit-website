@@ -19,7 +19,7 @@ interface Video {
 
 const availableVideos: Video[] = [
   {
-    title: "Yoga 1 - ganzheitliches Training 60'(Abfolge Di/Mi-Gruppe)",
+    title: "Yoga 1 - ganzheitliches Training 60' (Abfolge Di/Mi-Gruppe)",
     status: 'available',
   },
   {
@@ -39,7 +39,7 @@ const availableVideos: Video[] = [
   //   status: 'soon',
   // },
   {
-    title: 'CoreXtreme - 20’ intensives Rumpftraining',
+    title: "CoreXtreme - 20' intensives Rumpftraining",
     status: 'available',
   },
 ];
