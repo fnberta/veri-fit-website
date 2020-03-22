@@ -200,7 +200,7 @@ const Current: React.FC = () => {
         )}
         <p className="mt-6 text-lg text-white">
           Pro Video ziehe ich dir von deinem Abo einen Eintritt ab. Hast du kein Abo, verrechne ich dir einen
-          Einzeleintritt (30.-). Bleib gesund & in Bewegung!
+          Einzeleintritt (30.-). Bleib gesund und in Bewegung!
         </p>
       </div>
     </section>
