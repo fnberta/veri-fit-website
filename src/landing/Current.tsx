@@ -53,12 +53,6 @@ const initialValues: FormValues = {
 
 async function submitForm({ videos, ...rest }: FormValues): Promise<boolean> {
   try {
-    const titles = [] as string[];
-    for (let i = 0; i < videos.length; i++) {
-      if (videos[i]) {
-        titles.push(availableVideos[i].title);
-      }
-    }
     const res = await window.fetch('/', {
       method: 'POST',
       headers: {
@@ -67,7 +61,10 @@ async function submitForm({ videos, ...rest }: FormValues): Promise<boolean> {
       body: urlEncode({
         'form-name': 'videos',
         ...rest,
-        videos: titles.join(', '),
+        ...availableVideos.reduce((acc, curr, idx) => {
+          acc[curr.title] = videos[idx];
+          return acc;
+        }, {} as Record<string, boolean>),
       }),
     });
 
