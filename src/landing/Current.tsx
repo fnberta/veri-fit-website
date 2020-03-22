@@ -184,7 +184,7 @@ const Current: React.FC = () => {
                 type="submit"
                 color="orange"
                 loading={isSubmitting}
-                disabled={isSubmitting || !isValid}
+                disabled={!isValid}
               >
                 Senden
               </Button>

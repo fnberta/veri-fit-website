@@ -152,13 +152,7 @@ const ContactMe: React.FC = () => {
                     />
                   }
                 />
-                <Button
-                  className="ml-4 mt-4"
-                  type="submit"
-                  color="orange"
-                  loading={isSubmitting}
-                  disabled={isSubmitting || !isValid}
-                >
+                <Button className="ml-4 mt-4" type="submit" color="orange" loading={isSubmitting} disabled={!isValid}>
                   Senden
                 </Button>
               </Form>
