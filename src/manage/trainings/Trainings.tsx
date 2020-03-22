@@ -1,15 +1,15 @@
 import { RouteComponentProps } from '@reach/router';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
-import { Client, Session, Time } from '../../shared';
-import { Button, LinkIconButton } from '../common/components/Button';
-import Dialog from '../common/components/Dialog';
-import WeekSchedule, { TimeOfDay, Week, Weekday } from '../common/components/WeekSchedule';
-import { ClassNameProps } from '../common/utils/types';
+import { Client, Session, Time } from '../../../shared';
+import { Button, LinkIconButton } from '../../common/components/Button';
+import Dialog from '../../common/components/Dialog';
+import WeekSchedule, { TimeOfDay, Week, Weekday } from '../../common/components/WeekSchedule';
+import { ClassNameProps } from '../../common/utils/types';
 import AddSessionDialogContent from './AddSessionDialogContent';
 import AddTrainingDialogContent from './AddTrainingDialogContent';
 import EditSessionDialogContent from './EditSessionDialogContent';
-import { useRepos } from './repositories/RepoContext';
+import { useRepos } from '../repositories/RepoContext';
 import SessionCard from './SessionCard';
 import cx from 'classnames';
 

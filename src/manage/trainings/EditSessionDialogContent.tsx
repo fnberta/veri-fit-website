@@ -1,10 +1,10 @@
 import { Form, Formik, FormikHelpers } from 'formik';
 import { DateTime } from 'luxon';
 import React, { useState } from 'react';
-import { ChangeType, Client, Session, SessionInput } from '../../shared';
-import { Button } from '../common/components/Button';
-import { DialogBody, DialogFooter, DialogHeader } from '../common/components/Dialog';
-import { useRepos } from './repositories/RepoContext';
+import { ChangeType, Client, Session, SessionInput } from '../../../shared';
+import { Button } from '../../common/components/Button';
+import { DialogBody, DialogFooter, DialogHeader } from '../../common/components/Dialog';
+import { useRepos } from '../repositories/RepoContext';
 import SessionFormFields, { SessionFormValues } from './SessionFormFields';
 import { validateTrainingForm } from './TrainingFormFields';
 

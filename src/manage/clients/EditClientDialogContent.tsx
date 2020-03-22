@@ -1,10 +1,10 @@
 import { Form, Formik, FormikHelpers } from 'formik';
 import React from 'react';
-import { Client } from '../../shared';
-import { Button } from '../common/components/Button';
-import { DialogBody, DialogFooter, DialogHeader } from '../common/components/Dialog';
+import { Client } from '../../../shared';
+import { Button } from '../../common/components/Button';
+import { DialogBody, DialogFooter, DialogHeader } from '../../common/components/Dialog';
 import ClientFormFields, { ClientFormValues, getClientInput, validateClientForm } from './ClientFormFields';
-import { useRepos } from './repositories/RepoContext';
+import { useRepos } from '../repositories/RepoContext';
 
 export interface Props {
   client: Client;

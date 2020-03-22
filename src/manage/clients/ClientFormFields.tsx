@@ -1,9 +1,9 @@
 import { ErrorMessage, Field, FormikErrors } from 'formik';
 import React from 'react';
-import { FormField } from '../common/components/Forms';
-import { makeValidator } from '../common/utils/forms';
-import { getToday, isValidISOString } from './dateTime';
-import { ClientInput } from './repositories/ClientRepository';
+import { FormField } from '../../common/components/Forms';
+import { makeValidator } from '../../common/utils/forms';
+import { getToday, isValidISOString } from '../dateTime';
+import { ClientInput } from '../repositories/ClientRepository';
 
 export interface Props {
   disabled: boolean;
