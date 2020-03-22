@@ -110,6 +110,21 @@ dialog[open] + .backdrop {
   @apply bg-red-200 text-red-800;
 }
 
+.form-field {
+  @apply flex flex-col;
+}
+.form-field > * + * {
+  @apply mt-1;
+}
+
+.form-label {
+  @apply text-sm font-semibold;
+}
+
+.form-error {
+  @apply text-xs text-red-500 font-semibold;
+}
+
 .table thead tr th {
   @apply px-4 py-2 border-b-2 text-xs text-gray-500 text-left uppercase tracking-wider;
 }

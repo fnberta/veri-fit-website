@@ -1,12 +1,10 @@
 import { ErrorMessage, Field, Form, Formik, FormikHelpers } from 'formik';
 import React, { useState } from 'react';
 import BulletItem from './BulletItem';
-import { Button, IconButton } from '../common/components/Button';
-import { FormField } from '../common/components/Forms';
-import { makeValidator } from '../common/utils/forms';
-import cx from 'classnames';
-
-type NotificationType = 'success' | 'error';
+import { Button } from '../common/components/Button';
+import { BotField, FormField } from '../common/components/Forms';
+import { makeValidator, urlEncode } from '../common/utils/forms';
+import Notification, { NotificationType } from '../common/components/Notification';
 
 interface FormValues {
   name: string;
@@ -19,57 +17,6 @@ const initialValues: FormValues = {
   email: '',
   message: '',
 };
-
-const Notification: React.FC<{
-  type: NotificationType;
-  onCloseClick: React.MouseEventHandler<HTMLButtonElement>;
-} & React.HTMLProps<HTMLDivElement>> = ({ type, onCloseClick, className, ...rest }) => {
-  function getContentForType() {
-    switch (type) {
-      case 'success':
-        return {
-          classes: {
-            pill: 'bg-orange-300 text-orange-800',
-            close: 'hover:bg-orange-200 active:bg-orange-400',
-          },
-          text: 'Herzlichen Dank für deine Nachricht! Ich melde mich sofort bei dir.',
-        };
-      case 'error':
-        return {
-          classes: {
-            pill: 'bg-red-300 text-red-800',
-            close: 'hover:bg-red-200 active:bg-red-400',
-          },
-          text: 'Da ist etwas schief gegangen. Bitte versuche es nochmals!',
-        };
-    }
-  }
-
-  const { classes, text } = getContentForType();
-  return (
-    <div
-      className={cx('px-4 py-2 leading-tight rounded-lg flex items-center', classes.pill, className)}
-      role="alert"
-      {...rest}
-    >
-      <span className="font-semibold text-left flex-auto">{text}</span>
-      <IconButton
-        className={cx('ml-2', classes.close)}
-        color="none"
-        icon="x"
-        title="Schliessen"
-        aria-label="Schliessen"
-        onClick={onCloseClick}
-      />
-    </div>
-  );
-};
-
-function urlEncode(data: { [key: string]: string }): string {
-  return Object.keys(data)
-    .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`)
-    .join('&');
-}
 
 async function submitForm(values: FormValues): Promise<boolean> {
   try {
@@ -155,11 +102,7 @@ const ContactMe: React.FC = () => {
                 data-netlify="true"
                 netlify-honeypot="bot-field"
               >
-                <div className="hidden">
-                  <label>
-                    Don't fill this out if you're human: <input name="bot-field" />
-                  </label>
-                </div>
+                <BotField />
                 <FormField
                   className="w-64 ml-4 mt-4 flex-auto"
                   label={<span className="text-white font-semibold">Name</span>}
@@ -209,13 +152,7 @@ const ContactMe: React.FC = () => {
                     />
                   }
                 />
-                <Button
-                  className="ml-4 mt-4"
-                  type="submit"
-                  color="orange"
-                  loading={isSubmitting}
-                  disabled={isSubmitting || !isValid}
-                >
+                <Button className="ml-4 mt-4" type="submit" color="orange" loading={isSubmitting} disabled={!isValid}>
                   Senden
                 </Button>
               </Form>
