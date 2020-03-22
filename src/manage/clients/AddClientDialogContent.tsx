@@ -1,17 +1,17 @@
 import { Form, Formik, FormikErrors, FormikHelpers } from 'formik';
 import React from 'react';
-import { Client, SubscriptionType, TrainingType } from '../../shared';
-import { DialogBody, DialogFooter, DialogHeader } from '../common/components/Dialog';
+import { Client, SubscriptionType, TrainingType } from '../../../shared';
+import { DialogBody, DialogFooter, DialogHeader } from '../../common/components/Dialog';
 import ClientFormFields, { ClientFormValues, getClientInput, validateClientForm } from './ClientFormFields';
-import { getToday } from './dateTime';
-import { useRepos } from './repositories/RepoContext';
+import { getToday } from '../dateTime';
+import { useRepos } from '../repositories/RepoContext';
 import SubscriptionFormFields, {
   getDefaultTrainingsLeft,
   getSubscriptionInput,
   SubscriptionFormValues,
   validateSubscriptionForm,
 } from './SubscriptionFormFields';
-import { Button } from '../common/components/Button';
+import { Button } from '../../common/components/Button';
 
 export interface Props {
   onClientCreated: (client: Client) => void;

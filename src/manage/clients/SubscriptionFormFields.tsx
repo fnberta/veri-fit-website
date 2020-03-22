@@ -1,11 +1,11 @@
 import { ErrorMessage, Field, FormikErrors, getIn, useFormikContext } from 'formik';
 import React from 'react';
-import { SubscriptionType, TrainingType } from '../../shared';
-import { FormField } from '../common/components/Forms';
-import { getEndDate, isValidISOString } from './dateTime';
-import { getSubscriptionName, getTrainingName } from './displayNames';
-import { SubscriptionInput } from './repositories/ClientRepository';
-import { validSubscriptionTypes } from './subscriptionChecks';
+import { SubscriptionType, TrainingType } from '../../../shared';
+import { FormField } from '../../common/components/Forms';
+import { getEndDate, isValidISOString } from '../dateTime';
+import { getSubscriptionName, getTrainingName } from '../displayNames';
+import { SubscriptionInput } from '../repositories/ClientRepository';
+import { validSubscriptionTypes } from '../subscriptionChecks';
 
 export interface Props {
   namespace?: string;
