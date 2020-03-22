@@ -17,3 +17,11 @@ export const FormField: React.FC<FormFieldProps> = ({ control, label, error, htm
     {error && <p className="text-xs text-red-500">{error}</p>}
   </div>
 );
+
+export const BotField: React.FC = () => (
+  <div className="hidden">
+    <label>
+      Don't fill this out if you're human: <input name="bot-field" />
+    </label>
+  </div>
+);

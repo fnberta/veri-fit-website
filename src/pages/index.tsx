@@ -5,6 +5,7 @@ import Navbar from '../common/components/Navbar';
 import { IndexPageQuery } from '../generatedGraphQL';
 import AboutMe from '../landing/AboutMe';
 import ContactMe from '../landing/ContactMe';
+import Current from '../landing/Current';
 import Hero from '../landing/Hero';
 import LocationMap from '../landing/LocationMap';
 import Offers, { OfferData } from '../landing/Offers';
@@ -42,6 +43,7 @@ const IndexPage: React.FC<Props> = ({ data }) => {
         <a href="/#contact">Kontakt</a>
       </Navbar>
       <Hero />
+      <Current />
       <Offers data={data.offers.nodes.map(node => ({ ...node.frontmatter, html: node.html } as OfferData))} />
       <TryOut />
       <Schedule entries={data.schedule.nodes.map(node => node.frontmatter as ScheduleEntryData)} />
