@@ -8,7 +8,7 @@ import { makeValidator, urlEncode } from '../common/utils/forms';
 interface FormValues {
   name: string;
   email: string;
-  videos: boolean[];
+  videos: string[];
   message: string;
 }
 
@@ -47,7 +47,7 @@ const availableVideos: Video[] = [
 const initialValues: FormValues = {
   name: '',
   email: '',
-  videos: availableVideos.map(() => false),
+  videos: [],
   message: '',
 };
 
@@ -61,10 +61,7 @@ async function submitForm({ videos, ...rest }: FormValues): Promise<boolean> {
       body: urlEncode({
         'form-name': 'videos',
         ...rest,
-        ...videos.reduce((acc, curr, idx) => {
-          acc[`videos[${idx}]`] = curr;
-          return acc;
-        }, {} as Record<string, boolean>),
+        videos: videos.join(', '),
       }),
     });
 
@@ -107,22 +104,20 @@ const Current: React.FC = () => {
               <fieldset>
                 <legend className="text-white form-label">Videos</legend>
                 <ul className="-mt-1 text-white">
-                  {availableVideos.map((video, idx) => {
-                    const name = `videos[${idx}]`;
-                    return (
-                      <li key={video.title} className="mt-2">
-                        <div className="form-field">
-                          <label className="inline-flex items-center">
-                            <Field className="form-checkbox" type="checkbox" name={name} disabled={isSubmitting} />
-                            <span className="ml-2 text-sm">{video.title}</span>
-                          </label>
-                          <ErrorMessage name={name}>
-                            {error => <span className="form-error">{error}</span>}
-                          </ErrorMessage>
-                        </div>
-                      </li>
-                    );
-                  })}
+                  {availableVideos.map(video => (
+                    <li key={video.title} className="mt-2">
+                      <label className="inline-flex items-center">
+                        <Field
+                          className="form-checkbox"
+                          type="checkbox"
+                          name="videos"
+                          value={video.title}
+                          disabled={isSubmitting}
+                        />
+                        <span className="ml-2 text-sm">{video.title}</span>
+                      </label>
+                    </li>
+                  ))}
                 </ul>
               </fieldset>
               <label className="mt-4 flex-auto form-field">
