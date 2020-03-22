@@ -61,8 +61,8 @@ async function submitForm({ videos, ...rest }: FormValues): Promise<boolean> {
       body: urlEncode({
         'form-name': 'videos',
         ...rest,
-        ...availableVideos.reduce((acc, curr, idx) => {
-          acc[curr.title] = videos[idx];
+        ...videos.reduce((acc, curr, idx) => {
+          acc[`videos[${idx}]`] = curr;
           return acc;
         }, {} as Record<string, boolean>),
       }),
@@ -112,18 +112,10 @@ const Current: React.FC = () => {
                     return (
                       <li key={video.title} className="mt-2">
                         <div className="form-field">
-                          <div className="inline-flex items-center">
-                            <Field
-                              className="form-checkbox"
-                              type="checkbox"
-                              id={name}
-                              name={name}
-                              disabled={isSubmitting}
-                            />
-                            <label className="ml-2 text-sm" htmlFor={name}>
-                              {video.title}
-                            </label>
-                          </div>
+                          <label className="inline-flex items-center">
+                            <Field className="form-checkbox" type="checkbox" name={name} disabled={isSubmitting} />
+                            <span className="ml-2 text-sm">{video.title}</span>
+                          </label>
                           <ErrorMessage name={name}>
                             {error => <span className="form-error">{error}</span>}
                           </ErrorMessage>
@@ -133,48 +125,36 @@ const Current: React.FC = () => {
                   })}
                 </ul>
               </fieldset>
-              <div className="mt-4 flex-auto form-field">
-                <label className="form-label text-white" htmlFor="videos-message">
+              <label className="mt-4 flex-auto form-field">
+                <span className="form-label text-white">
                   Dein Wunschtraining ist noch nicht auf der Liste? Beschreibe was du dir wünschst!
-                </label>
-                <Field
-                  className="form-textarea h-full"
-                  as="textarea"
-                  id="videos-message"
-                  name="message"
-                  disabled={isSubmitting}
-                />
+                </span>
+                <Field className="form-textarea h-full" as="textarea" name="message" disabled={isSubmitting} />
                 <ErrorMessage name="message">{error => <span className="form-error">{error}</span>}</ErrorMessage>
-              </div>
+              </label>
               <div className="-ml-4 flex flex-wrap">
-                <div className="w-64 ml-4 mt-4 flex-auto form-field">
-                  <label className="form-label text-white" htmlFor="videos-name">
-                    Name
-                  </label>
+                <label className="w-64 ml-4 mt-4 flex-auto form-field">
+                  <span className="form-label text-white">Name</span>
                   <Field
                     className="form-input"
                     type="text"
-                    id="videos-name"
                     name="name"
                     validate={makeValidator('Name')}
                     disabled={isSubmitting}
                   />
                   <ErrorMessage name="name">{error => <span className="form-error">{error}</span>}</ErrorMessage>
-                </div>
-                <div className="w-64 ml-4 mt-4 flex-auto form-field">
-                  <label className="form-label text-white" htmlFor="videos-email">
-                    Email
-                  </label>
+                </label>
+                <label className="w-64 ml-4 mt-4 flex-auto form-field">
+                  <span className="form-label text-white">Email</span>
                   <Field
                     className="form-input"
                     type="email"
-                    id="videos-email"
                     name="email"
                     validate={makeValidator('Email')}
                     disabled={isSubmitting}
                   />
                   <ErrorMessage name="email">{error => <span className="form-error">{error}</span>}</ErrorMessage>
-                </div>
+                </label>
               </div>
               <Button
                 className="mt-4 self-start"

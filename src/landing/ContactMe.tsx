@@ -2,7 +2,7 @@ import { ErrorMessage, Field, Form, Formik, FormikHelpers } from 'formik';
 import React, { useState } from 'react';
 import BulletItem from './BulletItem';
 import { Button } from '../common/components/Button';
-import { BotField, FormField } from '../common/components/Forms';
+import { BotField } from '../common/components/Forms';
 import { makeValidator, urlEncode } from '../common/utils/forms';
 import Notification, { NotificationType } from '../common/components/Notification';
 
@@ -103,55 +103,40 @@ const ContactMe: React.FC = () => {
                 netlify-honeypot="bot-field"
               >
                 <BotField />
-                <FormField
-                  className="w-64 ml-4 mt-4 flex-auto"
-                  label={<span className="text-white font-semibold">Name</span>}
-                  htmlFor="name"
-                  error={<ErrorMessage name="name" />}
-                  control={
-                    <Field
-                      className="form-input"
-                      type="text"
-                      id="name"
-                      name="name"
-                      validate={makeValidator('Name')}
-                      disabled={isSubmitting}
-                    />
-                  }
-                />
-                <FormField
-                  className="w-64 ml-4 mt-4 flex-auto"
-                  label={<span className="text-white font-semibold">Email</span>}
-                  htmlFor="email"
-                  error={<ErrorMessage name="email" />}
-                  control={
-                    <Field
-                      className="form-input"
-                      type="email"
-                      id="email"
-                      name="email"
-                      validate={makeValidator('Email')}
-                      disabled={isSubmitting}
-                    />
-                  }
-                />
-                <FormField
-                  className="w-full ml-4 mt-4"
-                  label={<span className="text-white font-semibold">Nachricht</span>}
-                  htmlFor="message"
-                  error={<ErrorMessage name="message" />}
-                  control={
-                    <Field
-                      className="form-textarea"
-                      as="textarea"
-                      id="message"
-                      name="message"
-                      placeholder="Wie kann ich dir helfen?"
-                      validate={makeValidator('Nachricht')}
-                      disabled={isSubmitting}
-                    />
-                  }
-                />
+                <label className="w-64 ml-4 mt-4 flex-auto form-field">
+                  <span className="text-white form-label">Name</span>
+                  <Field
+                    className="form-input"
+                    type="text"
+                    name="name"
+                    validate={makeValidator('Name')}
+                    disabled={isSubmitting}
+                  />
+                  <ErrorMessage name="name">{error => <span className="form-error">{error}</span>}</ErrorMessage>
+                </label>
+                <label className="w-64 ml-4 mt-4 flex-auto form-field">
+                  <span className="text-white form-label">Email</span>
+                  <Field
+                    className="form-input"
+                    type="email"
+                    name="email"
+                    validate={makeValidator('Email')}
+                    disabled={isSubmitting}
+                  />
+                  <ErrorMessage name="email">{error => <span className="form-error">{error}</span>}</ErrorMessage>
+                </label>
+                <label className="w-full ml-4 mt-4 form-field">
+                  <span className="text-white form-label">Nachricht</span>
+                  <Field
+                    className="form-textarea"
+                    as="textarea"
+                    name="message"
+                    placeholder="Wie kann ich dir helfen?"
+                    validate={makeValidator('Nachricht')}
+                    disabled={isSubmitting}
+                  />
+                  <ErrorMessage name="message">{error => <span className="form-error">{error}</span>}</ErrorMessage>
+                </label>
                 <Button className="ml-4 mt-4" type="submit" color="orange" loading={isSubmitting} disabled={!isValid}>
                   Senden
                 </Button>
