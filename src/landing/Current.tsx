@@ -34,12 +34,16 @@ const availableVideos: Video[] = [
     title: "Yoga 4 - 40' Yoga-Flow (Sonnengruss-Varianten, tanzender Krieger)",
     status: 'available',
   },
-  // {
-  //   title: 'Boost 1 - funktionelles Krafttraining mit dem eigenen Körpergewicht',
-  //   status: 'soon',
-  // },
+  {
+    title: "Yoga 5 - 30' ruhige Abfolge zum Abschalten",
+    status: 'available',
+  },
   {
     title: "CoreXtreme - 20' intensives Rumpftraining",
+    status: 'available',
+  },
+  {
+    title: 'Boost 1 - funktionelles Krafttraining mit dem eigenen Körpergewicht',
     status: 'available',
   },
 ];

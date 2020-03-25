@@ -57,18 +57,10 @@ const IndexPage: React.FC<Props> = ({ data }) => {
 export default IndexPage;
 
 export const query = graphql`
-  fragment FluidImageNoBase64 on File {
-    childImageSharp {
-      fluid {
-        ...GatsbyImageSharpFluid_noBase64
-      }
-    }
-  }
-
   fragment FluidImage on File {
     childImageSharp {
       fluid {
-        ...GatsbyImageSharpFluid
+        ...GatsbyImageSharpFluid_withWebp
       }
     }
   }
