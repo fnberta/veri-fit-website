@@ -1,4 +1,5 @@
 import { graphql } from 'gatsby';
+import { FluidObject } from 'gatsby-image';
 import React, { useEffect, useState } from 'react';
 import Layout from '../common/components/Layout';
 import Navbar from '../common/components/Navbar';
@@ -44,10 +45,19 @@ const IndexPage: React.FC<Props> = ({ data }) => {
       </Navbar>
       <Hero />
       <Current />
-      <Offers data={data.offers.nodes.map(node => ({ ...node.frontmatter, html: node.html } as OfferData))} />
+      <Offers
+        data={data.offers.nodes.map(
+          (node) =>
+            ({
+              ...node.frontmatter,
+              image: node.frontmatter!.image!.childImageSharp!.fluid as FluidObject,
+              html: node.html,
+            } as OfferData),
+        )}
+      />
       <TryOut />
-      <Schedule entries={data.schedule.nodes.map(node => node.frontmatter as ScheduleEntryData)} />
-      <AboutMe vera={data.vera!} />
+      <Schedule entries={data.schedule.nodes.map((node) => node.frontmatter as ScheduleEntryData)} />
+      <AboutMe vera={data.vera!.childImageSharp!.fluid as FluidObject} />
       <ContactMe />
       <LocationMap />
     </Layout>
@@ -57,17 +67,13 @@ const IndexPage: React.FC<Props> = ({ data }) => {
 export default IndexPage;
 
 export const query = graphql`
-  fragment FluidImage on File {
-    childImageSharp {
-      fluid {
-        ...GatsbyImageSharpFluid_withWebp
-      }
-    }
-  }
-
   query IndexPage {
     vera: file(relativePath: { eq: "vera.jpg" }) {
-      ...FluidImage
+      childImageSharp {
+        fluid {
+          ...GatsbyImageSharpFluid_withWebp
+        }
+      }
     }
     offers: allMarkdownRemark(filter: { frontmatter: { collection: { eq: "offer" } } }) {
       nodes {
@@ -77,7 +83,11 @@ export const query = graphql`
           title
           subtitle
           image {
-            ...FluidImage
+            childImageSharp {
+              fluid {
+                ...GatsbyImageSharpFluid_withWebp
+              }
+            }
           }
           prices {
             price
