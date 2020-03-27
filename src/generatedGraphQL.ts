@@ -717,6 +717,8 @@ export enum FileFieldsEnum {
   ChildMarkdownRemarkFrontmatterWeekday = 'childMarkdownRemark___frontmatter___weekday',
   ChildMarkdownRemarkFrontmatterTimeOfDay = 'childMarkdownRemark___frontmatter___timeOfDay',
   ChildMarkdownRemarkFrontmatterTime = 'childMarkdownRemark___frontmatter___time',
+  ChildMarkdownRemarkFrontmatterDescription = 'childMarkdownRemark___frontmatter___description',
+  ChildMarkdownRemarkFrontmatterStatus = 'childMarkdownRemark___frontmatter___status',
   ChildMarkdownRemarkExcerpt = 'childMarkdownRemark___excerpt',
   ChildMarkdownRemarkRawMarkdownBody = 'childMarkdownRemark___rawMarkdownBody',
   ChildMarkdownRemarkFileAbsolutePath = 'childMarkdownRemark___fileAbsolutePath',
@@ -1561,6 +1563,8 @@ export enum MarkdownRemarkFieldsEnum {
   FrontmatterWeekday = 'frontmatter___weekday',
   FrontmatterTimeOfDay = 'frontmatter___timeOfDay',
   FrontmatterTime = 'frontmatter___time',
+  FrontmatterDescription = 'frontmatter___description',
+  FrontmatterStatus = 'frontmatter___status',
   Excerpt = 'excerpt',
   RawMarkdownBody = 'rawMarkdownBody',
   FileAbsolutePath = 'fileAbsolutePath',
@@ -1694,6 +1698,8 @@ export type MarkdownRemarkFrontmatter = {
   weekday?: Maybe<Scalars['String']>;
   timeOfDay?: Maybe<Scalars['String']>;
   time?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
 };
 
 export type MarkdownRemarkFrontmatterFilterInput = {
@@ -1709,6 +1715,8 @@ export type MarkdownRemarkFrontmatterFilterInput = {
   weekday?: Maybe<StringQueryOperatorInput>;
   timeOfDay?: Maybe<StringQueryOperatorInput>;
   time?: Maybe<StringQueryOperatorInput>;
+  description?: Maybe<StringQueryOperatorInput>;
+  status?: Maybe<StringQueryOperatorInput>;
 };
 
 export type MarkdownRemarkFrontmatterPrices = {
@@ -3102,7 +3110,7 @@ export type MetadataQuery = { __typename?: 'Query' } & {
 export type LogoFragment = { __typename?: 'File' } & {
   childImageSharp?: Maybe<
     { __typename?: 'ImageSharp' } & {
-      fixed?: Maybe<{ __typename?: 'ImageSharpFixed' } & GatsbyImageSharpFixed_WithWebpFragment>;
+      fixed?: Maybe<{ __typename?: 'ImageSharpFixed' } & GatsbyImageSharpFixed_WithWebp_NoBase64Fragment>;
     }
   >;
 };
@@ -3166,6 +3174,15 @@ export type IndexPageQuery = { __typename?: 'Query' } & {
             MarkdownRemarkFrontmatter,
             'title' | 'weekday' | 'timeOfDay' | 'time'
           >
+        >;
+      }
+    >;
+  };
+  videos: { __typename?: 'MarkdownRemarkConnection' } & {
+    nodes: Array<
+      { __typename?: 'MarkdownRemark' } & {
+        frontmatter?: Maybe<
+          { __typename?: 'MarkdownRemarkFrontmatter' } & Pick<MarkdownRemarkFrontmatter, 'title' | 'description'>
         >;
       }
     >;

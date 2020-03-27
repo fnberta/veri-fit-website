@@ -8,7 +8,7 @@ import Navbar from '../common/components/Navbar';
 import { IndexPageQuery } from '../generatedGraphQL';
 import AboutMe from '../landing/AboutMe';
 import ContactMe from '../landing/ContactMe';
-import Current from '../landing/Current';
+import Current, { Video } from '../landing/Current';
 import Hero from '../landing/Hero';
 import LocationMap from '../landing/LocationMap';
 import Offers, { OfferData } from '../landing/Offers';
@@ -45,7 +45,7 @@ const IndexPage: React.FC<Props> = ({ data }) => {
         <a href="/#contact">Kontakt</a>
       </Navbar>
       <Hero />
-      <Current />
+      <Current videos={data.videos.nodes.map((node) => node.frontmatter as Video)} />
       <Offers
         data={data.offers.nodes.map(
           (node) =>
@@ -105,6 +105,17 @@ export const query = graphql`
           weekday
           timeOfDay
           time
+        }
+      }
+    }
+    videos: allMarkdownRemark(
+      filter: { frontmatter: { collection: { eq: "video" } } }
+      sort: { fields: [frontmatter___title], order: ASC }
+    ) {
+      nodes {
+        frontmatter {
+          title
+          description
         }
       }
     }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { AgbTemplate } from '../templates/AgbPageTemplate';
-import { PreviewProps } from './cms';
+import { PreviewProps } from './interfaces';
 
 const AgbPagePreview: React.FC<PreviewProps> = ({ entry, widgetFor }) => (
   <AgbTemplate
