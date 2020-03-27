@@ -39,7 +39,7 @@ async function submitForm({ videos, ...rest }: FormValues): Promise<boolean> {
       body: urlEncode({
         'form-name': 'videos',
         ...rest,
-        videos: videos.join(', '),
+        videos: videos.join('; '),
       }),
     });
 
