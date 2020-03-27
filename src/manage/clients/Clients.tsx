@@ -1,14 +1,14 @@
 import { Link, RouteComponentProps } from '@reach/router';
 import React, { useEffect, useMemo, useState } from 'react';
+import cx from 'classnames';
 import { Client } from '../../../shared';
 import { Button, LinkButton } from '../../common/components/Button';
 import Dialog from '../../common/components/Dialog';
 import { ClassNameProps } from '../../common/utils/types';
-import AddClientDialogContent from './AddClientDialogContent';
 import { useRepos } from '../repositories/RepoContext';
 import { doesSubscriptionRunShort, isSubscriptionExpiring } from '../subscriptionChecks';
+import AddClientDialogContent from './AddClientDialogContent';
 import ClientDetails from './ClientDetails';
-import cx from 'classnames';
 
 export type Props = RouteComponentProps<{ clientId?: string }> & ClassNameProps;
 
@@ -21,13 +21,13 @@ const ClientsContent: React.FC<{
 
   const filteredClients = useMemo(() => {
     if (filter.length > 0) {
-      return clients.filter(client => client.name.toLowerCase().includes(filter.toLowerCase()));
+      return clients.filter((client) => client.name.toLowerCase().includes(filter.toLowerCase()));
     } else {
       return clients;
     }
   }, [clients, filter]);
 
-  const selectedClient = clients.find(client => client.id === selectedClientId);
+  const selectedClient = clients.find((client) => client.id === selectedClientId);
   const hasClients = clients.length > 0;
   return (
     <>
@@ -46,7 +46,7 @@ const ClientsContent: React.FC<{
             aria-label="Kundennamen"
             placeholder="Filtern…"
             value={filter}
-            onChange={e => setFilter(e.currentTarget.value)}
+            onChange={(e) => setFilter(e.currentTarget.value)}
           />
           {filteredClients.length > 0 ? (
             <>
@@ -57,10 +57,10 @@ const ClientsContent: React.FC<{
                     'lg:w-1/5 flex-auto lg:flex-initial lg:flex lg:flex-col bg-white rounded shadow overflow-auto',
                   )}
                 >
-                  {filteredClients.map(client => {
+                  {filteredClients.map((client) => {
                     const { name, activeSubscriptions } = client;
                     const tags = [] as React.ReactNode[];
-                    if (activeSubscriptions.some(subscription => subscription.paidAt == null)) {
+                    if (activeSubscriptions.some((subscription) => subscription.paidAt == null)) {
                       tags.push(
                         <span key="unpaid" className="ml-1 tag tag-red">
                           Unbezahlt

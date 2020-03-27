@@ -1,13 +1,12 @@
 import Image, { FluidObject } from 'gatsby-image';
 import React from 'react';
 import Offer, { Price } from './Offer';
-import { FluidImageFragment } from '../generatedGraphQL';
 
 export interface OfferData {
   order: number;
   title: string;
   subtitle: string;
-  image: FluidImageFragment;
+  image: FluidObject;
   prices: Price[];
   html: string;
 }
@@ -36,7 +35,7 @@ const Offers: React.FC<Props> = ({ data }) => (
               key={`${data.title}-${idx}`}
               title={data.title}
               subtitle={data.subtitle}
-              image={<Image fluid={data.image.childImageSharp!.fluid as FluidObject} alt="Training image" />}
+              image={<Image fluid={data.image} alt="Training image" />}
               prices={data.prices}
               body={data.html}
             />

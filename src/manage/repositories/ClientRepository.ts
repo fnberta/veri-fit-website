@@ -21,7 +21,7 @@ export default class ClientRepository {
     return this.db
       .collection(Collection.CLIENTS)
       .orderBy('name', 'asc')
-      .onSnapshot(querySnap => {
+      .onSnapshot((querySnap) => {
         const clients = querySnap.docs.map(parseClient);
         onChange(clients);
       });
@@ -36,10 +36,7 @@ export default class ClientRepository {
 
   async delete(clientId: string): Promise<void> {
     // TODO: do in cloud function to delete subscription sub-collection
-    await this.db
-      .collection(Collection.CLIENTS)
-      .doc(clientId)
-      .delete();
+    await this.db.collection(Collection.CLIENTS).doc(clientId).delete();
   }
 
   async createSubscription(clientId: string, input: SubscriptionInput): Promise<Subscription> {
@@ -57,7 +54,7 @@ export default class ClientRepository {
       .collection(Collection.CLIENTS)
       .doc(clientId)
       .collection(Collection.SUBSCRIPTIONS)
-      .onSnapshot(querySnap => {
+      .onSnapshot((querySnap) => {
         const subscriptions = querySnap.docs.map(parseSubscription);
         onChange(subscriptions);
       });

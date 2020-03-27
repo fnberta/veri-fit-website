@@ -1,17 +1,17 @@
 import { RouteComponentProps } from '@reach/router';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
+import cx from 'classnames';
 import { Client, Session, Time } from '../../../shared';
 import { Button, LinkIconButton } from '../../common/components/Button';
 import Dialog from '../../common/components/Dialog';
 import WeekSchedule, { TimeOfDay, Week, Weekday } from '../../common/components/WeekSchedule';
 import { ClassNameProps } from '../../common/utils/types';
+import { useRepos } from '../repositories/RepoContext';
 import AddSessionDialogContent from './AddSessionDialogContent';
 import AddTrainingDialogContent from './AddTrainingDialogContent';
 import EditSessionDialogContent from './EditSessionDialogContent';
-import { useRepos } from '../repositories/RepoContext';
 import SessionCard from './SessionCard';
-import cx from 'classnames';
 
 export type Props = RouteComponentProps<{ year: number; week: number }> & ClassNameProps;
 
@@ -76,7 +76,7 @@ const Trainings: React.FC<Props> = ({ year, week, className }) => {
   ]);
   useEffect(() => {
     // TODO: show error to user
-    sessionRepo.createForYear(date.weekYear).catch(err => console.error(err));
+    sessionRepo.createForYear(date.weekYear).catch((err) => console.error(err));
   }, [sessionRepo, date.weekYear]);
 
   return (

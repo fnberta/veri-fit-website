@@ -1,10 +1,10 @@
 import { ErrorMessage, Field, Form, Formik, FormikHelpers } from 'formik';
 import React, { useState } from 'react';
-import BulletItem from './BulletItem';
 import { Button } from '../common/components/Button';
 import { BotField } from '../common/components/Forms';
 import { makeValidator, urlEncode } from '../common/utils/forms';
 import Notification, { NotificationType } from '../common/components/Notification';
+import BulletItem from './BulletItem';
 
 interface FormValues {
   name: string;
@@ -112,7 +112,7 @@ const ContactMe: React.FC = () => {
                     validate={makeValidator('Name')}
                     disabled={isSubmitting}
                   />
-                  <ErrorMessage name="name">{error => <span className="form-error">{error}</span>}</ErrorMessage>
+                  <ErrorMessage name="name">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
                 </label>
                 <label className="w-64 ml-4 mt-4 flex-auto form-field">
                   <span className="text-white form-label">Email</span>
@@ -123,7 +123,7 @@ const ContactMe: React.FC = () => {
                     validate={makeValidator('Email')}
                     disabled={isSubmitting}
                   />
-                  <ErrorMessage name="email">{error => <span className="form-error">{error}</span>}</ErrorMessage>
+                  <ErrorMessage name="email">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
                 </label>
                 <label className="w-full ml-4 mt-4 form-field">
                   <span className="text-white form-label">Nachricht</span>
@@ -135,7 +135,7 @@ const ContactMe: React.FC = () => {
                     validate={makeValidator('Nachricht')}
                     disabled={isSubmitting}
                   />
-                  <ErrorMessage name="message">{error => <span className="form-error">{error}</span>}</ErrorMessage>
+                  <ErrorMessage name="message">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
                 </label>
                 <Button className="ml-4 mt-4" type="submit" color="orange" loading={isSubmitting} disabled={!isValid}>
                   Senden

@@ -3,7 +3,7 @@ import Offer from '../landing/Offer';
 import { PreviewProps } from './cms';
 
 const OfferPreview: React.FC<PreviewProps> = ({ entry, widgetFor, widgetsFor, getAsset }) => {
-  const prices = widgetsFor('prices').map(price => ({
+  const prices = widgetsFor('prices').map((price) => ({
     price: price.getIn(['data', 'price']),
     type: price.getIn(['data', 'type']),
     validity: price.getIn(['data', 'validity']),

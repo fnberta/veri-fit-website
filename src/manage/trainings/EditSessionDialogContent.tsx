@@ -75,7 +75,7 @@ const EditSessionDialogContent: React.FC<Props> = ({ session, clients, onSession
                     aria-label="Änderungsart"
                     value={changeType}
                     disabled={isSubmitting}
-                    onChange={e => setChangeType(e.currentTarget.value as ChangeType)}
+                    onChange={(e) => setChangeType(e.currentTarget.value as ChangeType)}
                   >
                     <option value={ChangeType.SINGLE}>Nur dieses</option>
                     <option value={ChangeType.ALL_FOLLOWING}>Alle zukünftigen</option>

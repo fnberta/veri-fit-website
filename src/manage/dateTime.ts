@@ -5,9 +5,7 @@ export function getToday(): string {
 }
 
 export function getEndDate(start: string, duration: DurationObject): string {
-  return DateTime.fromISO(start)
-    .plus(duration)
-    .toISODate();
+  return DateTime.fromISO(start).plus(duration).toISODate();
 }
 
 export function formatLocale(isoDate: string): string {

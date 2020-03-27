@@ -61,7 +61,9 @@ export type Directory = Node & {
   atime: Scalars['Date'];
   mtime: Scalars['Date'];
   ctime: Scalars['Date'];
+  /** @deprecated Use `birthTime` instead */
   birthtime?: Maybe<Scalars['Date']>;
+  /** @deprecated Use `birthTime` instead */
   birthtimeMs?: Maybe<Scalars['Float']>;
   blksize?: Maybe<Scalars['Int']>;
   blocks?: Maybe<Scalars['Int']>;
@@ -361,7 +363,9 @@ export type File = Node & {
   atime: Scalars['Date'];
   mtime: Scalars['Date'];
   ctime: Scalars['Date'];
+  /** @deprecated Use `birthTime` instead */
   birthtime?: Maybe<Scalars['Date']>;
+  /** @deprecated Use `birthTime` instead */
   birthtimeMs?: Maybe<Scalars['Float']>;
   blksize?: Maybe<Scalars['Int']>;
   blocks?: Maybe<Scalars['Int']>;
@@ -853,6 +857,8 @@ export enum ImageFit {
   Cover = 'COVER',
   Contain = 'CONTAIN',
   Fill = 'FILL',
+  Inside = 'INSIDE',
+  Outside = 'OUTSIDE',
 }
 
 export enum ImageFormat {
@@ -865,8 +871,10 @@ export enum ImageFormat {
 export type ImageSharp = Node & {
   __typename?: 'ImageSharp';
   fixed?: Maybe<ImageSharpFixed>;
+  /** @deprecated Resolutions was deprecated in Gatsby v2. It's been renamed to "fixed" https://example.com/write-docs-and-fix-this-example-link */
   resolutions?: Maybe<ImageSharpResolutions>;
   fluid?: Maybe<ImageSharpFluid>;
+  /** @deprecated Sizes was deprecated in Gatsby v2. It's been renamed to "fluid" https://example.com/write-docs-and-fix-this-example-link */
   sizes?: Maybe<ImageSharpSizes>;
   original?: Maybe<ImageSharpOriginal>;
   resize?: Maybe<ImageSharpResize>;
@@ -2550,18 +2558,6 @@ export enum SitePageFieldsEnum {
   PluginCreatorPluginOptionsPluginsBrowserApIs = 'pluginCreator___pluginOptions___plugins___browserAPIs',
   PluginCreatorPluginOptionsPluginsPluginFilepath = 'pluginCreator___pluginOptions___plugins___pluginFilepath',
   PluginCreatorPluginOptionsName = 'pluginCreator___pluginOptions___name',
-  PluginCreatorPluginOptionsPathPrefix = 'pluginCreator___pluginOptions___pathPrefix',
-  PluginCreatorPluginOptionsMaxWidth = 'pluginCreator___pluginOptions___maxWidth',
-  PluginCreatorPluginOptionsWrapperStyle = 'pluginCreator___pluginOptions___wrapperStyle',
-  PluginCreatorPluginOptionsBackgroundColor = 'pluginCreator___pluginOptions___backgroundColor',
-  PluginCreatorPluginOptionsLinkImagesToOriginal = 'pluginCreator___pluginOptions___linkImagesToOriginal',
-  PluginCreatorPluginOptionsShowCaptions = 'pluginCreator___pluginOptions___showCaptions',
-  PluginCreatorPluginOptionsMarkdownCaptions = 'pluginCreator___pluginOptions___markdownCaptions',
-  PluginCreatorPluginOptionsWithWebp = 'pluginCreator___pluginOptions___withWebp',
-  PluginCreatorPluginOptionsTracedSvg = 'pluginCreator___pluginOptions___tracedSVG',
-  PluginCreatorPluginOptionsLoading = 'pluginCreator___pluginOptions___loading',
-  PluginCreatorPluginOptionsDisableBgImageOnAlpha = 'pluginCreator___pluginOptions___disableBgImageOnAlpha',
-  PluginCreatorPluginOptionsDisableBgImage = 'pluginCreator___pluginOptions___disableBgImage',
   PluginCreatorPluginOptionsPath = 'pluginCreator___pluginOptions___path',
   PluginCreatorPluginOptionsModulePath = 'pluginCreator___pluginOptions___modulePath',
   PluginCreatorPluginOptionsPathCheck = 'pluginCreator___pluginOptions___pathCheck',
@@ -2759,33 +2755,9 @@ export enum SitePluginFieldsEnum {
   PluginOptionsPluginsName = 'pluginOptions___plugins___name',
   PluginOptionsPluginsVersion = 'pluginOptions___plugins___version',
   PluginOptionsPluginsPluginOptionsName = 'pluginOptions___plugins___pluginOptions___name',
-  PluginOptionsPluginsPluginOptionsPathPrefix = 'pluginOptions___plugins___pluginOptions___pathPrefix',
-  PluginOptionsPluginsPluginOptionsMaxWidth = 'pluginOptions___plugins___pluginOptions___maxWidth',
-  PluginOptionsPluginsPluginOptionsWrapperStyle = 'pluginOptions___plugins___pluginOptions___wrapperStyle',
-  PluginOptionsPluginsPluginOptionsBackgroundColor = 'pluginOptions___plugins___pluginOptions___backgroundColor',
-  PluginOptionsPluginsPluginOptionsLinkImagesToOriginal = 'pluginOptions___plugins___pluginOptions___linkImagesToOriginal',
-  PluginOptionsPluginsPluginOptionsShowCaptions = 'pluginOptions___plugins___pluginOptions___showCaptions',
-  PluginOptionsPluginsPluginOptionsMarkdownCaptions = 'pluginOptions___plugins___pluginOptions___markdownCaptions',
-  PluginOptionsPluginsPluginOptionsWithWebp = 'pluginOptions___plugins___pluginOptions___withWebp',
-  PluginOptionsPluginsPluginOptionsTracedSvg = 'pluginOptions___plugins___pluginOptions___tracedSVG',
-  PluginOptionsPluginsPluginOptionsLoading = 'pluginOptions___plugins___pluginOptions___loading',
-  PluginOptionsPluginsPluginOptionsDisableBgImageOnAlpha = 'pluginOptions___plugins___pluginOptions___disableBgImageOnAlpha',
-  PluginOptionsPluginsPluginOptionsDisableBgImage = 'pluginOptions___plugins___pluginOptions___disableBgImage',
   PluginOptionsPluginsBrowserApIs = 'pluginOptions___plugins___browserAPIs',
   PluginOptionsPluginsPluginFilepath = 'pluginOptions___plugins___pluginFilepath',
   PluginOptionsName = 'pluginOptions___name',
-  PluginOptionsPathPrefix = 'pluginOptions___pathPrefix',
-  PluginOptionsMaxWidth = 'pluginOptions___maxWidth',
-  PluginOptionsWrapperStyle = 'pluginOptions___wrapperStyle',
-  PluginOptionsBackgroundColor = 'pluginOptions___backgroundColor',
-  PluginOptionsLinkImagesToOriginal = 'pluginOptions___linkImagesToOriginal',
-  PluginOptionsShowCaptions = 'pluginOptions___showCaptions',
-  PluginOptionsMarkdownCaptions = 'pluginOptions___markdownCaptions',
-  PluginOptionsWithWebp = 'pluginOptions___withWebp',
-  PluginOptionsTracedSvg = 'pluginOptions___tracedSVG',
-  PluginOptionsLoading = 'pluginOptions___loading',
-  PluginOptionsDisableBgImageOnAlpha = 'pluginOptions___disableBgImageOnAlpha',
-  PluginOptionsDisableBgImage = 'pluginOptions___disableBgImage',
   PluginOptionsPath = 'pluginOptions___path',
   PluginOptionsModulePath = 'pluginOptions___modulePath',
   PluginOptionsPathCheck = 'pluginOptions___pathCheck',
@@ -2913,18 +2885,6 @@ export type SitePluginPluginOptions = {
   __typename?: 'SitePluginPluginOptions';
   plugins?: Maybe<Array<Maybe<SitePluginPluginOptionsPlugins>>>;
   name?: Maybe<Scalars['String']>;
-  pathPrefix?: Maybe<Scalars['String']>;
-  maxWidth?: Maybe<Scalars['Int']>;
-  wrapperStyle?: Maybe<Scalars['String']>;
-  backgroundColor?: Maybe<Scalars['String']>;
-  linkImagesToOriginal?: Maybe<Scalars['Boolean']>;
-  showCaptions?: Maybe<Scalars['Boolean']>;
-  markdownCaptions?: Maybe<Scalars['Boolean']>;
-  withWebp?: Maybe<Scalars['Boolean']>;
-  tracedSVG?: Maybe<Scalars['Boolean']>;
-  loading?: Maybe<Scalars['String']>;
-  disableBgImageOnAlpha?: Maybe<Scalars['Boolean']>;
-  disableBgImage?: Maybe<Scalars['Boolean']>;
   path?: Maybe<Scalars['String']>;
   modulePath?: Maybe<Scalars['String']>;
   pathCheck?: Maybe<Scalars['Boolean']>;
@@ -2933,18 +2893,6 @@ export type SitePluginPluginOptions = {
 export type SitePluginPluginOptionsFilterInput = {
   plugins?: Maybe<SitePluginPluginOptionsPluginsFilterListInput>;
   name?: Maybe<StringQueryOperatorInput>;
-  pathPrefix?: Maybe<StringQueryOperatorInput>;
-  maxWidth?: Maybe<IntQueryOperatorInput>;
-  wrapperStyle?: Maybe<StringQueryOperatorInput>;
-  backgroundColor?: Maybe<StringQueryOperatorInput>;
-  linkImagesToOriginal?: Maybe<BooleanQueryOperatorInput>;
-  showCaptions?: Maybe<BooleanQueryOperatorInput>;
-  markdownCaptions?: Maybe<BooleanQueryOperatorInput>;
-  withWebp?: Maybe<BooleanQueryOperatorInput>;
-  tracedSVG?: Maybe<BooleanQueryOperatorInput>;
-  loading?: Maybe<StringQueryOperatorInput>;
-  disableBgImageOnAlpha?: Maybe<BooleanQueryOperatorInput>;
-  disableBgImage?: Maybe<BooleanQueryOperatorInput>;
   path?: Maybe<StringQueryOperatorInput>;
   modulePath?: Maybe<StringQueryOperatorInput>;
   pathCheck?: Maybe<BooleanQueryOperatorInput>;
@@ -2978,34 +2926,10 @@ export type SitePluginPluginOptionsPluginsFilterListInput = {
 export type SitePluginPluginOptionsPluginsPluginOptions = {
   __typename?: 'SitePluginPluginOptionsPluginsPluginOptions';
   name?: Maybe<Scalars['String']>;
-  pathPrefix?: Maybe<Scalars['String']>;
-  maxWidth?: Maybe<Scalars['Int']>;
-  wrapperStyle?: Maybe<Scalars['String']>;
-  backgroundColor?: Maybe<Scalars['String']>;
-  linkImagesToOriginal?: Maybe<Scalars['Boolean']>;
-  showCaptions?: Maybe<Scalars['Boolean']>;
-  markdownCaptions?: Maybe<Scalars['Boolean']>;
-  withWebp?: Maybe<Scalars['Boolean']>;
-  tracedSVG?: Maybe<Scalars['Boolean']>;
-  loading?: Maybe<Scalars['String']>;
-  disableBgImageOnAlpha?: Maybe<Scalars['Boolean']>;
-  disableBgImage?: Maybe<Scalars['Boolean']>;
 };
 
 export type SitePluginPluginOptionsPluginsPluginOptionsFilterInput = {
   name?: Maybe<StringQueryOperatorInput>;
-  pathPrefix?: Maybe<StringQueryOperatorInput>;
-  maxWidth?: Maybe<IntQueryOperatorInput>;
-  wrapperStyle?: Maybe<StringQueryOperatorInput>;
-  backgroundColor?: Maybe<StringQueryOperatorInput>;
-  linkImagesToOriginal?: Maybe<BooleanQueryOperatorInput>;
-  showCaptions?: Maybe<BooleanQueryOperatorInput>;
-  markdownCaptions?: Maybe<BooleanQueryOperatorInput>;
-  withWebp?: Maybe<BooleanQueryOperatorInput>;
-  tracedSVG?: Maybe<BooleanQueryOperatorInput>;
-  loading?: Maybe<StringQueryOperatorInput>;
-  disableBgImageOnAlpha?: Maybe<BooleanQueryOperatorInput>;
-  disableBgImage?: Maybe<BooleanQueryOperatorInput>;
 };
 
 export type SitePluginSortInput = {
@@ -3168,41 +3092,58 @@ export type GatsbyImageSharpSizes_WithWebp_NoBase64Fragment = { __typename?: 'Im
 export type MetadataQueryVariables = {};
 
 export type MetadataQuery = { __typename?: 'Query' } & {
-  site: Maybe<
+  site?: Maybe<
     { __typename?: 'Site' } & {
       siteMetadata: { __typename?: 'SiteSiteMetadata' } & Pick<SiteSiteMetadata, 'title' | 'description' | 'author'>;
     }
   >;
 };
 
-export type FluidImageNoBase64Fragment = { __typename?: 'File' } & {
-  childImageSharp: Maybe<
+export type LogoFragment = { __typename?: 'File' } & {
+  childImageSharp?: Maybe<
     { __typename?: 'ImageSharp' } & {
-      fluid: Maybe<{ __typename?: 'ImageSharpFluid' } & GatsbyImageSharpFluid_NoBase64Fragment>;
+      fixed?: Maybe<{ __typename?: 'ImageSharpFixed' } & GatsbyImageSharpFixed_WithWebpFragment>;
     }
   >;
 };
 
-export type FluidImageFragment = { __typename?: 'File' } & {
-  childImageSharp: Maybe<
-    { __typename?: 'ImageSharp' } & { fluid: Maybe<{ __typename?: 'ImageSharpFluid' } & GatsbyImageSharpFluidFragment> }
-  >;
+export type LogosQueryVariables = {};
+
+export type LogosQuery = { __typename?: 'Query' } & {
+  logoBlack?: Maybe<{ __typename?: 'File' } & LogoFragment>;
+  logoWhite?: Maybe<{ __typename?: 'File' } & LogoFragment>;
 };
 
 export type IndexPageQueryVariables = {};
 
 export type IndexPageQuery = { __typename?: 'Query' } & {
-  vera: Maybe<{ __typename?: 'File' } & FluidImageFragment>;
+  vera?: Maybe<
+    { __typename?: 'File' } & {
+      childImageSharp?: Maybe<
+        { __typename?: 'ImageSharp' } & {
+          fluid?: Maybe<{ __typename?: 'ImageSharpFluid' } & GatsbyImageSharpFluid_WithWebpFragment>;
+        }
+      >;
+    }
+  >;
   offers: { __typename?: 'MarkdownRemarkConnection' } & {
     nodes: Array<
       { __typename?: 'MarkdownRemark' } & Pick<MarkdownRemark, 'html'> & {
-          frontmatter: Maybe<
+          frontmatter?: Maybe<
             { __typename?: 'MarkdownRemarkFrontmatter' } & Pick<
               MarkdownRemarkFrontmatter,
               'order' | 'title' | 'subtitle'
             > & {
-                image: Maybe<{ __typename?: 'File' } & FluidImageFragment>;
-                prices: Maybe<
+                image?: Maybe<
+                  { __typename?: 'File' } & {
+                    childImageSharp?: Maybe<
+                      { __typename?: 'ImageSharp' } & {
+                        fluid?: Maybe<{ __typename?: 'ImageSharpFluid' } & GatsbyImageSharpFluid_WithWebpFragment>;
+                      }
+                    >;
+                  }
+                >;
+                prices?: Maybe<
                   Array<
                     Maybe<
                       { __typename?: 'MarkdownRemarkFrontmatterPrices' } & Pick<
@@ -3220,7 +3161,7 @@ export type IndexPageQuery = { __typename?: 'Query' } & {
   schedule: { __typename?: 'MarkdownRemarkConnection' } & {
     nodes: Array<
       { __typename?: 'MarkdownRemark' } & {
-        frontmatter: Maybe<
+        frontmatter?: Maybe<
           { __typename?: 'MarkdownRemarkFrontmatter' } & Pick<
             MarkdownRemarkFrontmatter,
             'title' | 'weekday' | 'timeOfDay' | 'time'
@@ -3232,7 +3173,7 @@ export type IndexPageQuery = { __typename?: 'Query' } & {
   testimonials: { __typename?: 'MarkdownRemarkConnection' } & {
     nodes: Array<
       { __typename?: 'MarkdownRemark' } & {
-        frontmatter: Maybe<
+        frontmatter?: Maybe<
           { __typename?: 'MarkdownRemarkFrontmatter' } & Pick<MarkdownRemarkFrontmatter, 'author' | 'quote'>
         >;
       }
@@ -3245,9 +3186,9 @@ export type AgbPageQueryVariables = {
 };
 
 export type AgbPageQuery = { __typename?: 'Query' } & {
-  markdownRemark: Maybe<
+  markdownRemark?: Maybe<
     { __typename?: 'MarkdownRemark' } & Pick<MarkdownRemark, 'html'> & {
-        frontmatter: Maybe<
+        frontmatter?: Maybe<
           { __typename?: 'MarkdownRemarkFrontmatter' } & Pick<MarkdownRemarkFrontmatter, 'title' | 'subtitle'>
         >;
       }

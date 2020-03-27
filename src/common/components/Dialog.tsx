@@ -20,7 +20,7 @@ const Dialog: React.FC<Props> = ({ open, onCancel, children, className, ...rest 
   useEffect(() => {
     const { current } = dialogRef;
     if (current && !registered) {
-      import('dialog-polyfill').then(polyfill => {
+      import('dialog-polyfill').then((polyfill) => {
         polyfill.default.registerDialog(current);
         setRegistered(true);
       });

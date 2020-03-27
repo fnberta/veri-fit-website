@@ -162,7 +162,7 @@ const SubscriptionFormFields: React.FC<Props> = ({ disabled, namespace }) => {
         error={<ErrorMessage name={withNamespace('trainingType')} />}
         control={
           <Field className="form-select w-full" as="select" id="trainingType" name={withNamespace('trainingType')}>
-            {Object.keys(validSubscriptionTypes).map(trainingType => (
+            {Object.keys(validSubscriptionTypes).map((trainingType) => (
               <option key={trainingType} value={trainingType}>
                 {getTrainingName(trainingType as TrainingType)}
               </option>
@@ -178,7 +178,7 @@ const SubscriptionFormFields: React.FC<Props> = ({ disabled, namespace }) => {
           error={<ErrorMessage name={withNamespace('type')} />}
           control={
             <Field className="form-select" as="select" id="type" name={withNamespace('type')}>
-              {validSubscriptionTypes[trainingType].map(type => (
+              {validSubscriptionTypes[trainingType].map((type) => (
                 <option key={type} value={type}>
                   {getSubscriptionName(type)}
                 </option>

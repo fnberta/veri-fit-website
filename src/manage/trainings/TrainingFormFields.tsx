@@ -5,8 +5,8 @@ import { Client, TrainingInput, TrainingType } from '../../../shared';
 import { FormField } from '../../common/components/Forms';
 import { isValidISOString } from '../dateTime';
 import { getTrainingName } from '../displayNames';
-import ParticipantsSelector from './ParticipantsSelector';
 import { validSubscriptionTypes } from '../subscriptionChecks';
+import ParticipantsSelector from './ParticipantsSelector';
 
 export interface Props {
   clients: Client[];
@@ -56,7 +56,7 @@ const TrainingFormFields: React.FC<Props> = ({ clients, disabled }) => {
         error={<ErrorMessage name="type" />}
         control={
           <Field className="form-select" as="select" id="type" name="type" disabled={disabled}>
-            {Object.keys(validSubscriptionTypes).map(trainingType => (
+            {Object.keys(validSubscriptionTypes).map((trainingType) => (
               <option key={trainingType} value={trainingType}>
                 {getTrainingName(trainingType as TrainingType)}
               </option>

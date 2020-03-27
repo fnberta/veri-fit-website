@@ -47,10 +47,7 @@ export default class SessionRepository {
   }
 
   async toggleConfirmed(session: Session): Promise<Session> {
-    await this.db
-      .collection(Collection.SESSIONS)
-      .doc(session.id)
-      .update({ confirmed: !session.confirmed });
+    await this.db.collection(Collection.SESSIONS).doc(session.id).update({ confirmed: !session.confirmed });
     return {
       ...session,
       confirmed: !session.confirmed,
@@ -63,7 +60,7 @@ export default class SessionRepository {
       .where('clientIds', 'array-contains', clientId)
       .where('confirmed', '==', true)
       .orderBy('date', 'desc')
-      .onSnapshot(querySnap => {
+      .onSnapshot((querySnap) => {
         const sessions = querySnap.docs.map(parseSession);
         onChange(sessions);
       });
@@ -76,7 +73,7 @@ export default class SessionRepository {
       .collection(Collection.SESSIONS)
       .where('date', '>=', startDate.toISODate())
       .where('date', '<', endDate.toISODate())
-      .onSnapshot(querySnap => {
+      .onSnapshot((querySnap) => {
         const sessions = querySnap.docs.map(parseSession);
         onChange(sessions);
       });

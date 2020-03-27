@@ -1,11 +1,10 @@
 import Image, { FluidObject } from 'gatsby-image';
 import React from 'react';
 import Card from '../common/components/Card';
-import { FluidImageFragment } from '../generatedGraphQL';
 import Icon from '../common/components/Icon';
 
 export interface Props {
-  vera: FluidImageFragment;
+  vera: FluidObject;
 }
 
 const IMG_STYLE = { maxHeight: 300 };
@@ -35,10 +34,7 @@ const AboutMe: React.FC<Props> = ({ vera }) => (
             Für Fragen zum Training oder zu mir stehe ich dir gerne zur Verfügung!
           </p>
         </header>
-        <Card
-          className="ml-12 mt-12"
-          image={<Image fluid={vera.childImageSharp!.fluid as FluidObject} alt="Vera Lienhard" style={IMG_STYLE} />}
-        >
+        <Card className="ml-12 mt-12" image={<Image fluid={vera} alt="Vera Lienhard" style={IMG_STYLE} />}>
           <ul className="text-lg text-gray-700">
             <ExperienceItem>Master Sportwissenschaft Universität Bern</ExperienceItem>
             <ExperienceItem>Konditionstrainerin SwissOlympic</ExperienceItem>

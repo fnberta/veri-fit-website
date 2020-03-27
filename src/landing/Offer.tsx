@@ -37,7 +37,7 @@ const Offer: React.FC<Props> = ({ title, subtitle, image, body, prices, classNam
         </tr>
       </thead>
       <tbody>
-        {prices.map(price => (
+        {prices.map((price) => (
           <tr key={`${price.type}-${price.price}`}>
             <td>
               <div>{getPriceTypeDisplay(price.type)}</div>

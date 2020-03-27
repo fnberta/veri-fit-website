@@ -72,7 +72,8 @@ function getMeta(meta: Meta[], keywords: string[], { title, description, author 
 
 const DocHead: React.FC<Props> = ({ title, lang = 'de-CH', meta = [], keywords = [] }) => {
   const data = useStaticQuery<MetadataQuery>(DETAILS_QUERY);
-  const { siteMetadata } = data.site!; // we know it's defined
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const { siteMetadata } = data.site!;
   return (
     <Helmet titleTemplate={`%s | ${siteMetadata.title}`} meta={getMeta(meta, keywords, siteMetadata)}>
       <html lang={lang} />

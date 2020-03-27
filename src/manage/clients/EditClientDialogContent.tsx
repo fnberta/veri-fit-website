@@ -3,8 +3,8 @@ import React from 'react';
 import { Client } from '../../../shared';
 import { Button } from '../../common/components/Button';
 import { DialogBody, DialogFooter, DialogHeader } from '../../common/components/Dialog';
-import ClientFormFields, { ClientFormValues, getClientInput, validateClientForm } from './ClientFormFields';
 import { useRepos } from '../repositories/RepoContext';
+import ClientFormFields, { ClientFormValues, getClientInput, validateClientForm } from './ClientFormFields';
 
 export interface Props {
   client: Client;

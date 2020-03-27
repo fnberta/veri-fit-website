@@ -3,18 +3,18 @@ import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
 import { Button } from '../common/components/Button';
 import Layout from '../common/components/Layout';
+import Navbar from '../common/components/Navbar';
 import Clients from './clients/Clients';
 import { UserCredential } from './firebase';
 import { useRepos } from './repositories/RepoContext';
 import Trainings from './trainings/Trainings';
-import Navbar from '../common/components/Navbar';
 
 const ManageApp: React.FC = () => {
   const [loggedIn, setLoggedIn] = useState(false);
   const [logInResult, setLoginResult] = useState<UserCredential>();
   const { authRepo } = useRepos();
 
-  useEffect(() => authRepo.observeAuthState(user => setLoggedIn(user != null)), [authRepo]);
+  useEffect(() => authRepo.observeAuthState((user) => setLoggedIn(user != null)), [authRepo]);
   useEffect(() => {
     authRepo.getRedirectResult().then(setLoginResult);
   }, [authRepo]);

@@ -2,8 +2,8 @@ import Carousel from '@brainhubeu/react-carousel';
 import '@brainhubeu/react-carousel/lib/style.css';
 import cx from 'classnames';
 import React, { useState } from 'react';
-import Testimonial, { Props as TestimonialProps } from './Testimonial';
 import { range } from '../common/utils/numbers';
+import Testimonial, { Props as TestimonialProps } from './Testimonial';
 
 export interface Props {
   data: TestimonialProps[];
@@ -32,7 +32,7 @@ const Testimonials: React.FC<Props> = ({ data }) => {
           ))}
         </Carousel>
         <div className="relative -ml-2 mt-8 flex items-center justify-center">
-          {range(0, data.length).map(idx => (
+          {range(0, data.length).map((idx) => (
             <button
               key={idx}
               className="w-4 h-4 ml-2 flex items-center justify-center cursor-pointer outline-none focus:shadow-outline"

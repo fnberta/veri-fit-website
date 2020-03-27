@@ -1,7 +1,8 @@
 import cx from 'classnames';
+import { graphql, useStaticQuery } from 'gatsby';
 import React, { isValidElement, useState } from 'react';
-import logoBlack from '../../images/logo_orange_black.png';
-import logoWhite from '../../images/logo_orange_white.png';
+import Image, { FixedObject } from 'gatsby-image';
+import { LogosQuery } from '../../generatedGraphQL';
 import { IconButton } from './Button';
 import Icon from './Icon';
 
@@ -10,6 +11,25 @@ export interface Props extends React.HTMLProps<HTMLDivElement> {
   sticky?: boolean;
 }
 
+const LOGOS_QUERY = graphql`
+  fragment Logo on File {
+    childImageSharp {
+      fixed(width: 80) {
+        ...GatsbyImageSharpFixed_withWebp_noBase64
+      }
+    }
+  }
+
+  query Logos {
+    logoBlack: file(relativePath: { eq: "logo_orange_black.png" }) {
+      ...Logo
+    }
+    logoWhite: file(relativePath: { eq: "logo_orange_white.png" }) {
+      ...Logo
+    }
+  }
+`;
+
 function getClasses(variant: Props['variant'], open: boolean) {
   const brightText = 'text-gray-900 hover:bg-gray-200 hover:text-orange-500';
   switch (variant) {
@@ -17,28 +37,28 @@ function getClasses(variant: Props['variant'], open: boolean) {
       return {
         header: 'bg-white',
         text: brightText,
-        logo: logoBlack,
       };
     case 'dark':
       return {
         header: 'bg-gray-900',
         text: 'text-white hover:bg-gray-700 hover:text-orange-500',
-        logo: logoWhite,
       };
     case 'transparent':
       return {
         nav: open && 'bg-white',
         header: 'absolute z-10 inset-x-0 bg-transparent',
         text: open ? brightText : 'text-white hover:text-gray-200',
-        logo: logoWhite,
       };
   }
 }
 
 const Navbar: React.FC<Props> = ({ variant, sticky, children, className, ...rest }) => {
   const [open, setOpen] = useState(false);
+  const data = useStaticQuery<LogosQuery>(LOGOS_QUERY);
 
-  const { header, nav, text, logo } = getClasses(variant, open);
+  const { header, nav, text } = getClasses(variant, open);
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const logo = variant === 'bright' ? data.logoBlack!.childImageSharp!.fixed : data.logoWhite!.childImageSharp!.fixed;
   return (
     <header
       className={cx(
@@ -50,19 +70,19 @@ const Navbar: React.FC<Props> = ({ variant, sticky, children, className, ...rest
       {...rest}
     >
       <div className="px-4 py-2 flex justify-between items-center">
-        <img className="w-20" src={logo} alt="Veri-Fit" />
+        <Image fixed={logo as FixedObject} alt="Veri-Fit" />
         <IconButton
           className={cx('sm:hidden', text)}
           color="none"
           icon={<Icon className="h-6 w-6" name="menu" />}
           aria-label="Menu"
           aria-expanded={open}
-          onClick={() => setOpen(prev => !prev)}
+          onClick={() => setOpen((prev) => !prev)}
         />
       </div>
       <nav className={cx(nav)}>
         <ul className={cx('px-4 py-2 -mt-1 sm:mt-0 sm:-ml-2 sm:flex', open ? 'block' : 'hidden')}>
-          {React.Children.map(children, child => (
+          {React.Children.map(children, (child) => (
             <li className="mt-1 sm:mt-0 sm:ml-2 flex">
               {isValidElement(child)
                 ? React.cloneElement(child, {

@@ -108,7 +108,7 @@ const Current: React.FC = () => {
               <fieldset>
                 <legend className="text-white form-label">Videos</legend>
                 <ul className="-mt-1 text-white">
-                  {availableVideos.map(video => (
+                  {availableVideos.map((video) => (
                     <li key={video.title} className="mt-2">
                       <label className="inline-flex items-center">
                         <Field
@@ -129,7 +129,7 @@ const Current: React.FC = () => {
                   Dein Wunschtraining ist noch nicht auf der Liste? Beschreibe was du dir wünschst!
                 </span>
                 <Field className="form-textarea h-full" as="textarea" name="message" disabled={isSubmitting} />
-                <ErrorMessage name="message">{error => <span className="form-error">{error}</span>}</ErrorMessage>
+                <ErrorMessage name="message">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
               </label>
               <div className="-ml-4 flex flex-wrap">
                 <label className="w-64 ml-4 mt-4 flex-auto form-field">
@@ -141,7 +141,7 @@ const Current: React.FC = () => {
                     validate={makeValidator('Name')}
                     disabled={isSubmitting}
                   />
-                  <ErrorMessage name="name">{error => <span className="form-error">{error}</span>}</ErrorMessage>
+                  <ErrorMessage name="name">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
                 </label>
                 <label className="w-64 ml-4 mt-4 flex-auto form-field">
                   <span className="form-label text-white">Email</span>
@@ -152,7 +152,7 @@ const Current: React.FC = () => {
                     validate={makeValidator('Email')}
                     disabled={isSubmitting}
                   />
-                  <ErrorMessage name="email">{error => <span className="form-error">{error}</span>}</ErrorMessage>
+                  <ErrorMessage name="email">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
                 </label>
               </div>
               <Button

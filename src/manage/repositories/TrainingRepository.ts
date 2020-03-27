@@ -15,10 +15,7 @@ export default class TrainingRepository {
   }
 
   async get(trainingId: string): Promise<Training> {
-    const snap = await this.db
-      .collection(Collection.TRAININGS)
-      .doc(trainingId)
-      .get();
+    const snap = await this.db.collection(Collection.TRAININGS).doc(trainingId).get();
     return parseTraining(snap);
   }
 
@@ -26,7 +23,7 @@ export default class TrainingRepository {
     return this.db
       .collection(Collection.TRAININGS)
       .where('clientIds', 'array-contains', clientId)
-      .onSnapshot(querySnap => {
+      .onSnapshot((querySnap) => {
         const trainings = querySnap.docs.map(parseTraining);
         onChange(trainings);
       });
