@@ -82,20 +82,23 @@ const Current: React.FC<Props> = ({ videos }) => {
               <fieldset>
                 <legend className="text-white form-label">Videos</legend>
                 <ul className="-mt-1 text-white">
-                  {videos.map((video) => (
-                    <li key={video.title} className="mt-2">
-                      <label className="inline-flex items-center">
-                        <Field
-                          className="form-checkbox"
-                          type="checkbox"
-                          name="videos"
-                          value={video.title}
-                          disabled={isSubmitting}
-                        />
-                        <span className="ml-2 text-sm">{`${video.title} - ${video.description}`}</span>
-                      </label>
-                    </li>
-                  ))}
+                  {videos.map((video) => {
+                    const text = `${video.title} - ${video.description}`;
+                    return (
+                      <li key={video.title} className="mt-2">
+                        <label className="inline-flex items-center">
+                          <Field
+                            className="form-checkbox"
+                            type="checkbox"
+                            name="videos"
+                            value={text}
+                            disabled={isSubmitting}
+                          />
+                          <span className="ml-2 text-sm">{text}</span>
+                        </label>
+                      </li>
+                    );
+                  })}
                 </ul>
               </fieldset>
               <label className="mt-4 flex-auto form-field">
