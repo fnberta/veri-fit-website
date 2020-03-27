@@ -1,6 +1,6 @@
 import React from 'react';
 import Testimonial from '../landing/Testimonial';
-import { PreviewProps } from './cms';
+import { PreviewProps } from './interfaces';
 
 const TestimonialPreview: React.FC<PreviewProps> = ({ entry }) => (
   <div className="bg-gray-800">

@@ -63,6 +63,13 @@ module.exports = {
         path: `${__dirname}/src/landing/schedule`,
       },
     },
+    {
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        name: 'videos',
+        path: `${__dirname}/src/landing/videos`,
+      },
+    },
     'gatsby-plugin-typescript',
     'gatsby-plugin-postcss',
     'gatsby-plugin-react-helmet',

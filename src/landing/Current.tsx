@@ -5,48 +5,22 @@ import { BotField } from '../common/components/Forms';
 import Notification, { NotificationType } from '../common/components/Notification';
 import { makeValidator, urlEncode } from '../common/utils/forms';
 
+export interface Video {
+  title: string;
+  description: string;
+  status: 'available' | 'soon';
+}
+
+export interface Props {
+  videos: Video[];
+}
+
 interface FormValues {
   name: string;
   email: string;
   videos: string[];
   message: string;
 }
-
-interface Video {
-  title: string;
-  status: 'available' | 'soon';
-}
-
-const availableVideos: Video[] = [
-  {
-    title: "Yoga 1 - ganzheitliches Training 60' (Abfolge Di/Mi-Gruppe)",
-    status: 'available',
-  },
-  {
-    title: "Yoga 2 - ganzheitliches Training 60' (Abfolge Fr/Sa-Gruppe)",
-    status: 'available',
-  },
-  {
-    title: "Yoga 3 - 30' Kurz-Yoga (Rotationen und Hüftöffner)",
-    status: 'available',
-  },
-  {
-    title: "Yoga 4 - 40' Yoga-Flow (Sonnengruss-Varianten, tanzender Krieger)",
-    status: 'available',
-  },
-  {
-    title: "Yoga 5 - 30' ruhige Abfolge zum Abschalten",
-    status: 'available',
-  },
-  {
-    title: "CoreXtreme - 20' intensives Rumpftraining",
-    status: 'available',
-  },
-  {
-    title: 'Boost 1 - funktionelles Krafttraining mit dem eigenen Körpergewicht',
-    status: 'available',
-  },
-];
 
 const initialValues: FormValues = {
   name: '',
@@ -75,7 +49,7 @@ async function submitForm({ videos, ...rest }: FormValues): Promise<boolean> {
   }
 }
 
-const Current: React.FC = () => {
+const Current: React.FC<Props> = ({ videos }) => {
   const [notificationType, setNotificationType] = useState<NotificationType>();
 
   function showNotification(type: NotificationType) {
@@ -108,20 +82,23 @@ const Current: React.FC = () => {
               <fieldset>
                 <legend className="text-white form-label">Videos</legend>
                 <ul className="-mt-1 text-white">
-                  {availableVideos.map((video) => (
-                    <li key={video.title} className="mt-2">
-                      <label className="inline-flex items-center">
-                        <Field
-                          className="form-checkbox"
-                          type="checkbox"
-                          name="videos"
-                          value={video.title}
-                          disabled={isSubmitting}
-                        />
-                        <span className="ml-2 text-sm">{video.title}</span>
-                      </label>
-                    </li>
-                  ))}
+                  {videos.map((video) => {
+                    const text = `${video.title} - ${video.description}`;
+                    return (
+                      <li key={video.title} className="mt-2">
+                        <label className="inline-flex items-center">
+                          <Field
+                            className="form-checkbox"
+                            type="checkbox"
+                            name="videos"
+                            value={text}
+                            disabled={isSubmitting}
+                          />
+                          <span className="ml-2 text-sm">{text}</span>
+                        </label>
+                      </li>
+                    );
+                  })}
                 </ul>
               </fieldset>
               <label className="mt-4 flex-auto form-field">

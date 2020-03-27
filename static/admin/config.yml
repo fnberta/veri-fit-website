@@ -4,6 +4,7 @@ backend:
 
 media_folder: 'static/assets'
 public_folder: 'assets'
+site_url: 'https://veri-fit.ch'
 
 collections:
   - name: 'pages'
@@ -83,3 +84,14 @@ collections:
       - { name: 'collection', label: 'Collection', widget: 'hidden', default: 'testimonial' }
       - { name: 'author', label: 'Author', widget: 'string' }
       - { name: 'quote', label: 'Quote', widget: 'string' }
+  - name: 'videos'
+    label: 'Videos'
+    label_singular: 'Video'
+    folder: 'src/landing/videos'
+    create: true
+    slug: '{{slug}}'
+    fields:
+      - { name: 'collection', label: 'Collection', widget: 'hidden', default: 'video' }
+      - { name: 'title', label: 'Title', widget: 'string' }
+      - { name: 'description', label: 'Description', widget: 'text' }
+      - { name: 'status', label: 'Status', widget: 'hidden', default: 'available' }

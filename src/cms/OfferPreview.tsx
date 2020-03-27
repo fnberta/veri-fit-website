@@ -1,6 +1,6 @@
 import React from 'react';
 import Offer from '../landing/Offer';
-import { PreviewProps } from './cms';
+import { PreviewProps } from './interfaces';
 
 const OfferPreview: React.FC<PreviewProps> = ({ entry, widgetFor, widgetsFor, getAsset }) => {
   const prices = widgetsFor('prices').map((price) => ({
