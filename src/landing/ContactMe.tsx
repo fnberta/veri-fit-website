@@ -1,10 +1,10 @@
 import { ErrorMessage, Field, Form, Formik, FormikHelpers } from 'formik';
 import React, { useState } from 'react';
-import BulletItem from './BulletItem';
 import { Button } from '../common/components/Button';
 import { BotField } from '../common/components/Forms';
 import { makeValidator, urlEncode } from '../common/utils/forms';
 import Notification, { NotificationType } from '../common/components/Notification';
+import BulletItem from './BulletItem';
 
 interface FormValues {
   name: string;

@@ -1,14 +1,14 @@
 import { Link, RouteComponentProps } from '@reach/router';
 import React, { useEffect, useMemo, useState } from 'react';
+import cx from 'classnames';
 import { Client } from '../../../shared';
 import { Button, LinkButton } from '../../common/components/Button';
 import Dialog from '../../common/components/Dialog';
 import { ClassNameProps } from '../../common/utils/types';
-import AddClientDialogContent from './AddClientDialogContent';
 import { useRepos } from '../repositories/RepoContext';
 import { doesSubscriptionRunShort, isSubscriptionExpiring } from '../subscriptionChecks';
+import AddClientDialogContent from './AddClientDialogContent';
 import ClientDetails from './ClientDetails';
-import cx from 'classnames';
 
 export type Props = RouteComponentProps<{ clientId?: string }> & ClassNameProps;
 

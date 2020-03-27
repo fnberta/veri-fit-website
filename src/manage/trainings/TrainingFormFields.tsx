@@ -5,8 +5,8 @@ import { Client, TrainingInput, TrainingType } from '../../../shared';
 import { FormField } from '../../common/components/Forms';
 import { isValidISOString } from '../dateTime';
 import { getTrainingName } from '../displayNames';
-import ParticipantsSelector from './ParticipantsSelector';
 import { validSubscriptionTypes } from '../subscriptionChecks';
+import ParticipantsSelector from './ParticipantsSelector';
 
 export interface Props {
   clients: Client[];

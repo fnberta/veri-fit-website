@@ -1,7 +1,7 @@
 import { useField } from 'formik';
 import React from 'react';
-import { Client } from '../../../shared';
 import cx from 'classnames';
+import { Client } from '../../../shared';
 
 export interface Props extends React.HTMLProps<HTMLSelectElement> {
   name: string;

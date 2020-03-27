@@ -1,3 +1,5 @@
+// lot's of assertions here, would need proper graphql schema customization to fix
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { graphql } from 'gatsby';
 import { FluidObject } from 'gatsby-image';
 import React, { useEffect, useState } from 'react';
@@ -17,7 +19,6 @@ export interface Props {
   data: IndexPageQuery;
 }
 
-// lot's of assertions here, would need proper graphql schema customization to fix
 const IndexPage: React.FC<Props> = ({ data }) => {
   const [navFixed, setNavFixed] = useState(false);
 

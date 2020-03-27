@@ -1,10 +1,10 @@
 import cx from 'classnames';
 import { graphql, useStaticQuery } from 'gatsby';
 import React, { isValidElement, useState } from 'react';
+import Image, { FixedObject } from 'gatsby-image';
 import { LogosQuery } from '../../generatedGraphQL';
 import { IconButton } from './Button';
 import Icon from './Icon';
-import Image, { FixedObject } from 'gatsby-image';
 
 export interface Props extends React.HTMLProps<HTMLDivElement> {
   variant: 'bright' | 'dark' | 'transparent';
@@ -57,6 +57,7 @@ const Navbar: React.FC<Props> = ({ variant, sticky, children, className, ...rest
   const data = useStaticQuery<LogosQuery>(LOGOS_QUERY);
 
   const { header, nav, text } = getClasses(variant, open);
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const logo = variant === 'bright' ? data.logoBlack!.childImageSharp!.fixed : data.logoWhite!.childImageSharp!.fixed;
   return (
     <header
