@@ -36,9 +36,9 @@ export function isSubscriptionExpiring(subscription: Subscription): boolean {
 
 export function showSessionConfirm(clients: Client[], session: Session): boolean {
   return clients
-    .filter(client => session.clientIds.includes(client.id))
-    .every(client =>
-      client.activeSubscriptions.some(activeSub => {
+    .filter((client) => session.clientIds.includes(client.id))
+    .every((client) =>
+      client.activeSubscriptions.some((activeSub) => {
         if (activeSub.trainingType !== session.type) {
           return false;
         }

@@ -169,7 +169,7 @@ const ClientDetails: React.FC<Props> = ({ client, className, ...rest }) => {
           <h2 className="text-xl font-semibold">Abos</h2>
           <div className="mt-2">
             <ul className="h-56 px-2 border overflow-auto">
-              {subscriptions.map(subscription => (
+              {subscriptions.map((subscription) => (
                 <li key={subscription.id} className="py-4 px-2 border-b last:border-b-0">
                   <SubscriptionSummary
                     subscription={subscription}
@@ -206,7 +206,7 @@ const ClientDetails: React.FC<Props> = ({ client, className, ...rest }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {trainings.map(training => (
+                  {trainings.map((training) => (
                     <tr key={training.id}>
                       <td>{getTrainingName(training.type)}</td>
                       <td>{`${training.time.start} - ${training.time.end}`}</td>
@@ -232,7 +232,7 @@ const ClientDetails: React.FC<Props> = ({ client, className, ...rest }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {sessions.map(session => (
+                  {sessions.map((session) => (
                     <tr key={session.id}>
                       <td>{session.date}</td>
                       <td>{getTrainingName(session.type)}</td>

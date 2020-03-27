@@ -94,7 +94,7 @@ export const createSessions = functions.https.onCall(async (data, context) => {
 
 export const createSessionsOnTrainingCreated = functions.firestore
   .document('trainings/{trainingId}')
-  .onCreate(async snap => {
+  .onCreate(async (snap) => {
     const training = parseTraining(snap);
     const runsFrom = DateTime.fromISO(training.runsFrom);
 
@@ -123,10 +123,7 @@ export const createSessionsOnTrainingCreated = functions.firestore
   });
 
 function getSessionsForTrainingQuery(trainingId: string, startingFrom?: string): Query {
-  let query = db
-    .collection(Collection.SESSIONS)
-    .where('trainingId', '==', trainingId)
-    .where('confirmed', '==', false);
+  let query = db.collection(Collection.SESSIONS).where('trainingId', '==', trainingId).where('confirmed', '==', false);
   if (startingFrom != null) {
     query = query.where('date', '>=', startingFrom);
   }
@@ -149,10 +146,10 @@ function makeTrainingAndSessionsUpdater(
     clientIds: sessionInput.clientIds,
   };
 
-  return async t => {
+  return async (t) => {
     const sessionsSnap = await t.get(sessionsQuery);
     t.set(trainingsRef, trainingInput);
-    sessionsSnap.forEach(snap => {
+    sessionsSnap.forEach((snap) => {
       const session = parseSession(snap);
       const date = DateTime.fromISO(session.date);
       const { weekday } = DateTime.fromISO(sessionInput.runsFrom);
@@ -172,10 +169,7 @@ export const updateSession = functions.https.onCall(async (data, context) => {
 
   const { type, sessionId, sessionInput } = data as UpdateSessionPayload;
   if (type === ChangeType.SINGLE) {
-    await db
-      .collection(Collection.SESSIONS)
-      .doc(sessionId)
-      .set(sessionInput);
+    await db.collection(Collection.SESSIONS).doc(sessionId).set(sessionInput);
   } else {
     const { trainingId } = sessionInput;
     if (trainingId == null) {
@@ -209,7 +203,7 @@ export const deleteSessionsOnTrainingDeleted = functions.firestore
     const sessionsQuery = getSessionsForTrainingQuery(context.params.trainingId, training.runsFrom);
     const sessionsSnap = await sessionsQuery.get();
     const batch = db.batch();
-    sessionsSnap.forEach(snap => {
+    sessionsSnap.forEach((snap) => {
       batch.delete(snap.ref);
     });
     await batch.commit();
@@ -232,12 +226,12 @@ export const setActiveSubscriptions = functions.firestore
 /**
  * Updates the trainingsLeft field of a user's subscription when the confirmed status of a session is updated.
  */
-export const updateTrainingsLeft = functions.firestore.document('sessions/{sessionId}').onUpdate(async change => {
+export const updateTrainingsLeft = functions.firestore.document('sessions/{sessionId}').onUpdate(async (change) => {
   const before = parseSession(change.before);
   const after = parseSession(change.after);
   if (after.confirmed !== before.confirmed && [TrainingType.YOGA, TrainingType.PERSONAL].includes(after.type)) {
     const clientSubscriptions = await Promise.all(
-      after.clientIds.map(async clientId => {
+      after.clientIds.map(async (clientId) => {
         const query = await db
           .collection(Collection.CLIENTS)
           .doc(clientId)

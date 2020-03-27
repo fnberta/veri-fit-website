@@ -14,7 +14,7 @@ const ManageApp: React.FC = () => {
   const [logInResult, setLoginResult] = useState<UserCredential>();
   const { authRepo } = useRepos();
 
-  useEffect(() => authRepo.observeAuthState(user => setLoggedIn(user != null)), [authRepo]);
+  useEffect(() => authRepo.observeAuthState((user) => setLoggedIn(user != null)), [authRepo]);
   useEffect(() => {
     authRepo.getRedirectResult().then(setLoginResult);
   }, [authRepo]);

@@ -32,7 +32,7 @@ const Testimonials: React.FC<Props> = ({ data }) => {
           ))}
         </Carousel>
         <div className="relative -ml-2 mt-8 flex items-center justify-center">
-          {range(0, data.length).map(idx => (
+          {range(0, data.length).map((idx) => (
             <button
               key={idx}
               className="w-4 h-4 ml-2 flex items-center justify-center cursor-pointer outline-none focus:shadow-outline"

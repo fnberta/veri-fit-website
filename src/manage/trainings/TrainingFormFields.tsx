@@ -56,7 +56,7 @@ const TrainingFormFields: React.FC<Props> = ({ clients, disabled }) => {
         error={<ErrorMessage name="type" />}
         control={
           <Field className="form-select" as="select" id="type" name="type" disabled={disabled}>
-            {Object.keys(validSubscriptionTypes).map(trainingType => (
+            {Object.keys(validSubscriptionTypes).map((trainingType) => (
               <option key={trainingType} value={trainingType}>
                 {getTrainingName(trainingType as TrainingType)}
               </option>

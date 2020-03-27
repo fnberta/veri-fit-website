@@ -76,7 +76,7 @@ const Trainings: React.FC<Props> = ({ year, week, className }) => {
   ]);
   useEffect(() => {
     // TODO: show error to user
-    sessionRepo.createForYear(date.weekYear).catch(err => console.error(err));
+    sessionRepo.createForYear(date.weekYear).catch((err) => console.error(err));
   }, [sessionRepo, date.weekYear]);
 
   return (

@@ -23,7 +23,7 @@ export function pickSubscriptionId(
   }
 
   if (sessionConfirmed) {
-    const nonEmptySubscriptions = subscriptions.filter(subscription => subscription.trainingsLeft > 0);
+    const nonEmptySubscriptions = subscriptions.filter((subscription) => subscription.trainingsLeft > 0);
     if (nonEmptySubscriptions.length === 1) {
       return nonEmptySubscriptions[0].id;
     }

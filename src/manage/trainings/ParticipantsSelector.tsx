@@ -20,10 +20,10 @@ const ParticipantsSelector: React.FC<Props> = ({ name, clients, className, ...re
       size={clients.length > MAX_PARTICIPANTS_SIZE ? MAX_PARTICIPANTS_SIZE : clients.length}
       value={meta.value}
       onBlur={field.onBlur}
-      onChange={e => setValue(Array.from(e.currentTarget.selectedOptions).map(option => option.value))}
+      onChange={(e) => setValue(Array.from(e.currentTarget.selectedOptions).map((option) => option.value))}
       {...rest}
     >
-      {clients.map(client => (
+      {clients.map((client) => (
         <option key={client.id} value={client.id}>
           {client.name}
         </option>
