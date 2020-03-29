@@ -2,7 +2,6 @@ import { ErrorMessage, Field, FormikErrors, useFormikContext } from 'formik';
 import { DateTime } from 'luxon';
 import React from 'react';
 import { Client, TrainingInput, TrainingType } from '../../../shared';
-import { FormField } from '../../common/components/Forms';
 import { isValidISOString } from '../dateTime';
 import { getTrainingName } from '../displayNames';
 import { validSubscriptionTypes } from '../subscriptionChecks';
@@ -47,51 +46,46 @@ export function validateTrainingForm(values: TrainingInput): FormikErrors<Traini
 }
 
 const TrainingFormFields: React.FC<Props> = ({ clients, disabled }) => {
-  const { values } = useFormikContext<TrainingInput>();
+  const { values, errors, touched } = useFormikContext<TrainingInput>();
   return (
     <>
-      <FormField
-        label="Typ"
-        htmlFor="type"
-        error={<ErrorMessage name="type" />}
-        control={
-          <Field className="form-select" as="select" id="type" name="type" disabled={disabled}>
-            {Object.keys(validSubscriptionTypes).map((trainingType) => (
-              <option key={trainingType} value={trainingType}>
-                {getTrainingName(trainingType as TrainingType)}
-              </option>
-            ))}
-          </Field>
-        }
-      />
-      <FormField
-        className="mt-3"
-        label="Startpunkt"
-        htmlFor="runsFrom"
-        error={<ErrorMessage name="runsFrom" />}
-        help={`Training findet wöchentlich am ${DateTime.fromISO(values.runsFrom).weekdayLong} statt.`}
-        control={<Field className="form-input" type="date" id="runsFrom" name="runsFrom" disabled={disabled} />}
-      />
-      <FormField
-        className="mt-3"
-        label="Startzeit"
-        htmlFor="start"
-        error={<ErrorMessage name="time.start" />}
-        control={<Field className="form-input" type="time" id="start" name="time.start" disabled={disabled} />}
-      />
-      <FormField
-        className="mt-3"
-        label="Endzeit"
-        htmlFor="end"
-        error={<ErrorMessage name="time.end" />}
-        control={<Field className="form-input" type="time" id="end" name="time.end" disabled={disabled} />}
-      />
-      <FormField
-        className="mt-3"
-        label="Teilnehmer"
-        htmlFor="clientIds"
-        control={<ParticipantsSelector id="clientIds" name="clientIds" clients={clients} disabled={disabled} />}
-      />
+      <label className="form-field">
+        <span className="form-label">Typ</span>
+        <Field className="form-select" as="select" name="type" disabled={disabled}>
+          {Object.keys(validSubscriptionTypes).map((trainingType) => (
+            <option key={trainingType} value={trainingType}>
+              {getTrainingName(trainingType as TrainingType)}
+            </option>
+          ))}
+        </Field>
+        <ErrorMessage name="type">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
+      </label>
+      <label className="form-field mt-3">
+        <span className="form-label">Startpunkt</span>
+        <Field className="form-input" type="date" name="runsFrom" disabled={disabled} />
+        {errors.runsFrom && touched.runsFrom ? (
+          <span className="form-error">{errors.runsFrom}</span>
+        ) : (
+          <span className="text-xs">{`Training findet am ${
+            DateTime.fromISO(values.runsFrom).weekdayLong
+          } statt.`}</span>
+        )}
+      </label>
+      <label className="form-field mt-3">
+        <span className="form-label">Startzeit</span>
+        <Field className="form-input" type="time" name="time.start" disabled={disabled} />
+        <ErrorMessage name="time.start">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
+      </label>
+      <label className="form-field mt-3">
+        <span className="form-label">Endzeit</span>
+        <Field className="form-input" type="time" id="end" name="time.end" disabled={disabled} />
+        <ErrorMessage name="time.end">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
+      </label>
+      <label className="form-field mt-3">
+        <span className="form-label">Teilnehmer</span>
+        <ParticipantsSelector name="clientIds" clients={clients} disabled={disabled} />
+        <ErrorMessage name="clientIds">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
+      </label>
     </>
   );
 };

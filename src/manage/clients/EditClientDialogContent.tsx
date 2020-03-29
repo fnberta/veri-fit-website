@@ -2,7 +2,7 @@ import { Form, Formik, FormikHelpers } from 'formik';
 import React from 'react';
 import { Client } from '../../../shared';
 import { Button } from '../../common/components/Button';
-import { DialogBody, DialogFooter, DialogHeader } from '../../common/components/Dialog';
+import { DialogFooter, DialogHeader } from '../../common/components/Dialog';
 import { useRepos } from '../repositories/RepoContext';
 import ClientFormFields, { ClientFormValues, getClientInput, validateClientForm } from './ClientFormFields';
 
@@ -47,27 +47,23 @@ const EditClientDialogContent: React.FC<Props> = ({ client, onClientUpdated, onC
       >
         {({ dirty, isSubmitting, isValid, submitForm }) => (
           <>
-            <DialogBody>
-              <Form>
-                <ClientFormFields disabled={isSubmitting} />
-              </Form>
-            </DialogBody>
-            <DialogFooter>
-              <div className="flex justify-end p-4">
-                <Button disabled={isSubmitting} onClick={onCancelClick}>
-                  Verwerfen
-                </Button>
-                <Button
-                  className="ml-2"
-                  type="submit"
-                  color="orange"
-                  loading={isSubmitting}
-                  disabled={!dirty || !isValid}
-                  onClick={submitForm}
-                >
-                  Speichern
-                </Button>
-              </div>
+            <Form className="dialog-body">
+              <ClientFormFields disabled={isSubmitting} />
+            </Form>
+            <DialogFooter className="flex justify-end p-4">
+              <Button disabled={isSubmitting} onClick={onCancelClick}>
+                Verwerfen
+              </Button>
+              <Button
+                className="ml-2"
+                type="submit"
+                color="orange"
+                loading={isSubmitting}
+                disabled={!dirty || !isValid}
+                onClick={submitForm}
+              >
+                Speichern
+              </Button>
             </DialogFooter>
           </>
         )}

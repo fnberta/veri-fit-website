@@ -1,6 +1,5 @@
 import Image, { FluidObject } from 'gatsby-image';
 import React from 'react';
-import Card from '../common/components/Card';
 import Icon from '../common/components/Icon';
 
 export interface Props {
@@ -34,8 +33,9 @@ const AboutMe: React.FC<Props> = ({ vera }) => (
             Für Fragen zum Training oder zu mir stehe ich dir gerne zur Verfügung!
           </p>
         </header>
-        <Card className="ml-12 mt-12" image={<Image fluid={vera} alt="Vera Lienhard" style={IMG_STYLE} />}>
-          <ul className="text-lg text-gray-700">
+        <div className="card ml-12 mt-12">
+          <Image fluid={vera} alt="Vera Lienhard" style={IMG_STYLE} />
+          <ul className="card-body text-lg text-gray-700">
             <ExperienceItem>Master Sportwissenschaft Universität Bern</ExperienceItem>
             <ExperienceItem>Konditionstrainerin SwissOlympic</ExperienceItem>
             <ExperienceItem>Medizinische Trainingstherapeutin MTT</ExperienceItem>
@@ -45,7 +45,7 @@ const AboutMe: React.FC<Props> = ({ vera }) => (
             <ExperienceItem>Spiraldynamik Basic Med</ExperienceItem>
             <ExperienceItem>Beckenboden Instruktorin</ExperienceItem>
           </ul>
-        </Card>
+        </div>
       </div>
     </div>
   </section>

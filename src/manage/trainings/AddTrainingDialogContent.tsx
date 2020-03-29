@@ -2,7 +2,7 @@ import { Form, Formik, FormikHelpers } from 'formik';
 import React from 'react';
 import { Client, Training, TrainingInput, TrainingType } from '../../../shared';
 import { Button } from '../../common/components/Button';
-import { DialogBody, DialogFooter, DialogHeader } from '../../common/components/Dialog';
+import { DialogFooter, DialogHeader } from '../../common/components/Dialog';
 import { getToday } from '../dateTime';
 import { useRepos } from '../repositories/RepoContext';
 import TrainingFormFields, { validateTrainingForm } from './TrainingFormFields';
@@ -44,27 +44,23 @@ const AddTrainingDialogContent: React.FC<Props> = ({ clients, onTrainingCreated,
       >
         {({ isValid, isSubmitting, submitForm }) => (
           <>
-            <DialogBody>
-              <Form className="p-4">
-                <TrainingFormFields clients={clients} disabled={isSubmitting} />
-              </Form>
-            </DialogBody>
-            <DialogFooter>
-              <div className="flex justify-end p-4">
-                <Button disabled={isSubmitting} onClick={onCancelClick}>
-                  Verwerfen
-                </Button>
-                <Button
-                  className="ml-2"
-                  type="submit"
-                  color="orange"
-                  loading={isSubmitting}
-                  disabled={!isValid}
-                  onClick={submitForm}
-                >
-                  Erstellen
-                </Button>
-              </div>
+            <Form className="dialog-body p-4">
+              <TrainingFormFields clients={clients} disabled={isSubmitting} />
+            </Form>
+            <DialogFooter className="flex justify-end p-4">
+              <Button disabled={isSubmitting} onClick={onCancelClick}>
+                Verwerfen
+              </Button>
+              <Button
+                className="ml-2"
+                type="submit"
+                color="orange"
+                loading={isSubmitting}
+                disabled={!isValid}
+                onClick={submitForm}
+              >
+                Erstellen
+              </Button>
             </DialogFooter>
           </>
         )}

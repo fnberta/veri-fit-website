@@ -80,7 +80,7 @@ const Current: React.FC<Props> = ({ videos }) => {
             <Form className="mt-8 flex flex-col" name="videos" data-netlify="true" netlify-honeypot="bot-field">
               <BotField />
               <fieldset>
-                <legend className="text-white form-label">Videos</legend>
+                <legend className="form-label text-white">Videos</legend>
                 <ul className="-mt-1 text-white">
                   {videos.map((video) => {
                     const text = `${video.title} - ${video.description}`;
@@ -101,7 +101,7 @@ const Current: React.FC<Props> = ({ videos }) => {
                   })}
                 </ul>
               </fieldset>
-              <label className="mt-4 flex-auto form-field">
+              <label className="form-field mt-4 flex-auto">
                 <span className="form-label text-white">
                   Dein Wunschtraining ist noch nicht auf der Liste? Beschreibe was du dir wünschst!
                 </span>
@@ -109,7 +109,7 @@ const Current: React.FC<Props> = ({ videos }) => {
                 <ErrorMessage name="message">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
               </label>
               <div className="-ml-4 flex flex-wrap">
-                <label className="w-64 ml-4 mt-4 flex-auto form-field">
+                <label className="form-field w-64 ml-4 mt-4 flex-auto">
                   <span className="form-label text-white">Name</span>
                   <Field
                     className="form-input"
@@ -120,7 +120,7 @@ const Current: React.FC<Props> = ({ videos }) => {
                   />
                   <ErrorMessage name="name">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
                 </label>
-                <label className="w-64 ml-4 mt-4 flex-auto form-field">
+                <label className="form-field w-64 ml-4 mt-4 flex-auto">
                   <span className="form-label text-white">Email</span>
                   <Field
                     className="form-input"
