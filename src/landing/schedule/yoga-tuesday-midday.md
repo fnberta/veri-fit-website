@@ -1,5 +1,4 @@
 ---
-collection: schedule
 title: Yoga
 weekday: tuesday
 timeOfDay: midday

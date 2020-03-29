@@ -76,7 +76,7 @@ export const query = graphql`
         }
       }
     }
-    offers: allMarkdownRemark(filter: { frontmatter: { collection: { eq: "offer" } } }) {
+    offers: allMarkdownRemark(filter: { fields: { collection: { eq: "offers" } } }) {
       nodes {
         html
         frontmatter {
@@ -98,7 +98,7 @@ export const query = graphql`
         }
       }
     }
-    schedule: allMarkdownRemark(filter: { frontmatter: { collection: { eq: "schedule" } } }) {
+    schedule: allMarkdownRemark(filter: { fields: { collection: { eq: "schedule" } } }) {
       nodes {
         frontmatter {
           title
@@ -109,21 +109,13 @@ export const query = graphql`
       }
     }
     videos: allMarkdownRemark(
-      filter: { frontmatter: { collection: { eq: "video" } } }
+      filter: { fields: { collection: { eq: "videos" } } }
       sort: { fields: [frontmatter___title], order: ASC }
     ) {
       nodes {
         frontmatter {
           title
           description
-        }
-      }
-    }
-    testimonials: allMarkdownRemark(filter: { frontmatter: { collection: { eq: "testimonial" } } }) {
-      nodes {
-        frontmatter {
-          author
-          quote
         }
       }
     }
