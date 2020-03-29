@@ -46,7 +46,7 @@ export function validateTrainingForm(values: TrainingInput): FormikErrors<Traini
 }
 
 const TrainingFormFields: React.FC<Props> = ({ clients, disabled }) => {
-  const { values, errors } = useFormikContext<TrainingInput>();
+  const { values, errors, touched } = useFormikContext<TrainingInput>();
   return (
     <>
       <label className="form-field">
@@ -63,7 +63,7 @@ const TrainingFormFields: React.FC<Props> = ({ clients, disabled }) => {
       <label className="form-field mt-3">
         <span className="form-label">Startpunkt</span>
         <Field className="form-input" type="date" name="runsFrom" disabled={disabled} />
-        {errors.runsFrom ? (
+        {errors.runsFrom && touched.runsFrom ? (
           <span className="form-error">{errors.runsFrom}</span>
         ) : (
           <span className="text-xs">{`Training findet am ${
