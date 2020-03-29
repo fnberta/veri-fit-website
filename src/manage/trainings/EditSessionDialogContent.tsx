@@ -3,7 +3,7 @@ import { DateTime } from 'luxon';
 import React, { useState } from 'react';
 import { ChangeType, Client, Session, SessionInput } from '../../../shared';
 import { Button } from '../../common/components/Button';
-import { DialogBody, DialogFooter, DialogHeader } from '../../common/components/Dialog';
+import { DialogFooter, DialogHeader } from '../../common/components/Dialog';
 import { useRepos } from '../repositories/RepoContext';
 import SessionFormFields, { SessionFormValues } from './SessionFormFields';
 import { validateTrainingForm } from './TrainingFormFields';
@@ -61,42 +61,38 @@ const EditSessionDialogContent: React.FC<Props> = ({ session, clients, onSession
       >
         {({ isValid, isSubmitting, submitForm }) => (
           <>
-            <DialogBody>
-              <Form className="p-4">
-                <SessionFormFields clients={clients} disabled={isSubmitting} />
-              </Form>
-            </DialogBody>
-            <DialogFooter>
-              <div className="-mt-2 p-4 flex flex-wrap items-baseline justify-end">
-                {session.trainingId != null && (
-                  // eslint-disable-next-line jsx-a11y/no-onchange
-                  <select
-                    className="mt-2 form-select"
-                    aria-label="Änderungsart"
-                    value={changeType}
-                    disabled={isSubmitting}
-                    onChange={(e) => setChangeType(e.currentTarget.value as ChangeType)}
-                  >
-                    <option value={ChangeType.SINGLE}>Nur dieses</option>
-                    <option value={ChangeType.ALL_FOLLOWING}>Alle zukünftigen</option>
-                    <option value={ChangeType.ALL_NON_CONFIRMED}>Alle offenen</option>
-                  </select>
-                )}
-                <div className="mt-2 ml-4 flex-grow flex justify-end">
-                  <Button disabled={isSubmitting} onClick={onCancelClick}>
-                    Verwerfen
-                  </Button>
-                  <Button
-                    className="ml-2"
-                    type="submit"
-                    color="orange"
-                    loading={isSubmitting}
-                    disabled={!isValid}
-                    onClick={submitForm}
-                  >
-                    Speichern
-                  </Button>
-                </div>
+            <Form className="dialog-body p-4">
+              <SessionFormFields clients={clients} disabled={isSubmitting} />
+            </Form>
+            <DialogFooter className="-mt-2 p-4 flex flex-wrap items-baseline justify-end">
+              {session.trainingId != null && (
+                // eslint-disable-next-line jsx-a11y/no-onchange
+                <select
+                  className="mt-2 form-select"
+                  aria-label="Änderungsart"
+                  value={changeType}
+                  disabled={isSubmitting}
+                  onChange={(e) => setChangeType(e.currentTarget.value as ChangeType)}
+                >
+                  <option value={ChangeType.SINGLE}>Nur dieses</option>
+                  <option value={ChangeType.ALL_FOLLOWING}>Alle zukünftigen</option>
+                  <option value={ChangeType.ALL_NON_CONFIRMED}>Alle offenen</option>
+                </select>
+              )}
+              <div className="mt-2 ml-4 flex-grow flex justify-end">
+                <Button disabled={isSubmitting} onClick={onCancelClick}>
+                  Verwerfen
+                </Button>
+                <Button
+                  className="ml-2"
+                  type="submit"
+                  color="orange"
+                  loading={isSubmitting}
+                  disabled={!isValid}
+                  onClick={submitForm}
+                >
+                  Speichern
+                </Button>
               </div>
             </DialogFooter>
           </>

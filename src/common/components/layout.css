@@ -65,6 +65,10 @@ dialog[open] + .backdrop {
   }
 }
 
+.dialog-body {
+  @apply overflow-auto flex-grow;
+}
+
 .content h4 {
   @apply text-xl font-semibold leading-tight mb-2;
 }
@@ -91,7 +95,7 @@ dialog[open] + .backdrop {
 }
 
 .card {
-  @apply bg-white shadow rounded;
+  @apply bg-white shadow rounded overflow-hidden;
 }
 
 .card-body {

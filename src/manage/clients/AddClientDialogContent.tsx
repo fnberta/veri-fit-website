@@ -1,7 +1,7 @@
 import { Form, Formik, FormikErrors, FormikHelpers } from 'formik';
 import React from 'react';
 import { Client, SubscriptionType, TrainingType } from '../../../shared';
-import { DialogBody, DialogFooter, DialogHeader } from '../../common/components/Dialog';
+import { DialogFooter, DialogHeader } from '../../common/components/Dialog';
 import { getToday } from '../dateTime';
 import { useRepos } from '../repositories/RepoContext';
 import { Button } from '../../common/components/Button';
@@ -77,34 +77,30 @@ const AddClientDialogContent: React.FC<Props> = ({ onClientCreated, onCancelClic
       >
         {({ isSubmitting, isValid, submitForm }) => (
           <>
-            <DialogBody>
-              <Form>
-                <ClientFormFields disabled={isSubmitting} />
-                <hr className="my-2" />
-                <div className="p-4">
-                  <h2 className="text-base font-semibold">Abo</h2>
-                  <div className="mt-4">
-                    <SubscriptionFormFields disabled={isSubmitting} namespace="subscription" />
-                  </div>
+            <Form className="dialog-body">
+              <ClientFormFields disabled={isSubmitting} />
+              <hr className="my-2" />
+              <div className="p-4">
+                <h2 className="text-base font-semibold">Abo</h2>
+                <div className="mt-4">
+                  <SubscriptionFormFields disabled={isSubmitting} namespace="subscription" />
                 </div>
-              </Form>
-            </DialogBody>
-            <DialogFooter>
-              <div className="p-4 flex justify-end">
-                <Button disabled={isSubmitting} onClick={onCancelClick}>
-                  Verwerfen
-                </Button>
-                <Button
-                  className="ml-2"
-                  type="submit"
-                  color="orange"
-                  loading={isSubmitting}
-                  disabled={!isValid}
-                  onClick={submitForm}
-                >
-                  Erstellen
-                </Button>
               </div>
+            </Form>
+            <DialogFooter className="p-4 flex justify-end">
+              <Button disabled={isSubmitting} onClick={onCancelClick}>
+                Verwerfen
+              </Button>
+              <Button
+                className="ml-2"
+                type="submit"
+                color="orange"
+                loading={isSubmitting}
+                disabled={!isValid}
+                onClick={submitForm}
+              >
+                Erstellen
+              </Button>
             </DialogFooter>
           </>
         )}

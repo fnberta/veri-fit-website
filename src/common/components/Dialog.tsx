@@ -102,14 +102,8 @@ export const DialogHeader: React.FC<DialogHeaderProps> = ({ title, onCloseClick,
   </header>
 );
 
-export const DialogBody: React.FC<React.HTMLProps<HTMLDivElement>> = ({ children, className, ...rest }) => (
-  <div className={cx('overflow-auto flex-grow', className)} {...rest}>
-    {children}
-  </div>
-);
-
 export const DialogFooter: React.FC<React.HTMLProps<HTMLDivElement>> = ({ children, className, ...rest }) => (
-  <div className={cx('bg-gray-100', className)} {...rest}>
+  <footer className={cx('bg-gray-100', className)} {...rest}>
     {children}
-  </div>
+  </footer>
 );
