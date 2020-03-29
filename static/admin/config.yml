@@ -14,8 +14,6 @@ collections:
         label: 'AGB'
         name: 'agb'
         fields:
-          - { name: 'collection', label: 'Collection', widget: 'hidden', default: 'agb-page' }
-          - { name: 'path', label: 'Path', widget: 'string' }
           - { name: 'title', label: 'Title', widget: 'string' }
           - { name: 'subtitle', label: 'Subtitle', widget: 'string' }
           - { name: 'body', label: 'Text', widget: 'markdown' }
@@ -26,7 +24,6 @@ collections:
     create: true
     slug: '{{slug}}'
     fields:
-      - { name: 'collection', label: 'Collection', widget: 'hidden', default: 'offer' }
       - { name: 'order', label: 'Order', widget: 'number', valueType: 'int', min: 1 }
       - { name: 'title', label: 'Title', widget: 'string' }
       - { name: 'subtitle', label: 'Subtitle', widget: 'string' }
@@ -53,7 +50,6 @@ collections:
     create: true
     slug: '{{slug}}-{{weekday}}-{{timeOfDay}}'
     fields:
-      - { name: 'collection', label: 'Collection', widget: 'hidden', default: 'schedule' }
       - { name: 'title', label: 'Title', widget: 'string' }
       - name: 'weekday'
         label: 'Weekday'
@@ -81,7 +77,6 @@ collections:
     identifier_field: 'author'
     slug: '{{year}}-{{month}}-{{day}}-{{slug}}'
     fields:
-      - { name: 'collection', label: 'Collection', widget: 'hidden', default: 'testimonial' }
       - { name: 'author', label: 'Author', widget: 'string' }
       - { name: 'quote', label: 'Quote', widget: 'string' }
   - name: 'videos'
@@ -91,7 +86,6 @@ collections:
     create: true
     slug: '{{slug}}'
     fields:
-      - { name: 'collection', label: 'Collection', widget: 'hidden', default: 'video' }
       - { name: 'title', label: 'Title', widget: 'string' }
       - { name: 'description', label: 'Description', widget: 'text' }
       - { name: 'status', label: 'Status', widget: 'hidden', default: 'available' }

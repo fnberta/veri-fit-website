@@ -1,5 +1,4 @@
 ---
-collection: offer
 order: 4
 title: BOOST
 subtitle: Funktionelles Krafttraining

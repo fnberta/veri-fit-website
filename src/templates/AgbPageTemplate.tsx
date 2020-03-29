@@ -33,8 +33,8 @@ const AgbPageTemplate: React.FC<Props> = ({ data }) => {
 export default AgbPageTemplate;
 
 export const query = graphql`
-  query AgbPage($path: String!) {
-    markdownRemark(frontmatter: { path: { eq: $path } }) {
+  query AgbPage($slug: String!) {
+    markdownRemark(fields: { slug: { eq: $slug } }) {
       html
       frontmatter {
         title

@@ -1,6 +1,4 @@
 ---
-collection: agb-page
-path: /agb
 title: Allgemeine Geschäftsbedingungen
 subtitle: Für alle Kurse von Veri-Fit gelten die folgenden Bestimmungen
 ---

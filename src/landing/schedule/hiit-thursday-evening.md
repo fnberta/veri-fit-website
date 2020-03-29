@@ -1,5 +1,4 @@
 ---
-collection: schedule
 title: HIIT
 weekday: thursday
 timeOfDay: evening

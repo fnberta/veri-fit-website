@@ -1,5 +1,4 @@
 ---
-collection: offer
 order: 2
 title: HIIT
 subtitle: High Intensity Interval Training

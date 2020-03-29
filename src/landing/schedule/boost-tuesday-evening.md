@@ -1,5 +1,4 @@
 ---
-collection: schedule
 title: Boost
 weekday: tuesday
 timeOfDay: evening
