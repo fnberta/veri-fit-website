@@ -1,6 +1,5 @@
 import { ErrorMessage, Field, FormikErrors } from 'formik';
 import React from 'react';
-import { FormField } from '../../common/components/Forms';
 import { makeValidator } from '../../common/utils/forms';
 import { getToday, isValidISOString } from '../dateTime';
 import { ClientInput } from '../repositories/ClientRepository';
@@ -78,96 +77,62 @@ const ClientFormFields: React.FC<Props> = ({ disabled }) => (
     <div className="p-4">
       <h2 className="text-base font-semibold">Persönlich</h2>
       <div className="mt-4">
-        <FormField
-          label="Name"
-          htmlFor="name"
-          error={<ErrorMessage name="name" />}
-          control={
-            <Field
-              className="form-input w-full"
-              type="text"
-              id="name"
-              name="name"
-              placeholder="Yoga Gott"
-              validate={makeValidator('Name')}
-              disabled={disabled}
-            />
-          }
-        />
-        <FormField
-          className="mt-3"
-          label="Geburtstag"
-          htmlFor="birthday"
-          error={<ErrorMessage name="birthday" />}
-          control={
-            <Field
-              className="form-input w-full"
-              type="date"
-              id="birthday"
-              name="birthday"
-              max={getToday()}
-              disabled={disabled}
-            />
-          }
-        />
+        <label className="form-field">
+          <span className="form-label">Name</span>
+          <Field
+            className="form-input w-full"
+            type="text"
+            name="name"
+            placeholder="Yoga Gott"
+            validate={makeValidator('Name')}
+            disabled={disabled}
+          />
+          <ErrorMessage name="name">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
+        </label>
+        <label className="form-field mt-3">
+          <span className="form-label">Geburtstag</span>
+          <Field className="form-input w-full" type="date" name="birthday" max={getToday()} disabled={disabled} />
+          <ErrorMessage name="birthday">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
+        </label>
       </div>
     </div>
     <hr className="my-2" />
     <div className="p-4">
       <h2 className="text-base font-semibold">Kontakt</h2>
       <div className="mt-4">
-        <FormField
-          label="Email"
-          htmlFor="email"
-          error={<ErrorMessage name="email" />}
-          control={<Field className="form-input w-full" type="email" id="email" name="email" disabled={disabled} />}
-        />
-        <FormField
-          className="mt-2"
-          label="Telefon"
-          htmlFor="phone"
-          error={<ErrorMessage name="phone" />}
-          control={<Field className="form-input w-full" type="tel" id="phone" name="phone" disabled={disabled} />}
-        />
+        <label className="form-field">
+          <span className="form-label">Email</span>
+          <Field className="form-input w-full" type="email" name="email" disabled={disabled} />
+          <ErrorMessage name="email">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
+        </label>
+        <label className="form-field mt-2">
+          <span className="form-label">Telefon</span>
+          <Field className="form-input w-full" type="tel" name="phone" disabled={disabled} />
+          <ErrorMessage name="phone">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
+        </label>
         <div className="mt-2 flex">
-          <FormField
-            className="flex-1"
-            label="Strasse"
-            htmlFor="street"
-            error={<ErrorMessage name="address.street" />}
-            control={
-              <Field className="form-input w-full" type="text" id="street" name="address.street" disabled={disabled} />
-            }
-          />
-          <FormField
-            className="ml-2 w-1/3"
-            label="Hausnummer"
-            htmlFor="number"
-            error={<ErrorMessage name="address.number" />}
-            control={
-              <Field className="form-input w-full" type="text" id="number" name="address.number" disabled={disabled} />
-            }
-          />
+          <label className="form-field flex-1">
+            <span className="form-label">Strasse</span>
+            <Field className="form-input w-full" type="text" name="address.street" disabled={disabled} />
+            <ErrorMessage name="address.street">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
+          </label>
+          <label className="form-field ml-2 w-1/3">
+            <span className="form-label">Hausnummer</span>
+            <Field className="form-input w-full" type="text" name="address.number" disabled={disabled} />
+            <ErrorMessage name="address.number">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
+          </label>
         </div>
         <div className="mt-2 flex">
-          <FormField
-            className="w-1/3"
-            label="PLZ"
-            htmlFor="zip"
-            error={<ErrorMessage name="address.zip" />}
-            control={
-              <Field className="form-input w-full" type="text" id="zip" name="address.zip" disabled={disabled} />
-            }
-          />
-          <FormField
-            className="ml-2 flex-1"
-            label="Stadt"
-            htmlFor="city"
-            error={<ErrorMessage name="address.city" />}
-            control={
-              <Field className="form-input w-full" type="text" id="city" name="address.city" disabled={disabled} />
-            }
-          />
+          <label className="form-field w-1/3">
+            <span className="form-label">PLZ</span>
+            <Field className="form-input w-full" type="text" name="address.zip" disabled={disabled} />
+            <ErrorMessage name="address.zip">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
+          </label>
+          <label className="form-field ml-2 flex-1">
+            <span className="form-label">Stadt</span>
+            <Field className="form-input w-full" type="text" name="address.city" disabled={disabled} />
+            <ErrorMessage name="address.city">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
+          </label>
         </div>
       </div>
     </div>

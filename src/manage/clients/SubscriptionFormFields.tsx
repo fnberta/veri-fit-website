@@ -1,7 +1,6 @@
 import { ErrorMessage, Field, FormikErrors, getIn, useFormikContext } from 'formik';
 import React from 'react';
 import { SubscriptionType, TrainingType } from '../../../shared';
-import { FormField } from '../../common/components/Forms';
 import { getEndDate, isValidISOString } from '../dateTime';
 import { getSubscriptionName, getTrainingName } from '../displayNames';
 import { SubscriptionInput } from '../repositories/ClientRepository';
@@ -155,104 +154,73 @@ const SubscriptionFormFields: React.FC<Props> = ({ disabled, namespace }) => {
 
   return (
     <>
-      <FormField
-        className=""
-        label="Trainings-Typ"
-        htmlFor="trainingType"
-        error={<ErrorMessage name={withNamespace('trainingType')} />}
-        control={
-          <Field className="form-select w-full" as="select" id="trainingType" name={withNamespace('trainingType')}>
-            {Object.keys(validSubscriptionTypes).map((trainingType) => (
-              <option key={trainingType} value={trainingType}>
-                {getTrainingName(trainingType as TrainingType)}
+      <label className="form-field">
+        <span className="form-label">Trainings-Typ</span>
+        <Field className="form-select w-full" as="select" name={withNamespace('trainingType')}>
+          {Object.keys(validSubscriptionTypes).map((trainingType) => (
+            <option key={trainingType} value={trainingType}>
+              {getTrainingName(trainingType as TrainingType)}
+            </option>
+          ))}
+        </Field>
+        <ErrorMessage name={withNamespace('trainingType')}>
+          {(error) => <span className="form-error">{error}</span>}
+        </ErrorMessage>
+      </label>
+      <div className="mt-2 flex">
+        <label className="form-field w-2/3">
+          <span className="form-label">Abo-Typ</span>
+          <Field className="form-select" as="select" name={withNamespace('type')}>
+            {validSubscriptionTypes[trainingType].map((type) => (
+              <option key={type} value={type}>
+                {getSubscriptionName(type)}
               </option>
             ))}
           </Field>
-        }
-      />
-      <div className="mt-2 flex">
-        <FormField
-          className="w-2/3"
-          label="Abo-Typ"
-          htmlFor="type"
-          error={<ErrorMessage name={withNamespace('type')} />}
-          control={
-            <Field className="form-select" as="select" id="type" name={withNamespace('type')}>
-              {validSubscriptionTypes[trainingType].map((type) => (
-                <option key={type} value={type}>
-                  {getSubscriptionName(type)}
-                </option>
-              ))}
-            </Field>
-          }
-        />
+          <ErrorMessage name={withNamespace('type')}>
+            {(error) => <span className="form-error">{error}</span>}
+          </ErrorMessage>
+        </label>
         {type !== SubscriptionType.BLOCK && (
-          <FormField
-            className="ml-2 flex-1"
-            label="Trainings übrig"
-            htmlFor="trainingsLeft"
-            error={<ErrorMessage name={withNamespace('trainingsLeft')} />}
-            control={
-              <Field
-                className="form-input w-full"
-                type="number"
-                id="trainingsLeft"
-                name={withNamespace('trainingsLeft')}
-                disabled={disabled}
-              />
-            }
-          />
-        )}
-      </div>
-      <FormField
-        className="mt-2"
-        label="Startpunkt"
-        htmlFor="start"
-        error={<ErrorMessage name={withNamespace('start')} />}
-        control={
-          <Field
-            className="form-input w-full"
-            type="date"
-            id="start"
-            name={withNamespace('start')}
-            disabled={disabled}
-          />
-        }
-      />
-      <FormField
-        className="mt-2"
-        label="Kosten"
-        htmlFor="paid"
-        error={<ErrorMessage name={withNamespace('paid')} />}
-        control={
-          <div className="inline-flex items-center">
-            <Field
-              className="form-checkbox"
-              type="checkbox"
-              id="paid"
-              name={withNamespace('paid')}
-              disabled={disabled}
-            />
-            <span className="ml-2 text-base">{' Bereits bezahlt'}</span>
-          </div>
-        }
-      />
-      {paid && (
-        <FormField
-          className="mt-2"
-          label="Bezahlt am"
-          htmlFor="paidAt"
-          error={<ErrorMessage name={withNamespace('paidAt')} />}
-          control={
+          <label className="form-field ml-2 flex-1">
+            <span className="form-label">Trainings übrig</span>
             <Field
               className="form-input w-full"
-              type="date"
-              id="paidAt"
-              name={withNamespace('paidAt')}
+              type="number"
+              name={withNamespace('trainingsLeft')}
               disabled={disabled}
             />
-          }
-        />
+            <ErrorMessage name={withNamespace('trainingsLeft')}>
+              {(error) => <span className="form-error">{error}</span>}
+            </ErrorMessage>
+          </label>
+        )}
+      </div>
+      <label className="form-field mt-2">
+        <span className="form-label">Startpunkt</span>
+        <Field className="form-input w-full" type="date" name={withNamespace('start')} disabled={disabled} />
+        <ErrorMessage name={withNamespace('start')}>
+          {(error) => <span className="form-error">{error}</span>}
+        </ErrorMessage>
+      </label>
+      <fieldset className="form-field mt-2">
+        <legend className="form-label">Kosten</legend>
+        <label className="inline-flex items-center">
+          <Field className="form-checkbox" type="checkbox" name={withNamespace('paid')} disabled={disabled} />
+          <span className="ml-2 text-base">{' Bereits bezahlt'}</span>
+        </label>
+        <ErrorMessage name={withNamespace('paid')}>
+          {(error) => <span className="form-error">{error}</span>}
+        </ErrorMessage>
+      </fieldset>
+      {paid && (
+        <label className="form-field mt-2">
+          <span className="form-label">Bezahlt am</span>
+          <Field className="form-input w-full" type="date" name={withNamespace('paidAt')} disabled={disabled} />
+          <ErrorMessage name={withNamespace('paidAt')}>
+            {(error) => <span className="form-error">{error}</span>}
+          </ErrorMessage>
+        </label>
       )}
     </>
   );
