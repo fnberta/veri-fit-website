@@ -168,7 +168,7 @@ describe('pick subscription for update trainings left', () => {
           trainingType: TrainingType.YOGA,
           trainingsLeft: 0,
           start: '2020-01-01',
-          end: '2020-05-01',
+          end: '2020-09-01',
         },
         {
           id: 'some-other-other-id',
