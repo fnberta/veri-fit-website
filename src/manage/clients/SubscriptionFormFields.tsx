@@ -1,5 +1,5 @@
 import { ErrorMessage, Field, FormikErrors, getIn, useFormikContext } from 'formik';
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { SubscriptionType, TrainingType } from '../../../shared';
 import { getEndDate, isValidISOString } from '../dateTime';
 import { getSubscriptionName, getTrainingName } from '../displayNames';
@@ -141,7 +141,7 @@ function usePrevious<T>(value: T): T | undefined {
 }
 
 const SubscriptionFormFields: React.FC<Props> = ({ disabled, namespace }) => {
-  const withNamespace = useCallback((name: string) => (namespace ? `${namespace}.${name}` : name), [namespace]);
+  const withNamespace = (name: string) => (namespace ? `${namespace}.${name}` : name);
 
   // this is not very type safe but good enough for now
   const { values, setFieldValue } = useFormikContext();
