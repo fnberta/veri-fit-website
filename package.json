@@ -73,7 +73,7 @@
     "jest": "^25.2.3",
     "lint-staged": "^10.2.11",
     "prettier": "^2.0.5",
-    "tailwindcss": "^1.2.0",
+    "tailwindcss": "^1.6.2",
     "ts-jest": "^25.2.1",
     "typescript": "^3.9.7"
   },
