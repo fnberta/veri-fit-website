@@ -230,24 +230,20 @@ export const updateTrainingsLeft = functions.firestore
   .onUpdate(async (change, context) => {
     const after = parseSession(change.after);
     if (after.statusReverted === true) {
-      console.log('status reverted');
       // session's confirmed status was reverted because updating of trainingsLeft failed, abort early
       return Promise.resolve();
     }
     if (after.type !== TrainingType.YOGA && after.type !== TrainingType.PERSONAL) {
-      console.log('wrong type');
       // session does not belong to a training type where trainingsLeft needs to be updated, abort early
       return Promise.resolve();
     }
     if (after.clientIds.length === 0) {
-      console.log('no clients');
       // no clients attached to this session, abort early
       return Promise.resolve();
     }
 
     const before = parseSession(change.before);
     if (after.confirmed === before.confirmed) {
-      console.log('confirmed not changed');
       // confirmed status did not change, abort early
       return Promise.resolve();
     }
@@ -255,7 +251,6 @@ export const updateTrainingsLeft = functions.firestore
     const handledUpdateRef = db.collection(Collection.HANDLED_SESSION_UPDATES).doc(context.eventId);
     const handledUpdateSnap = await handledUpdateRef.get();
     if (handledUpdateSnap.exists && parseHandledSessionUpdate(handledUpdateSnap).trainingsLeftUpdated) {
-      console.log('session handled');
       // session update was already handled, abort early
       return Promise.resolve();
     }
@@ -272,7 +267,6 @@ export const updateTrainingsLeft = functions.firestore
         (snap) => parseSubscription(snap) as YogaSubscription | PersonalSubscription,
       );
       const subscriptionId = pickSubscriptionId(after.confirmed ? 'confirmed' : 'opened', subscriptions);
-      console.log('subscriptionId', subscriptionId);
       if (subscriptionId) {
         const ref = db
           .collection(Collection.CLIENTS)
