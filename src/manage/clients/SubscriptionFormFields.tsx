@@ -1,5 +1,5 @@
 import { ErrorMessage, Field, FormikErrors, getIn, useFormikContext } from 'formik';
-import React from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { SubscriptionType, TrainingType } from '../../../shared';
 import { getEndDate, isValidISOString } from '../dateTime';
 import { getSubscriptionName, getTrainingName } from '../displayNames';
@@ -132,8 +132,16 @@ export function getSubscriptionInput(values: SubscriptionFormValues): Subscripti
   }
 }
 
+function usePrevious<T>(value: T): T | undefined {
+  const ref = useRef<T>();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+}
+
 const SubscriptionFormFields: React.FC<Props> = ({ disabled, namespace }) => {
-  const withNamespace = (name: string) => (namespace ? `${namespace}.${name}` : name);
+  const withNamespace = useCallback((name: string) => (namespace ? `${namespace}.${name}` : name), [namespace]);
 
   // this is not very type safe but good enough for now
   const { values, setFieldValue } = useFormikContext();
@@ -147,8 +155,10 @@ const SubscriptionFormFields: React.FC<Props> = ({ disabled, namespace }) => {
     setFieldValue(withNamespace('type'), validTypes[0]);
   }
 
+  // update trainingsLeft when default changes or if value is higher than default
   const defaultTrainingsLeft = getDefaultTrainingsLeft(type);
-  if (trainingsLeft > defaultTrainingsLeft) {
+  const prevDefaultTrainingsLeft = usePrevious(defaultTrainingsLeft);
+  if (defaultTrainingsLeft !== prevDefaultTrainingsLeft || trainingsLeft > defaultTrainingsLeft) {
     setFieldValue(withNamespace('trainingsLeft'), defaultTrainingsLeft);
   }
 
