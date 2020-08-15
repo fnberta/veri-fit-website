@@ -5,9 +5,9 @@ import { Button } from '../common/components/Button';
 import Layout from '../common/components/Layout';
 import Navbar from '../common/components/Navbar';
 import Clients from './clients/Clients';
-import { UserCredential } from './firebase';
 import { useRepos } from './repositories/RepoContext';
 import Trainings from './trainings/Trainings';
+import { UserCredential } from './firebase';
 
 const ManageApp: React.FC = () => {
   const [loggedIn, setLoggedIn] = useState(false);

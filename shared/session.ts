@@ -1,4 +1,4 @@
-import { Snapshot } from './common';
+import { Entity, Snapshot } from './common';
 import { Training } from './training';
 
 export interface Session extends Training {
@@ -6,6 +6,7 @@ export interface Session extends Training {
   date: string; // YYYY-MM-DD
   confirmed: boolean;
   notes?: string;
+  statusReverted?: boolean;
 }
 
 export type SessionInput = Omit<Session, 'id'>;
@@ -31,4 +32,15 @@ export function parseSession(snap: Snapshot): Session {
     id: snap.id,
     ...snap.data(),
   } as Session;
+}
+
+export interface HandledSessionUpdate extends Entity {
+  trainingsLeftUpdated: boolean;
+}
+
+export function parseHandledSessionUpdate(snap: Snapshot): HandledSessionUpdate {
+  return {
+    id: snap.id,
+    ...snap.data(),
+  } as HandledSessionUpdate;
 }

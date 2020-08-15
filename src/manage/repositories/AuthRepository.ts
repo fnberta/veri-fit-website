@@ -1,5 +1,5 @@
-import { Unsubscribe } from 'firebase';
-import { Auth, AuthProvider, User } from '../firebase';
+import { Unsubscribe, User } from 'firebase';
+import { Auth, AuthProvider } from '../firebase';
 
 export default class AuthRepository {
   constructor(private readonly auth: Auth, private readonly provider: AuthProvider) {}

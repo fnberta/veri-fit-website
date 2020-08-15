@@ -1,14 +1,14 @@
 import { Unsubscribe } from 'firebase';
 import { DateTime } from 'luxon';
 import {
-  Collection,
-  Session,
-  parseSession,
-  CreateSessionsPayload,
   ChangeType,
-  UpdateSessionPayload,
-  SessionInput,
+  Collection,
+  CreateSessionsPayload,
   getTimeForId,
+  parseSession,
+  Session,
+  SessionInput,
+  UpdateSessionPayload,
 } from '../../../shared';
 import { Firestore, Functions, HttpsCallable } from '../firebase';
 
@@ -47,7 +47,10 @@ export default class SessionRepository {
   }
 
   async toggleConfirmed(session: Session): Promise<Session> {
-    await this.db.collection(Collection.SESSIONS).doc(session.id).update({ confirmed: !session.confirmed });
+    await this.db
+      .collection(Collection.SESSIONS)
+      .doc(session.id)
+      .update({ confirmed: !session.confirmed, statusReverted: firestore.FieldValue.delete() });
     return {
       ...session,
       confirmed: !session.confirmed,
