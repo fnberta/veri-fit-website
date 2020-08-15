@@ -1,4 +1,4 @@
-import { firestore, Unsubscribe, functions } from 'firebase';
+import { Unsubscribe } from 'firebase';
 import { DateTime } from 'luxon';
 import {
   ChangeType,
@@ -10,12 +10,13 @@ import {
   SessionInput,
   UpdateSessionPayload,
 } from '../../../shared';
+import { Firestore, Functions, HttpsCallable } from '../firebase';
 
 export default class SessionRepository {
-  private readonly createSessions: functions.HttpsCallable;
-  private readonly updateSession: functions.HttpsCallable;
+  private readonly createSessions: HttpsCallable;
+  private readonly updateSession: HttpsCallable;
 
-  constructor(private readonly db: firestore.Firestore, functions: functions.Functions) {
+  constructor(private readonly db: Firestore, functions: Functions) {
     this.createSessions = functions.httpsCallable('createSessions');
     this.updateSession = functions.httpsCallable('updateSession');
   }

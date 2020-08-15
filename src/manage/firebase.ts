@@ -1,8 +1,18 @@
+import { firestore, functions, auth } from 'firebase';
 import AuthRepository from './repositories/AuthRepository';
 import ClientRepository from './repositories/ClientRepository';
 import { RepoContextValues } from './repositories/RepoContext';
 import SessionRepository from './repositories/SessionRepository';
 import TrainingRepository from './repositories/TrainingRepository';
+
+// re-export to allow type only imports in client code
+// otherwise static generation fails as runtime code of firebase is imported
+export type Firestore = firestore.Firestore;
+export type Functions = functions.Functions;
+export type Auth = auth.Auth;
+export type HttpsCallable = functions.HttpsCallable;
+export type AuthProvider = auth.GoogleAuthProvider;
+export type UserCredential = auth.UserCredential;
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBoigzCLWt04NFAVZz6f41APTszUPzuWJM',

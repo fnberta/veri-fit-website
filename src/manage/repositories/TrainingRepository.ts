@@ -1,9 +1,10 @@
-import { Unsubscribe, firestore } from 'firebase';
+import { Unsubscribe } from 'firebase';
 import { DateTime } from 'luxon';
 import { Collection, getTimeForId, parseTraining, Training, TrainingInput } from '../../../shared';
+import { Firestore } from '../firebase';
 
 export default class TrainingRepository {
-  constructor(private readonly db: firestore.Firestore) {}
+  constructor(private readonly db: Firestore) {}
 
   async create(input: TrainingInput): Promise<Training> {
     const { weekday } = DateTime.fromISO(input.runsFrom);

@@ -1,7 +1,8 @@
-import { auth, Unsubscribe, User } from 'firebase';
+import { Unsubscribe, User } from 'firebase';
+import { Auth, AuthProvider } from '../firebase';
 
 export default class AuthRepository {
-  constructor(private readonly auth: auth.Auth, private readonly provider: auth.AuthProvider) {}
+  constructor(private readonly auth: Auth, private readonly provider: AuthProvider) {}
 
   async signIn() {
     await this.auth.signInWithRedirect(this.provider);
