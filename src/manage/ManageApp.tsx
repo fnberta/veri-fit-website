@@ -1,17 +1,17 @@
 import { Link, Redirect, Router } from '@reach/router';
 import { DateTime } from 'luxon';
 import React, { useEffect, useState } from 'react';
+import type { auth } from 'firebase';
 import { Button } from '../common/components/Button';
 import Layout from '../common/components/Layout';
 import Navbar from '../common/components/Navbar';
 import Clients from './clients/Clients';
 import { useRepos } from './repositories/RepoContext';
 import Trainings from './trainings/Trainings';
-import { UserCredential } from './firebase';
 
 const ManageApp: React.FC = () => {
   const [loggedIn, setLoggedIn] = useState(false);
-  const [logInResult, setLoginResult] = useState<UserCredential>();
+  const [logInResult, setLoginResult] = useState<auth.UserCredential>();
   const { authRepo } = useRepos();
 
   useEffect(() => authRepo.observeAuthState((user) => setLoggedIn(user != null)), [authRepo]);

@@ -1,4 +1,4 @@
-import { Unsubscribe } from 'firebase';
+import type { firestore, functions, Unsubscribe } from 'firebase';
 import { DateTime } from 'luxon';
 import {
   ChangeType,
@@ -10,13 +10,16 @@ import {
   SessionInput,
   UpdateSessionPayload,
 } from '../../../shared';
-import { Firestore, Functions, HttpsCallable } from '../firebase';
 
 export default class SessionRepository {
-  private readonly createSessions: HttpsCallable;
-  private readonly updateSession: HttpsCallable;
+  private readonly createSessions: functions.HttpsCallable;
+  private readonly updateSession: functions.HttpsCallable;
 
-  constructor(private readonly db: Firestore, functions: Functions) {
+  constructor(
+    private readonly db: firestore.Firestore,
+    functions: functions.Functions,
+    private readonly getDeleteSentinel: () => unknown,
+  ) {
     this.createSessions = functions.httpsCallable('createSessions');
     this.updateSession = functions.httpsCallable('updateSession');
   }
@@ -50,7 +53,7 @@ export default class SessionRepository {
     await this.db
       .collection(Collection.SESSIONS)
       .doc(session.id)
-      .update({ confirmed: !session.confirmed, statusReverted: firestore.FieldValue.delete() });
+      .update({ confirmed: !session.confirmed, statusReverted: this.getDeleteSentinel() });
     return {
       ...session,
       confirmed: !session.confirmed,
