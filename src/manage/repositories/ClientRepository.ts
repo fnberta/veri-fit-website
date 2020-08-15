@@ -1,13 +1,12 @@
-import { Unsubscribe } from 'firebase';
+import { firestore, Unsubscribe } from 'firebase';
 import { Collection, parseSubscription, parseClient, Subscription, Client } from '../../../shared';
 import { DistributiveOmit } from '../../common/utils/types';
-import { Firestore } from '../firebase';
 
 export type ClientInput = Omit<Client, 'id'>;
 export type SubscriptionInput = DistributiveOmit<Subscription, 'id'>;
 
 export default class ClientRepository {
-  constructor(private readonly db: Firestore) {}
+  constructor(private readonly db: firestore.Firestore) {}
 
   async create(clientInput: ClientInput, subscriptionInput: SubscriptionInput): Promise<Client> {
     const ref = await this.db.collection(Collection.CLIENTS).add(clientInput);

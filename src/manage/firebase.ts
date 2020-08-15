@@ -1,17 +1,8 @@
-import { firestore, functions, auth, User as FirebaseUser } from 'firebase';
 import AuthRepository from './repositories/AuthRepository';
 import ClientRepository from './repositories/ClientRepository';
 import { RepoContextValues } from './repositories/RepoContext';
 import SessionRepository from './repositories/SessionRepository';
 import TrainingRepository from './repositories/TrainingRepository';
-
-export type Firestore = firestore.Firestore;
-export type Functions = functions.Functions;
-export type Auth = auth.Auth;
-export type HttpsCallable = functions.HttpsCallable;
-export type AuthProvider = auth.GoogleAuthProvider;
-export type UserCredential = auth.UserCredential;
-export type User = FirebaseUser;
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBoigzCLWt04NFAVZz6f41APTszUPzuWJM',
