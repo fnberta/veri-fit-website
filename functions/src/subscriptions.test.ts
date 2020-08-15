@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { PersonalSubscription, SubscriptionType, TrainingType, YogaSubscription } from './shared';
+import { SubscriptionType, TrainingType, YogaSubscription } from './shared';
 import { isSubscriptionActive, pickSubscriptionId } from './subscriptions';
 
 describe('check whether subscription is active', () => {
@@ -59,17 +59,15 @@ describe('check whether subscription is active', () => {
   });
 });
 
-describe('pick subscription for update trainings left', () => {
-  test('should throw if there are no subscriptions', () => {
-    expect(() => pickSubscriptionId(false, [])).toThrow();
-    expect(() => pickSubscriptionId(true, [])).toThrow();
+describe('pick subscription id to update trainingsLeft', () => {
+  test('should return undefined if there are no subscriptions', () => {
+    expect(pickSubscriptionId('confirmed', [])).toBeUndefined();
+    expect(pickSubscriptionId('opened', [])).toBeUndefined();
   });
 
   describe('session confirmed', () => {
-    test('should throw if no or multiple subscriptions with trainingsLeft', () => {
-      expect(() => pickSubscriptionId(true, [])).toThrow();
-
-      const nothingLeftSubscriptions: Array<YogaSubscription | PersonalSubscription> = [
+    test('should return undefined if no subscriptions available with trainingsLeft > 0', () => {
+      const nothingLeftSubscriptions: YogaSubscription[] = [
         {
           id: 'some-id',
           type: SubscriptionType.LIMITED_10,
@@ -86,30 +84,32 @@ describe('pick subscription for update trainings left', () => {
           start: '2020-01-01',
         },
       ];
-      expect(() => pickSubscriptionId(true, nothingLeftSubscriptions)).toThrow();
-
-      const multipleWithLeftSubscriptions: Array<YogaSubscription | PersonalSubscription> = [
-        {
-          id: 'some-id',
-          type: SubscriptionType.LIMITED_10,
-          trainingType: TrainingType.YOGA,
-          trainingsLeft: 8,
-          start: '2020-01-01',
-          end: '2020-03-01',
-        },
-        {
-          id: 'some-other-id',
-          type: SubscriptionType.UNLIMITED_10,
-          trainingType: TrainingType.YOGA,
-          trainingsLeft: 7,
-          start: '2020-01-01',
-        },
-      ];
-      expect(() => pickSubscriptionId(true, multipleWithLeftSubscriptions)).toThrow();
+      expect(pickSubscriptionId('confirmed', nothingLeftSubscriptions)).toBeUndefined();
     });
 
-    test('should return subscription with trainingsLeft if there is exactly one', () => {
-      const subscriptions: Array<YogaSubscription | PersonalSubscription> = [
+    test('should return undefined if multiple subscriptions available with trainingsLeft > 0', () => {
+      const somethingLeftSubscriptions: YogaSubscription[] = [
+        {
+          id: 'some-id',
+          type: SubscriptionType.LIMITED_10,
+          trainingType: TrainingType.YOGA,
+          trainingsLeft: 4,
+          start: '2020-01-01',
+          end: '2020-03-01',
+        },
+        {
+          id: 'some-other-id',
+          type: SubscriptionType.UNLIMITED_10,
+          trainingType: TrainingType.YOGA,
+          trainingsLeft: 2,
+          start: '2020-01-01',
+        },
+      ];
+      expect(pickSubscriptionId('confirmed', somethingLeftSubscriptions)).toBeUndefined();
+    });
+
+    test('should return id if there is exactly one subscription with trainingsLeft > 0', () => {
+      const subscriptions: YogaSubscription[] = [
         {
           id: 'some-id',
           type: SubscriptionType.LIMITED_10,
@@ -126,13 +126,35 @@ describe('pick subscription for update trainings left', () => {
           start: '2020-01-01',
         },
       ];
-      expect(pickSubscriptionId(true, subscriptions)).toBe('some-id');
+      expect(pickSubscriptionId('confirmed', subscriptions)).toBe('some-id');
     });
   });
 
   describe('session opened', () => {
-    test('should return subscription if there is only one', () => {
-      const subscriptions: Array<YogaSubscription | PersonalSubscription> = [
+    test('should return undefined if there are multiple subscriptions with trainingsLeft > 0', () => {
+      const subscriptions: YogaSubscription[] = [
+        {
+          id: 'some-id',
+          type: SubscriptionType.LIMITED_10,
+          trainingType: TrainingType.YOGA,
+          trainingsLeft: 5,
+          start: '2020-01-01',
+          end: '2020-03-01',
+        },
+        {
+          id: 'some-other-id',
+          type: SubscriptionType.LIMITED_10,
+          trainingType: TrainingType.YOGA,
+          trainingsLeft: 5,
+          start: '2020-03-01',
+          end: '2020-06-01',
+        },
+      ];
+      expect(pickSubscriptionId('opened', subscriptions)).toBeUndefined();
+    });
+
+    test('should return id if there is only one subscription', () => {
+      const subscriptions: YogaSubscription[] = [
         {
           id: 'some-id',
           type: SubscriptionType.LIMITED_10,
@@ -142,13 +164,42 @@ describe('pick subscription for update trainings left', () => {
           end: '2020-03-01',
         },
       ];
-      expect(pickSubscriptionId(false, subscriptions)).toBe('some-id');
+      expect(pickSubscriptionId('opened', subscriptions)).toBe('some-id');
     });
 
-    test('should return subscription with most recent end date if there are multiple', () => {
-      const subscriptions: Array<YogaSubscription | PersonalSubscription> = [
+    test('should return id of subscription with trainingsLeft > 0 if there are multiple subscriptions but only one has trainingsLeft > 0', () => {
+      const subscriptions: YogaSubscription[] = [
         {
           id: 'some-id',
+          type: SubscriptionType.UNLIMITED_10,
+          trainingType: TrainingType.YOGA,
+          trainingsLeft: 0,
+          start: '2020-01-01',
+        },
+        {
+          id: 'some-other-id',
+          type: SubscriptionType.LIMITED_10,
+          trainingType: TrainingType.YOGA,
+          trainingsLeft: 5,
+          start: '2020-03-01',
+          end: '2020-06-01',
+        },
+        {
+          id: 'some-other-other-id',
+          type: SubscriptionType.LIMITED_20,
+          trainingType: TrainingType.YOGA,
+          trainingsLeft: 0,
+          start: '2020-06-01',
+          end: '2020-09-01',
+        },
+      ];
+      expect(pickSubscriptionId('opened', subscriptions)).toBe('some-other-id');
+    });
+
+    test('should return id of subscription with the most recent end date if there are multiple subscriptions but none of them has trainingsLeft > 0', () => {
+      const subscriptions: YogaSubscription[] = [
+        {
+          id: 'limited-10-older',
           type: SubscriptionType.LIMITED_10,
           trainingType: TrainingType.YOGA,
           trainingsLeft: 0,
@@ -156,65 +207,59 @@ describe('pick subscription for update trainings left', () => {
           end: '2020-03-01',
         },
         {
-          id: 'some-random-id',
+          id: 'unlimited-10',
           type: SubscriptionType.UNLIMITED_10,
           trainingType: TrainingType.YOGA,
           trainingsLeft: 0,
           start: '2020-03-01',
         },
         {
-          id: 'some-other-id',
+          id: 'limited-10-newer',
           type: SubscriptionType.LIMITED_10,
           trainingType: TrainingType.YOGA,
           trainingsLeft: 0,
           start: '2020-01-01',
           end: '2020-09-01',
         },
-        {
-          id: 'some-other-other-id',
-          type: SubscriptionType.UNLIMITED_10,
-          trainingType: TrainingType.YOGA,
-          trainingsLeft: 0,
-          start: '2020-01-01',
-        },
       ];
-      expect(pickSubscriptionId(false, subscriptions)).toBe('some-other-id');
+      expect(pickSubscriptionId('opened', subscriptions)).toBe('limited-10-newer');
     });
 
     test('should return latest unlimited subscription if limited subscription is expired', () => {
-      const subscriptions: Array<YogaSubscription | PersonalSubscription> = [
+      const today = DateTime.local();
+      const subscriptions: YogaSubscription[] = [
         {
-          id: 'some-id',
+          id: 'limited-10-expired',
           type: SubscriptionType.LIMITED_10,
           trainingType: TrainingType.YOGA,
           trainingsLeft: 0,
-          start: '2020-01-01',
-          end: '2020-02-01',
+          start: today.minus({ months: 6 }).toISODate(),
+          end: today.minus({ months: 3 }).toISODate(),
         },
         {
-          id: 'some-other-other-id',
+          id: 'unlimited-10-older',
           type: SubscriptionType.UNLIMITED_10,
           trainingType: TrainingType.YOGA,
           trainingsLeft: 0,
-          start: '2020-01-01',
+          start: today.minus({ months: 1 }).toISODate(),
         },
         {
-          id: 'some-other-id',
+          id: 'limited-10-expired-2',
           type: SubscriptionType.LIMITED_10,
           trainingType: TrainingType.YOGA,
           trainingsLeft: 0,
-          start: '2020-01-01',
-          end: '2020-01-01',
+          start: today.minus({ months: 9 }).toISODate(),
+          end: today.minus({ months: 6 }).toISODate(),
         },
         {
-          id: 'some-other-other-id',
+          id: 'unlimited-10-latest',
           type: SubscriptionType.UNLIMITED_10,
           trainingType: TrainingType.YOGA,
           trainingsLeft: 0,
-          start: '2020-03-01',
+          start: today.toISODate(),
         },
       ];
-      expect(pickSubscriptionId(false, subscriptions)).toBe('some-other-other-id');
+      expect(pickSubscriptionId('opened', subscriptions)).toBe('unlimited-10-latest');
     });
   });
 });

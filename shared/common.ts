@@ -22,4 +22,5 @@ export const Collection = {
   SUBSCRIPTIONS: 'subscriptions',
   TRAININGS: 'trainings',
   SESSIONS: 'sessions',
+  HANDLED_SESSION_UPDATES: 'handledSessionUpdates',
 };

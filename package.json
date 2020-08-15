@@ -10,7 +10,7 @@
     "dev": "gatsby develop -H 0.0.0.0",
     "serve": "gatsby serve",
     "firebase:deploy": "firebase deploy",
-    "firebase:emulator": "firebase emulators:start --only firestore,functions",
+    "firebase:emulator": "firebase emulators:start",
     "typecheck": "tsc --noEmit",
     "test": "jest",
     "lint": "eslint 'src/**/*.{ts,tsx,js,jsx}'",
