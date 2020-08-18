@@ -5,6 +5,7 @@ import { DialogFooter, DialogHeader } from '../../common/components/Dialog';
 import { getToday } from '../dateTime';
 import { useRepos } from '../repositories/RepoContext';
 import { Button } from '../../common/components/Button';
+import { trainingTypes } from '../subscriptionChecks';
 import SubscriptionFormFields, {
   getDefaultTrainingsLeft,
   getSubscriptionInput,
@@ -83,7 +84,11 @@ const AddClientDialogContent: React.FC<Props> = ({ onClientCreated, onCancelClic
               <div className="p-4">
                 <h2 className="text-base font-semibold">Abo</h2>
                 <div className="mt-4">
-                  <SubscriptionFormFields disabled={isSubmitting} namespace="subscription" />
+                  <SubscriptionFormFields
+                    trainingTypes={trainingTypes}
+                    namespace="subscription"
+                    disabled={isSubmitting}
+                  />
                 </div>
               </div>
             </Form>

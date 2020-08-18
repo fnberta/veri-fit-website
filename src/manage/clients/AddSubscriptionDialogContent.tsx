@@ -1,10 +1,11 @@
-import { Formik, FormikHelpers, Form } from 'formik';
+import { Form, Formik, FormikHelpers } from 'formik';
 import React from 'react';
 import { Subscription, SubscriptionType, TrainingType } from '../../../shared';
 import { Button } from '../../common/components/Button';
 import { DialogFooter, DialogHeader } from '../../common/components/Dialog';
 import { getToday } from '../dateTime';
 import { useRepos } from '../repositories/RepoContext';
+import { getValidTrainingTypes } from '../subscriptionChecks';
 import SubscriptionFormFields, {
   getDefaultTrainingsLeft,
   getSubscriptionInput,
@@ -13,6 +14,7 @@ import SubscriptionFormFields, {
 
 export interface Props {
   clientId: string;
+  subscriptions: Subscription[];
   onSubscriptionAdded: (subscription: Subscription) => void;
   onCancelClick: () => void;
 }
@@ -28,7 +30,12 @@ function getInitialValues(today: string): SubscriptionFormValues {
   };
 }
 
-const AddSubscriptionDialogContent: React.FC<Props> = ({ clientId, onSubscriptionAdded, onCancelClick }) => {
+const AddSubscriptionDialogContent: React.FC<Props> = ({
+  clientId,
+  subscriptions,
+  onSubscriptionAdded,
+  onCancelClick,
+}) => {
   const { clientRepo } = useRepos();
 
   async function handleFormSubmission(
@@ -48,7 +55,7 @@ const AddSubscriptionDialogContent: React.FC<Props> = ({ clientId, onSubscriptio
         {({ isValid, isSubmitting, submitForm }) => (
           <>
             <Form className="dialog-body p-4">
-              <SubscriptionFormFields disabled={isSubmitting} />
+              <SubscriptionFormFields trainingTypes={getValidTrainingTypes(subscriptions)} disabled={isSubmitting} />
             </Form>
             <DialogFooter className="flex justify-end p-4">
               <Button disabled={isSubmitting} onClick={onCancelClick}>

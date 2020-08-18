@@ -1,7 +1,80 @@
 import { DateTime } from 'luxon';
-import { Session, SubscriptionType, TrainingType, Client } from '../../shared';
+import {
+  BoostSubscription,
+  Client,
+  HiitSubscription,
+  PersonalSubscription,
+  Session,
+  SubscriptionType,
+  TrainingType,
+  YogaSubscription,
+} from '../../shared';
 import { getToday } from './dateTime';
-import { doesSubscriptionRunShort, isSubscriptionExpiring, showSessionConfirm } from './subscriptionChecks';
+import {
+  doesSubscriptionRunShort,
+  getValidTrainingTypes,
+  isSubscriptionExpiring,
+  showSessionConfirm,
+  trainingTypes,
+} from './subscriptionChecks';
+
+describe('valid training types', () => {
+  test('should only include training types for which there is no valid subscription', () => {
+    const withValidBoostSubscription: BoostSubscription[] = [
+      {
+        id: 'valid-boost-sub',
+        type: SubscriptionType.BLOCK,
+        trainingType: TrainingType.BOOST,
+        start: DateTime.local().minus({ months: 1 }).toISODate(),
+        end: DateTime.local().plus({ months: 2 }).toISODate(),
+      },
+    ];
+    expect(getValidTrainingTypes(withValidBoostSubscription)).toEqual(
+      trainingTypes.filter((type) => type !== TrainingType.BOOST),
+    );
+
+    const withValidYogaSubscription: YogaSubscription[] = [
+      {
+        id: 'valid-yoga-sub',
+        type: SubscriptionType.LIMITED_10,
+        trainingType: TrainingType.YOGA,
+        start: '1990-02-02',
+        end: '1990-03-02',
+        trainingsLeft: 5,
+      },
+    ];
+    expect(getValidTrainingTypes(withValidYogaSubscription)).toEqual(
+      trainingTypes.filter((type) => type !== TrainingType.YOGA),
+    );
+
+    const withValidPersonalSubscription: PersonalSubscription[] = [
+      {
+        id: 'valid-personal-sub',
+        type: SubscriptionType.SINGLE,
+        trainingType: TrainingType.PERSONAL,
+        start: '1990-02-02',
+        end: '1990-03-02',
+        trainingsLeft: 1,
+      },
+    ];
+    expect(getValidTrainingTypes(withValidPersonalSubscription)).toEqual(
+      trainingTypes.filter((type) => type !== TrainingType.PERSONAL),
+    );
+
+    const withValidHiitSubscription: HiitSubscription[] = [
+      {
+        id: 'valid-hiit-sub',
+        type: SubscriptionType.BLOCK,
+        trainingType: TrainingType.HIIT,
+        start: DateTime.local().minus({ months: 1 }).toISODate(),
+        end: DateTime.local().plus({ months: 2 }).toISODate(),
+      },
+    ];
+    expect(getValidTrainingTypes(withValidHiitSubscription)).toEqual(
+      trainingTypes.filter((type) => type !== TrainingType.HIIT),
+    );
+  });
+});
 
 describe('expires', () => {
   test('should return false if type is UNLIMITED_10', () => {

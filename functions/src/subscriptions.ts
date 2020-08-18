@@ -1,17 +1,8 @@
 import { DateTime } from 'luxon';
-import { PersonalSubscription, Subscription, SubscriptionType, YogaSubscription } from './shared';
+import { isSubscriptionValid, PersonalSubscription, Subscription, SubscriptionType, YogaSubscription } from './shared';
 
 export function isSubscriptionActive(subscription: Subscription): boolean {
-  if (subscription.paidAt == null) {
-    return true;
-  }
-
-  if (subscription.type === SubscriptionType.BLOCK) {
-    const today = DateTime.local();
-    return today <= DateTime.fromISO(subscription.end);
-  }
-
-  return subscription.trainingsLeft > 0;
+  return subscription.paidAt == null ? true : isSubscriptionValid(subscription);
 }
 
 export function pickSubscriptionId(
