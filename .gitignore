@@ -54,19 +54,14 @@ jspm_packages/
 # gatsby files
 .cache/
 public
-
-# Mac files
-.DS_Store
+lib
+build
 
 # Yarn
 yarn-error.log
 .pnp/
 .pnp.js
 .yarn-integrity
-
-# build
-lib
-build
 
 # credentials
 credentials
