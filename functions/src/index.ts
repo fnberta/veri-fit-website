@@ -5,14 +5,14 @@ import {
   ChangeType,
   Collection,
   CreateSessionsPayload,
-  parseHandledSessionUpdate,
   parseSession,
   parseSubscription,
   parseTraining,
   PersonalSubscription,
   SessionInput,
+  ToggleSessionPayload,
+  ToggleSessionResponse,
   TrainingInput,
-  TrainingType,
   UpdateSessionPayload,
   YogaSubscription,
 } from './shared';
@@ -62,6 +62,7 @@ export const backupDatabase = functions.pubsub
 // TODO: use something like io-ts to do this validation
 function isCreateSessionsPayload(payload: unknown): payload is CreateSessionsPayload {
   const { year } = payload as CreateSessionsPayload;
+  // noinspection SuspiciousTypeOfGuard
   return typeof year === 'number';
 }
 
@@ -242,83 +243,81 @@ export const setActiveSubscriptions = functions.firestore
     });
   });
 
+// TODO: use something like io-ts to do this validation
+function isToggleSessionPayload(payload: unknown): payload is ToggleSessionPayload {
+  const { sessionId } = payload as ToggleSessionPayload;
+  // noinspection SuspiciousTypeOfGuard
+  return typeof sessionId === 'string';
+}
+
 /**
- * Updates the trainingsLeft field of a user's subscription when the confirmed status of a session is updated.
+ * Toggles the confirmed status of a session and updates the trainingsLeft field for all clients
  */
-export const updateTrainingsLeft = functions.firestore
-  .document('sessions/{sessionId}')
-  .onUpdate(async (change, context) => {
-    const after = parseSession(change.after);
-    if (after.statusReverted === true) {
-      // session's confirmed status was reverted because updating of trainingsLeft failed, abort early
-      return Promise.resolve();
-    }
-    if (after.type !== TrainingType.YOGA && after.type !== TrainingType.PERSONAL) {
-      // session does not belong to a training type where trainingsLeft needs to be updated, abort early
-      return Promise.resolve();
-    }
-    if (after.clientIds.length === 0) {
-      // no clients attached to this session, abort early
-      return Promise.resolve();
-    }
+export const toggleSessionConfirmed = functions.https.onCall(async (data, context) => {
+  assertAuthenticated(context);
 
-    const before = parseSession(change.before);
-    if (after.confirmed === before.confirmed) {
-      // confirmed status did not change, abort early
-      return Promise.resolve();
-    }
+  if (!isToggleSessionPayload(data)) {
+    throw new functions.https.HttpsError(
+      'invalid-argument',
+      'The function must be called with a valid session id in the payload.',
+    );
+  }
 
-    const handledUpdateRef = db.collection(Collection.HANDLED_SESSION_UPDATES).doc(context.eventId);
-    const handledUpdateSnap = await handledUpdateRef.get();
-    if (handledUpdateSnap.exists && parseHandledSessionUpdate(handledUpdateSnap).trainingsLeftUpdated) {
-      // session update was already handled, abort early
-      return Promise.resolve();
-    }
+  const { sessionId } = data;
+  const sessionRef = db.collection(Collection.SESSIONS).doc(sessionId);
+  const sessionSnap = await sessionRef.get();
+  if (!sessionSnap.exists) {
+    throw new functions.https.HttpsError('not-found', `No session document found for ${sessionId}.`);
+  }
 
-    return db.runTransaction(async (t) => {
-      const clientSubscriptions = await Promise.all(
-        after.clientIds.map(async (clientId) => {
-          const query = db
-            .collection(Collection.CLIENTS)
-            .doc(clientId)
-            .collection(Collection.SUBSCRIPTIONS)
-            .where('trainingType', '==', after.type);
-          const querySnap = await t.get(query);
-          const subscriptions = querySnap.docs.map(
-            (snap) => parseSubscription(snap) as YogaSubscription | PersonalSubscription,
+  const session = parseSession(sessionSnap);
+  const action = session.confirmed ? 'opened' : 'confirmed';
+  return db.runTransaction(async (t) => {
+    const clientSubscriptionIds = await Promise.all(
+      session.clientIds.map(async (clientId) => {
+        const query = db
+          .collection(Collection.CLIENTS)
+          .doc(clientId)
+          .collection(Collection.SUBSCRIPTIONS)
+          .where('trainingType', '==', session.type);
+        const querySnap = await t.get(query);
+        const subscriptions = querySnap.docs.map(
+          (snap) => parseSubscription(snap) as YogaSubscription | PersonalSubscription,
+        );
+        const subscriptionId = pickSubscriptionId(session.confirmed ? 'confirmed' : 'opened', subscriptions);
+        if (!subscriptionId) {
+          throw new functions.https.HttpsError(
+            'not-found',
+            `No valid subscription id found for client ${clientId} when updating trainingsLeft for session ${session.id}.`,
           );
-          const subscriptionId = pickSubscriptionId(after.confirmed ? 'confirmed' : 'opened', subscriptions);
-          return {
-            clientId,
-            subscriptionId,
-          };
-        }),
-      );
-
-      for (const { clientId, subscriptionId } of clientSubscriptions) {
-        if (subscriptionId) {
-          const ref = db
-            .collection(Collection.CLIENTS)
-            .doc(clientId)
-            .collection(Collection.SUBSCRIPTIONS)
-            .doc(subscriptionId);
-          t.update(ref, { trainingsLeft: admin.firestore.FieldValue.increment(after.confirmed ? -1 : 1) });
-        } else {
-          console.error(
-            new Error(
-              `No valid subscription id found for client ${clientId} when updating trainingsLeft for session ${
-                after.id
-              }. Aborting and reverting confirmed status back to ${!after.confirmed}.`,
-            ),
-          );
-
-          // revert and exit out of transaction update function
-          t.update(change.after.ref, { confirmed: !after.confirmed, statusReverted: true });
-          return;
         }
-      }
 
-      t.set(handledUpdateRef, { trainingsLeftUpdated: true });
-      return;
-    });
+        return {
+          clientId,
+          subscriptionId,
+        };
+      }),
+    );
+
+    t.update(sessionRef, { confirmed: !session.confirmed });
+
+    for (const { clientId, subscriptionId } of clientSubscriptionIds) {
+      const ref = db
+        .collection(Collection.CLIENTS)
+        .doc(clientId)
+        .collection(Collection.SUBSCRIPTIONS)
+        .doc(subscriptionId);
+      t.update(ref, {
+        trainingsLeft: admin.firestore.FieldValue.increment(action === 'confirmed' ? -1 : 1),
+      });
+    }
+
+    const res: ToggleSessionResponse = {
+      session: {
+        ...session,
+        confirmed: !session.confirmed,
+      },
+    };
+    return res;
   });
+});

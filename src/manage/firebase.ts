@@ -37,7 +37,7 @@ export default async function initRepositories(): Promise<RepoContextValues> {
   }
 
   const clientRepo = new ClientRepository(db);
-  const sessionRepo = new SessionRepository(db, functions, firebase.firestore.FieldValue.delete);
+  const sessionRepo = new SessionRepository(db, functions);
   const trainingRepo = new TrainingRepository(db);
   const authRepo = new AuthRepository(auth, new firebase.auth.GoogleAuthProvider());
   return {

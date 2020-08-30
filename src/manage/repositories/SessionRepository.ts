@@ -8,20 +8,20 @@ import {
   parseSession,
   Session,
   SessionInput,
+  ToggleSessionPayload,
+  ToggleSessionResponse,
   UpdateSessionPayload,
 } from '../../../shared';
 
 export default class SessionRepository {
   private readonly createSessions: functions.HttpsCallable;
   private readonly updateSession: functions.HttpsCallable;
+  private readonly toggleSessionConfirmed: functions.HttpsCallable;
 
-  constructor(
-    private readonly db: firestore.Firestore,
-    functions: functions.Functions,
-    private readonly getDeleteSentinel: () => unknown,
-  ) {
+  constructor(private readonly db: firestore.Firestore, functions: functions.Functions) {
     this.createSessions = functions.httpsCallable('createSessions');
     this.updateSession = functions.httpsCallable('updateSession');
+    this.toggleSessionConfirmed = functions.httpsCallable('toggleSessionConfirmed');
   }
 
   async createForYear(year: number): Promise<void> {
@@ -49,15 +49,11 @@ export default class SessionRepository {
     };
   }
 
-  async toggleConfirmed(session: Session): Promise<Session> {
-    await this.db
-      .collection(Collection.SESSIONS)
-      .doc(session.id)
-      .update({ confirmed: !session.confirmed, statusReverted: this.getDeleteSentinel() });
-    return {
-      ...session,
-      confirmed: !session.confirmed,
-    };
+  async toggleConfirmed(sessionId: string): Promise<Session> {
+    const payload: ToggleSessionPayload = { sessionId };
+    const res = await this.toggleSessionConfirmed(payload);
+    const { session } = res.data as ToggleSessionResponse;
+    return session;
   }
 
   observeAllForClients(clientId: string, onChange: (sessions: Session[]) => void): Unsubscribe {
