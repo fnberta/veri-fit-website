@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import { Link } from 'gatsby';
 import { Client, Session } from '../../../shared';
 import { getToday } from '../dateTime';
 import { getTrainingName } from '../displayNames';
-import { showSessionConfirm } from '../subscriptionChecks';
+import { getClientsWithIssues } from '../subscriptionChecks';
 import { Button } from '../../common/components/Button';
 import { useRepos } from '../repositories/RepoContext';
 
@@ -27,6 +28,8 @@ const SessionCard: React.FC<Props> = ({ session, clients, onEditClick }) => {
     setLoading(false);
   }
 
+  const clientsWithIssues = getClientsWithIssues(clients, session);
+  const hasClientsWithIssues = clientsWithIssues.length > 0;
   return (
     <div className="bg-white rounded overflow-hidden border">
       <div className="px-4 py-2 flex flex-col items-start">
@@ -34,7 +37,21 @@ const SessionCard: React.FC<Props> = ({ session, clients, onEditClick }) => {
           <h5 className="text-xs text-gray-600 uppercase tracking-wider font-semibold">{`${session.time.start} - ${session.time.end}`}</h5>
           <h4 className="text-lg font-semibold leading-tight">{getTrainingName(session.type)}</h4>
         </div>
-        <p className="mt-2 text-gray-600 text-sm">{`${session.clientIds.length} Teilnehmer`}</p>
+        <p className="mt-2  text-sm text-gray-600">{`${session.clientIds.length} Teilnehmer`}</p>
+        {hasClientsWithIssues && (
+          <div className="mt-2 text-xs text-red-600 ">
+            <p>Folgende Teilnehmer haben kein gültiges Abo:</p>
+            <ul className="mt-1 list-disc list-inside">
+              {clientsWithIssues.map((client) => (
+                <li key={client.id}>
+                  <Link className="font-medium" to={`/manage/clients/${client.id}`}>
+                    {client.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
       <footer className="flex items-center justify-end bg-gray-100 px-4 py-2">
         {!session.confirmed && (
@@ -53,7 +70,7 @@ const SessionCard: React.FC<Props> = ({ session, clients, onEditClick }) => {
               size="small"
               color="orange"
               loading={loading}
-              disabled={!showSessionConfirm(clients, session)}
+              disabled={hasClientsWithIssues}
               onClick={handleToggleClick}
             >
               Bestätigen

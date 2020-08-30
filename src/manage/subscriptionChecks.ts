@@ -43,20 +43,24 @@ export function isSubscriptionExpiring(subscription: Subscription): boolean {
   return end.diff(getStartOfToday()) <= Duration.fromObject({ weeks: 1 });
 }
 
-export function showSessionConfirm(clients: Client[], session: Session): boolean {
-  return clients
-    .filter((client) => session.clientIds.includes(client.id))
-    .every((client) =>
-      client.activeSubscriptions.some((activeSub) => {
-        if (activeSub.trainingType !== session.type) {
-          return false;
-        }
+export function getClientsWithIssues(clients: Client[], session: Session): Client[] {
+  return clients.filter((client) => {
+    if (!session.clientIds.includes(client.id)) {
+      return false;
+    }
 
-        if (activeSub.type === SubscriptionType.BLOCK) {
-          return true;
-        } else {
-          return activeSub.trainingsLeft > 0;
-        }
-      }),
-    );
+    const hasMatchingValidSubscription = client.activeSubscriptions.some((activeSub) => {
+      if (activeSub.trainingType !== session.type) {
+        return false;
+      }
+
+      if (activeSub.type === SubscriptionType.BLOCK) {
+        // TODO: this should check end date
+        return true;
+      } else {
+        return activeSub.trainingsLeft > 0;
+      }
+    });
+    return !hasMatchingValidSubscription;
+  });
 }
