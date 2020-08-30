@@ -1,8 +1,29 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if request.auth.uid in ['WGVXSIVVy7bEr3KKlJPwuOIrZWI3', 'NtO4nOpL6vVTMlMXy6HDq9PfSo83'];
+    function isAuthorizedUser() {
+      return request.auth != null && request.auth.uid in ['WGVXSIVVy7bEr3KKlJPwuOIrZWI3', 'NtO4nOpL6vVTMlMXy6HDq9PfSo83'];
+    }
+
+    match /clients/{clientId} {
+      allow read: if isAuthorizedUser();
+      allow create: if isAuthorizedUser();
+      allow update: if isAuthorizedUser() && request.resource.data.activeSubscriptions == resource.data.activeSubscriptions;
+    }
+
+    match /clients/{clientId}/subscriptions/{subscriptionId} {
+      allow read: if isAuthorizedUser();
+      allow create: if isAuthorizedUser();
+      allow delete: if isAuthorizedUser();
+    }
+
+    match /trainings/{trainingId} {
+      allow read: if isAuthorizedUser();
+      allow create: if isAuthorizedUser();
+    }
+
+    match /sessions/{sessionId} {
+      allow read: if isAuthorizedUser();
     }
   }
 }
