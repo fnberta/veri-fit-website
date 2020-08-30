@@ -1,4 +1,3 @@
-import firestore from '@google-cloud/firestore';
 import admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 import { DateTime } from 'luxon';
@@ -27,7 +26,17 @@ const BACKUP_BUCKET = 'gs://veri-fit-db-backup';
 
 admin.initializeApp();
 const db = admin.firestore();
-const client = new firestore.v1.FirestoreAdminClient();
+const client = new admin.firestore.v1.FirestoreAdminClient();
+
+function assertNever(x: never): never {
+  throw new Error(`unexpected object: ${x}`);
+}
+
+function assertAuthenticated(context: functions.https.CallableContext) {
+  if (!context.auth) {
+    throw new functions.https.HttpsError('failed-precondition', 'The function must be called while authenticated.');
+  }
+}
 
 /**
  * Copies a backup of all collections in the database to a Google Storage bucket every 24 hours.
@@ -50,15 +59,25 @@ export const backupDatabase = functions.pubsub
     }
   });
 
+// TODO: use something like io-ts to do this validation
+function isCreateSessionsPayload(payload: unknown): payload is CreateSessionsPayload {
+  const { year } = payload as CreateSessionsPayload;
+  return typeof year === 'number';
+}
+
 // TODO: should run in a transaction, but no proper way to only create a session if it doesn't exists yet without crashing the transaction
 export const createSessions = functions.https.onCall(async (data, context) => {
-  if (!context.auth) {
-    throw new functions.https.HttpsError('failed-precondition', 'The function must be called while authenticated.');
+  assertAuthenticated(context);
+
+  if (!isCreateSessionsPayload(data)) {
+    throw new functions.https.HttpsError(
+      'invalid-argument',
+      'The function must be called with a valid year number in the payload.',
+    );
   }
 
-  const { year } = data as CreateSessionsPayload;
+  const { year } = data;
   const date = DateTime.fromObject({ weekYear: year });
-
   const querySnap = await db.collection(Collection.TRAININGS).get();
   for (const snap of querySnap.docs) {
     const training = parseTraining(snap);
@@ -132,6 +151,22 @@ function getSessionsForTrainingQuery(trainingId: string, startingFrom?: string):
   return query;
 }
 
+/**
+ * Deletes all non-confirmed sessions of a training when it's deleted.
+ */
+export const deleteSessionsOnTrainingDeleted = functions.firestore
+  .document('trainings/{trainingId}')
+  .onDelete(async (snap, context) => {
+    const training = parseTraining(snap);
+    const query = getSessionsForTrainingQuery(context.params.trainingId, training.runsFrom);
+    return db.runTransaction(async (t) => {
+      const snap = await t.get(query);
+      snap.forEach((snap) => {
+        t.delete(snap.ref);
+      });
+    });
+  });
+
 // TODO: should create new sessions if runsFrom changes to an earlier week
 function makeTrainingAndSessionsUpdater(
   sessionInput: SessionInput,
@@ -164,10 +199,9 @@ function makeTrainingAndSessionsUpdater(
 }
 
 export const updateSession = functions.https.onCall(async (data, context) => {
-  if (!context.auth) {
-    throw new functions.https.HttpsError('failed-precondition', 'The function must be called while authenticated.');
-  }
+  assertAuthenticated(context);
 
+  // TODO: validate payload
   const { type, sessionId, sessionInput } = data as UpdateSessionPayload;
   if (type === ChangeType.SINGLE) {
     return db.collection(Collection.SESSIONS).doc(sessionId).set(sessionInput);
@@ -181,32 +215,16 @@ export const updateSession = functions.https.onCall(async (data, context) => {
     }
 
     switch (type) {
-      case ChangeType.ALL_FOLLOWING: {
+      case ChangeType.ALL_FOLLOWING:
         // TODO: ensure all sessions up to this date are created
         return db.runTransaction(makeTrainingAndSessionsUpdater(sessionInput, trainingId, false));
-      }
-      case ChangeType.ALL_NON_CONFIRMED: {
+      case ChangeType.ALL_NON_CONFIRMED:
         return db.runTransaction(makeTrainingAndSessionsUpdater(sessionInput, trainingId, true));
-      }
+      default:
+        assertNever(type);
     }
   }
 });
-
-/**
- * Deletes all non-confirmed sessions of a training when it's deleted.
- */
-export const deleteSessionsOnTrainingDeleted = functions.firestore
-  .document('trainings/{trainingId}')
-  .onDelete(async (snap, context) => {
-    const training = parseTraining(snap);
-    const sessionsQuery = getSessionsForTrainingQuery(context.params.trainingId, training.runsFrom);
-    const sessionsSnap = await sessionsQuery.get();
-    const batch = db.batch();
-    sessionsSnap.forEach((snap) => {
-      batch.delete(snap.ref);
-    });
-    return batch.commit();
-  });
 
 /**
  * The activeSubscriptions field of a user is a duplication of all currently active subscriptions stored in the
@@ -217,9 +235,11 @@ export const setActiveSubscriptions = functions.firestore
   .document('clients/{clientId}/subscriptions/{subscriptionId}')
   .onWrite(async (change, context) => {
     const clientRef = db.collection(Collection.CLIENTS).doc(context.params.clientId);
-    const subscriptionSnap = await clientRef.collection(Collection.SUBSCRIPTIONS).get();
-    const activeSubscriptions = subscriptionSnap.docs.map(parseSubscription).filter(isSubscriptionActive);
-    return clientRef.update({ activeSubscriptions });
+    return db.runTransaction(async (t) => {
+      const subscriptionSnap = await t.get(clientRef.collection(Collection.SUBSCRIPTIONS));
+      const activeSubscriptions = subscriptionSnap.docs.map(parseSubscription).filter(isSubscriptionActive);
+      t.update(clientRef, { activeSubscriptions });
+    });
   });
 
 /**
@@ -255,36 +275,50 @@ export const updateTrainingsLeft = functions.firestore
       return Promise.resolve();
     }
 
-    const batch = db.batch();
-    for (const clientId of after.clientIds) {
-      const query = await db
-        .collection(Collection.CLIENTS)
-        .doc(clientId)
-        .collection(Collection.SUBSCRIPTIONS)
-        .where('trainingType', '==', after.type)
-        .get();
-      const subscriptions = query.docs.map(
-        (snap) => parseSubscription(snap) as YogaSubscription | PersonalSubscription,
+    return db.runTransaction(async (t) => {
+      const clientSubscriptions = await Promise.all(
+        after.clientIds.map(async (clientId) => {
+          const query = db
+            .collection(Collection.CLIENTS)
+            .doc(clientId)
+            .collection(Collection.SUBSCRIPTIONS)
+            .where('trainingType', '==', after.type);
+          const querySnap = await t.get(query);
+          const subscriptions = querySnap.docs.map(
+            (snap) => parseSubscription(snap) as YogaSubscription | PersonalSubscription,
+          );
+          const subscriptionId = pickSubscriptionId(after.confirmed ? 'confirmed' : 'opened', subscriptions);
+          return {
+            clientId,
+            subscriptionId,
+          };
+        }),
       );
-      const subscriptionId = pickSubscriptionId(after.confirmed ? 'confirmed' : 'opened', subscriptions);
-      if (subscriptionId) {
-        const ref = db
-          .collection(Collection.CLIENTS)
-          .doc(clientId)
-          .collection(Collection.SUBSCRIPTIONS)
-          .doc(subscriptionId);
-        batch.update(ref, { trainingsLeft: admin.firestore.FieldValue.increment(after.confirmed ? -1 : 1) });
-      } else {
-        console.error(
-          new Error(
-            `No valid subscription id found for client ${clientId} when updating trainingsLeft for session ${
-              after.id
-            }. Aborting and reverting confirmed status back to ${!after.confirmed}.`,
-          ),
-        );
-        return change.after.ref.update({ confirmed: !after.confirmed, statusReverted: true });
+
+      for (const { clientId, subscriptionId } of clientSubscriptions) {
+        if (subscriptionId) {
+          const ref = db
+            .collection(Collection.CLIENTS)
+            .doc(clientId)
+            .collection(Collection.SUBSCRIPTIONS)
+            .doc(subscriptionId);
+          t.update(ref, { trainingsLeft: admin.firestore.FieldValue.increment(after.confirmed ? -1 : 1) });
+        } else {
+          console.error(
+            new Error(
+              `No valid subscription id found for client ${clientId} when updating trainingsLeft for session ${
+                after.id
+              }. Aborting and reverting confirmed status back to ${!after.confirmed}.`,
+            ),
+          );
+
+          // revert and exit out of transaction update function
+          t.update(change.after.ref, { confirmed: !after.confirmed, statusReverted: true });
+          return;
+        }
       }
-    }
-    batch.set(handledUpdateRef, { trainingsLeftUpdated: true });
-    return batch.commit();
+
+      t.set(handledUpdateRef, { trainingsLeftUpdated: true });
+      return;
+    });
   });
