@@ -12,9 +12,9 @@ import {
 import { getToday } from './dateTime';
 import {
   doesSubscriptionRunShort,
+  getClientsWithIssues,
   getValidTrainingTypes,
   isSubscriptionExpiring,
-  showSessionConfirm,
   trainingTypes,
 } from './subscriptionChecks';
 
@@ -192,8 +192,8 @@ describe('runs short', () => {
   });
 });
 
-describe('show session confirm', () => {
-  test('show return false if session has clients with no matching subscription', () => {
+describe('clients with issues', () => {
+  test('show return faulty clients if session has clients with no matching subscription', () => {
     const clients = [
       {
         id: 'client-1',
@@ -222,10 +222,10 @@ describe('show session confirm', () => {
       confirmed: false,
     };
 
-    const result = showSessionConfirm(clients, session);
-    expect(result).toBe(false);
+    const result = getClientsWithIssues(clients, session);
+    expect(result).toEqual(clients);
   });
-  test('show return false if session has clients with a matching non-block subscription that has no trainings left', () => {
+  test('show return faulty clients if session has clients with a matching non-block subscription that has no trainings left', () => {
     const clients = [
       {
         id: 'client-1',
@@ -254,10 +254,10 @@ describe('show session confirm', () => {
       confirmed: false,
     };
 
-    const result = showSessionConfirm(clients, session);
-    expect(result).toBe(false);
+    const result = getClientsWithIssues(clients, session);
+    expect(result).toEqual(clients);
   });
-  test('show return true if session has clients with a matching block subscription', () => {
+  test('show return empty list if session has clients with a matching block subscription', () => {
     const clients = [
       {
         id: 'client-1',
@@ -285,10 +285,10 @@ describe('show session confirm', () => {
       confirmed: false,
     };
 
-    const result = showSessionConfirm(clients, session);
-    expect(result).toBe(true);
+    const result = getClientsWithIssues(clients, session);
+    expect(result).toEqual([]);
   });
-  test('show return true if session has clients with a matching non-block subscription that has trainings left', () => {
+  test('show return empty list if session has clients with a matching non-block subscription that has trainings left', () => {
     const clients = [
       {
         id: 'client-1',
@@ -317,11 +317,11 @@ describe('show session confirm', () => {
       confirmed: false,
     };
 
-    const result = showSessionConfirm(clients, session);
-    expect(result).toBe(true);
+    const result = getClientsWithIssues(clients, session);
+    expect(result).toEqual([]);
   });
 
-  test('show return true if session has clients with a multiple matching non-block subscriptions, where at least one (which might not be the first) has trainings left', () => {
+  test('show return empty list if session has clients with a multiple matching non-block subscriptions, where at least one (which might not be the first) has trainings left', () => {
     const clients = [
       {
         id: 'client-1',
@@ -357,7 +357,7 @@ describe('show session confirm', () => {
       confirmed: false,
     };
 
-    const result = showSessionConfirm(clients, session);
-    expect(result).toBe(true);
+    const result = getClientsWithIssues(clients, session);
+    expect(result).toEqual([]);
   });
 });
