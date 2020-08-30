@@ -1,5 +1,5 @@
-import type { Unsubscribe, firestore } from 'firebase';
-import { Collection, parseSubscription, parseClient, Subscription, Client } from '../../../shared';
+import type { firestore, Unsubscribe } from 'firebase';
+import { Client, Collection, parseClient, parseSubscription, Subscription } from '../../../shared';
 import { DistributiveOmit } from '../../common/utils/types';
 
 export type ClientInput = Omit<Client, 'id'>;
@@ -53,6 +53,8 @@ export default class ClientRepository {
       .collection(Collection.CLIENTS)
       .doc(clientId)
       .collection(Collection.SUBSCRIPTIONS)
+      .orderBy('trainingType')
+      .orderBy('start', 'desc')
       .onSnapshot((querySnap) => {
         const subscriptions = querySnap.docs.map(parseSubscription);
         onChange(subscriptions);
