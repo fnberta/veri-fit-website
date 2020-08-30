@@ -127,7 +127,6 @@ const Trainings: React.FC<Props> = ({ year, week, className }) => {
                   <SessionCard
                     session={curr}
                     clients={clients}
-                    onConfirmToggle={() => sessionRepo.toggleConfirmed(curr)}
                     onEditClick={() => setAddEditDialog({ type: 'EDIT', session: curr })}
                   />
                 ),

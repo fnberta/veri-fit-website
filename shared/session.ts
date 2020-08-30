@@ -1,4 +1,4 @@
-import { Entity, Snapshot } from './common';
+import { Snapshot } from './common';
 import { Training } from './training';
 
 export interface Session extends Training {
@@ -27,20 +27,17 @@ export interface UpdateSessionPayload {
   sessionInput: SessionInput;
 }
 
+export interface ToggleSessionPayload {
+  sessionId: string;
+}
+
+export interface ToggleSessionResponse {
+  session: Session;
+}
+
 export function parseSession(snap: Snapshot): Session {
   return {
     id: snap.id,
     ...snap.data(),
   } as Session;
-}
-
-export interface HandledSessionUpdate extends Entity {
-  trainingsLeftUpdated: boolean;
-}
-
-export function parseHandledSessionUpdate(snap: Snapshot): HandledSessionUpdate {
-  return {
-    id: snap.id,
-    ...snap.data(),
-  } as HandledSessionUpdate;
 }
