@@ -268,6 +268,7 @@ const ClientDetails: React.FC<Props> = ({ client, className, ...rest }) => {
         {clientDialog?.type === 'SUBSCRIPTION_ADD' && (
           <AddSubscriptionDialogContent
             clientId={client.id}
+            subscriptions={subscriptions}
             onSubscriptionAdded={() => setClientDialog(undefined)}
             onCancelClick={() => setClientDialog(undefined)}
           />

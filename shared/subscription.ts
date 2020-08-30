@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon';
 import { Entity, Snapshot } from './common';
 import { TrainingType } from './training';
 
@@ -55,4 +56,13 @@ export function parseSubscription(snap: Snapshot): Subscription {
     id: snap.id,
     ...snap.data(),
   } as Subscription;
+}
+
+export function isSubscriptionValid(subscription: Subscription): boolean {
+  if (subscription.type === SubscriptionType.BLOCK) {
+    const today = DateTime.local();
+    return DateTime.fromISO(subscription.end) >= today;
+  }
+
+  return subscription.trainingsLeft > 0;
 }

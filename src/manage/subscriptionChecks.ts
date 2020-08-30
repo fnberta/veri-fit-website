@@ -1,5 +1,5 @@
 import { DateTime, Duration } from 'luxon';
-import { Client, Session, Subscription, SubscriptionType, TrainingType } from '../../shared';
+import { Client, isSubscriptionValid, Session, Subscription, SubscriptionType, TrainingType } from '../../shared';
 import { getStartOfToday } from './dateTime';
 
 export const validSubscriptionTypes: Record<TrainingType, SubscriptionType[]> = {
@@ -13,6 +13,15 @@ export const validSubscriptionTypes: Record<TrainingType, SubscriptionType[]> = 
   [TrainingType.BOOST]: [SubscriptionType.BLOCK],
   [TrainingType.HIIT]: [SubscriptionType.BLOCK],
 };
+
+export const trainingTypes = Object.keys(validSubscriptionTypes) as TrainingType[];
+
+export function getValidTrainingTypes(subscriptions: Subscription[]): TrainingType[] {
+  const validSubscriptionTrainingTypes = subscriptions
+    .filter(isSubscriptionValid)
+    .map((subscription) => subscription.trainingType);
+  return trainingTypes.filter((trainingType) => !validSubscriptionTrainingTypes.includes(trainingType));
+}
 
 export function doesSubscriptionRunShort(subscription: Subscription): boolean {
   if (subscription.type === SubscriptionType.UNLIMITED_10 || subscription.type === SubscriptionType.BLOCK) {

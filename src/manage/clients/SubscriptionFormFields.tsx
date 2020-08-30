@@ -7,6 +7,7 @@ import { SubscriptionInput } from '../repositories/ClientRepository';
 import { validSubscriptionTypes } from '../subscriptionChecks';
 
 export interface Props {
+  trainingTypes: TrainingType[];
   namespace?: string;
   disabled: boolean;
 }
@@ -140,7 +141,7 @@ function usePrevious<T>(value: T): T | undefined {
   return ref.current;
 }
 
-const SubscriptionFormFields: React.FC<Props> = ({ disabled, namespace }) => {
+const SubscriptionFormFields: React.FC<Props> = ({ trainingTypes, namespace, disabled }) => {
   const withNamespace = (name: string) => (namespace ? `${namespace}.${name}` : name);
 
   // this is not very type safe but good enough for now
@@ -167,7 +168,7 @@ const SubscriptionFormFields: React.FC<Props> = ({ disabled, namespace }) => {
       <label className="form-field">
         <span className="form-label">Trainings-Typ</span>
         <Field className="form-select w-full" as="select" name={withNamespace('trainingType')}>
-          {Object.keys(validSubscriptionTypes).map((trainingType) => (
+          {trainingTypes.map((trainingType) => (
             <option key={trainingType} value={trainingType}>
               {getTrainingName(trainingType as TrainingType)}
             </option>
