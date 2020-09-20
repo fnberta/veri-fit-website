@@ -24,6 +24,7 @@ service cloud.firestore {
 
     match /sessions/{sessionId} {
       allow read: if isAuthorizedUser();
+      allow create: if isAuthorizedUser();
     }
   }
 }
