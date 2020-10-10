@@ -1,0 +1,32 @@
+name: Deploy functions
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-deploy:
+    name: Build and deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Restore yarn cache
+        uses: actions/cache@v2
+        with:
+          path: ./.yarn/cache
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+      - name: Install dependencies
+        run: yarn install --immutable
+      - name: Build common packages
+        run: yarn build
+      - name: Build functions
+        run: yarn workspace @veri-fit/functions build
+      - name: Deploy functions and firestore rules
+        run: yarn firebase:deploy
+        env:
+          FIREBASE_TOKEN: '${{ secrets.FIREBASE_TOKEN }}'

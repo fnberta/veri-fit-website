@@ -3,7 +3,6 @@
     "rules": "firestore.rules"
   },
   "functions": {
-    "predeploy": ["yarn workspace @veri-fit/common build", "yarn workspace @veri-fit/functions build"],
     "source": "packages/functions",
     "runtime": "nodejs10"
   },

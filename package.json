@@ -2,6 +2,7 @@
   "private": true,
   "license": "MIT",
   "scripts": {
+    "build": "tsc -b",
     "typecheck": "yarn workspaces foreach -p run typecheck",
     "test": "jest",
     "lint": "eslint --ignore-path .gitignore '**/*.{ts,tsx,js,jsx}'",
