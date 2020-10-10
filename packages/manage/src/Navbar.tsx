@@ -43,7 +43,7 @@ const Navbar: React.FC<Props> = ({ variant, sticky, children, className, ...rest
       {...rest}
     >
       <div className="px-4 py-2 flex justify-between items-center">
-        <img className="w-20" src={require('./logo_orange_white.png')} alt="Veri-Fit" />
+        <img className="w-20" src={require('./logo-orange-white.png')} alt="Veri-Fit" />
         <IconButton
           className={cx('sm:hidden', text)}
           color="none"
