@@ -14,7 +14,7 @@ import 'firebase/functions';
 import './global.css';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyBoigzCLWt04NFAVZz6f41APTszUPzuWJM',
+  apiKey: process.env.FIREBASE_API_KEY,
   authDomain: 'veri-fit.firebaseapp.com',
   databaseURL: 'https://veri-fit.firebaseio.com',
   projectId: 'veri-fit',

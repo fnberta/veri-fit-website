@@ -1,7 +1,9 @@
 const { resolve } = require('path');
+const { EnvironmentPlugin } = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const DotEnvWebpack = require('dotenv-webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
@@ -20,10 +22,13 @@ const plugins = [
 ];
 
 if (PRODUCTION) {
+  plugins.push(new EnvironmentPlugin(['FIREBASE_API_KEY']));
   plugins.push(new CleanWebpackPlugin());
   plugins.push(new MiniCssExtractPlugin({ filename: '[name].[contenthash].css' }));
   plugins.push(new CopyWebpackPlugin({ patterns: [{ from: 'public' }] }));
   plugins.push(new WorkboxPlugin.GenerateSW());
+} else {
+  plugins.push(new DotEnvWebpack());
 }
 
 module.exports = {
