@@ -15,7 +15,7 @@
     "@veri-fit/common": "workspace:*",
     "@veri-fit/common-ui": "workspace:*",
     "classnames": "^2.2.6",
-    "dialog-polyfill": "0.5.3",
+    "dialog-polyfill": "0.5.0",
     "firebase": "^7.23.0",
     "formik": "^2.2.0",
     "luxon": "^1.25.0",

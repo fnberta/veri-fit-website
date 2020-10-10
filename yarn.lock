@@ -5169,7 +5169,7 @@ __metadata:
     clean-webpack-plugin: ^3.0.0
     copy-webpack-plugin: ^6.2.1
     css-minimizer-webpack-plugin: ^1.1.5
-    dialog-polyfill: 0.5.3
+    dialog-polyfill: 0.5.0
     firebase: ^7.23.0
     formik: ^2.2.0
     html-webpack-plugin: ^4.5.0
@@ -10128,10 +10128,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dialog-polyfill@npm:0.5.3":
-  version: 0.5.3
-  resolution: "dialog-polyfill@npm:0.5.3"
-  checksum: aaba5e18514d0845d84b0190cc684b9f3d338be03c228a94dbb2c667deac7d98a4b93a7fd3c055572727bc291a2a65b7d2ad16790aac4b5e570e460294fae76b
+"dialog-polyfill@npm:0.5.0":
+  version: 0.5.0
+  resolution: "dialog-polyfill@npm:0.5.0"
+  checksum: b1f287727f9d7cf0b5a1ec93c2122df3a27b9696f549d33c321211167b76be078c850dc45fd654359d32769af1a1af0eb0e7dcde40fe38bfcda4bb37d487719d
   languageName: node
   linkType: hard
 
