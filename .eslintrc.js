@@ -29,7 +29,6 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
     'no-return-await': 'error',
-    // 'no-shadow': 'off',
     'no-restricted-globals': ['error'].concat(restrictedGlobals),
     'no-param-reassign': 'error',
     'prefer-arrow-callback': 'warn',
