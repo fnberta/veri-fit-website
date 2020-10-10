@@ -50,6 +50,7 @@
     }
   }
 
+  /* purgecss start ignore */
   @screen md {
     .schedule-monday {
       grid-column-start: monday;
@@ -87,6 +88,7 @@
       grid-row-start: evening;
     }
   }
+  /* purgecss end ignore */
 }
 
 @layer utilities {
