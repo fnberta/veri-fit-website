@@ -5091,6 +5091,7 @@ __metadata:
   dependencies:
     "@rollup/plugin-node-resolve": ^9.0.0
     "@rollup/plugin-typescript": ^6.0.0
+    "@types/jest": ^26.0.14
     "@types/luxon": 1.25.0
     "@veri-fit/common": "workspace:*"
     firebase-admin: ^9.2.0
@@ -11142,28 +11143,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react@npm:^7.20.6":
-  version: 7.21.3
-  resolution: "eslint-plugin-react@npm:7.21.3"
-  dependencies:
-    array-includes: ^3.1.1
-    array.prototype.flatmap: ^1.2.3
-    doctrine: ^2.1.0
-    has: ^1.0.3
-    jsx-ast-utils: ^2.4.1
-    object.entries: ^1.1.2
-    object.fromentries: ^2.0.2
-    object.values: ^1.1.1
-    prop-types: ^15.7.2
-    resolve: ^1.17.0
-    string.prototype.matchall: ^4.0.2
-  peerDependencies:
-    eslint: ^3 || ^4 || ^5 || ^6 || ^7
-  checksum: 8a126d405448534821126dd636a1aee8df3a4f49b3fcec8944ac8500cdb5119bccaf9e209512f20e73879ddce08f657deb32fdae2f92e6393614de61fed1cca8
-  languageName: node
-  linkType: hard
-
-"eslint-plugin-react@npm:^7.21.4":
+"eslint-plugin-react@npm:^7.20.6, eslint-plugin-react@npm:^7.21.4":
   version: 7.21.4
   resolution: "eslint-plugin-react@npm:7.21.4"
   dependencies:
@@ -12567,25 +12547,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"formik@npm:^2.0.8":
-  version: 2.1.7
-  resolution: "formik@npm:2.1.7"
-  dependencies:
-    deepmerge: ^2.1.1
-    hoist-non-react-statics: ^3.3.0
-    lodash: ^4.17.14
-    lodash-es: ^4.17.14
-    react-fast-compare: ^2.0.1
-    scheduler: ^0.18.0
-    tiny-warning: ^1.0.2
-    tslib: ^1.10.0
-  peerDependencies:
-    react: ">=16.8.0"
-  checksum: c9980f56c9ccebcae0b248f93ca16afcf7dcb342a123d9e3f258486b155e7c8bc5efa56f7f0c798ef964f2b0dcf563767070da24599fd6679b660705904095b2
-  languageName: node
-  linkType: hard
-
-"formik@npm:^2.2.0":
+"formik@npm:^2.0.8, formik@npm:^2.2.0":
   version: 2.2.0
   resolution: "formik@npm:2.2.0"
   dependencies:
@@ -22249,23 +22211,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"postcss-loader@npm:^4.0.2":
-  version: 4.0.3
-  resolution: "postcss-loader@npm:4.0.3"
-  dependencies:
-    cosmiconfig: ^7.0.0
-    klona: ^2.0.4
-    loader-utils: ^2.0.0
-    schema-utils: ^2.7.1
-    semver: ^7.3.2
-  peerDependencies:
-    postcss: ^7.0.0 || ^8.0.1
-    webpack: ^4.0.0 || ^5.0.0
-  checksum: 2f3f14040a715eeb3919b5da1767c445cf24d7f5046663df827256f534ee5eae79fcbfdcfbe05093cc70636b61ca1fa5d99e5549d9b976c62689b21ba43a4702
-  languageName: node
-  linkType: hard
-
-"postcss-loader@npm:^4.0.4":
+"postcss-loader@npm:^4.0.2, postcss-loader@npm:^4.0.4":
   version: 4.0.4
   resolution: "postcss-loader@npm:4.0.4"
   dependencies:

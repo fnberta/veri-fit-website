@@ -55,7 +55,7 @@ jspm_packages/
 .cache/
 packages/landing/public
 lib
-build
+build*
 
 # Yarn
 .yarn/*
@@ -69,4 +69,4 @@ build
 credentials
 
 # typescript incremental builds
-tsconfig.tsbuildinfo
+tsconfig*.tsbuildinfo

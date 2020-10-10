@@ -8,6 +8,7 @@
     "dev": "rm -rf lib && tsc --watch",
     "shell": "yarn build && firebase functions:shell",
     "start": "yarn shell",
+    "test": "jest",
     "logs": "firebase functions:log"
   },
   "dependencies": {
@@ -18,6 +19,7 @@
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^9.0.0",
     "@rollup/plugin-typescript": "^6.0.0",
+    "@types/jest": "^26.0.14",
     "@types/luxon": "1.25.0",
     "@veri-fit/common": "workspace:*",
     "rollup": "^2.29.0",
