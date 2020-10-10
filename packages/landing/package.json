@@ -5,7 +5,7 @@
   "author": "Fabio Berta <fnberta@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "gatsby build",
+    "build": "tsc -b && gatsby build",
     "dev": "gatsby develop -H 0.0.0.0",
     "serve": "gatsby serve",
     "typecheck": "tsc --noEmit",
