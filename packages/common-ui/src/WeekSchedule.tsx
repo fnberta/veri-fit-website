@@ -29,6 +29,7 @@ const Block: React.FC<{ title: string; entries: WeekdayEntry[] }> = ({ title, en
   <>
     <h3 className="mb-2 text-center font-semibold uppercase tracking-wider">{title}</h3>
     {entries
+      .slice()
       .sort((a, b) => TIMES_OF_DAY.indexOf(a.timeOfDay) - TIMES_OF_DAY.indexOf(b.timeOfDay))
       .map((entry) => (
         <div
