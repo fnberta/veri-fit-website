@@ -58,10 +58,12 @@ lib
 build
 
 # Yarn
-yarn-error.log
-.pnp/
-.pnp.js
-.yarn-integrity
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*
 
 # credentials
 credentials

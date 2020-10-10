@@ -2,7 +2,6 @@
   "name": "@veri-fit/common",
   "description": "Common utilities and types",
   "private": true,
-  "version": "0.1.0",
   "author": "Fabio Berta <fnberta@gmail.com>",
   "license": "MIT",
   "main": "build/index.js",
