@@ -11,6 +11,8 @@
       <excludeFolder url="file://$MODULE_DIR$/packages/functions/build" />
       <excludeFolder url="file://$MODULE_DIR$/packages/functions/dist" />
       <excludeFolder url="file://$MODULE_DIR$/packages/functions/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/landing/.cache" />
+      <excludeFolder url="file://$MODULE_DIR$/packages/landing/public" />
       <excludeFolder url="file://$MODULE_DIR$/packages/manage/build" />
       <excludeFolder url="file://$MODULE_DIR$/public" />
       <excludeFolder url="file://$MODULE_DIR$/temp" />
