@@ -1,6 +1,6 @@
 import React from 'react';
 import cx from 'classnames';
-import Body from '../common/Body';
+import Body from '../Body';
 
 export interface Price {
   price: number;

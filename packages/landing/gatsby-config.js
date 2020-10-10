@@ -46,28 +46,28 @@ module.exports = {
       resolve: 'gatsby-source-filesystem',
       options: {
         name: 'testimonials',
-        path: `${__dirname}/src/landing/testimonials`,
+        path: `${__dirname}/src/sections/testimonials`,
       },
     },
     {
       resolve: 'gatsby-source-filesystem',
       options: {
         name: 'offers',
-        path: `${__dirname}/src/landing/offers`,
+        path: `${__dirname}/src/sections/offers`,
       },
     },
     {
       resolve: 'gatsby-source-filesystem',
       options: {
         name: 'schedule',
-        path: `${__dirname}/src/landing/schedule`,
+        path: `${__dirname}/src/sections/schedule`,
       },
     },
     {
       resolve: 'gatsby-source-filesystem',
       options: {
         name: 'videos',
-        path: `${__dirname}/src/landing/videos`,
+        path: `${__dirname}/src/sections/videos`,
       },
     },
     'gatsby-plugin-typescript',

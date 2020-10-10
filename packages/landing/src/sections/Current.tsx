@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ErrorMessage, Field, Form, Formik, FormikHelpers } from 'formik';
 import { BotField, Button, makeValidator, urlEncode } from '@veri-fit/common-ui';
-import Notification, { NotificationType } from '../common/Notification';
+import Notification, { NotificationType } from '../Notification';
 
 export interface Video {
   title: string;

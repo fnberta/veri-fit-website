@@ -1,7 +1,7 @@
 import { ErrorMessage, Field, Form, Formik, FormikHelpers } from 'formik';
 import React, { useState } from 'react';
 import { BotField, Button, makeValidator, urlEncode } from '@veri-fit/common-ui';
-import Notification, { NotificationType } from '../common/Notification';
+import Notification, { NotificationType } from '../Notification';
 import BulletItem from './BulletItem';
 
 interface FormValues {

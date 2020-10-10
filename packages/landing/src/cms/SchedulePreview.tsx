@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScheduleItem } from '../landing/Schedule';
+import { ScheduleItem } from '../sections/Schedule';
 import { PreviewProps } from './interfaces';
 
 const SchedulePreview: React.FC<PreviewProps> = ({ entry }) => (

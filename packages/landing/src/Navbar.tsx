@@ -3,7 +3,7 @@ import { graphql, useStaticQuery } from 'gatsby';
 import React, { isValidElement, useState } from 'react';
 import Image, { FixedObject } from 'gatsby-image';
 import { Icon, IconButton } from '@veri-fit/common-ui';
-import { LogosQuery } from '../generatedGraphQL';
+import { LogosQuery } from './generatedGraphQL';
 
 export interface Props extends React.HTMLProps<HTMLDivElement> {
   variant: 'bright' | 'dark' | 'transparent';

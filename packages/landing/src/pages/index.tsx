@@ -4,17 +4,17 @@
 import { graphql } from 'gatsby';
 import { FluidObject } from 'gatsby-image';
 import React, { useEffect, useState } from 'react';
-import Navbar from '../common/Navbar';
-import Layout from '../common/Layout';
+import Navbar from '../Navbar';
+import Layout from '../Layout';
 import { IndexPageQuery } from '../generatedGraphQL';
-import AboutMe from '../landing/AboutMe';
-import ContactMe from '../landing/ContactMe';
-import Current, { Video } from '../landing/Current';
-import Hero from '../landing/Hero';
-import LocationMap from '../landing/LocationMap';
-import Offers, { OfferData } from '../landing/Offers';
-import Schedule, { ScheduleEntryData } from '../landing/Schedule';
-import TryOut from '../landing/TryOut';
+import AboutMe from '../sections/AboutMe';
+import ContactMe from '../sections/ContactMe';
+import Current, { Video } from '../sections/Current';
+import Hero from '../sections/Hero';
+import LocationMap from '../sections/LocationMap';
+import Offers, { OfferData } from '../sections/Offers';
+import Schedule, { ScheduleEntryData } from '../sections/Schedule';
+import TryOut from '../sections/TryOut';
 
 export interface Props {
   data: IndexPageQuery;
