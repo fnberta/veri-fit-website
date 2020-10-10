@@ -1,0 +1,151 @@
+import cx from 'classnames';
+import React, { isValidElement } from 'react';
+import Icon, { IconName } from './Icon';
+
+export interface ButtonStyleProps {
+  color?: 'gray' | 'orange' | 'red' | 'none';
+  shape?: 'filled' | 'outlined';
+  size?: 'small' | 'medium' | 'large' | 'huge' | 'none';
+}
+
+export interface ButtonContentProps {
+  icon?: IconName | React.ReactElement;
+  loading?: boolean;
+  children?: React.ReactNode;
+}
+
+export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & ButtonStyleProps & ButtonContentProps;
+
+export function getButtonShapeColorClasses(
+  color: ButtonStyleProps['color'] = 'gray',
+  shape: ButtonStyleProps['shape'] = 'filled',
+): string {
+  const shapeClasses = shape === 'outlined' && 'border hover:border-transparent';
+  switch (color) {
+    case 'none':
+      return cx(shapeClasses);
+    case 'gray':
+      return cx('text-gray-700 hover:bg-gray-200 active:bg-gray-400', shapeClasses, {
+        ['bg-gray-300 ']: shape === 'filled',
+        ['border-gray-300']: shape === 'outlined',
+      });
+    case 'orange':
+      return cx('text-white hover:bg-orange-400 active:bg-orange-600', shapeClasses, {
+        ['bg-orange-500 ']: shape === 'filled',
+        ['border-orange-500']: shape === 'outlined',
+      });
+    case 'red':
+      return cx('text-white hover:bg-red-400 active:bg-red-600', shapeClasses, {
+        ['bg-red-500']: shape === 'filled',
+        ['border-red-500']: shape === 'outlined',
+      });
+  }
+}
+
+export function getButtonSizeClasses(size: ButtonStyleProps['size'] = 'medium'): string {
+  switch (size) {
+    case 'none':
+      return '';
+    case 'small':
+      return 'text-xs py-1 px-2';
+    case 'medium':
+      return 'text-sm py-2 px-4';
+    case 'large':
+      return 'text-xl py-3 px-5';
+    case 'huge':
+      return 'text-xl py-4 px-8';
+  }
+}
+
+export const ButtonContent: React.FC<ButtonContentProps> = ({ icon, loading, children }) => {
+  if (loading) {
+    return (
+      <div className="relative flex justify-center items-center">
+        <span className="absolute spinner" />
+        <span className="invisible">{children}</span>
+      </div>
+    );
+  }
+
+  if (icon) {
+    const iconElement = isValidElement(icon) ? icon : <Icon name={icon} />;
+    return children ? (
+      <div className="flex items-center">
+        {iconElement}
+        <span className="ml-2">{children}</span>
+      </div>
+    ) : (
+      iconElement
+    );
+  }
+
+  return children as React.ReactElement;
+};
+
+export const Button: React.FC<ButtonProps> = ({
+  color,
+  shape,
+  size,
+  icon,
+  loading,
+  disabled,
+  children,
+  className,
+  ...rest
+}) => (
+  <button
+    className={cx('btn', getButtonSizeClasses(size), getButtonShapeColorClasses(color, shape), className)}
+    disabled={loading || disabled}
+    {...rest}
+  >
+    <ButtonContent icon={icon} loading={loading}>
+      {children}
+    </ButtonContent>
+  </button>
+);
+
+export interface IconButtonContentProps {
+  icon: IconName | React.ReactElement;
+  loading?: boolean;
+  'aria-label': string;
+}
+
+export type IconButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & ButtonStyleProps & IconButtonContentProps;
+
+export const IconButton: React.FC<IconButtonProps> = ({
+  color,
+  shape,
+  size,
+  icon,
+  loading,
+  disabled,
+  className,
+  ...rest
+}) => (
+  <button
+    className={cx('btn', getButtonSizeClasses(size), getButtonShapeColorClasses(color, shape), className)}
+    disabled={loading || disabled}
+    {...rest}
+  >
+    <ButtonContent icon={icon} loading={loading} />
+  </button>
+);
+
+export type AnchorButtonProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & ButtonStyleProps & ButtonContentProps;
+
+export const AnchorButton: React.FC<AnchorButtonProps> = ({
+  color,
+  shape,
+  size,
+  icon,
+  loading,
+  children,
+  className,
+  ...rest
+}) => (
+  <a className={cx('btn', getButtonSizeClasses(size), getButtonShapeColorClasses(color, shape), className)} {...rest}>
+    <ButtonContent icon={icon} loading={loading}>
+      {children}
+    </ButtonContent>
+  </a>
+);

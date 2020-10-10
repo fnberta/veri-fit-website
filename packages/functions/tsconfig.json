@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig-base.json",
+  "compilerOptions": {
+    "target": "es2018",
+    "rootDir": "src"
+  },
+  "exclude": ["node_modules", "**/*.test.ts"],
+  "references": [
+    {
+      "path": "../common"
+    }
+  ]
+}

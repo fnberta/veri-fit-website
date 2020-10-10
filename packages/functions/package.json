@@ -1,0 +1,27 @@
+{
+  "name": "@veri-fit/functions",
+  "private": true,
+  "version": "0.1.0",
+  "main": "build/index.js",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "rm -rf lib && rollup --config rollup.config.js",
+    "dev": "rm -rf lib && tsc --watch",
+    "shell": "yarn build && firebase functions:shell",
+    "start": "yarn shell",
+    "logs": "firebase functions:log"
+  },
+  "dependencies": {
+    "firebase-admin": "^9.1.0",
+    "firebase-functions": "^3.9.1",
+    "luxon": "^1.25.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^9.0.0",
+    "@rollup/plugin-typescript": "^6.0.0",
+    "@types/luxon": "1.25.0",
+    "@veri-fit/common": "^0.1.0",
+    "rollup": "^2.28.2",
+    "typescript": "^4.0.3"
+  }
+}

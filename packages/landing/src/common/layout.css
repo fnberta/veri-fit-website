@@ -1,0 +1,71 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+@import '@veri-fit/common-ui';
+
+@layer base {
+  html,
+  body {
+    @apply h-full w-full antialiased text-gray-900;
+    scroll-behavior: smooth;
+  }
+
+  #___gatsby,
+  #___gatsby > * {
+    @apply h-full w-full;
+  }
+}
+
+@layer components {
+  .content h4 {
+    @apply text-xl font-semibold leading-tight mb-2;
+  }
+
+  .content p {
+    @apply text-base text-gray-700 mb-4;
+  }
+
+  .card {
+    @apply bg-white shadow rounded overflow-hidden;
+  }
+
+  .card-body {
+    @apply px-6 py-4;
+  }
+
+  .table thead tr th {
+    @apply px-4 py-2 border-b-2 text-xs text-gray-500 text-left uppercase tracking-wider;
+  }
+
+  .table tbody tr td {
+    @apply px-4 py-2 border-b;
+  }
+
+  .table tbody tr:last-child td {
+    @apply border-b-0;
+  }
+
+  .parallax {
+    @apply bg-center bg-no-repeat bg-scroll bg-cover;
+  }
+
+  @screen lg {
+    .parallax {
+      @apply bg-fixed;
+    }
+  }
+
+  .parallax-overlay {
+    @apply relative;
+  }
+
+  .parallax-overlay::before {
+    @apply absolute inset-0 w-full h-full bg-black opacity-50;
+    content: '';
+  }
+
+  .offer-grid {
+    @apply grid gap-6;
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  }
+}

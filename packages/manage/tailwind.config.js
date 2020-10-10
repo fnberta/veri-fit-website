@@ -1,0 +1,23 @@
+const defaultTheme = require('tailwindcss/defaultTheme');
+
+module.exports = {
+  purge: ['./src/**/*.tsx', '../../node_modules/@veri-fit/common-ui/src/**/*.tsx'],
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+      },
+    },
+  },
+  variants: {
+    borderWidth: ['responsive', 'last'],
+  },
+  plugins: [require('@tailwindcss/ui')],
+  future: {
+    removeDeprecatedGapUtilities: true,
+    purgeLayersByDefault: true,
+  },
+  experimental: {
+    applyComplexClasses: true,
+  },
+};

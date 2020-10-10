@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig-base.json",
+  "compilerOptions": {
+    "target": "es2016",
+    "module": "esnext",
+    "rootDir": "src",
+    "outDir": "build",
+    "jsx": "react"
+  },
+  "references": [
+    {
+      "path": "../common"
+    },
+    {
+      "path": "../common-ui"
+    }
+  ]
+}

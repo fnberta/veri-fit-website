@@ -53,7 +53,7 @@ jspm_packages/
 
 # gatsby files
 .cache/
-public
+packages/landing/public
 lib
 build
 
@@ -65,3 +65,6 @@ yarn-error.log
 
 # credentials
 credentials
+
+# typescript incremental builds
+tsconfig.tsbuildinfo

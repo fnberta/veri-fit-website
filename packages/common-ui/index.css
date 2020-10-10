@@ -1,0 +1,101 @@
+@layer components {
+  .btn {
+    @apply inline-block rounded font-semibold leading-tight transition-all duration-200;
+  }
+
+  .btn:focus {
+    @apply outline-none shadow-outline;
+  }
+
+  .btn:disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
+
+  .spinner {
+    @apply w-4 h-4 border-2 border-gray-700 rounded-full;
+    border-right-color: transparent;
+    border-top-color: transparent;
+    animation: spin 500ms linear infinite;
+  }
+
+  .link {
+    @apply text-blue-500;
+  }
+
+  .link:hover {
+    @apply text-blue-700 underline;
+  }
+
+  .form-field {
+    @apply flex flex-col space-y-1;
+  }
+
+  .form-label {
+    @apply text-sm font-semibold;
+  }
+
+  .form-error {
+    @apply text-xs text-red-500 font-semibold;
+  }
+
+  .schedule-grid {
+    @apply grid gap-4;
+    grid-template-columns: 1fr;
+  }
+
+  @screen md {
+    .schedule-grid {
+      grid-template-columns: [monday] 1fr [tuesday] 1fr [wednesday] 1fr [thursday] 1fr [friday] 1fr [saturday] 1fr;
+      grid-template-rows: auto [morning] 1fr [midday] 1fr [evening] 1fr;
+    }
+  }
+
+  @screen md {
+    .schedule-monday {
+      grid-column-start: monday;
+    }
+
+    .schedule-tuesday {
+      grid-column-start: tuesday;
+    }
+
+    .schedule-wednesday {
+      grid-column-start: wednesday;
+    }
+
+    .schedule-thursday {
+      grid-column-start: thursday;
+    }
+
+    .schedule-friday {
+      grid-column-start: friday;
+    }
+
+    .schedule-saturday {
+      grid-column-start: saturday;
+    }
+
+    .schedule-morning {
+      grid-row-start: morning;
+    }
+
+    .schedule-midday {
+      grid-row-start: midday;
+    }
+
+    .schedule-evening {
+      grid-row-start: evening;
+    }
+  }
+}
+
+@layer utilities {
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig-base.json",
+  "compilerOptions": {
+    "target": "es2016",
+    "rootDir": "src",
+    "outDir": "build",
+    "declaration": true,
+    "declarationMap": true,
+    "composite": true,
+    "jsx": "react"
+  },
+  "references": [
+    {
+      "path": "../common"
+    }
+  ]
+}
