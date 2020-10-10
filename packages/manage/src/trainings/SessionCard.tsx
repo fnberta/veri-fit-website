@@ -23,6 +23,7 @@ const SessionCard: React.FC<Props> = ({ session, clients, onEditClick }) => {
       await sessionRepo.toggleConfirmed(session.id);
     } catch (e) {
       // TODO: show error to user
+      // eslint-disable-next-line no-console
       console.error('toggling confirmed status of session failed with', e);
     }
     setLoading(false);

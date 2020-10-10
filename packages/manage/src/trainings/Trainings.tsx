@@ -75,6 +75,7 @@ const Trainings: React.FC<ClassNameProps> = ({ className }) => {
   useEffect(() => {
     sessionRepo.createForYear(date.weekYear).catch((err) => {
       // TODO: show error to user
+      // eslint-disable-next-line no-console
       console.error(err);
     });
   }, [sessionRepo, date.weekYear]);
