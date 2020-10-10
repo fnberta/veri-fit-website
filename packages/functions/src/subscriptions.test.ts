@@ -197,14 +197,15 @@ describe('pick subscription id to update trainingsLeft', () => {
     });
 
     test('should return id of subscription with the most recent end date if there are multiple subscriptions but none of them has trainingsLeft > 0', () => {
+      const today = DateTime.local();
       const subscriptions: YogaSubscription[] = [
         {
           id: 'limited-10-older',
           type: SubscriptionType.LIMITED_10,
           trainingType: TrainingType.YOGA,
           trainingsLeft: 0,
-          start: '2020-01-01',
-          end: '2020-03-01',
+          start: today.minus({ months: 2 }).toISODate(),
+          end: today.plus({ months: 1 }).toISODate(),
         },
         {
           id: 'unlimited-10',
@@ -218,8 +219,8 @@ describe('pick subscription id to update trainingsLeft', () => {
           type: SubscriptionType.LIMITED_10,
           trainingType: TrainingType.YOGA,
           trainingsLeft: 0,
-          start: '2020-01-01',
-          end: '2020-09-01',
+          start: today.minus({ months: 1 }).toISODate(),
+          end: today.plus({ months: 2 }).toISODate(),
         },
       ];
       expect(pickSubscriptionId('opened', subscriptions)).toBe('limited-10-newer');
