@@ -24,7 +24,7 @@ const DETAILS_QUERY = graphql`
   }
 `;
 
-function getMeta(meta: Meta[], keywords: string[], { title, description, author }: SiteSiteMetadata): Meta[] {
+function getMeta(meta: Meta[], keywords: string[], { title, description }: SiteSiteMetadata): Meta[] {
   const list: Meta[] = [
     {
       name: 'description',
@@ -45,10 +45,6 @@ function getMeta(meta: Meta[], keywords: string[], { title, description, author 
     {
       name: 'twitter:card',
       content: 'summary',
-    },
-    {
-      name: 'twitter:creator',
-      content: author,
     },
     {
       name: 'twitter:title',
