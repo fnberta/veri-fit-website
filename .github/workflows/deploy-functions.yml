@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
       - name: Build common packages
-        run: yarn build
+        run: yarn build --verbose
       - name: Build functions
         run: yarn workspace @veri-fit/functions build
       - name: Deploy functions and firestore rules

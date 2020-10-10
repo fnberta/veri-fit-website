@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
       - name: Build common packages
-        run: yarn build
+        run: yarn build --verbose
       - name: Run type checks
         run: yarn typecheck
       - name: Run lint checks
