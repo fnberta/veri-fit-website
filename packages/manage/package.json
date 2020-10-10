@@ -1,6 +1,6 @@
 {
   "name": "@veri-fit/manage",
-  "description": "Website for veri-fit business",
+  "description": "CRM application for veri-fit business",
   "private": true,
   "author": "Fabio Berta <fnberta@gmail.com>",
   "license": "MIT",
