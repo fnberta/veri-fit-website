@@ -2,7 +2,7 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "typecheck": "yarn workspaces foreach typecheck",
+    "typecheck": "yarn workspaces foreach -p run typecheck",
     "test": "jest",
     "lint": "eslint --ignore-path .gitignore '**/*.{ts,tsx,js,jsx}'",
     "format": "prettier --ignore-path .gitignore --write '**/*.{js,jsx,ts,tsx,json,css,scss,sass,md,yml,yaml}'",
