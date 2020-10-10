@@ -3882,20 +3882,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-typescript@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "@rollup/plugin-typescript@npm:6.0.0"
-  dependencies:
-    "@rollup/pluginutils": ^3.1.0
-    resolve: ^1.17.0
-  peerDependencies:
-    rollup: ^2.14.0
-    tslib: "*"
-    typescript: ">=3.4.0"
-  checksum: 4a474853394d725f68c3b502498d4c7b8d2c2edae2782fa04a0f2f749c2b9bf93dc6b01c7c71f4135fe47ce6697b868e249f70485173fb66b49842a743f37f0b
-  languageName: node
-  linkType: hard
-
 "@rollup/pluginutils@npm:^3.0.8, @rollup/pluginutils@npm:^3.1.0":
   version: 3.1.0
   resolution: "@rollup/pluginutils@npm:3.1.0"
@@ -5090,7 +5076,6 @@ __metadata:
   resolution: "@veri-fit/functions@workspace:packages/functions"
   dependencies:
     "@rollup/plugin-node-resolve": ^9.0.0
-    "@rollup/plugin-typescript": ^6.0.0
     "@types/jest": ^26.0.14
     "@types/luxon": 1.25.0
     "@veri-fit/common": "workspace:*"

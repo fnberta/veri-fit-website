@@ -55,6 +55,7 @@ jspm_packages/
 .cache/
 packages/landing/public
 lib
+dist
 build*
 
 # Yarn

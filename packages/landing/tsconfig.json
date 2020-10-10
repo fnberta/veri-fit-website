@@ -8,10 +8,16 @@
   },
   "references": [
     {
-      "path": "../common"
+      "path": "../common/tsconfig.json"
     },
     {
-      "path": "../common-ui"
+      "path": "../common/tsconfig-esm.json"
+    },
+    {
+      "path": "../common-ui/tsconfig.json"
+    },
+    {
+      "path": "../common-ui/tsconfig-esm.json"
     }
   ]
 }

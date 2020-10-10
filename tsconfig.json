@@ -2,19 +2,16 @@
   "files": [],
   "references": [
     {
-      "path": "packages/common"
+      "path": "packages/common/tsconfig.json"
     },
     {
-      "path": "packages/common-ui"
+      "path": "packages/common/tsconfig-esm.json"
     },
     {
-      "path": "packages/functions"
+      "path": "packages/common-ui/tsconfig.json"
     },
     {
-      "path": "packages/landing"
-    },
-    {
-      "path": "packages/manage"
+      "path": "packages/common-ui/tsconfig-esm.json"
     }
   ]
 }

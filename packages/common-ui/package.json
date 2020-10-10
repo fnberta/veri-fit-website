@@ -17,7 +17,7 @@
   ],
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "build": "tsc && tsc -p tsconfig-esm.json",
+    "build": "tsc -b tsconfig.json tsconfig-esm.json",
     "prepare": "yarn build"
   },
   "dependencies": {
