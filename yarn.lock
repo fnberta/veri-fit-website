@@ -5172,7 +5172,7 @@ __metadata:
     tailwindcss: ^1.8.13
     ts-loader: ^8.0.4
     typescript: ^4.0.3
-    webpack: ^5.0.0-rc.5
+    webpack: ^5.0.0
     webpack-cli: ^3.3.12
     webpack-dev-server: ^3.11.0
     workbox-webpack-plugin: ^5.1.4
@@ -29365,9 +29365,9 @@ typescript@^4.0.3:
   languageName: node
   linkType: hard
 
-"webpack@npm:^5.0.0-rc.5":
-  version: 5.0.0-rc.5
-  resolution: "webpack@npm:5.0.0-rc.5"
+"webpack@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "webpack@npm:5.0.0"
   dependencies:
     "@types/eslint-scope": ^3.7.0
     "@types/estree": ^0.0.45
@@ -29398,7 +29398,7 @@ typescript@^4.0.3:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: f30af7f68844825975decee43f42afce02cb85febe0908cad9b3a6a9765bc8b38ae21f779da5e0febbca5dd9a1c6f75a0281be45d892b89d014164896f4a1fc8
+  checksum: bbd9df6389cc9ddb24c20ee9749e41adee64cff5ea7a30a0ee762a78d5f880f363a55cbb6ad66e62aa276608dd507d311ebcf8e7b2e1061aaf231aa6fa1bac84
   languageName: node
   linkType: hard
 
