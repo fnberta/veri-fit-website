@@ -1,0 +1,91 @@
+backend:
+  name: 'github'
+  repo: 'fnberta/veri-fit-website'
+
+media_folder: 'packages/landing/static/assets'
+public_folder: 'assets'
+site_url: 'https://veri-fit.ch'
+
+collections:
+  - name: 'pages'
+    label: 'Pages'
+    files:
+      - file: 'packages/landing/src/pages/agb.md'
+        label: 'AGB'
+        name: 'agb'
+        fields:
+          - { name: 'title', label: 'Title', widget: 'string' }
+          - { name: 'subtitle', label: 'Subtitle', widget: 'string' }
+          - { name: 'body', label: 'Text', widget: 'markdown' }
+  - name: 'offers'
+    label: 'Offers'
+    label_singular: 'Offer'
+    folder: 'packages/landing/src/sections/offers'
+    create: true
+    slug: '{{slug}}'
+    fields:
+      - { name: 'order', label: 'Order', widget: 'number', valueType: 'int', min: 1 }
+      - { name: 'title', label: 'Title', widget: 'string' }
+      - { name: 'subtitle', label: 'Subtitle', widget: 'string' }
+      - { name: 'image', label: 'Image', widget: 'image' }
+      - name: 'prices'
+        label: 'Prices'
+        widget: 'list'
+        fields:
+          - { name: 'price', label: 'Price', widget: 'number', valueType: 'int', min: 1 }
+          - name: 'type'
+            label: 'Type'
+            widget: 'select'
+            default: 1
+            options:
+              - { label: 'Single', value: 1 }
+              - { label: '10', value: 10 }
+              - { label: '16', value: 16 }
+              - { label: '20', value: 20 }
+          - { name: 'validity', label: 'Validity', widget: 'string', required: false }
+      - { name: 'body', label: 'Text', widget: 'markdown' }
+  - name: 'schedule'
+    label: 'Schedule'
+    folder: 'packages/landing/src/sections/schedule'
+    create: true
+    slug: '{{slug}}-{{weekday}}-{{timeOfDay}}'
+    fields:
+      - { name: 'title', label: 'Title', widget: 'string' }
+      - name: 'weekday'
+        label: 'Weekday'
+        widget: 'select'
+        options:
+          - { label: 'Monday', value: 'monday' }
+          - { label: 'Tuesday', value: 'tuesday' }
+          - { label: 'Wednesday', value: 'wednesday' }
+          - { label: 'Thursday', value: 'thursday' }
+          - { label: 'Friday', value: 'friday' }
+          - { label: 'Saturday', value: 'saturday' }
+      - name: 'timeOfDay'
+        label: 'Time of Day'
+        widget: 'select'
+        options:
+          - { label: 'Morning', value: 'morning' }
+          - { label: 'Midday', value: 'midday' }
+          - { label: 'Evening', value: 'evening' }
+      - { name: 'time', label: 'Time', widget: 'string' }
+  - name: 'testimonials'
+    label: 'Testimonials'
+    label_singular: 'Testimonial'
+    folder: 'packages/landing/src/sections/testimonials'
+    create: true
+    identifier_field: 'author'
+    slug: '{{year}}-{{month}}-{{day}}-{{slug}}'
+    fields:
+      - { name: 'author', label: 'Author', widget: 'string' }
+      - { name: 'quote', label: 'Quote', widget: 'string' }
+  - name: 'videos'
+    label: 'Videos'
+    label_singular: 'Video'
+    folder: 'packages/landing/src/sections/videos'
+    create: true
+    slug: '{{slug}}'
+    fields:
+      - { name: 'title', label: 'Title', widget: 'string' }
+      - { name: 'description', label: 'Description', widget: 'text' }
+      - { name: 'status', label: 'Status', widget: 'hidden', default: 'available' }

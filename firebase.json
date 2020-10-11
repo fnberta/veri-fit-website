@@ -3,8 +3,8 @@
     "rules": "firestore.rules"
   },
   "functions": {
-    "predeploy": "yarn --ignore-engines --cwd \"$RESOURCE_DIR\" build",
-    "source": "functions"
+    "source": "packages/functions",
+    "runtime": "nodejs10"
   },
   "emulators": {
     "functions": {

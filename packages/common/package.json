@@ -1,0 +1,19 @@
+{
+  "name": "@veri-fit/common",
+  "description": "Common utilities and types",
+  "private": true,
+  "author": "Fabio Berta <fnberta@gmail.com>",
+  "license": "MIT",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "module": "build-esm/index.js",
+  "sideEffects": false,
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "tsc -b tsconfig.json tsconfig-esm.json",
+    "prepare": "yarn build"
+  },
+  "devDependencies": {
+    "typescript": "^4.0.3"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "name": "@veri-fit/common-ui",
+  "description": "Common UI components",
+  "private": true,
+  "author": "Fabio Berta <fnberta@gmail.com>",
+  "license": "MIT",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "module": "build-esm/index.js",
+  "sideEffects": false,
+  "files": [
+    "build",
+    "src",
+    "index.css"
+  ],
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "tsc -b tsconfig.json tsconfig-esm.json",
+    "prepare": "yarn build"
+  },
+  "dependencies": {
+    "@veri-fit/common": "workspace:*"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.0.1",
+    "postcss": "^8.1.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "rollup": "^2.29.0",
+    "rollup-plugin-postcss": "^3.1.8",
+    "rollup-plugin-typescript2": "^0.27.3",
+    "tailwindcss": "^1.8.13",
+    "typescript": "^4.0.3"
+  },
+  "peerDependencies": {
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  }
+}

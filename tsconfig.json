@@ -1,16 +1,17 @@
 {
-  "compilerOptions": {
-    "target": "es2019",
-    "module": "commonjs",
-    "outDir": "build",
-    "noEmit": true,
-    "esModuleInterop": true,
-    "strict": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true,
-    "jsx": "react",
-    "lib": ["es2015", "dom", "es2017.object"]
-  }
+  "files": [],
+  "references": [
+    {
+      "path": "packages/common/tsconfig.json"
+    },
+    {
+      "path": "packages/common/tsconfig-esm.json"
+    },
+    {
+      "path": "packages/common-ui/tsconfig.json"
+    },
+    {
+      "path": "packages/common-ui/tsconfig-esm.json"
+    }
+  ]
 }

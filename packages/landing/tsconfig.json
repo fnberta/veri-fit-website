@@ -1,0 +1,23 @@
+{
+  "extends": "../../tsconfig-base.json",
+  "compilerOptions": {
+    "target": "es2019",
+    "rootDir": "src",
+    "noEmit": true,
+    "jsx": "react"
+  },
+  "references": [
+    {
+      "path": "../common/tsconfig.json"
+    },
+    {
+      "path": "../common/tsconfig-esm.json"
+    },
+    {
+      "path": "../common-ui/tsconfig.json"
+    },
+    {
+      "path": "../common-ui/tsconfig-esm.json"
+    }
+  ]
+}

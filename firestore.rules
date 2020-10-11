@@ -13,8 +13,7 @@ service cloud.firestore {
 
     match /clients/{clientId}/subscriptions/{subscriptionId} {
       allow read: if isAuthorizedUser();
-      allow create: if isAuthorizedUser();
-      allow delete: if isAuthorizedUser();
+      allow write: if isAuthorizedUser();
     }
 
     match /trainings/{trainingId} {
