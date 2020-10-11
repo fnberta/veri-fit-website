@@ -26,7 +26,12 @@ if (PRODUCTION) {
   plugins.push(new CleanWebpackPlugin());
   plugins.push(new MiniCssExtractPlugin({ filename: '[name].[contenthash].css' }));
   plugins.push(new CopyWebpackPlugin({ patterns: [{ from: 'public' }] }));
-  plugins.push(new WorkboxPlugin.GenerateSW());
+  plugins.push(
+    new WorkboxPlugin.GenerateSW({
+      cleanupOutdatedCaches: true,
+      navigateFallback: '/index.html',
+    }),
+  );
 } else {
   plugins.push(new DotEnvWebpack());
 }
@@ -51,7 +56,6 @@ module.exports = {
         exclude: /node_modules/,
         options: {
           transpileOnly: true,
-          projectReferences: true,
         },
       },
       {
