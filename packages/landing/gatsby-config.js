@@ -14,7 +14,7 @@ module.exports = {
           {
             resolve: 'gatsby-remark-relative-images',
             options: {
-              name: 'assets',
+              staticFolderName: 'packages/landing/static/assets',
             },
           },
           'gatsby-remark-images',
