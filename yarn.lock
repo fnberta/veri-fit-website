@@ -5063,7 +5063,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@veri-fit/common@workspace:*, @veri-fit/common@workspace:packages/common":
+"@veri-fit/common@0.1.0, @veri-fit/common@workspace:*, @veri-fit/common@workspace:packages/common":
   version: 0.0.0-use.local
   resolution: "@veri-fit/common@workspace:packages/common"
   dependencies:
@@ -5078,7 +5078,7 @@ __metadata:
     "@rollup/plugin-node-resolve": ^9.0.0
     "@types/jest": ^26.0.14
     "@types/luxon": 1.25.0
-    "@veri-fit/common": "workspace:*"
+    "@veri-fit/common": 0.1.0
     firebase-admin: ^9.2.0
     firebase-functions: ^3.11.0
     luxon: ^1.25.0

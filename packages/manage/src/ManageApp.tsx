@@ -83,7 +83,7 @@ const ManageApp: React.FC = () => {
   const today = DateTime.local();
   return (
     <>
-      <Navbar variant="dark">
+      <Navbar className="flex-shrink-0" variant="dark">
         <Link to="/clients">Kunden</Link>
         <Link to="/trainings">Trainings</Link>
       </Navbar>

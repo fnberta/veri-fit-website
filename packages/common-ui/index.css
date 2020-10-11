@@ -38,6 +38,18 @@
     @apply text-xs text-red-500 font-semibold;
   }
 
+  .table thead tr th {
+    @apply px-4 py-2 border-b-2 text-xs text-gray-500 text-left uppercase tracking-wider;
+  }
+
+  .table tbody tr td {
+    @apply px-4 py-2 border-b;
+  }
+
+  .table tbody tr:last-child td {
+    @apply border-b-0;
+  }
+
   .schedule-grid {
     @apply grid gap-4;
     grid-template-columns: 1fr;
