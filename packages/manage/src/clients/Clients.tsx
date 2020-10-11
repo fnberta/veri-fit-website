@@ -138,8 +138,8 @@ const Clients: React.FC<ClassNameProps> = ({ className }) => {
 
   const { clientId } = useParams<{ clientId?: string }>();
   return (
-    <section className={cx('flex bg-gray-100', className)}>
-      <div className="w-full max-w-screen-xl mx-auto py-6 px-4 flex flex-col min-h-0">
+    <section className={cx('flex bg-gray-100 min-h-0', className)}>
+      <div className="w-full max-w-screen-xl mx-auto py-6 px-4 flex flex-col">
         <header className={cx(clientId ? 'hidden' : 'flex', 'lg:flex justify-between items-baseline')}>
           <h1 className="text-2xl font-semibold">Kunden</h1>
           <Button icon="user-add" onClick={() => setAddDialogOpen(true)}>
