@@ -6,7 +6,7 @@
   "author": "Fabio Berta <fnberta@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "build": "tsc -b && webpack",
+    "build": "tsc -b && NODE_ENV=production webpack",
     "dev": "webpack-cli serve",
     "start": "http-server build",
     "typecheck": "tsc --noEmit",
