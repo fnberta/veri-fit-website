@@ -7,17 +7,13 @@ const Portal: React.FC = ({ children }) => {
   const { current } = useRef(window.document.createElement('div'));
 
   useEffect(() => {
-    if (current) {
-      modalRoot?.appendChild(current);
-    }
+    modalRoot?.appendChild(current);
     return () => {
-      if (current) {
-        modalRoot?.removeChild(current);
-      }
+      modalRoot?.removeChild(current);
     };
   }, [current]);
 
-  return current ? createPortal(children, current) : null;
+  return createPortal(children, current);
 };
 
 export default Portal;

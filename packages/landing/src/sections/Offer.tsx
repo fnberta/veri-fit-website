@@ -8,7 +8,7 @@ export interface Price {
   validity?: string;
 }
 
-export interface Props extends React.HTMLProps<HTMLDivElement> {
+export interface Props extends React.ComponentPropsWithoutRef<'div'> {
   title: string;
   subtitle: string;
   image?: React.ReactNode;

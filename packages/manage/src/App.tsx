@@ -1,20 +1,20 @@
-import { Link, Redirect, Route, Switch } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import { messageSW, Workbox } from 'workbox-window';
 import React, { useEffect, useState } from 'react';
-import type { auth } from 'firebase';
+import firebase from 'firebase/app';
 import { Button } from '@veri-fit/common-ui';
 import Clients from './clients/Clients';
 import { useRepos } from './repositories/RepoContext';
 import Trainings from './trainings/Trainings';
-import Navbar from './Navbar';
+import Navbar, { NavbarLink } from './Navbar';
 
 function registerServiceWorker(): Workbox {
   const wb = new Workbox('/service-worker.js');
   let registration: ServiceWorkerRegistration | undefined;
 
   const showSkipWaitingPrompt = () => {
-    const yes = window.confirm('Reload?');
+    const yes = window.confirm('Eine neue Version ist verfügbar. Klicke auf "ok" um diese zu laden.');
     if (yes) {
       if (registration && registration.waiting) {
         messageSW(registration.waiting, { type: 'SKIP_WAITING' });
@@ -42,13 +42,13 @@ function registerServiceWorker(): Workbox {
   return wb;
 }
 
-const ManageApp: React.FC = () => {
+const App: React.FC = () => {
   const [loggedIn, setLoggedIn] = useState(false);
-  const [logInResult, setLoginResult] = useState<auth.UserCredential>();
+  const [logInResult, setLoginResult] = useState<firebase.auth.UserCredential>();
   const { authRepo } = useRepos();
 
   useEffect(() => {
-    if ('serviceWorker' in navigator) {
+    if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
       registerServiceWorker();
     }
   }, []);
@@ -60,22 +60,17 @@ const ManageApp: React.FC = () => {
   if (!logInResult || !loggedIn) {
     return (
       <div className="w-full h-full bg-gray-100 flex items-center justify-center">
-        <div className="w-1/2 bg-white p-4 rounded shadow">
-          {!loggedIn && (
-            <header className="flex flex-col items-center justify-center">
-              <h1 className="text-3xl font-semibold">Willkommen!</h1>
-              <Button
-                className="mt-4"
-                size="large"
-                color="orange"
-                loading={!logInResult}
-                onClick={() => authRepo.signIn()}
-              >
-                Login with Google
-              </Button>
-            </header>
-          )}
-        </div>
+        {!loggedIn && (
+          <header
+            style={{ width: '30rem' }}
+            className="p-8 flex flex-col items-center justify-center bg-white rounded shadow space-y-6"
+          >
+            <h1 className="text-3xl">Willkommen zurück!</h1>
+            <Button className="self-stretch" color="orange" loading={!logInResult} onClick={() => authRepo.signIn()}>
+              <span className="uppercase tracking-wider">Login</span>
+            </Button>
+          </header>
+        )}
       </div>
     );
   }
@@ -83,9 +78,9 @@ const ManageApp: React.FC = () => {
   const today = DateTime.local();
   return (
     <>
-      <Navbar className="flex-shrink-0" variant="dark">
-        <Link to="/clients">Kunden</Link>
-        <Link to="/trainings">Trainings</Link>
+      <Navbar className="flex-shrink-0">
+        <NavbarLink to="/clients">Kunden</NavbarLink>
+        <NavbarLink to="/trainings">Trainings</NavbarLink>
       </Navbar>
       <Switch>
         <Route path="/clients/:clientId?">
@@ -100,4 +95,4 @@ const ManageApp: React.FC = () => {
   );
 };
 
-export default ManageApp;
+export default App;

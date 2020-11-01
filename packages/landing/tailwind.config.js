@@ -1,12 +1,10 @@
-const defaultTheme = require('tailwindcss/defaultTheme');
+const commonConfig = require('@veri-fit/common-ui/tailwind.config.js');
 
 module.exports = {
-  purge: ['./src/**/*.tsx', '../../node_modules/@veri-fit/common-ui/src/**/*.tsx'],
+  presets: [commonConfig],
+  purge: ['./src/**/*.tsx', '**/node_modules/@veri-fit/common-ui/src/**/*.tsx'],
   theme: {
     extend: {
-      fontFamily: {
-        sans: ['Inter var', ...defaultTheme.fontFamily.sans],
-      },
       flexGrow: {
         2: 2,
         3: 3,
@@ -20,13 +18,5 @@ module.exports = {
         full: 9999,
       },
     },
-  },
-  plugins: [require('@tailwindcss/ui')],
-  future: {
-    removeDeprecatedGapUtilities: true,
-    purgeLayersByDefault: true,
-  },
-  experimental: {
-    applyComplexClasses: true,
   },
 };

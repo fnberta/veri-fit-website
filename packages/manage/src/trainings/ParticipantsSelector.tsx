@@ -3,7 +3,7 @@ import React from 'react';
 import cx from 'classnames';
 import { Client } from '@veri-fit/common';
 
-export interface Props extends React.HTMLProps<HTMLSelectElement> {
+export interface Props extends React.ComponentPropsWithoutRef<'select'> {
   name: string;
   clients: Client[];
 }

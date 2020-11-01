@@ -2,38 +2,44 @@
   "name": "@veri-fit/common-ui",
   "description": "Common UI components",
   "private": true,
+  "version": "0.1.0",
   "author": "Fabio Berta <fnberta@gmail.com>",
   "license": "MIT",
-  "main": "build/index.js",
-  "types": "build/index.d.ts",
-  "module": "build-esm/index.js",
+  "main": "build/cjs/index.js",
+  "types": "build/cjs/index.d.ts",
+  "module": "build/esm/index.js",
   "sideEffects": false,
   "files": [
-    "build",
     "src",
-    "index.css"
+    "index.css",
+    "tailwind.config.js",
+    "build/cjs",
+    "build/esm",
+    "build/index.css"
   ],
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "build": "tsc -b tsconfig.json tsconfig-esm.json",
+    "build": "tsc -b tsconfig.json tsconfig-esm.json && tailwindcss build index.css -o build/index.css",
+    "dev": "tsc -b tsconfig.json tsconfig-esm.json --watch",
     "prepare": "yarn build"
   },
   "dependencies": {
-    "@veri-fit/common": "workspace:*"
+    "classnames": "^2.2.6",
+    "@veri-fit/common": "0.1.0"
   },
   "devDependencies": {
+    "@types/classnames": "^2.2.11",
     "autoprefixer": "^10.0.1",
-    "postcss": "^8.1.1",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "rollup": "^2.29.0",
-    "rollup-plugin-postcss": "^3.1.8",
-    "rollup-plugin-typescript2": "^0.27.3",
-    "tailwindcss": "^1.8.13",
+    "formik": "^2.2.1",
+    "postcss": "^8.1.2",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "tailwindcss": "^1.9.5",
     "typescript": "^4.0.3"
   },
   "peerDependencies": {
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "formik": "^2.2.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
   }
 }

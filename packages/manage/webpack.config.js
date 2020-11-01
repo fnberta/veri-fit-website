@@ -67,16 +67,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [
-          PRODUCTION ? MiniCssExtractPlugin.loader : 'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              sourceMaps: true,
-            },
-          },
-          'postcss-loader',
-        ],
+        use: [PRODUCTION ? MiniCssExtractPlugin.loader : 'style-loader', 'css-loader', 'postcss-loader'],
       },
     ],
   },

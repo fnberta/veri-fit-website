@@ -1,6 +1,6 @@
-import { ErrorMessage, Field } from 'formik';
 import React from 'react';
 import { TrainingInput } from '@veri-fit/common';
+import { TextAreaField } from '@veri-fit/common-ui';
 import TrainingFormFields, { Props } from './TrainingFormFields';
 
 export interface SessionFormValues extends TrainingInput {
@@ -10,11 +10,7 @@ export interface SessionFormValues extends TrainingInput {
 const SessionFormFields: React.FC<Props> = ({ clients, disabled }) => (
   <>
     <TrainingFormFields clients={clients} disabled={disabled} />
-    <label className="form-field mt-3">
-      <span className="form-label">Notizen</span>
-      <Field className="form-textarea w-full" as="textarea" type="text" name="notes" disabled={disabled} />
-      <ErrorMessage name="notes">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
-    </label>
+    <TextAreaField type="text" name="notes" disabled={disabled} label="Notizen" />
   </>
 );
 

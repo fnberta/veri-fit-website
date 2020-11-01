@@ -2,7 +2,7 @@ import React from 'react';
 import cx from 'classnames';
 import { Icon, IconName } from '@veri-fit/common-ui';
 
-export interface Props extends React.HTMLProps<HTMLDivElement> {
+export interface Props extends React.ComponentPropsWithoutRef<'div'> {
   icon: IconName;
   title: string;
 }

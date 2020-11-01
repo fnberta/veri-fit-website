@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { IconButton } from '@veri-fit/common-ui';
 import Portal from './Portal';
 
-export interface Props extends React.HTMLProps<HTMLDialogElement> {
+export interface Props extends React.ComponentPropsWithoutRef<'dialog'> {
   open: boolean;
   onCancel: () => void;
 }
@@ -81,7 +81,7 @@ const Dialog: React.FC<Props> = ({ open, onCancel, children, className, ...rest 
 
 export default Dialog;
 
-export interface DialogHeaderProps extends React.HTMLProps<HTMLDivElement> {
+export interface DialogHeaderProps extends React.ComponentPropsWithoutRef<'div'> {
   title: string;
   onCloseClick: React.MouseEventHandler;
 }
@@ -91,18 +91,11 @@ export const DialogHeader: React.FC<DialogHeaderProps> = ({ title, onCloseClick,
     <h1 id="dialog-header" className="text-2xl font-semibold">
       {title}
     </h1>
-    <IconButton
-      className="hover:bg-gray-200 active:bg-gray-400"
-      color="none"
-      icon="x"
-      title="Schliessen"
-      aria-label="Schliessen"
-      onClick={onCloseClick}
-    />
+    <IconButton shape="text" icon="x" label="Schliessen" onClick={onCloseClick} />
   </header>
 );
 
-export const DialogFooter: React.FC<React.HTMLProps<HTMLDivElement>> = ({ children, className, ...rest }) => (
+export const DialogFooter: React.FC<React.ComponentPropsWithoutRef<'div'>> = ({ children, className, ...rest }) => (
   <footer className={cx('bg-gray-100', className)} {...rest}>
     {children}
   </footer>
