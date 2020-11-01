@@ -1,6 +1,6 @@
-import { ErrorMessage, Field, Form, Formik, FormikHelpers } from 'formik';
+import { Form, Formik, FormikHelpers } from 'formik';
 import React, { useState } from 'react';
-import { BotField, Button, makeValidator, InputField, urlEncode } from '@veri-fit/common-ui';
+import { BotField, Button, InputField, makeValidator, TextAreaField, urlEncode } from '@veri-fit/common-ui';
 import Notification, { NotificationType } from '../Notification';
 import BulletItem from './BulletItem';
 
@@ -108,6 +108,7 @@ const ContactMe: React.FC = () => {
                   validate={makeValidator('Name')}
                   disabled={isSubmitting}
                   label="Name"
+                  dark={true}
                 />
                 <InputField
                   className="w-64 ml-4 mt-4 flex-auto"
@@ -116,19 +117,17 @@ const ContactMe: React.FC = () => {
                   validate={makeValidator('Email')}
                   disabled={isSubmitting}
                   label="Email"
+                  dark={true}
                 />
-                <label className="w-full ml-4 mt-4 form-field">
-                  <span className="text-white form-label">Nachricht</span>
-                  <Field
-                    className="form-textarea"
-                    as="textarea"
-                    name="message"
-                    placeholder="Wie kann ich dir helfen?"
-                    validate={makeValidator('Nachricht')}
-                    disabled={isSubmitting}
-                  />
-                  <ErrorMessage name="message">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
-                </label>
+                <TextAreaField
+                  className="w-full ml-4 mt-4"
+                  name="message"
+                  label="Nachricht"
+                  placeholder="Wie kann ich dir helfen?"
+                  validate={makeValidator('Nachricht')}
+                  disabled={isSubmitting}
+                  dark={true}
+                />
                 <Button className="ml-4 mt-4" type="submit" color="orange" loading={isSubmitting} disabled={!isValid}>
                   Senden
                 </Button>

@@ -2,7 +2,7 @@
 order: 1
 title: Yoga
 subtitle: Stark und beweglich
-image: /assets/yoga.jpg
+image: /yoga.jpg
 prices:
   - price: 30
     type: 1

@@ -1,4 +1,5 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
+const tailwindUiPlugin = require('@tailwindcss/ui');
 
 module.exports = {
   purge: ['./src/**/*.tsx'],
@@ -10,7 +11,7 @@ module.exports = {
     },
   },
   variants: {},
-  plugins: [require('@tailwindcss/ui')],
+  plugins: [tailwindUiPlugin],
   future: {
     removeDeprecatedGapUtilities: true,
     purgeLayersByDefault: true,

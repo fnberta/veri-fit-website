@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc -b && gatsby build",
-    "dev": "gatsby develop -H 0.0.0.0",
+    "dev": "GATSBY_HOT_LOADER=fast-refresh gatsby develop -H 0.0.0.0",
     "serve": "gatsby serve",
     "typecheck": "tsc --noEmit",
     "test": "jest",

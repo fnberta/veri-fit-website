@@ -2,7 +2,7 @@
 order: 2
 title: HIIT
 subtitle: High Intensity Interval Training
-image: /assets/hiit.jpg
+image: /hiit.jpg
 prices:
   - price: 5
     type: 1
