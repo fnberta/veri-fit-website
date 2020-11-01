@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { ErrorMessage, Field, Form, Formik, FormikHelpers } from 'formik';
-import { BotField, Button, makeValidator, urlEncode } from '@veri-fit/common-ui';
+import { Field, Form, Formik, FormikHelpers } from 'formik';
+import { BotField, Button, InputField, makeValidator, TextAreaField, urlEncode } from '@veri-fit/common-ui';
 import Notification, { NotificationType } from '../Notification';
 
 export interface Video {
@@ -99,36 +99,32 @@ const Current: React.FC<Props> = ({ videos }) => {
                   })}
                 </ul>
               </fieldset>
-              <label className="form-field mt-4 flex-auto">
-                <span className="form-label text-white">
-                  Dein Wunschtraining ist noch nicht auf der Liste? Beschreibe was du dir wünschst!
-                </span>
-                <Field className="form-textarea h-full" as="textarea" name="message" disabled={isSubmitting} />
-                <ErrorMessage name="message">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
-              </label>
+              <TextAreaField
+                className="mt-4 flex-auto"
+                name="message"
+                disabled={isSubmitting}
+                label="Dein Wunschtraining ist noch nicht auf der Liste? Beschreibe was du dir wünschst!"
+                dark={true}
+              />
               <div className="-ml-4 flex flex-wrap">
-                <label className="form-field w-64 ml-4 mt-4 flex-auto">
-                  <span className="form-label text-white">Name</span>
-                  <Field
-                    className="form-input"
-                    type="text"
-                    name="name"
-                    validate={makeValidator('Name')}
-                    disabled={isSubmitting}
-                  />
-                  <ErrorMessage name="name">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
-                </label>
-                <label className="form-field w-64 ml-4 mt-4 flex-auto">
-                  <span className="form-label text-white">Email</span>
-                  <Field
-                    className="form-input"
-                    type="email"
-                    name="email"
-                    validate={makeValidator('Email')}
-                    disabled={isSubmitting}
-                  />
-                  <ErrorMessage name="email">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
-                </label>
+                <InputField
+                  className="w-64 ml-4 mt-4 flex-auto"
+                  type="text"
+                  name="name"
+                  validate={makeValidator('Name')}
+                  disabled={isSubmitting}
+                  label="Name"
+                  dark={true}
+                />
+                <InputField
+                  className="w-64 ml-4 mt-4 flex-auto"
+                  type="email"
+                  name="email"
+                  validate={makeValidator('Email')}
+                  disabled={isSubmitting}
+                  label="Name"
+                  dark={true}
+                />
               </div>
               <Button
                 className="mt-4 self-start"

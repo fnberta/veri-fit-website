@@ -1,7 +1,7 @@
-import type { Unsubscribe, User, auth } from 'firebase';
+import firebase from 'firebase/app';
 
 export default class AuthRepository {
-  constructor(private readonly auth: auth.Auth, private readonly provider: auth.AuthProvider) {}
+  constructor(private readonly auth: firebase.auth.Auth, private readonly provider: firebase.auth.AuthProvider) {}
 
   async signIn() {
     await this.auth.signInWithRedirect(this.provider);
@@ -11,11 +11,11 @@ export default class AuthRepository {
     return this.auth.getRedirectResult();
   }
 
-  async singOut() {
+  async signOut() {
     await this.auth.signOut();
   }
 
-  observeAuthState(onChange: (user: User | null) => void): Unsubscribe {
+  observeAuthState(onChange: (user: firebase.User | null) => void): firebase.Unsubscribe {
     return this.auth.onAuthStateChanged(onChange);
   }
 }

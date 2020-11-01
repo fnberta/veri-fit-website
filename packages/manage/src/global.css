@@ -12,12 +12,11 @@
   #root {
     @apply h-full w-full flex flex-col overflow-hidden;
   }
-}
 
-@layer components {
   dialog {
     @apply absolute inset-0 h-auto w-auto p-0 flex items-center justify-center bg-transparent overflow-hidden text-gray-900;
   }
+
   @screen sm {
     dialog {
       @apply p-4;
@@ -26,21 +25,27 @@
   dialog:not([open]) {
     @apply hidden;
   }
+
   dialog[open] {
     animation: dialog-show 0.2s cubic-bezier(0, 0, 0.2, 1) normal;
   }
+
   dialog::backdrop {
     @apply bg-gray-900 pointer-events-none opacity-75;
   }
+
   dialog + .backdrop {
     @apply fixed inset-0 bg-gray-900 pointer-events-none opacity-75;
   }
+
   ._dialog_overlay {
     @apply fixed inset-0;
   }
+
   dialog[open]::backdrop {
     animation: dialog-backdrop-show 0.2s cubic-bezier(0, 0, 0.2, 1) normal;
   }
+
   dialog[open] + .backdrop {
     animation: dialog-backdrop-show 0.2s cubic-bezier(0, 0, 0.2, 1) normal;
   }
@@ -49,6 +54,28 @@
     @apply overflow-auto flex-grow;
   }
 
+  @keyframes dialog-show {
+    from {
+      @apply opacity-0;
+      transform: scale(0.6);
+    }
+    to {
+      @apply opacity-100;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes dialog-backdrop-show {
+    from {
+      @apply opacity-0;
+    }
+    to {
+      @apply opacity-75;
+    }
+  }
+}
+
+@layer components {
   .tag {
     @apply inline-block px-2 rounded-full text-xs font-semibold uppercase tracking-wider;
   }
@@ -67,27 +94,5 @@
 
   .tag-red {
     @apply bg-red-200 text-red-800;
-  }
-}
-
-@layer utitlies {
-  @keyframes dialog-show {
-    from {
-      @apply opacity-0;
-      transform: scale(0.9);
-    }
-    to {
-      @apply opacity-100;
-      transform: scale(1);
-    }
-  }
-
-  @keyframes dialog-backdrop-show {
-    from {
-      @apply opacity-0;
-    }
-    to {
-      @apply opacity-75;
-    }
   }
 }

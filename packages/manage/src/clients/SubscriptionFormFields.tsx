@@ -1,6 +1,7 @@
 import { ErrorMessage, Field, FormikErrors, getIn, useFormikContext } from 'formik';
 import React, { useEffect, useRef } from 'react';
 import { SubscriptionType, TrainingType } from '@veri-fit/common';
+import { InputField, SelectField } from '@veri-fit/common-ui';
 import { getEndDate, isValidISOString } from '../dateTime';
 import { getSubscriptionName, getTrainingName } from '../displayNames';
 import { SubscriptionInput } from '../repositories/ClientRepository';
@@ -165,74 +166,43 @@ const SubscriptionFormFields: React.FC<Props> = ({ trainingTypes, namespace, dis
 
   return (
     <>
-      <label className="form-field">
-        <span className="form-label">Trainings-Typ</span>
-        <Field className="form-select w-full" as="select" name={withNamespace('trainingType')}>
-          {trainingTypes.map((trainingType) => (
-            <option key={trainingType} value={trainingType}>
-              {getTrainingName(trainingType as TrainingType)}
+      <SelectField name={withNamespace('trainingType')} label="Trainings-Typ">
+        {trainingTypes.map((trainingType) => (
+          <option key={trainingType} value={trainingType}>
+            {getTrainingName(trainingType as TrainingType)}
+          </option>
+        ))}
+      </SelectField>
+      <div className="flex space-x-2">
+        <SelectField className="w-2/3" label="Abo-Typ" name={withNamespace('type')}>
+          {validSubscriptionTypes[trainingType].map((type) => (
+            <option key={type} value={type}>
+              {getSubscriptionName(type)}
             </option>
           ))}
-        </Field>
-        <ErrorMessage name={withNamespace('trainingType')}>
-          {(error) => <span className="form-error">{error}</span>}
-        </ErrorMessage>
-      </label>
-      <div className="mt-2 flex">
-        <label className="form-field w-2/3">
-          <span className="form-label">Abo-Typ</span>
-          <Field className="form-select" as="select" name={withNamespace('type')}>
-            {validSubscriptionTypes[trainingType].map((type) => (
-              <option key={type} value={type}>
-                {getSubscriptionName(type)}
-              </option>
-            ))}
-          </Field>
-          <ErrorMessage name={withNamespace('type')}>
-            {(error) => <span className="form-error">{error}</span>}
-          </ErrorMessage>
-        </label>
+        </SelectField>
         {type !== SubscriptionType.BLOCK && (
-          <label className="form-field ml-2 flex-1">
-            <span className="form-label">Trainings übrig</span>
-            <Field
-              className="form-input w-full"
-              type="number"
-              name={withNamespace('trainingsLeft')}
-              disabled={disabled}
-            />
-            <ErrorMessage name={withNamespace('trainingsLeft')}>
-              {(error) => <span className="form-error">{error}</span>}
-            </ErrorMessage>
-          </label>
+          <InputField
+            className="flex-1"
+            type="number"
+            name={withNamespace('trainingsLeft')}
+            disabled={disabled}
+            label="Trainings übrig"
+          />
         )}
       </div>
-      <label className="form-field mt-2">
-        <span className="form-label">Startpunkt</span>
-        <Field className="form-input w-full" type="date" name={withNamespace('start')} disabled={disabled} />
-        <ErrorMessage name={withNamespace('start')}>
-          {(error) => <span className="form-error">{error}</span>}
-        </ErrorMessage>
-      </label>
-      <fieldset className="form-field mt-2">
+      <InputField type="date" name={withNamespace('start')} disabled={disabled} label="Startpunkt" />
+      <fieldset className="form-field">
         <legend className="form-label">Kosten</legend>
-        <label className="inline-flex items-center">
+        <label className="inline-flex items-center space-x-2">
           <Field className="form-checkbox" type="checkbox" name={withNamespace('paid')} disabled={disabled} />
-          <span className="ml-2 text-base">{' Bereits bezahlt'}</span>
+          <span className="text-base">{' Bereits bezahlt'}</span>
         </label>
         <ErrorMessage name={withNamespace('paid')}>
           {(error) => <span className="form-error">{error}</span>}
         </ErrorMessage>
       </fieldset>
-      {paid && (
-        <label className="form-field mt-2">
-          <span className="form-label">Bezahlt am</span>
-          <Field className="form-input w-full" type="date" name={withNamespace('paidAt')} disabled={disabled} />
-          <ErrorMessage name={withNamespace('paidAt')}>
-            {(error) => <span className="form-error">{error}</span>}
-          </ErrorMessage>
-        </label>
-      )}
+      {paid && <InputField type="date" name={withNamespace('paidAt')} disabled={disabled} label="Bezahlt am" />}
     </>
   );
 };

@@ -5,35 +5,26 @@ import {
   ButtonContent,
   ButtonContentProps,
   ButtonStyleProps,
-  getButtonShapeColorClasses,
-  getButtonSizeClasses,
+  getButtonStyleClasses,
   IconButtonContentProps,
 } from '@veri-fit/common-ui';
 
-export type LinkButtonProps<T> = LinkProps<T> & ButtonStyleProps & ButtonContentProps;
+export type LinkButtonProps<T> = LinkProps<T> & ButtonStyleProps & Omit<ButtonContentProps, 'loading'>;
 
-export function LinkButton<T>({ color, shape, size, icon, loading, children, className, ...rest }: LinkButtonProps<T>) {
+export function LinkButton<T>({ shape, color, size, icon, children, className, ...rest }: LinkButtonProps<T>) {
   return (
-    <Link<T>
-      className={cx('btn', getButtonSizeClasses(size), getButtonShapeColorClasses(color, shape), className)}
-      {...rest}
-    >
-      <ButtonContent icon={icon} loading={loading}>
-        {children}
-      </ButtonContent>
+    <Link<T> className={cx(getButtonStyleClasses({ shape, color, size }), className)} {...rest}>
+      <ButtonContent icon={icon}>{children}</ButtonContent>
     </Link>
   );
 }
 
-export type LinkIconButtonProps<T> = LinkProps<T> & ButtonStyleProps & IconButtonContentProps;
+export type LinkIconButtonProps<T> = LinkProps<T> & ButtonStyleProps & Omit<IconButtonContentProps, 'loading'>;
 
-export function LinkIconButton<T>({ color, shape, size, icon, loading, className, ...rest }: LinkIconButtonProps<T>) {
+export function LinkIconButton<T>({ shape, color, size, icon, label, className, ...rest }: LinkIconButtonProps<T>) {
   return (
-    <Link<T>
-      className={cx('btn', getButtonSizeClasses(size), getButtonShapeColorClasses(color, shape), className)}
-      {...rest}
-    >
-      <ButtonContent icon={icon} loading={loading} />
+    <Link<T> aria-label={label} className={cx(getButtonStyleClasses({ shape, color, size }), className)} {...rest}>
+      <ButtonContent icon={icon} />
     </Link>
   );
 }

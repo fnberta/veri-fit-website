@@ -1,6 +1,6 @@
-import { ErrorMessage, Field, FormikErrors } from 'formik';
+import { FormikErrors } from 'formik';
 import React from 'react';
-import { makeValidator } from '@veri-fit/common-ui';
+import { makeValidator, InputField } from '@veri-fit/common-ui';
 import { getToday, isValidISOString } from '../dateTime';
 import { ClientInput } from '../repositories/ClientRepository';
 
@@ -74,65 +74,33 @@ export function getClientInput(values: ClientFormValues): ClientInput {
 
 const ClientFormFields: React.FC<Props> = ({ disabled }) => (
   <>
-    <div className="p-4">
+    <div className="p-4 space-y-4">
       <h2 className="text-base font-semibold">Persönlich</h2>
-      <div className="mt-4">
-        <label className="form-field">
-          <span className="form-label">Name</span>
-          <Field
-            className="form-input w-full"
-            type="text"
-            name="name"
-            placeholder="Yoga Gott"
-            validate={makeValidator('Name')}
-            disabled={disabled}
-          />
-          <ErrorMessage name="name">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
-        </label>
-        <label className="form-field mt-3">
-          <span className="form-label">Geburtstag</span>
-          <Field className="form-input w-full" type="date" name="birthday" max={getToday()} disabled={disabled} />
-          <ErrorMessage name="birthday">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
-        </label>
+      <div className="space-y-3">
+        <InputField
+          name="name"
+          type="text"
+          placeholder="Yoga Gott"
+          disabled={disabled}
+          label="Name"
+          validate={makeValidator('Name')}
+        />
+        <InputField name="birthday" type="date" max={getToday()} disabled={disabled} label="Geburtstag" />
       </div>
     </div>
     <hr className="my-2" />
-    <div className="p-4">
+    <div className="p-4 space-y-4">
       <h2 className="text-base font-semibold">Kontakt</h2>
-      <div className="mt-4">
-        <label className="form-field">
-          <span className="form-label">Email</span>
-          <Field className="form-input w-full" type="email" name="email" disabled={disabled} />
-          <ErrorMessage name="email">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
-        </label>
-        <label className="form-field mt-2">
-          <span className="form-label">Telefon</span>
-          <Field className="form-input w-full" type="tel" name="phone" disabled={disabled} />
-          <ErrorMessage name="phone">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
-        </label>
-        <div className="mt-2 flex">
-          <label className="form-field flex-1">
-            <span className="form-label">Strasse</span>
-            <Field className="form-input w-full" type="text" name="address.street" disabled={disabled} />
-            <ErrorMessage name="address.street">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
-          </label>
-          <label className="form-field ml-2 w-1/3">
-            <span className="form-label">Hausnummer</span>
-            <Field className="form-input w-full" type="text" name="address.number" disabled={disabled} />
-            <ErrorMessage name="address.number">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
-          </label>
+      <div className="space-y-2">
+        <InputField name="email" type="email" disabled={disabled} label="Email" />
+        <InputField name="phone" type="tel" disabled={disabled} label="Telefon" />
+        <div className="flex space-x-2">
+          <InputField className="flex-1" name="address.street" type="text" disabled={disabled} label="Strasse" />
+          <InputField className="w-1/3" name="address.number" type="text" disabled={disabled} label="Hausnummer" />
         </div>
-        <div className="mt-2 flex">
-          <label className="form-field w-1/3">
-            <span className="form-label">PLZ</span>
-            <Field className="form-input w-full" type="text" name="address.zip" disabled={disabled} />
-            <ErrorMessage name="address.zip">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
-          </label>
-          <label className="form-field ml-2 flex-1">
-            <span className="form-label">Stadt</span>
-            <Field className="form-input w-full" type="text" name="address.city" disabled={disabled} />
-            <ErrorMessage name="address.city">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
-          </label>
+        <div className="flex space-x-2">
+          <InputField className="w-1/3" name="address.zip" type="text" disabled={disabled} label="PLZ" />
+          <InputField className="flex-1" name="address.city" type="text" disabled={disabled} label="Stadt" />
         </div>
       </div>
     </div>

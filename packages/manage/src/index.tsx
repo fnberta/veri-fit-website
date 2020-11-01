@@ -1,13 +1,15 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import * as firebase from 'firebase/app';
-import ManageApp from './ManageApp';
+import firebase from 'firebase/app';
+import App from './App';
 import { RepoContext } from './repositories/RepoContext';
 import ClientRepository from './repositories/ClientRepository';
 import SessionRepository from './repositories/SessionRepository';
 import TrainingRepository from './repositories/TrainingRepository';
 import AuthRepository from './repositories/AuthRepository';
+import ErrorBoundary from './ErrorBoundary';
+
 import 'firebase/firestore';
 import 'firebase/auth';
 import 'firebase/functions';
@@ -30,11 +32,9 @@ const db = app.firestore();
 const functions = app.functions();
 
 if (window.location.hostname === 'localhost') {
-  db.settings({
-    host: 'localhost:8080',
-    ssl: false,
-  });
-  functions.useFunctionsEmulator('http://localhost:5001');
+  // auth.useEmulator('http://localhost:9099')
+  db.useEmulator('localhost', 8080);
+  functions.useEmulator('localhost', 5001);
 }
 
 const clientRepo = new ClientRepository(db);
@@ -51,7 +51,9 @@ const repos = {
 const root = (
   <BrowserRouter>
     <RepoContext.Provider value={repos}>
-      <ManageApp />
+      <ErrorBoundary>
+        <App />
+      </ErrorBoundary>
     </RepoContext.Provider>
   </BrowserRouter>
 );

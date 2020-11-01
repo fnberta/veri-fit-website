@@ -8,7 +8,7 @@ const Hero: React.FC = () => (
   >
     <header className="relative p-12 md:px-24 lg:px-32">
       <h1 className="sr-only">Veri-Fit</h1>
-      <p className="text-4xl lg:text-5xl text-white leading-tight">
+      <p className="text-4xl lg:text-5xl text-white">
         Tone your body,
         <br />
         calm your mind,

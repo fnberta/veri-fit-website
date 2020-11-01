@@ -50,12 +50,11 @@ const EditClientDialogContent: React.FC<Props> = ({ client, onClientUpdated, onC
             <Form className="dialog-body">
               <ClientFormFields disabled={isSubmitting} />
             </Form>
-            <DialogFooter className="flex justify-end p-4">
+            <DialogFooter className="flex justify-end p-4 space-x-2">
               <Button disabled={isSubmitting} onClick={onCancelClick}>
                 Verwerfen
               </Button>
               <Button
-                className="ml-2"
                 type="submit"
                 color="orange"
                 loading={isSubmitting}

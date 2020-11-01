@@ -10,7 +10,7 @@ import { useRepos } from '../repositories/RepoContext';
 import EditClientDialogContent from './EditClientDialogContent';
 import AddSubscriptionDialogContent from './AddSubscriptionDialogContent';
 
-export interface Props extends React.HTMLProps<HTMLDivElement> {
+export interface Props extends React.ComponentPropsWithoutRef<'div'> {
   client: Client;
 }
 
@@ -36,41 +36,24 @@ const SubscriptionSummary: React.FC<{
           <p className="text-xs text-gray-600 uppercase tracking-wider">{getSubscriptionName(subscription.type)}</p>
           <h3 className="text-base font-semibold">{getTrainingName(subscription.trainingType)}</h3>
         </header>
-        <div>
+        <div className="button-group">
           {subscription.paidAt == null && (
             <IconButton
-              className="rounded-none rounded-l"
               shape="outlined"
               size="small"
               icon="currency-yen"
-              title="Auf bezahlt setzen"
-              aria-label="Auf bezahlt setzen"
+              label="Auf bezahlt setzen"
               onClick={onSetPaidClick}
             />
           )}
           {active ? (
-            <IconButton
-              className="rounded-none rounded-r -ml-px"
-              shape="outlined"
-              size="small"
-              icon="trash"
-              title="Abo löschen"
-              aria-label="Abo löschen"
-              onClick={onDeleteClick}
-            />
+            <IconButton shape="outlined" size="small" icon="trash" label="Abo löschen" onClick={onDeleteClick} />
           ) : (
-            <IconButton
-              className="rounded-none rounded-r -ml-px"
-              shape="outlined"
-              size="small"
-              icon="document-duplicate"
-              title="Erneuern"
-              aria-label="Erneuern"
-            />
+            <IconButton shape="outlined" size="small" icon="document-duplicate" label="Erneuern" />
           )}
         </div>
       </div>
-      <div className="mt-2">
+      <div>
         {subscription.type === SubscriptionType.SINGLE || subscription.type === SubscriptionType.UNLIMITED_10 ? (
           <div className="text-sm">
             {'Gültig ab '}
@@ -94,12 +77,12 @@ const SubscriptionSummary: React.FC<{
           </div>
         )}
       </div>
-      <div className="mt-2 -ml-1">
-        {active ? <div className="ml-1 tag tag-blue">Aktiv</div> : <div className="tag tag-red">Abgelaufen</div>}
+      <div className="space-x-1">
+        {active ? <div className="tag tag-blue">Aktiv</div> : <div className="tag tag-red">Abgelaufen</div>}
         {subscription.paidAt ? (
-          <div className="ml-1 tag tag-green">{`Bezahlt am ${formatLocale(subscription.paidAt)}`}</div>
+          <div className="tag tag-green">{`Bezahlt am ${formatLocale(subscription.paidAt)}`}</div>
         ) : (
-          <div className="ml-1 tag tag-red">Unbezahlt</div>
+          <div className="tag tag-red">Unbezahlt</div>
         )}
       </div>
     </>
@@ -165,12 +148,12 @@ const ClientDetails: React.FC<Props> = ({ client, className, ...rest }) => {
             </Button>
           </div>
         </div>
-        <div className="mt-6 ml-6">
+        <div className="mt-6 ml-6 space-y-2">
           <h2 className="text-xl font-semibold">Abos</h2>
-          <div className="mt-2">
+          <div className="space-y-2">
             <ul className="h-56 px-2 border overflow-auto divide-y">
               {subscriptions.map((subscription) => (
-                <li key={subscription.id} className="py-4 px-2">
+                <li key={subscription.id} className="py-4 px-2 space-y-2">
                   <SubscriptionSummary
                     subscription={subscription}
                     onSetPaidClick={async () => {
@@ -184,19 +167,14 @@ const ClientDetails: React.FC<Props> = ({ client, className, ...rest }) => {
                 </li>
               ))}
             </ul>
-            <Button
-              className="mt-2"
-              size="small"
-              icon="document-add"
-              onClick={() => setClientDialog({ type: 'SUBSCRIPTION_ADD' })}
-            >
+            <Button size="small" icon="document-add" onClick={() => setClientDialog({ type: 'SUBSCRIPTION_ADD' })}>
               Hinzufügen
             </Button>
           </div>
         </div>
-        <div className="mt-6 ml-6 flex-auto">
+        <div className="mt-6 ml-6 flex-auto space-y-2">
           <h2 className="text-xl font-semibold">Trainingszeiten</h2>
-          <div className="mt-2">
+          <div>
             {trainings.length > 0 ? (
               <table className="w-full table table-auto">
                 <thead>
@@ -219,9 +197,9 @@ const ClientDetails: React.FC<Props> = ({ client, className, ...rest }) => {
             )}
           </div>
         </div>
-        <div className="mt-6 ml-6 flex-auto">
+        <div className="mt-6 ml-6 flex-auto space-y-2">
           <h2 className="text-xl font-semibold">Anwesenheit</h2>
-          <div className="mt-2">
+          <div>
             {sessions.length > 0 ? (
               <table className="w-full table table-auto">
                 <thead>

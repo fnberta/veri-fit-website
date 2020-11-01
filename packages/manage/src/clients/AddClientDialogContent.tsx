@@ -81,9 +81,9 @@ const AddClientDialogContent: React.FC<Props> = ({ onClientCreated, onCancelClic
             <Form className="dialog-body">
               <ClientFormFields disabled={isSubmitting} />
               <hr className="my-2" />
-              <div className="p-4">
+              <div className="p-4 space-y-4">
                 <h2 className="text-base font-semibold">Abo</h2>
-                <div className="mt-4">
+                <div className="space-y-2">
                   <SubscriptionFormFields
                     trainingTypes={trainingTypes}
                     namespace="subscription"
@@ -92,18 +92,11 @@ const AddClientDialogContent: React.FC<Props> = ({ onClientCreated, onCancelClic
                 </div>
               </div>
             </Form>
-            <DialogFooter className="p-4 flex justify-end">
+            <DialogFooter className="p-4 flex justify-end space-x-2">
               <Button disabled={isSubmitting} onClick={onCancelClick}>
                 Verwerfen
               </Button>
-              <Button
-                className="ml-2"
-                type="submit"
-                color="orange"
-                loading={isSubmitting}
-                disabled={!isValid}
-                onClick={submitForm}
-              >
+              <Button type="submit" color="orange" loading={isSubmitting} disabled={!isValid} onClick={submitForm}>
                 Erstellen
               </Button>
             </DialogFooter>

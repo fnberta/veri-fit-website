@@ -1,6 +1,6 @@
-import { ErrorMessage, Field, Form, Formik, FormikHelpers } from 'formik';
+import { Form, Formik, FormikHelpers } from 'formik';
 import React, { useState } from 'react';
-import { BotField, Button, makeValidator, urlEncode } from '@veri-fit/common-ui';
+import { BotField, Button, InputField, makeValidator, TextAreaField, urlEncode } from '@veri-fit/common-ui';
 import Notification, { NotificationType } from '../Notification';
 import BulletItem from './BulletItem';
 
@@ -101,40 +101,33 @@ const ContactMe: React.FC = () => {
                 netlify-honeypot="bot-field"
               >
                 <BotField />
-                <label className="w-64 ml-4 mt-4 flex-auto form-field">
-                  <span className="text-white form-label">Name</span>
-                  <Field
-                    className="form-input"
-                    type="text"
-                    name="name"
-                    validate={makeValidator('Name')}
-                    disabled={isSubmitting}
-                  />
-                  <ErrorMessage name="name">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
-                </label>
-                <label className="w-64 ml-4 mt-4 flex-auto form-field">
-                  <span className="text-white form-label">Email</span>
-                  <Field
-                    className="form-input"
-                    type="email"
-                    name="email"
-                    validate={makeValidator('Email')}
-                    disabled={isSubmitting}
-                  />
-                  <ErrorMessage name="email">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
-                </label>
-                <label className="w-full ml-4 mt-4 form-field">
-                  <span className="text-white form-label">Nachricht</span>
-                  <Field
-                    className="form-textarea"
-                    as="textarea"
-                    name="message"
-                    placeholder="Wie kann ich dir helfen?"
-                    validate={makeValidator('Nachricht')}
-                    disabled={isSubmitting}
-                  />
-                  <ErrorMessage name="message">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
-                </label>
+                <InputField
+                  className="w-64 ml-4 mt-4 flex-auto "
+                  type="text"
+                  name="name"
+                  validate={makeValidator('Name')}
+                  disabled={isSubmitting}
+                  label="Name"
+                  dark={true}
+                />
+                <InputField
+                  className="w-64 ml-4 mt-4 flex-auto"
+                  type="email"
+                  name="email"
+                  validate={makeValidator('Email')}
+                  disabled={isSubmitting}
+                  label="Email"
+                  dark={true}
+                />
+                <TextAreaField
+                  className="w-full ml-4 mt-4"
+                  name="message"
+                  label="Nachricht"
+                  placeholder="Wie kann ich dir helfen?"
+                  validate={makeValidator('Nachricht')}
+                  disabled={isSubmitting}
+                  dark={true}
+                />
                 <Button className="ml-4 mt-4" type="submit" color="orange" loading={isSubmitting} disabled={!isValid}>
                   Senden
                 </Button>

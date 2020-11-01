@@ -1,11 +1,26 @@
 import cx from 'classnames';
 import React, { isValidElement } from 'react';
-import Icon, { IconName } from './Icon';
+import Icon, { IconName, Props as IconProps } from './Icon';
 
 export interface ButtonStyleProps {
+  shape?: 'filled' | 'outlined' | 'text';
   color?: 'gray' | 'orange' | 'red' | 'none';
-  shape?: 'filled' | 'outlined';
-  size?: 'small' | 'medium' | 'large' | 'huge' | 'none';
+  size?: 'small' | 'medium' | 'large' | 'huge';
+}
+
+export function getButtonStyleClasses({ shape = 'filled', color = 'gray', size = 'medium' }: ButtonStyleProps): string {
+  return cx('button', {
+    ['button-filled']: shape === 'filled',
+    ['button-outlined']: shape === 'outlined',
+    ['button-text']: shape === 'text',
+    ['button-gray']: color === 'gray',
+    ['button-orange']: color === 'orange',
+    ['button-red']: color === 'red',
+    ['button-small']: size === 'small',
+    ['button-medium']: size === 'medium',
+    ['button-large']: size === 'large',
+    ['button-huge']: size === 'huge',
+  });
 }
 
 export interface ButtonContentProps {
@@ -14,65 +29,39 @@ export interface ButtonContentProps {
   children?: React.ReactNode;
 }
 
-export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & ButtonStyleProps & ButtonContentProps;
-
-export function getButtonShapeColorClasses(
-  color: ButtonStyleProps['color'] = 'gray',
-  shape: ButtonStyleProps['shape'] = 'filled',
-): string {
-  const shapeClasses = shape === 'outlined' && 'border hover:border-transparent';
-  switch (color) {
-    case 'none':
-      return cx(shapeClasses);
-    case 'gray':
-      return cx('text-gray-700 hover:bg-gray-200 active:bg-gray-400', shapeClasses, {
-        ['bg-gray-300 ']: shape === 'filled',
-        ['border-gray-300']: shape === 'outlined',
-      });
-    case 'orange':
-      return cx('text-white hover:bg-orange-400 active:bg-orange-600', shapeClasses, {
-        ['bg-orange-500 ']: shape === 'filled',
-        ['border-orange-500']: shape === 'outlined',
-      });
-    case 'red':
-      return cx('text-white hover:bg-red-400 active:bg-red-600', shapeClasses, {
-        ['bg-red-500']: shape === 'filled',
-        ['border-red-500']: shape === 'outlined',
-      });
-  }
-}
-
-export function getButtonSizeClasses(size: ButtonStyleProps['size'] = 'medium'): string {
-  switch (size) {
-    case 'none':
-      return '';
+function getIconSize(buttonSize: ButtonStyleProps['size'] = 'medium'): IconProps['size'] {
+  switch (buttonSize) {
     case 'small':
-      return 'text-xs py-1 px-2';
     case 'medium':
-      return 'text-sm py-2 px-4';
+      return 'normal';
     case 'large':
-      return 'text-xl py-3 px-5';
     case 'huge':
-      return 'text-xl py-4 px-8';
+      return 'large';
   }
 }
 
-export const ButtonContent: React.FC<ButtonContentProps> = ({ icon, loading, children }) => {
+export const ButtonContent: React.FC<ButtonContentProps & Pick<ButtonStyleProps, 'size'>> = ({
+  icon,
+  size,
+  loading,
+  children,
+}) => {
   if (loading) {
     return (
       <div className="relative flex justify-center items-center">
         <span className="absolute spinner" />
         <span className="invisible">{children}</span>
+        <span className="sr-only">Laden…</span>
       </div>
     );
   }
 
   if (icon) {
-    const iconElement = isValidElement(icon) ? icon : <Icon name={icon} />;
+    const iconElement = isValidElement(icon) ? icon : <Icon name={icon} size={getIconSize(size)} />;
     return children ? (
-      <div className="flex items-center">
+      <div className="flex items-center space-x-2">
         {iconElement}
-        <span className="ml-2">{children}</span>
+        <span>{children}</span>
       </div>
     ) : (
       iconElement
@@ -82,9 +71,11 @@ export const ButtonContent: React.FC<ButtonContentProps> = ({ icon, loading, chi
   return children as React.ReactElement;
 };
 
+export type ButtonProps = React.ComponentPropsWithoutRef<'button'> & ButtonStyleProps & ButtonContentProps;
+
 export const Button: React.FC<ButtonProps> = ({
-  color,
   shape,
+  color,
   size,
   icon,
   loading,
@@ -94,7 +85,7 @@ export const Button: React.FC<ButtonProps> = ({
   ...rest
 }) => (
   <button
-    className={cx('btn', getButtonSizeClasses(size), getButtonShapeColorClasses(color, shape), className)}
+    className={cx(getButtonStyleClasses({ shape, color, size }), className)}
     disabled={loading || disabled}
     {...rest}
   >
@@ -107,23 +98,26 @@ export const Button: React.FC<ButtonProps> = ({
 export interface IconButtonContentProps {
   icon: IconName | React.ReactElement;
   loading?: boolean;
-  'aria-label': string;
+  label: string;
 }
 
-export type IconButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & ButtonStyleProps & IconButtonContentProps;
+export type IconButtonProps = React.ComponentPropsWithoutRef<'button'> & ButtonStyleProps & IconButtonContentProps;
 
 export const IconButton: React.FC<IconButtonProps> = ({
-  color,
   shape,
+  color,
   size,
   icon,
   loading,
   disabled,
+  label,
   className,
   ...rest
 }) => (
   <button
-    className={cx('btn', getButtonSizeClasses(size), getButtonShapeColorClasses(color, shape), className)}
+    className={cx(getButtonStyleClasses({ shape, color, size }), className)}
+    aria-label={label}
+    title={label}
     disabled={loading || disabled}
     {...rest}
   >
@@ -131,11 +125,11 @@ export const IconButton: React.FC<IconButtonProps> = ({
   </button>
 );
 
-export type AnchorButtonProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & ButtonStyleProps & ButtonContentProps;
+export type AnchorButtonProps = React.ComponentPropsWithoutRef<'a'> & ButtonStyleProps & ButtonContentProps;
 
 export const AnchorButton: React.FC<AnchorButtonProps> = ({
-  color,
   shape,
+  color,
   size,
   icon,
   loading,
@@ -143,7 +137,7 @@ export const AnchorButton: React.FC<AnchorButtonProps> = ({
   className,
   ...rest
 }) => (
-  <a className={cx('btn', getButtonSizeClasses(size), getButtonShapeColorClasses(color, shape), className)} {...rest}>
+  <a className={cx(getButtonStyleClasses({ shape, color, size }), className)} {...rest}>
     <ButtonContent icon={icon} loading={loading}>
       {children}
     </ButtonContent>

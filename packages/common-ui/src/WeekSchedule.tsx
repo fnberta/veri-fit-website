@@ -14,7 +14,7 @@ export interface WeekdayEntry {
   content: React.ReactNode;
 }
 
-export interface Props extends React.HTMLProps<HTMLDivElement> {
+export interface Props extends React.ComponentPropsWithoutRef<'div'> {
   monday: WeekdayEntry[];
   tuesday: WeekdayEntry[];
   wednesday: WeekdayEntry[];

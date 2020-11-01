@@ -2,7 +2,7 @@
 order: 4
 title: BOOST
 subtitle: Funktionelles Krafttraining
-image: /assets/boost_placeholder.jpg
+image: /boost_placeholder.jpg
 prices:
   - price: 100
     type: 1

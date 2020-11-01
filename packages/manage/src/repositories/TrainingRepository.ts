@@ -1,9 +1,9 @@
-import type { Unsubscribe, firestore } from 'firebase';
+import firebase from 'firebase/app';
 import { DateTime } from 'luxon';
 import { Collection, getTimeForId, parseTraining, Training, TrainingInput } from '@veri-fit/common';
 
 export default class TrainingRepository {
-  constructor(private readonly db: firestore.Firestore) {}
+  constructor(private readonly db: firebase.firestore.Firestore) {}
 
   async create(input: TrainingInput): Promise<Training> {
     const { weekday } = DateTime.fromISO(input.runsFrom);
@@ -18,7 +18,7 @@ export default class TrainingRepository {
     return parseTraining(snap);
   }
 
-  observeAllForClients(clientId: string, onChange: (trainings: Training[]) => void): Unsubscribe {
+  observeAllForClients(clientId: string, onChange: (trainings: Training[]) => void): firebase.Unsubscribe {
     return this.db
       .collection(Collection.TRAININGS)
       .where('clientIds', 'array-contains', clientId)

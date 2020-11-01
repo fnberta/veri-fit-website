@@ -2,7 +2,6 @@
 
 const { resolve } = require('path');
 const { createFilePath } = require('gatsby-source-filesystem');
-const { fmImagesToRelative } = require('gatsby-remark-relative-images');
 
 exports.createSchemaCustomization = ({ actions }) => {
   const { createTypes } = actions;
@@ -58,10 +57,6 @@ exports.createPages = async ({ actions, graphql }) => {
 };
 
 exports.onCreateNode = ({ node, getNode, actions }) => {
-  // converts any absolute paths in markdown frontmatter data into relative paths if a matching file is found
-  // needed for netlify cms
-  fmImagesToRelative(node);
-
   const { createNodeField } = actions;
   if (node.internal.type === 'MarkdownRemark') {
     // add source name to be able to filter in queries

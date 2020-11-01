@@ -4,7 +4,7 @@ import { IconButton } from '@veri-fit/common-ui';
 
 export type NotificationType = 'success' | 'error';
 
-export interface Props extends React.HTMLProps<HTMLDivElement> {
+export interface Props extends React.ComponentPropsWithoutRef<'div'> {
   type: NotificationType;
   onCloseClick: React.MouseEventHandler<HTMLButtonElement>;
 }
@@ -43,8 +43,7 @@ const Notification: React.FC<Props> = ({ type, onCloseClick, className, ...rest 
         className={cx('ml-2', classes.close)}
         color="none"
         icon="x"
-        title="Schliessen"
-        aria-label="Schliessen"
+        label="Schliessen"
         onClick={onCloseClick}
       />
     </div>

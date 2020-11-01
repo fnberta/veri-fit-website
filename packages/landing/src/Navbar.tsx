@@ -5,7 +5,7 @@ import Image, { FixedObject } from 'gatsby-image';
 import { Icon, IconButton } from '@veri-fit/common-ui';
 import { LogosQuery } from './generatedGraphQL';
 
-export interface Props extends React.HTMLProps<HTMLDivElement> {
+export interface Props extends React.ComponentPropsWithoutRef<'div'> {
   variant: 'bright' | 'dark' | 'transparent';
   sticky?: boolean;
 }
@@ -74,7 +74,7 @@ const Navbar: React.FC<Props> = ({ variant, sticky, children, className, ...rest
           className={cx('sm:hidden', text)}
           color="none"
           icon={<Icon className="h-6 w-6" name="menu" />}
-          aria-label="Menu"
+          label="Menu"
           aria-expanded={open}
           onClick={() => setOpen((prev) => !prev)}
         />

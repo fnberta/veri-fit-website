@@ -1,16 +1,19 @@
-import { ErrorMessage, Field, FormikErrors, useFormikContext } from 'formik';
+import { ErrorMessage, Field, FieldConfig, FormikErrors, useField, useFormikContext } from 'formik';
 import { DateTime } from 'luxon';
 import React from 'react';
 import { Client, TrainingInput, TrainingType } from '@veri-fit/common';
+import { InputField, SelectField } from '@veri-fit/common-ui';
+import cx from 'classnames';
 import { isValidISOString } from '../dateTime';
 import { getTrainingName } from '../displayNames';
 import { validSubscriptionTypes } from '../subscriptionChecks';
-import ParticipantsSelector from './ParticipantsSelector';
 
 export interface Props {
   clients: Client[];
   disabled: boolean;
 }
+
+const MAX_PARTICIPANTS_SIZE = 5;
 
 export function validateTrainingForm(values: TrainingInput): FormikErrors<TrainingInput> {
   const errors: FormikErrors<TrainingInput> = {};
@@ -45,22 +48,48 @@ export function validateTrainingForm(values: TrainingInput): FormikErrors<Traini
   return errors;
 }
 
+type ParticipantsFieldProps = React.ComponentPropsWithoutRef<'select'> & FieldConfig<string[]> & { clients: Client[] };
+
+const ParticipantsField: React.FC<ParticipantsFieldProps> = (props) => {
+  const [field, meta, { setValue }] = useField(props);
+  const { name, clients, className, ...rest } = props;
+
+  return (
+    <label className={cx('form-field', className)}>
+      <span className="form-label">Teilnehmer</span>
+      <select
+        className="form-multiselect"
+        name={name}
+        multiple={true}
+        size={clients.length > MAX_PARTICIPANTS_SIZE ? MAX_PARTICIPANTS_SIZE : clients.length}
+        value={meta.value}
+        onBlur={field.onBlur}
+        onChange={(e) => setValue(Array.from(e.currentTarget.selectedOptions).map((option) => option.value))}
+        {...rest}
+      >
+        {clients.map((client) => (
+          <option key={client.id} value={client.id}>
+            {client.name}
+          </option>
+        ))}
+      </select>
+      <ErrorMessage name={name}>{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
+    </label>
+  );
+};
+
 const TrainingFormFields: React.FC<Props> = ({ clients, disabled }) => {
   const { values, errors, touched } = useFormikContext<TrainingInput>();
   return (
     <>
+      <SelectField name="type" disabled={disabled} label="Typ">
+        {Object.keys(validSubscriptionTypes).map((trainingType) => (
+          <option key={trainingType} value={trainingType}>
+            {getTrainingName(trainingType as TrainingType)}
+          </option>
+        ))}
+      </SelectField>
       <label className="form-field">
-        <span className="form-label">Typ</span>
-        <Field className="form-select" as="select" name="type" disabled={disabled}>
-          {Object.keys(validSubscriptionTypes).map((trainingType) => (
-            <option key={trainingType} value={trainingType}>
-              {getTrainingName(trainingType as TrainingType)}
-            </option>
-          ))}
-        </Field>
-        <ErrorMessage name="type">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
-      </label>
-      <label className="form-field mt-3">
         <span className="form-label">Startpunkt</span>
         <Field className="form-input" type="date" name="runsFrom" disabled={disabled} />
         {errors.runsFrom && touched.runsFrom ? (
@@ -71,21 +100,9 @@ const TrainingFormFields: React.FC<Props> = ({ clients, disabled }) => {
           } statt.`}</span>
         )}
       </label>
-      <label className="form-field mt-3">
-        <span className="form-label">Startzeit</span>
-        <Field className="form-input" type="time" name="time.start" disabled={disabled} />
-        <ErrorMessage name="time.start">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
-      </label>
-      <label className="form-field mt-3">
-        <span className="form-label">Endzeit</span>
-        <Field className="form-input" type="time" id="end" name="time.end" disabled={disabled} />
-        <ErrorMessage name="time.end">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
-      </label>
-      <label className="form-field mt-3">
-        <span className="form-label">Teilnehmer</span>
-        <ParticipantsSelector name="clientIds" clients={clients} disabled={disabled} />
-        <ErrorMessage name="clientIds">{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
-      </label>
+      <InputField type="time" name="time.start" disabled={disabled} label="Startzeit" />
+      <InputField type="time" name="time.end" disabled={disabled} label="Endzeit" />
+      <ParticipantsField name="clientIds" clients={clients} />
     </>
   );
 };

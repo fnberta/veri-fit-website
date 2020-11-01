@@ -1,11 +1,11 @@
-import type { firestore, Unsubscribe } from 'firebase';
+import firebase from 'firebase/app';
 import { Client, Collection, DistributiveOmit, parseClient, parseSubscription, Subscription } from '@veri-fit/common';
 
 export type ClientInput = Omit<Client, 'id'>;
 export type SubscriptionInput = DistributiveOmit<Subscription, 'id'>;
 
 export default class ClientRepository {
-  constructor(private readonly db: firestore.Firestore) {}
+  constructor(private readonly db: firebase.firestore.Firestore) {}
 
   async create(clientInput: ClientInput, subscriptionInput: SubscriptionInput): Promise<Client> {
     const ref = await this.db.collection(Collection.CLIENTS).add(clientInput);
@@ -15,7 +15,7 @@ export default class ClientRepository {
     return client;
   }
 
-  observeAll(onChange: (clients: Client[]) => void): Unsubscribe {
+  observeAll(onChange: (clients: Client[]) => void): firebase.Unsubscribe {
     return this.db
       .collection(Collection.CLIENTS)
       .orderBy('name', 'asc')
@@ -47,7 +47,7 @@ export default class ClientRepository {
     return parseSubscription(snap);
   }
 
-  observeAllSubscriptions(clientId: string, onChange: (subscriptions: Subscription[]) => void): Unsubscribe {
+  observeAllSubscriptions(clientId: string, onChange: (subscriptions: Subscription[]) => void): firebase.Unsubscribe {
     return this.db
       .collection(Collection.CLIENTS)
       .doc(clientId)

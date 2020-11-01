@@ -33,16 +33,16 @@ const SessionCard: React.FC<Props> = ({ session, clients, onEditClick }) => {
   const hasClientsWithIssues = clientsWithIssues.length > 0;
   return (
     <div className="bg-white rounded overflow-hidden border">
-      <div className="px-4 py-2 flex flex-col items-start">
+      <div className="px-4 py-2 flex flex-col items-start space-y-2">
         <div className="flex flex-col items-start">
           <h5 className="text-xs text-gray-600 uppercase tracking-wider font-semibold">{`${session.time.start} - ${session.time.end}`}</h5>
           <h4 className="text-lg font-semibold leading-tight">{getTrainingName(session.type)}</h4>
         </div>
-        <p className="mt-2  text-sm text-gray-600">{`${session.clientIds.length} Teilnehmer`}</p>
+        <p className=" text-sm text-gray-600">{`${session.clientIds.length} Teilnehmer`}</p>
         {hasClientsWithIssues && (
-          <div className="mt-2 text-xs text-red-600 ">
+          <div className="text-xs text-red-600 space-y-1">
             <p>Folgende Teilnehmer haben kein gültiges Abo:</p>
-            <ul className="mt-1 list-disc list-inside">
+            <ul className="list-disc list-inside">
               {clientsWithIssues.map((client) => (
                 <li key={client.id}>
                   <Link className="font-medium" to={`/clients/${client.id}`}>
@@ -54,7 +54,7 @@ const SessionCard: React.FC<Props> = ({ session, clients, onEditClick }) => {
           </div>
         )}
       </div>
-      <footer className="flex items-center justify-end bg-gray-100 px-4 py-2">
+      <footer className="flex items-center justify-end bg-gray-100 px-4 py-2 space-x-2">
         {!session.confirmed && (
           <Button size="small" disabled={loading} onClick={onEditClick}>
             Bearbeiten
@@ -62,12 +62,11 @@ const SessionCard: React.FC<Props> = ({ session, clients, onEditClick }) => {
         )}
         {session.date <= getToday() &&
           (session.confirmed ? (
-            <Button className="ml-2" size="small" loading={loading} onClick={handleToggleClick}>
+            <Button size="small" loading={loading} onClick={handleToggleClick}>
               Öffnen
             </Button>
           ) : (
             <Button
-              className="ml-2"
               size="small"
               color="orange"
               loading={loading}

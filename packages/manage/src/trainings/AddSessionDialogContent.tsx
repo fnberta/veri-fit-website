@@ -58,21 +58,14 @@ const AddSessionDialogContent: React.FC<Props> = ({ clients, onSessionAdded, onC
       >
         {({ isValid, isSubmitting, submitForm }) => (
           <>
-            <Form className="dialog-body p-4">
+            <Form className="dialog-body p-4 space-y-3">
               <SessionFormFields clients={clients} disabled={isSubmitting} />
             </Form>
-            <DialogFooter className="flex justify-end p-4">
+            <DialogFooter className="flex justify-end p-4 space-x-2">
               <Button disabled={isSubmitting} onClick={onCancelClick}>
                 Verwerfen
               </Button>
-              <Button
-                className="ml-2"
-                type="submit"
-                color="orange"
-                loading={isSubmitting}
-                disabled={!isValid}
-                onClick={submitForm}
-              >
+              <Button type="submit" color="orange" loading={isSubmitting} disabled={!isValid} onClick={submitForm}>
                 Speichern
               </Button>
             </DialogFooter>

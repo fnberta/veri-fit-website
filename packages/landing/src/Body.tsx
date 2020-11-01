@@ -1,7 +1,7 @@
 import React from 'react';
 import cx from 'classnames';
 
-export interface Props extends React.HTMLProps<HTMLDivElement> {
+export interface Props extends React.ComponentPropsWithoutRef<'div'> {
   body: string | Record<string, unknown>;
 }
 

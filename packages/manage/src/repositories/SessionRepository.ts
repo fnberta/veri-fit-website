@@ -1,4 +1,4 @@
-import type { firestore, functions, Unsubscribe } from 'firebase';
+import firebase from 'firebase/app';
 import { DateTime } from 'luxon';
 import {
   ChangeType,
@@ -14,11 +14,11 @@ import {
 } from '@veri-fit/common';
 
 export default class SessionRepository {
-  private readonly createSessions: functions.HttpsCallable;
-  private readonly updateSession: functions.HttpsCallable;
-  private readonly toggleSessionConfirmed: functions.HttpsCallable;
+  private readonly createSessions: firebase.functions.HttpsCallable;
+  private readonly updateSession: firebase.functions.HttpsCallable;
+  private readonly toggleSessionConfirmed: firebase.functions.HttpsCallable;
 
-  constructor(private readonly db: firestore.Firestore, functions: functions.Functions) {
+  constructor(private readonly db: firebase.firestore.Firestore, functions: firebase.functions.Functions) {
     this.createSessions = functions.httpsCallable('createSessions');
     this.updateSession = functions.httpsCallable('updateSession');
     this.toggleSessionConfirmed = functions.httpsCallable('toggleSessionConfirmed');
@@ -56,7 +56,7 @@ export default class SessionRepository {
     return session;
   }
 
-  observeAllForClients(clientId: string, onChange: (sessions: Session[]) => void): Unsubscribe {
+  observeAllForClients(clientId: string, onChange: (sessions: Session[]) => void): firebase.Unsubscribe {
     return this.db
       .collection(Collection.SESSIONS)
       .where('clientIds', 'array-contains', clientId)
@@ -68,7 +68,7 @@ export default class SessionRepository {
       });
   }
 
-  observeAllForWeek(year: number, weekNumber: number, onChange: (sessions: Session[]) => void): Unsubscribe {
+  observeAllForWeek(year: number, weekNumber: number, onChange: (sessions: Session[]) => void): firebase.Unsubscribe {
     const startDate = DateTime.fromObject({ weekYear: year, weekNumber });
     const endDate = startDate.plus({ weeks: 1 });
     return this.db

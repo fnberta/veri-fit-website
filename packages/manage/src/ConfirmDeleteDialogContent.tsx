@@ -12,9 +12,9 @@ const ConfirmDeleteDialogContent: React.FC<Props> = ({ name, onDeleteClick, onCa
   <>
     <DialogHeader title="Löschen bestätigen" onCloseClick={onCancelClick} />
     <p className="dialog-body p-4">{`Bist du sicher, dass du ${name} löschen möchtest?`}</p>
-    <DialogFooter className="flex justify-end p-4">
+    <DialogFooter className="flex justify-end p-4 space-x-2">
       <Button onClick={onCancelClick}>Abbrechen</Button>
-      <Button className="ml-2" color="red" onClick={onDeleteClick}>
+      <Button color="red" onClick={onDeleteClick}>
         Löschen
       </Button>
     </DialogFooter>

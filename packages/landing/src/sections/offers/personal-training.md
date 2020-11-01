@@ -2,7 +2,7 @@
 order: 3
 title: Personal Training
 subtitle: Spezifisch für dich
-image: /assets/kettlebells.jpg
+image: /kettlebells.jpg
 prices:
   - price: 120
     type: 1
