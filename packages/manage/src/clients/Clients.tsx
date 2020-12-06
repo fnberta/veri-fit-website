@@ -1,8 +1,8 @@
 import { Link, useParams } from 'react-router-dom';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { ComponentPropsWithoutRef, FC, MouseEventHandler, ReactNode, useEffect, useMemo, useState } from 'react';
 import cx from 'classnames';
 import { Client } from '@veri-fit/common';
-import { Button } from '@veri-fit/common-ui';
+import { Button, RawInput } from '@veri-fit/common-ui';
 import Dialog from '../Dialog';
 import { useRepos } from '../repositories/RepoContext';
 import { doesSubscriptionRunShort, isSubscriptionExpiring } from '../subscriptionChecks';
@@ -13,10 +13,10 @@ import ClientDetails from './ClientDetails';
 interface ClientsContentProps {
   clients: Client[];
   selectedClientId?: string;
-  onAddUserClick: React.MouseEventHandler;
+  onAddUserClick: MouseEventHandler;
 }
 
-const ClientsContent: React.FC<ClientsContentProps> = ({ clients, selectedClientId, onAddUserClick }) => {
+const ClientsContent: FC<ClientsContentProps> = ({ clients, selectedClientId, onAddUserClick }) => {
   const [filter, setFilter] = useState('');
 
   const filteredClients = useMemo(() => {
@@ -36,8 +36,8 @@ const ClientsContent: React.FC<ClientsContentProps> = ({ clients, selectedClient
       </LinkButton>
       {hasClients ? (
         <>
-          <input
-            className={cx(selectedClient && 'hidden', 'lg:block', 'form-input w-full mt-4')}
+          <RawInput
+            className={cx('lg:block mt-4', selectedClient && 'hidden')}
             type="search"
             aria-label="Kundennamen"
             placeholder="Filtern…"
@@ -55,7 +55,7 @@ const ClientsContent: React.FC<ClientsContentProps> = ({ clients, selectedClient
                 >
                   {filteredClients.map((client) => {
                     const { name, activeSubscriptions } = client;
-                    const tags = [] as React.ReactNode[];
+                    const tags = [] as ReactNode[];
                     if (activeSubscriptions.some((subscription) => subscription.paidAt == null)) {
                       tags.push(
                         <span key="unpaid" className="tag tag-red">
@@ -119,7 +119,7 @@ const ClientsContent: React.FC<ClientsContentProps> = ({ clients, selectedClient
       ) : (
         <div className="flex-auto mt-4 flex flex-col items-center justify-center space-y-4">
           <p className="text-xl text-center">Starte dein Business und füge einen Kunden hinzu.</p>
-          <Button size="large" color="orange" icon="user-add" onClick={onAddUserClick}>
+          <Button size="lg" colorScheme="orange" icon="user-add" onClick={onAddUserClick}>
             Hinzufügen
           </Button>
         </div>
@@ -128,9 +128,9 @@ const ClientsContent: React.FC<ClientsContentProps> = ({ clients, selectedClient
   );
 };
 
-export type Props = React.ComponentPropsWithoutRef<'section'>;
+export type Props = ComponentPropsWithoutRef<'section'>;
 
-const Clients: React.FC<Props> = ({ className, ...rest }) => {
+const Clients: FC<Props> = ({ className, ...rest }) => {
   const [clients, setClients] = useState<Client[]>();
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const { clientRepo } = useRepos();
@@ -139,7 +139,7 @@ const Clients: React.FC<Props> = ({ className, ...rest }) => {
 
   const { clientId } = useParams<{ clientId?: string }>();
   return (
-    <section className={cx('flex bg-gray-100 min-h-0', className)} {...rest}>
+    <section className={cx('flex bg-gray-50 min-h-0', className)} {...rest}>
       <div className="w-full max-w-screen-xl mx-auto py-6 px-4 flex flex-col">
         <header className={cx(clientId ? 'hidden' : 'flex', 'flex-shrink-0 lg:flex justify-between items-baseline')}>
           <h1 className="text-2xl font-semibold">Kunden</h1>

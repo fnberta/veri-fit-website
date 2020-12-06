@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
-import React, { useEffect, useState } from 'react';
-import { Session, Subscription, SubscriptionType, Training, Client } from '@veri-fit/common';
+import React, { ComponentPropsWithoutRef, FC, MouseEventHandler, useEffect, useState } from 'react';
+import { Client, Session, Subscription, SubscriptionType, Training } from '@veri-fit/common';
 import { Button, IconButton } from '@veri-fit/common-ui';
 import Dialog from '../Dialog';
 import ConfirmDeleteDialogContent from '../ConfirmDeleteDialogContent';
@@ -10,7 +10,7 @@ import { useRepos } from '../repositories/RepoContext';
 import EditClientDialogContent from './EditClientDialogContent';
 import AddSubscriptionDialogContent from './AddSubscriptionDialogContent';
 
-export interface Props extends React.ComponentPropsWithoutRef<'div'> {
+export interface Props extends ComponentPropsWithoutRef<'div'> {
   client: Client;
 }
 
@@ -20,11 +20,13 @@ type ClientDialog =
   | { type: 'SUBSCRIPTION_ADD' }
   | { type: 'SUBSCRIPTION_DELETE'; subscription: Subscription };
 
-const SubscriptionSummary: React.FC<{
+interface SummaryProps {
   subscription: Subscription;
-  onSetPaidClick: React.MouseEventHandler;
-  onDeleteClick: React.MouseEventHandler;
-}> = ({ subscription, onSetPaidClick, onDeleteClick }) => {
+  onSetPaidClick: MouseEventHandler;
+  onDeleteClick: MouseEventHandler;
+}
+
+const SubscriptionSummary: FC<SummaryProps> = ({ subscription, onSetPaidClick, onDeleteClick }) => {
   const active =
     subscription.type === SubscriptionType.SINGLE ||
     subscription.type === SubscriptionType.UNLIMITED_10 ||
@@ -40,16 +42,16 @@ const SubscriptionSummary: React.FC<{
           {subscription.paidAt == null && (
             <IconButton
               shape="outlined"
-              size="small"
+              size="sm"
               icon="currency-yen"
               label="Auf bezahlt setzen"
               onClick={onSetPaidClick}
             />
           )}
           {active ? (
-            <IconButton shape="outlined" size="small" icon="trash" label="Abo löschen" onClick={onDeleteClick} />
+            <IconButton shape="outlined" size="sm" icon="trash" label="Abo löschen" onClick={onDeleteClick} />
           ) : (
-            <IconButton shape="outlined" size="small" icon="document-duplicate" label="Erneuern" />
+            <IconButton shape="outlined" size="sm" icon="document-duplicate" label="Erneuern" />
           )}
         </div>
       </div>
@@ -89,7 +91,7 @@ const SubscriptionSummary: React.FC<{
   );
 };
 
-const ClientDetails: React.FC<Props> = ({ client, className, ...rest }) => {
+const ClientDetails: FC<Props> = ({ client, className, ...rest }) => {
   const [subscriptions, setSubscriptions] = useState([] as Subscription[]);
   const [sessions, setSessions] = useState([] as Session[]);
   const [trainings, setTrainings] = useState([] as Training[]);
@@ -134,12 +136,20 @@ const ClientDetails: React.FC<Props> = ({ client, className, ...rest }) => {
             </div>
           </div>
           <div className="-ml-2 flex flex-wrap">
-            <Button className="mt-2 ml-2" size="small" icon="pencil" onClick={() => setClientDialog({ type: 'EDIT' })}>
+            <Button
+              className="mt-2 ml-2"
+              shape="outlined"
+              size="sm"
+              icon="pencil"
+              onClick={() => setClientDialog({ type: 'EDIT' })}
+            >
               Ändern
             </Button>
             <Button
               className="mt-2 ml-2"
-              size="small"
+              size="sm"
+              colorScheme="red"
+              shape="text"
               icon="user-remove"
               disabled={true}
               onClick={() => setClientDialog({ type: 'DELETE' })}
@@ -167,7 +177,7 @@ const ClientDetails: React.FC<Props> = ({ client, className, ...rest }) => {
                 </li>
               ))}
             </ul>
-            <Button size="small" icon="document-add" onClick={() => setClientDialog({ type: 'SUBSCRIPTION_ADD' })}>
+            <Button size="sm" icon="document-add" onClick={() => setClientDialog({ type: 'SUBSCRIPTION_ADD' })}>
               Hinzufügen
             </Button>
           </div>

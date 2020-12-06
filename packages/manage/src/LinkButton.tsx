@@ -11,9 +11,9 @@ import {
 
 export type LinkButtonProps<T> = LinkProps<T> & ButtonStyleProps & Omit<ButtonContentProps, 'loading'>;
 
-export function LinkButton<T>({ shape, color, size, icon, children, className, ...rest }: LinkButtonProps<T>) {
+export function LinkButton<T>({ shape, colorScheme, size, icon, children, className, ...rest }: LinkButtonProps<T>) {
   return (
-    <Link<T> className={cx(getButtonStyleClasses({ shape, color, size }), className)} {...rest}>
+    <Link<T> className={cx(getButtonStyleClasses({ shape, colorScheme, size }), className)} {...rest}>
       <ButtonContent icon={icon}>{children}</ButtonContent>
     </Link>
   );
@@ -21,9 +21,21 @@ export function LinkButton<T>({ shape, color, size, icon, children, className, .
 
 export type LinkIconButtonProps<T> = LinkProps<T> & ButtonStyleProps & Omit<IconButtonContentProps, 'loading'>;
 
-export function LinkIconButton<T>({ shape, color, size, icon, label, className, ...rest }: LinkIconButtonProps<T>) {
+export function LinkIconButton<T>({
+  shape,
+  colorScheme,
+  size,
+  icon,
+  label,
+  className,
+  ...rest
+}: LinkIconButtonProps<T>) {
   return (
-    <Link<T> aria-label={label} className={cx(getButtonStyleClasses({ shape, color, size }), className)} {...rest}>
+    <Link<T>
+      aria-label={label}
+      className={cx(getButtonStyleClasses({ shape, colorScheme, size }), className)}
+      {...rest}
+    >
       <ButtonContent icon={icon} />
     </Link>
   );

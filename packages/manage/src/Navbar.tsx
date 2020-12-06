@@ -1,5 +1,5 @@
 import cx from 'classnames';
-import React, { createContext, useContext, useState } from 'react';
+import React, { ComponentPropsWithoutRef, createContext, FC, useContext, useState } from 'react';
 import { IconButton } from '@veri-fit/common-ui';
 import { NavLink, LinkProps } from 'react-router-dom';
 import Logo from './logo-orange-white.png';
@@ -11,9 +11,9 @@ interface NavbarContextValues {
 
 const NavbarContext = createContext<NavbarContextValues>({ open: false, setOpen: (open) => open });
 
-export type Props = React.ComponentPropsWithoutRef<'header'>;
+export type Props = ComponentPropsWithoutRef<'header'>;
 
-const Navbar: React.FC<Props> = ({ children, className, ...rest }) => {
+const Navbar: FC<Props> = ({ children, className, ...rest }) => {
   const [open, setOpen] = useState(false);
   return (
     <header className={cx('sm:flex sm:justify-between sm:items-center bg-gray-900', className)} {...rest}>
@@ -21,7 +21,7 @@ const Navbar: React.FC<Props> = ({ children, className, ...rest }) => {
         <img className="w-20" src={Logo} alt="Veri-Fit" />
         <IconButton
           className={cx('sm:hidden hover:bg-gray-700 text-white hover:text-orange-500')}
-          color="none"
+          colorScheme="custom"
           icon="menu"
           label="Menu"
           aria-expanded={open}

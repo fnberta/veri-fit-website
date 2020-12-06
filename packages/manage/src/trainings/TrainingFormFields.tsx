@@ -1,9 +1,8 @@
-import { ErrorMessage, Field, FieldConfig, FormikErrors, useField, useFormikContext } from 'formik';
+import { FieldConfig, FormikErrors, useField, useFormikContext } from 'formik';
 import { DateTime } from 'luxon';
-import React from 'react';
+import React, { ComponentPropsWithoutRef, FC } from 'react';
 import { Client, TrainingInput, TrainingType } from '@veri-fit/common';
 import { InputField, SelectField } from '@veri-fit/common-ui';
-import cx from 'classnames';
 import { isValidISOString } from '../dateTime';
 import { getTrainingName } from '../displayNames';
 import { validSubscriptionTypes } from '../subscriptionChecks';
@@ -48,38 +47,34 @@ export function validateTrainingForm(values: TrainingInput): FormikErrors<Traini
   return errors;
 }
 
-type ParticipantsFieldProps = React.ComponentPropsWithoutRef<'select'> & FieldConfig<string[]> & { clients: Client[] };
+type ParticipantsFieldProps = ComponentPropsWithoutRef<'select'> & FieldConfig<string[]> & { clients: Client[] };
 
-const ParticipantsField: React.FC<ParticipantsFieldProps> = (props) => {
+const ParticipantsField: FC<ParticipantsFieldProps> = (props) => {
   const [field, meta, { setValue }] = useField(props);
-  const { name, clients, className, ...rest } = props;
+  const { name, clients, ...rest } = props;
 
   return (
-    <label className={cx('form-field', className)}>
-      <span className="form-label">Teilnehmer</span>
-      <select
-        className="form-multiselect"
-        name={name}
-        multiple={true}
-        size={clients.length > MAX_PARTICIPANTS_SIZE ? MAX_PARTICIPANTS_SIZE : clients.length}
-        value={meta.value}
-        onBlur={field.onBlur}
-        onChange={(e) => setValue(Array.from(e.currentTarget.selectedOptions).map((option) => option.value))}
-        {...rest}
-      >
-        {clients.map((client) => (
-          <option key={client.id} value={client.id}>
-            {client.name}
-          </option>
-        ))}
-      </select>
-      <ErrorMessage name={name}>{(error) => <span className="form-error">{error}</span>}</ErrorMessage>
-    </label>
+    <SelectField
+      label="Teilnehmer"
+      name={name}
+      multiple={true}
+      size={clients.length > MAX_PARTICIPANTS_SIZE ? MAX_PARTICIPANTS_SIZE : clients.length}
+      value={meta.value}
+      onBlur={field.onBlur}
+      onChange={(e) => setValue(Array.from(e.currentTarget.selectedOptions).map((option) => option.value))}
+      {...rest}
+    >
+      {clients.map((client) => (
+        <option key={client.id} value={client.id}>
+          {client.name}
+        </option>
+      ))}
+    </SelectField>
   );
 };
 
-const TrainingFormFields: React.FC<Props> = ({ clients, disabled }) => {
-  const { values, errors, touched } = useFormikContext<TrainingInput>();
+const TrainingFormFields: FC<Props> = ({ clients, disabled }) => {
+  const { values } = useFormikContext<TrainingInput>();
   return (
     <>
       <SelectField name="type" disabled={disabled} label="Typ">
@@ -89,17 +84,13 @@ const TrainingFormFields: React.FC<Props> = ({ clients, disabled }) => {
           </option>
         ))}
       </SelectField>
-      <label className="form-field">
-        <span className="form-label">Startpunkt</span>
-        <Field className="form-input" type="date" name="runsFrom" disabled={disabled} />
-        {errors.runsFrom && touched.runsFrom ? (
-          <span className="form-error">{errors.runsFrom}</span>
-        ) : (
-          <span className="text-xs">{`Training findet am ${
-            DateTime.fromISO(values.runsFrom).weekdayLong
-          } statt.`}</span>
-        )}
-      </label>
+      <InputField
+        type="date"
+        name="runsFrom"
+        helperText={`Training findet am ${DateTime.fromISO(values.runsFrom).weekdayLong} statt.`}
+        disabled={disabled}
+        label="Startpunkt"
+      />
       <InputField type="time" name="time.start" disabled={disabled} label="Startzeit" />
       <InputField type="time" name="time.end" disabled={disabled} label="Endzeit" />
       <ParticipantsField name="clientIds" clients={clients} />

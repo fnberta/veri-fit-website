@@ -1,3 +1,2 @@
-module.exports = {
-  plugins: [require('postcss-import'), require('tailwindcss'), require('autoprefixer')],
-};
+const commonConfig = require('@veri-fit/common-ui/postcss.config.js');
+module.exports = commonConfig;

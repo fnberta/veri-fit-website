@@ -1,5 +1,5 @@
 import { Form, Formik, FormikHelpers } from 'formik';
-import React from 'react';
+import React, { FC } from 'react';
 import { Subscription, SubscriptionType, TrainingType } from '@veri-fit/common';
 import { Button } from '@veri-fit/common-ui';
 import { DialogFooter, DialogHeader } from '../Dialog';
@@ -30,12 +30,7 @@ function getInitialValues(today: string): SubscriptionFormValues {
   };
 }
 
-const AddSubscriptionDialogContent: React.FC<Props> = ({
-  clientId,
-  subscriptions,
-  onSubscriptionAdded,
-  onCancelClick,
-}) => {
+const AddSubscriptionDialogContent: FC<Props> = ({ clientId, subscriptions, onSubscriptionAdded, onCancelClick }) => {
   const { clientRepo } = useRepos();
 
   async function handleFormSubmission(
@@ -61,7 +56,13 @@ const AddSubscriptionDialogContent: React.FC<Props> = ({
               <Button disabled={isSubmitting} onClick={onCancelClick}>
                 Verwerfen
               </Button>
-              <Button type="submit" color="orange" loading={isSubmitting} disabled={!isValid} onClick={submitForm}>
+              <Button
+                type="submit"
+                colorScheme="orange"
+                loading={isSubmitting}
+                disabled={!isValid}
+                onClick={submitForm}
+              >
                 Speichern
               </Button>
             </DialogFooter>

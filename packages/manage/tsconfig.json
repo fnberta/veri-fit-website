@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig-base.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "target": "es2016",
     "module": "esnext",
@@ -12,13 +12,13 @@
       "path": "../common/tsconfig.json"
     },
     {
-      "path": "../common/tsconfig-esm.json"
+      "path": "../common/tsconfig.esm.json"
     },
     {
       "path": "../common-ui/tsconfig.json"
     },
     {
-      "path": "../common-ui/tsconfig-esm.json"
+      "path": "../common-ui/tsconfig.esm.json"
     }
   ]
 }

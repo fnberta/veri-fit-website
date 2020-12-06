@@ -13,7 +13,7 @@ import ErrorBoundary from './ErrorBoundary';
 import 'firebase/firestore';
 import 'firebase/auth';
 import 'firebase/functions';
-import './global.css';
+import './index.css';
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,

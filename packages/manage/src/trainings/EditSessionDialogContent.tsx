@@ -1,6 +1,6 @@
 import { Form, Formik, FormikHelpers } from 'formik';
 import { DateTime } from 'luxon';
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import { ChangeType, Client, Session, SessionInput } from '@veri-fit/common';
 import { Button } from '@veri-fit/common-ui';
 import { DialogFooter, DialogHeader } from '../Dialog';
@@ -41,7 +41,7 @@ function getInitialValues(session: Session): SessionFormValues {
   };
 }
 
-const EditSessionDialogContent: React.FC<Props> = ({ session, clients, onSessionChanged, onCancelClick }) => {
+const EditSessionDialogContent: FC<Props> = ({ session, clients, onSessionChanged, onCancelClick }) => {
   const [changeType, setChangeType] = useState(ChangeType.SINGLE);
   const { sessionRepo } = useRepos();
 
@@ -83,7 +83,13 @@ const EditSessionDialogContent: React.FC<Props> = ({ session, clients, onSession
                 <Button disabled={isSubmitting} onClick={onCancelClick}>
                   Verwerfen
                 </Button>
-                <Button type="submit" color="orange" loading={isSubmitting} disabled={!isValid} onClick={submitForm}>
+                <Button
+                  type="submit"
+                  colorScheme="orange"
+                  loading={isSubmitting}
+                  disabled={!isValid}
+                  onClick={submitForm}
+                >
                   Speichern
                 </Button>
               </div>
