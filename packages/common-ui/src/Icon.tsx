@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ComponentPropsWithoutRef, FC } from 'react';
 import cx from 'classnames';
 
 const ICON_PATHS = {
@@ -118,19 +118,19 @@ const ICON_PATHS = {
 
 export type IconName = keyof typeof ICON_PATHS;
 
-export interface Props extends React.ComponentPropsWithoutRef<'svg'> {
+export interface Props extends ComponentPropsWithoutRef<'svg'> {
   name: IconName;
-  size?: 'normal' | 'large' | 'none';
+  size?: 'md' | 'lg' | 'custom';
 }
 
-function getIconStyleClasses(size: Props['size'] = 'normal'): string {
+function getIconStyleClasses(size: Props['size'] = 'md'): string {
   return cx({
-    ['h-5 w-5']: size === 'normal',
-    ['h-6 w-6']: size === 'large',
+    ['h-5 w-5']: size === 'md',
+    ['h-6 w-6']: size === 'lg',
   });
 }
 
-export const Icon: React.FC<Props> = ({ name, size, className, ...rest }) => (
+export const Icon: FC<Props> = ({ name, size, className, ...rest }) => (
   <svg className={cx(getIconStyleClasses(size), className)} viewBox="0 0 20 20" fill="currentColor" {...rest}>
     {ICON_PATHS[name]}
   </svg>

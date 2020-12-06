@@ -1,5 +1,5 @@
 import { FormikErrors } from 'formik';
-import React from 'react';
+import React, { FC } from 'react';
 import { makeValidator, InputField } from '@veri-fit/common-ui';
 import { getToday, isValidISOString } from '../dateTime';
 import { ClientInput } from '../repositories/ClientRepository';
@@ -72,7 +72,7 @@ export function getClientInput(values: ClientFormValues): ClientInput {
   return input;
 }
 
-const ClientFormFields: React.FC<Props> = ({ disabled }) => (
+const ClientFormFields: FC<Props> = ({ disabled }) => (
   <>
     <div className="p-4 space-y-4">
       <h2 className="text-base font-semibold">Persönlich</h2>

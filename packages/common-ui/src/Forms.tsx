@@ -1,8 +1,17 @@
-import React from 'react';
-import { FieldConfig, useField } from 'formik';
+import React, {
+  ComponentPropsWithoutRef,
+  createContext,
+  FC,
+  isValidElement,
+  ReactElement,
+  ReactNode,
+  useContext,
+} from 'react';
+import { FieldValidator, useField } from 'formik';
 import cx from 'classnames';
+import Icon, { IconName } from './Icon';
 
-export const BotField: React.FC = () => (
+export const BotField: FC = () => (
   <div className="hidden">
     <label>
       Don't fill this out if you're human: <input name="bot-field" />
@@ -20,54 +29,166 @@ export function urlEncode(data: Record<string, string | number | boolean>): stri
     .join('&');
 }
 
-export interface CommonFieldProps<T> extends FieldConfig<T> {
-  label: string;
-  dark?: boolean;
+const FieldControlContext = createContext({ name: '', hasError: false });
+
+export interface FieldControlProps {
+  name: string;
+  helperText?: ReactNode;
 }
 
-export type InputFieldProps = React.ComponentPropsWithoutRef<'input'> & CommonFieldProps<string>;
+export const FieldControl: FC<ComponentPropsWithoutRef<'div'> & FieldControlProps> = ({
+  name,
+  helperText,
+  children,
+  className,
+  ...rest
+}) => {
+  const [, meta] = useField(name);
+  const hasError = meta.error != null && meta.touched;
 
-export const InputField: React.FC<InputFieldProps> = (props) => {
-  const [field, meta] = useField(props);
-  const { label, dark, className, ...rest } = props;
+  return (
+    <div className={cx('flex flex-col space-y-1.5', className)} {...rest}>
+      <FieldControlContext.Provider value={{ name, hasError }}>{children}</FieldControlContext.Provider>
+      {hasError ? (
+        <span className="text-xs text-red-500">{meta.error}</span>
+      ) : isValidElement(helperText) ? (
+        helperText
+      ) : helperText ? (
+        <span className="text-xs">{helperText}</span>
+      ) : null}
+    </div>
+  );
+};
+
+const FieldLabel: FC<{ dark?: boolean }> = ({ dark, children }) => (
+  <span className={cx('field-label', dark ? 'text-white' : 'text-gray-700')}>{children}</span>
+);
+
+export interface CommonFieldProps {
+  label: string | ReactElement;
+  dark?: boolean;
+  validate?: FieldValidator;
+}
+
+function getInputStyleClasses(hasError: boolean): string {
+  return cx(
+    'w-full rounded-md shadow-sm focus:ring focus:ring-opacity-50 disabled:cursor-not-allowed disabled:shadow-none disabled:border-0 disabled:bg-gray-200 disabled:opacity-50',
+    hasError
+      ? 'border-red-500 focus:border-red-500 focus:ring-red-400'
+      : 'border-gray-300 focus:border-gray-500 focus:ring-gray-400',
+  );
+}
+
+export const RawInput: FC<ComponentPropsWithoutRef<'input'> & { hasError?: boolean }> = ({
+  hasError,
+  className,
+  ...rest
+}) => <input className={cx(getInputStyleClasses(hasError === true), className)} {...rest} />;
+
+export interface InputProps extends ComponentPropsWithoutRef<'input'>, CommonFieldProps {
+  icon?: IconName | ReactElement;
+}
+
+export const Input: FC<InputProps> = (props) => {
+  const { label, dark, icon, validate, className, ...rest } = props;
+  const { name, hasError } = useContext(FieldControlContext);
+  const [field] = useField({ ...props, name });
 
   return (
     <label className={cx('form-field', className)}>
-      <span className={cx('form-label', dark && 'text-white')}>{label}</span>
-      <input className="form-input w-full" {...field} {...rest} />
-      {meta.error && meta.touched && <span className="form-error">{meta.error}</span>}
+      {isValidElement(label) ? label : <FieldLabel dark={dark}>{label}</FieldLabel>}
+      {icon ? (
+        <div className="relative">
+          <div className="absolute inset-y-0 pl-3 flex items-center">
+            {isValidElement(icon) ? icon : <Icon name={icon} />}
+          </div>
+          <RawInput className="pl-10" hasError={hasError} {...field} {...rest} />
+        </div>
+      ) : (
+        <RawInput hasError={hasError} {...field} {...rest} />
+      )}
     </label>
   );
 };
 
-export type TextAreaFieldProps = React.ComponentPropsWithoutRef<'textarea'> & CommonFieldProps<string>;
+export type InputFieldProps = InputProps & FieldControlProps;
 
-export const TextAreaField: React.FC<TextAreaFieldProps> = (props) => {
-  const [field, meta] = useField(props);
-  const { label, dark, className, ...rest } = props;
+export const InputField: FC<InputFieldProps> = ({ name, helperText, className, ...rest }) => (
+  <FieldControl name={name} helperText={helperText} className={className}>
+    <Input {...rest} />
+  </FieldControl>
+);
+
+export interface TextAreaProps extends ComponentPropsWithoutRef<'textarea'>, CommonFieldProps {}
+
+export const TextArea: FC<TextAreaProps> = (props) => {
+  const { label, dark, validate, className, ...rest } = props;
+  const { name, hasError } = useContext(FieldControlContext);
+  const [field] = useField({ ...props, name });
 
   return (
     <label className={cx('form-field', className)}>
-      <span className={cx('form-label', dark && 'text-white')}>{label}</span>
-      <textarea className="form-textarea w-full" {...field} {...rest} />
-      {meta.error && meta.touched && <span className="form-error">{meta.error}</span>}
+      {isValidElement(label) ? label : <FieldLabel dark={dark}>{label}</FieldLabel>}
+      <textarea className={getInputStyleClasses(hasError)} {...field} {...rest} />
     </label>
   );
 };
 
-export type SelectFieldProps = React.ComponentPropsWithoutRef<'select'> & CommonFieldProps<string>;
+export type TextAreaFieldProps = TextAreaProps & FieldControlProps;
 
-export const SelectField: React.FC<SelectFieldProps> = (props) => {
-  const [field, meta] = useField(props);
-  const { label, dark, className, children, ...rest } = props;
+export const TextAreaField: FC<TextAreaFieldProps> = ({ name, helperText, className, ...rest }) => (
+  <FieldControl name={name} helperText={helperText} className={className}>
+    <TextArea {...rest} />
+  </FieldControl>
+);
+
+export type SelectProps = ComponentPropsWithoutRef<'select'> & CommonFieldProps;
+
+export const Select: FC<SelectProps> = (props) => {
+  const { label, dark, validate, className, ...rest } = props;
+  const { name, hasError } = useContext(FieldControlContext);
+  const [field] = useField({ ...props, name });
 
   return (
     <label className={cx('form-field', className)}>
-      <span className={cx('form-label', dark && 'text-white')}>{label}</span>
-      <select className="form-select" {...field} {...rest}>
-        {children}
-      </select>
-      {meta.error && meta.touched && <span className="form-error">{meta.error}</span>}
+      {isValidElement(label) ? label : <FieldLabel dark={dark}>{label}</FieldLabel>}
+      <select className={getInputStyleClasses(hasError)} {...field} {...rest} />
+    </label>
+  );
+};
+
+export type SelectFieldProps = SelectProps & FieldControlProps;
+
+export const SelectField: FC<SelectFieldProps> = ({ name, helperText, className, ...rest }) => (
+  <FieldControl name={name} helperText={helperText} className={className}>
+    <Select {...rest} />
+  </FieldControl>
+);
+
+export type CheckInputProps = Omit<ComponentPropsWithoutRef<'input'>, 'type'> &
+  CommonFieldProps & { type: 'radio' | 'checkbox' };
+
+export const CheckInput: FC<CheckInputProps> = (props) => {
+  const { label, dark, validate, className, ...rest } = props;
+  const { name } = useContext(FieldControlContext);
+  const [field] = useField({ ...props, name });
+
+  return (
+    <label
+      className={cx(
+        'inline-flex items-center space-x-2',
+        {
+          ['cursor-not-allowed text-gray-200 opacity-50']: rest.disabled,
+        },
+        className,
+      )}
+    >
+      <input
+        className="rounded shadow-sm text-gray-700 border-gray-300 focus:ring-offset-2 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:shadow-none disabled:border-0 disabled:bg-gray-200"
+        {...field}
+        {...rest}
+      />
+      {isValidElement(label) ? label : <FieldLabel dark={dark}>{label}</FieldLabel>}
     </label>
   );
 };

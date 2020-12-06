@@ -1,46 +1,73 @@
 import cx from 'classnames';
-import React, { isValidElement } from 'react';
+import React, { ComponentPropsWithoutRef, FC, isValidElement, ReactElement } from 'react';
 import Icon, { IconName, Props as IconProps } from './Icon';
 
 export interface ButtonStyleProps {
   shape?: 'filled' | 'outlined' | 'text';
-  color?: 'gray' | 'orange' | 'red' | 'none';
-  size?: 'small' | 'medium' | 'large' | 'huge';
+  colorScheme?: 'gray' | 'orange' | 'red' | 'custom';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
 }
 
-export function getButtonStyleClasses({ shape = 'filled', color = 'gray', size = 'medium' }: ButtonStyleProps): string {
-  return cx('button', {
-    ['button-filled']: shape === 'filled',
-    ['button-outlined']: shape === 'outlined',
-    ['button-text']: shape === 'text',
-    ['button-gray']: color === 'gray',
-    ['button-orange']: color === 'orange',
-    ['button-red']: color === 'red',
-    ['button-small']: size === 'small',
-    ['button-medium']: size === 'medium',
-    ['button-large']: size === 'large',
-    ['button-huge']: size === 'huge',
-  });
+export function getButtonStyleClasses({
+  shape = 'filled',
+  colorScheme = 'orange',
+  size = 'md',
+}: ButtonStyleProps): string {
+  const shadow = 'shadow-sm hover:shadow active:shadow-none';
+  const grayText = 'text-gray-900 hover:bg-gray-200 active:bg-gray-300';
+  const orangeText =
+    'text-orange-600 hover:text-orange-700 active:text-orange-700 hover:bg-orange-50 active:bg-orange-100';
+  const redText = 'text-red-600 hover:text-red-700 active:text-red-700 hover:bg-red-50 active:bg-red-100';
+  return cx(
+    'inline-block font-semibold transition duration-150 ease-out rounded border select-none whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-50 disabled:opacity-75 disabled:cursor-not-allowed disabled:shadow-none disabled:bg-gray-200 disabled:text-gray-800',
+    {
+      ['text-xs px-2 py-1']: size === 'sm',
+      ['text-sm px-4 py-2']: size === 'md',
+      ['text-xl px-5 py-3']: size === 'lg',
+      ['text-xl px-8 py-4']: size === 'xl',
+      [`${shadow} border-transparent`]: shape === 'filled',
+      [`${shadow} disabled:border-transparent`]: shape === 'outlined',
+      ['border-transparent']: shape === 'text',
+
+      // gray
+      ['focus-visible:ring-gray-50']: colorScheme === 'gray',
+      ['text-gray-900 bg-gray-200 hover:bg-gray-300 active:bg-gray-400']: colorScheme === 'gray' && shape === 'filled',
+      [`${grayText} border-gray-200`]: colorScheme === 'gray' && shape === 'outlined',
+      [grayText]: colorScheme === 'gray' && shape === 'text',
+
+      // orange
+      ['focus-visible:ring-orange-300']: colorScheme === 'orange',
+      ['text-white bg-orange-500 hover:bg-orange-600 active:bg-orange-700']:
+        colorScheme === 'orange' && shape === 'filled',
+      [`${orangeText} border-orange-500`]: colorScheme === 'orange' && shape === 'outlined',
+      [orangeText]: colorScheme === 'orange' && shape === 'text',
+
+      // red
+      ['focus-visible:ring-red-300']: colorScheme === 'red',
+      ['text-white bg-red-500 hover:bg-red-600 active:bg-red-700']: colorScheme === 'red' && shape === 'filled',
+      [`${redText} border-red-500`]: colorScheme === 'red' && shape === 'outlined',
+      [redText]: colorScheme === 'red' && shape === 'text',
+    },
+  );
 }
 
 export interface ButtonContentProps {
-  icon?: IconName | React.ReactElement;
+  icon?: IconName | ReactElement;
   loading?: boolean;
-  children?: React.ReactNode;
 }
 
-function getIconSize(buttonSize: ButtonStyleProps['size'] = 'medium'): IconProps['size'] {
+function getIconSize(buttonSize: ButtonStyleProps['size'] = 'md'): IconProps['size'] {
   switch (buttonSize) {
-    case 'small':
-    case 'medium':
-      return 'normal';
-    case 'large':
-    case 'huge':
-      return 'large';
+    case 'sm':
+    case 'md':
+      return 'md';
+    case 'lg':
+    case 'xl':
+      return 'lg';
   }
 }
 
-export const ButtonContent: React.FC<ButtonContentProps & Pick<ButtonStyleProps, 'size'>> = ({
+export const ButtonContent: FC<ButtonContentProps & Pick<ButtonStyleProps, 'size'>> = ({
   icon,
   size,
   loading,
@@ -68,14 +95,14 @@ export const ButtonContent: React.FC<ButtonContentProps & Pick<ButtonStyleProps,
     );
   }
 
-  return children as React.ReactElement;
+  return children as ReactElement;
 };
 
-export type ButtonProps = React.ComponentPropsWithoutRef<'button'> & ButtonStyleProps & ButtonContentProps;
+export type ButtonProps = ComponentPropsWithoutRef<'button'> & ButtonStyleProps & ButtonContentProps;
 
-export const Button: React.FC<ButtonProps> = ({
+export const Button: FC<ButtonProps> = ({
   shape,
-  color,
+  colorScheme,
   size,
   icon,
   loading,
@@ -85,7 +112,7 @@ export const Button: React.FC<ButtonProps> = ({
   ...rest
 }) => (
   <button
-    className={cx(getButtonStyleClasses({ shape, color, size }), className)}
+    className={cx(getButtonStyleClasses({ shape, colorScheme, size }), className)}
     disabled={loading || disabled}
     {...rest}
   >
@@ -96,16 +123,16 @@ export const Button: React.FC<ButtonProps> = ({
 );
 
 export interface IconButtonContentProps {
-  icon: IconName | React.ReactElement;
+  icon: IconName | ReactElement;
   loading?: boolean;
   label: string;
 }
 
-export type IconButtonProps = React.ComponentPropsWithoutRef<'button'> & ButtonStyleProps & IconButtonContentProps;
+export type IconButtonProps = ComponentPropsWithoutRef<'button'> & ButtonStyleProps & IconButtonContentProps;
 
-export const IconButton: React.FC<IconButtonProps> = ({
+export const IconButton: FC<IconButtonProps> = ({
   shape,
-  color,
+  colorScheme,
   size,
   icon,
   loading,
@@ -115,7 +142,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
   ...rest
 }) => (
   <button
-    className={cx(getButtonStyleClasses({ shape, color, size }), className)}
+    className={cx(getButtonStyleClasses({ shape, colorScheme, size }), className)}
     aria-label={label}
     title={label}
     disabled={loading || disabled}
@@ -125,11 +152,11 @@ export const IconButton: React.FC<IconButtonProps> = ({
   </button>
 );
 
-export type AnchorButtonProps = React.ComponentPropsWithoutRef<'a'> & ButtonStyleProps & ButtonContentProps;
+export type AnchorButtonProps = ComponentPropsWithoutRef<'a'> & ButtonStyleProps & ButtonContentProps;
 
-export const AnchorButton: React.FC<AnchorButtonProps> = ({
+export const AnchorButton: FC<AnchorButtonProps> = ({
   shape,
-  color,
+  colorScheme,
   size,
   icon,
   loading,
@@ -137,9 +164,31 @@ export const AnchorButton: React.FC<AnchorButtonProps> = ({
   className,
   ...rest
 }) => (
-  <a className={cx(getButtonStyleClasses({ shape, color, size }), className)} {...rest}>
+  <a className={cx(getButtonStyleClasses({ shape, colorScheme, size }), className)} {...rest}>
     <ButtonContent icon={icon} loading={loading}>
       {children}
     </ButtonContent>
   </a>
+);
+
+export interface CloseButtonProps extends ComponentPropsWithoutRef<'button'>, Pick<ButtonStyleProps, 'colorScheme'> {
+  mode?: 'light' | 'dark';
+}
+
+export const CloseButton: FC<CloseButtonProps> = ({ mode = 'light', className, ...rest }) => (
+  <IconButton
+    className={cx(
+      'bg-opacity-0 hover:bg-opacity-5 active:bg-opacity-10 text-current',
+      {
+        ['bg-black']: mode === 'light',
+        ['bg-white']: mode === 'dark',
+      },
+      className,
+    )}
+    colorScheme="custom"
+    shape="text"
+    icon="x"
+    label="Schliessen"
+    {...rest}
+  />
 );

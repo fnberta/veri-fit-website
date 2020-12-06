@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import React, { useEffect, useState } from 'react';
+import React, { ComponentPropsWithoutRef, FC, useEffect, useState } from 'react';
 import cx from 'classnames';
 import { Client, Session, Time } from '@veri-fit/common';
 import { Button, TimeOfDay, Week, Weekday, WeekSchedule } from '@veri-fit/common-ui';
@@ -12,7 +12,7 @@ import AddTrainingDialogContent from './AddTrainingDialogContent';
 import EditSessionDialogContent from './EditSessionDialogContent';
 import SessionCard from './SessionCard';
 
-export type Props = React.ComponentPropsWithoutRef<'section'>;
+export type Props = ComponentPropsWithoutRef<'section'>;
 
 type AddEditDialog = { type: 'ADD_TRAINING' } | { type: 'ADD_SESSION' } | { type: 'EDIT'; session: Session };
 
@@ -59,7 +59,7 @@ function getDateFromPath(year: string | undefined, week: string | undefined): Da
   }
 }
 
-const Trainings: React.FC<Props> = ({ className, ...rest }) => {
+const Trainings: FC<Props> = ({ className, ...rest }) => {
   const [addEditDialog, setAddEditDialog] = useState<AddEditDialog>();
   const [clients, setClients] = useState([] as Client[]);
   const [sessions, setSessions] = useState([] as Session[]);
@@ -83,7 +83,7 @@ const Trainings: React.FC<Props> = ({ className, ...rest }) => {
   }, [sessionRepo, date.weekYear]);
 
   return (
-    <section className={cx('bg-gray-100 overflow-auto', className)} {...rest}>
+    <section className={cx('bg-gray-50 overflow-auto', className)} {...rest}>
       <div className="w-full max-w-screen-xl mx-auto py-6 px-4 space-y-4">
         <div className="flex justify-between items-center space-x-2">
           <header>

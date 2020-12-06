@@ -1,16 +1,16 @@
 import { useField } from 'formik';
-import React from 'react';
+import React, { ComponentPropsWithoutRef, FC } from 'react';
 import cx from 'classnames';
 import { Client } from '@veri-fit/common';
 
-export interface Props extends React.ComponentPropsWithoutRef<'select'> {
+export interface Props extends ComponentPropsWithoutRef<'select'> {
   name: string;
   clients: Client[];
 }
 
 const MAX_PARTICIPANTS_SIZE = 5;
 
-const ParticipantsSelector: React.FC<Props> = ({ name, clients, className, ...rest }) => {
+const ParticipantsSelector: FC<Props> = ({ name, clients, className, ...rest }) => {
   const [field, meta, { setValue }] = useField(name);
   return (
     <select

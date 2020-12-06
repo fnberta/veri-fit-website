@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig-base.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "target": "es2018",
     "rootDir": "src",
@@ -11,7 +11,7 @@
       "path": "../common/tsconfig.json"
     },
     {
-      "path": "../common/tsconfig-esm.json"
+      "path": "../common/tsconfig.esm.json"
     }
   ]
 }

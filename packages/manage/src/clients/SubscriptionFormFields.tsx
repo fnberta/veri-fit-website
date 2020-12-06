@@ -1,7 +1,7 @@
-import { ErrorMessage, Field, FormikErrors, getIn, useFormikContext } from 'formik';
-import React, { useEffect, useRef } from 'react';
+import { FormikErrors, getIn, useFormikContext } from 'formik';
+import React, { FC, useEffect, useRef } from 'react';
 import { SubscriptionType, TrainingType } from '@veri-fit/common';
-import { InputField, SelectField } from '@veri-fit/common-ui';
+import { CheckInput, FieldControl, InputField, SelectField } from '@veri-fit/common-ui';
 import { getEndDate, isValidISOString } from '../dateTime';
 import { getSubscriptionName, getTrainingName } from '../displayNames';
 import { SubscriptionInput } from '../repositories/ClientRepository';
@@ -142,7 +142,7 @@ function usePrevious<T>(value: T): T | undefined {
   return ref.current;
 }
 
-const SubscriptionFormFields: React.FC<Props> = ({ trainingTypes, namespace, disabled }) => {
+const SubscriptionFormFields: FC<Props> = ({ trainingTypes, namespace, disabled }) => {
   const withNamespace = (name: string) => (namespace ? `${namespace}.${name}` : name);
 
   // this is not very type safe but good enough for now
@@ -192,16 +192,12 @@ const SubscriptionFormFields: React.FC<Props> = ({ trainingTypes, namespace, dis
         )}
       </div>
       <InputField type="date" name={withNamespace('start')} disabled={disabled} label="Startpunkt" />
-      <fieldset className="form-field">
-        <legend className="form-label">Kosten</legend>
-        <label className="inline-flex items-center space-x-2">
-          <Field className="form-checkbox" type="checkbox" name={withNamespace('paid')} disabled={disabled} />
-          <span className="text-base">{' Bereits bezahlt'}</span>
-        </label>
-        <ErrorMessage name={withNamespace('paid')}>
-          {(error) => <span className="form-error">{error}</span>}
-        </ErrorMessage>
-      </fieldset>
+      <FieldControl name={withNamespace('paid')}>
+        <fieldset className="form-field">
+          <legend className="field-label">Kosten</legend>
+          <CheckInput type="checkbox" name={withNamespace('paid')} disabled={disabled} label={' Bereits bezahlt'} />
+        </fieldset>
+      </FieldControl>
       {paid && <InputField type="date" name={withNamespace('paidAt')} disabled={disabled} label="Bezahlt am" />}
     </>
   );

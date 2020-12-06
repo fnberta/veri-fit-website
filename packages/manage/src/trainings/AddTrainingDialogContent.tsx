@@ -1,5 +1,5 @@
 import { Form, Formik, FormikHelpers } from 'formik';
-import React from 'react';
+import React, { FC } from 'react';
 import { Client, Training, TrainingInput, TrainingType } from '@veri-fit/common';
 import { Button } from '@veri-fit/common-ui';
 import { DialogFooter, DialogHeader } from '../Dialog';
@@ -25,7 +25,7 @@ function getInitialValues(runsFrom: string): TrainingInput {
   };
 }
 
-const AddTrainingDialogContent: React.FC<Props> = ({ clients, onTrainingCreated, onCancelClick }) => {
+const AddTrainingDialogContent: FC<Props> = ({ clients, onTrainingCreated, onCancelClick }) => {
   const { trainingRepo } = useRepos();
 
   async function handleFormSubmission(values: TrainingInput, { setSubmitting }: FormikHelpers<TrainingInput>) {
@@ -51,7 +51,13 @@ const AddTrainingDialogContent: React.FC<Props> = ({ clients, onTrainingCreated,
               <Button disabled={isSubmitting} onClick={onCancelClick}>
                 Verwerfen
               </Button>
-              <Button type="submit" color="orange" loading={isSubmitting} disabled={!isValid} onClick={submitForm}>
+              <Button
+                type="submit"
+                colorScheme="orange"
+                loading={isSubmitting}
+                disabled={!isValid}
+                onClick={submitForm}
+              >
                 Erstellen
               </Button>
             </DialogFooter>

@@ -5,13 +5,13 @@
       "path": "packages/common/tsconfig.json"
     },
     {
-      "path": "packages/common/tsconfig-esm.json"
+      "path": "packages/common/tsconfig.esm.json"
     },
     {
       "path": "packages/common-ui/tsconfig.json"
     },
     {
-      "path": "packages/common-ui/tsconfig-esm.json"
+      "path": "packages/common-ui/tsconfig.esm.json"
     }
   ]
 }
