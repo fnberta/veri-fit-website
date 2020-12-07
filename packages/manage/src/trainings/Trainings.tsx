@@ -83,17 +83,17 @@ const Trainings: FC<Props> = ({ className, ...rest }) => {
   }, [sessionRepo, date.weekYear]);
 
   return (
-    <section className={cx('bg-gray-50 overflow-auto', className)} {...rest}>
+    <section className={cx('bg-gray-100 overflow-auto', className)} {...rest}>
       <div className="w-full max-w-screen-xl mx-auto py-6 px-4 space-y-4">
-        <div className="flex justify-between items-center space-x-2">
-          <header>
+        <div className="-mt-4 -ml-4 flex flex-wrap justify-between items-center">
+          <header className="mt-4 ml-4">
             <h1 className="sr-only">Trainings</h1>
-            <h2 className="text-xl md:text-2xl font-semibold">{`Woche ${date.weekNumber}`}</h2>
+            <h2 className="text-xl md:text-2xl font-semibold whitespace-nowrap">{`Woche ${date.weekNumber}`}</h2>
             <p className="text-xs md:text-sm">{`${date.set({ weekday: 1 }).toLocaleString()} - ${date
               .set({ weekday: 7 })
               .toLocaleString()}`}</p>
           </header>
-          <div className="button-group">
+          <div className="button-group mt-4 ml-4 flex no-wrap">
             <LinkIconButton
               icon="arrow-left"
               shape="outlined"
@@ -139,11 +139,16 @@ const Trainings: FC<Props> = ({ className, ...rest }) => {
             },
           )}
         />
-        <div className="flex space-x-2">
-          <Button icon="document-add" onClick={() => setAddEditDialog({ type: 'ADD_TRAINING' })}>
+        <div className="-mt-2 -ml-2 flex flex-wrap">
+          <Button className="mt-2 ml-2" icon="document-add" onClick={() => setAddEditDialog({ type: 'ADD_TRAINING' })}>
             Neue Trainingsreihe
           </Button>
-          <Button icon="plus" onClick={() => setAddEditDialog({ type: 'ADD_SESSION' })}>
+          <Button
+            className="mt-2 ml-2"
+            shape="outlined"
+            icon="plus"
+            onClick={() => setAddEditDialog({ type: 'ADD_SESSION' })}
+          >
             Neues Einzeltraining
           </Button>
         </div>

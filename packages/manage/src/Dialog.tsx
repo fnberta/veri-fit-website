@@ -98,7 +98,8 @@ export const DialogHeader: FC<DialogHeaderProps> = ({ title, onCloseClick, class
   </header>
 );
 
-type FooterProps = ComponentPropsWithoutRef<'div'>;
+export type FooterProps = ComponentPropsWithoutRef<'div'>;
+
 export const DialogFooter: FC<FooterProps> = ({ children, className, ...rest }) => (
   <footer className={cx('flex-shrink-0 bg-gray-100', className)} {...rest}>
     {children}

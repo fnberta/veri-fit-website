@@ -93,16 +93,10 @@ const AddClientDialogContent: FC<Props> = ({ onClientCreated, onCancelClick }) =
               </div>
             </Form>
             <DialogFooter className="p-4 flex justify-end space-x-2">
-              <Button disabled={isSubmitting} onClick={onCancelClick}>
+              <Button shape="outlined" disabled={isSubmitting} onClick={onCancelClick}>
                 Verwerfen
               </Button>
-              <Button
-                type="submit"
-                colorScheme="orange"
-                loading={isSubmitting}
-                disabled={!isValid}
-                onClick={submitForm}
-              >
+              <Button type="submit" loading={isSubmitting} disabled={!isValid} onClick={submitForm}>
                 Erstellen
               </Button>
             </DialogFooter>

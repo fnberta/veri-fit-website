@@ -10,11 +10,11 @@ export interface ButtonStyleProps {
 
 export function getButtonStyleClasses({
   shape = 'filled',
-  colorScheme = 'orange',
+  colorScheme = 'gray',
   size = 'md',
 }: ButtonStyleProps): string {
   const shadow = 'shadow-sm hover:shadow active:shadow-none';
-  const grayText = 'text-gray-900 hover:bg-gray-200 active:bg-gray-300';
+  const grayText = 'text-gray-600 hover:text-gray-700 active:text-gray-700 hover:bg-gray-200 active:bg-gray-300';
   const orangeText =
     'text-orange-600 hover:text-orange-700 active:text-orange-700 hover:bg-orange-50 active:bg-orange-100';
   const redText = 'text-red-600 hover:text-red-700 active:text-red-700 hover:bg-red-50 active:bg-red-100';
@@ -31,8 +31,8 @@ export function getButtonStyleClasses({
 
       // gray
       ['focus-visible:ring-gray-50']: colorScheme === 'gray',
-      ['text-gray-900 bg-gray-200 hover:bg-gray-300 active:bg-gray-400']: colorScheme === 'gray' && shape === 'filled',
-      [`${grayText} border-gray-200`]: colorScheme === 'gray' && shape === 'outlined',
+      ['text-white bg-gray-600 hover:bg-gray-700 active:bg-gray-800']: colorScheme === 'gray' && shape === 'filled',
+      [`${grayText} border-gray-600`]: colorScheme === 'gray' && shape === 'outlined',
       [grayText]: colorScheme === 'gray' && shape === 'text',
 
       // orange
@@ -45,7 +45,7 @@ export function getButtonStyleClasses({
       // red
       ['focus-visible:ring-red-300']: colorScheme === 'red',
       ['text-white bg-red-500 hover:bg-red-600 active:bg-red-700']: colorScheme === 'red' && shape === 'filled',
-      [`${redText} border-red-500`]: colorScheme === 'red' && shape === 'outlined',
+      [`${redText} border-red-600`]: colorScheme === 'red' && shape === 'outlined',
       [redText]: colorScheme === 'red' && shape === 'text',
     },
   );

@@ -1,6 +1,7 @@
 import React, {
   ComponentPropsWithoutRef,
   createContext,
+  ElementType,
   FC,
   isValidElement,
   ReactElement,
@@ -79,11 +80,11 @@ function getInputStyleClasses(hasError: boolean): string {
   );
 }
 
-export const RawInput: FC<ComponentPropsWithoutRef<'input'> & { hasError?: boolean }> = ({
-  hasError,
-  className,
-  ...rest
-}) => <input className={cx(getInputStyleClasses(hasError === true), className)} {...rest} />;
+export type RawProps<T extends ElementType> = ComponentPropsWithoutRef<T> & { hasError?: boolean };
+
+export const RawInput: FC<RawProps<'input'>> = ({ hasError, className, ...rest }) => (
+  <input className={cx(getInputStyleClasses(hasError === true), className)} {...rest} />
+);
 
 export interface InputProps extends ComponentPropsWithoutRef<'input'>, CommonFieldProps {
   icon?: IconName | ReactElement;
@@ -142,6 +143,10 @@ export const TextAreaField: FC<TextAreaFieldProps> = ({ name, helperText, classN
   </FieldControl>
 );
 
+export const RawSelect: FC<RawProps<'select'>> = ({ hasError, className, ...rest }) => (
+  <select className={cx(getInputStyleClasses(hasError === true), className)} {...rest} />
+);
+
 export type SelectProps = ComponentPropsWithoutRef<'select'> & CommonFieldProps;
 
 export const Select: FC<SelectProps> = (props) => {
@@ -152,7 +157,7 @@ export const Select: FC<SelectProps> = (props) => {
   return (
     <label className={cx('form-field', className)}>
       {isValidElement(label) ? label : <FieldLabel dark={dark}>{label}</FieldLabel>}
-      <select className={getInputStyleClasses(hasError)} {...field} {...rest} />
+      <RawSelect hasError={hasError} {...field} {...rest} />
     </label>
   );
 };

@@ -53,16 +53,10 @@ const AddSubscriptionDialogContent: FC<Props> = ({ clientId, subscriptions, onSu
               <SubscriptionFormFields trainingTypes={getValidTrainingTypes(subscriptions)} disabled={isSubmitting} />
             </Form>
             <DialogFooter className="flex justify-end p-4 space-x-2">
-              <Button disabled={isSubmitting} onClick={onCancelClick}>
+              <Button shape="outlined" disabled={isSubmitting} onClick={onCancelClick}>
                 Verwerfen
               </Button>
-              <Button
-                type="submit"
-                colorScheme="orange"
-                loading={isSubmitting}
-                disabled={!isValid}
-                onClick={submitForm}
-              >
+              <Button type="submit" loading={isSubmitting} disabled={!isValid} onClick={submitForm}>
                 Speichern
               </Button>
             </DialogFooter>

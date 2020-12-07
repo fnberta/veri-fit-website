@@ -56,7 +56,7 @@ const SessionCard: FC<Props> = ({ session, clients, onEditClick }) => {
       </div>
       <footer className="flex items-center justify-end bg-gray-100 px-4 py-2 space-x-2">
         {!session.confirmed && (
-          <Button size="sm" disabled={loading} onClick={onEditClick}>
+          <Button shape="outlined" size="sm" disabled={loading} onClick={onEditClick}>
             Bearbeiten
           </Button>
         )}
@@ -66,13 +66,7 @@ const SessionCard: FC<Props> = ({ session, clients, onEditClick }) => {
               Öffnen
             </Button>
           ) : (
-            <Button
-              size="sm"
-              colorScheme="orange"
-              loading={loading}
-              disabled={hasClientsWithIssues}
-              onClick={handleToggleClick}
-            >
+            <Button size="sm" loading={loading} disabled={hasClientsWithIssues} onClick={handleToggleClick}>
               Bestätigen
             </Button>
           ))}

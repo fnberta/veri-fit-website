@@ -31,7 +31,12 @@ const ClientsContent: FC<ClientsContentProps> = ({ clients, selectedClientId, on
   const hasClients = clients.length > 0;
   return (
     <>
-      <LinkButton className={cx(!selectedClient && 'hidden', 'lg:hidden self-start')} to="/clients" icon="arrow-left">
+      <LinkButton
+        className={cx(!selectedClient && 'hidden', 'lg:hidden self-start')}
+        to="/clients"
+        shape="outlined"
+        icon="arrow-left"
+      >
         Zurück
       </LinkButton>
       {hasClients ? (
@@ -139,7 +144,7 @@ const Clients: FC<Props> = ({ className, ...rest }) => {
 
   const { clientId } = useParams<{ clientId?: string }>();
   return (
-    <section className={cx('flex bg-gray-50 min-h-0', className)} {...rest}>
+    <section className={cx('flex bg-gray-100 min-h-0', className)} {...rest}>
       <div className="w-full max-w-screen-xl mx-auto py-6 px-4 flex flex-col">
         <header className={cx(clientId ? 'hidden' : 'flex', 'flex-shrink-0 lg:flex justify-between items-baseline')}>
           <h1 className="text-2xl font-semibold">Kunden</h1>

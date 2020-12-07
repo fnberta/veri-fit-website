@@ -2,7 +2,7 @@ import { Form, Formik, FormikHelpers } from 'formik';
 import { DateTime } from 'luxon';
 import React, { FC, useState } from 'react';
 import { ChangeType, Client, Session, SessionInput } from '@veri-fit/common';
-import { Button } from '@veri-fit/common-ui';
+import { Button, RawSelect } from '@veri-fit/common-ui';
 import { DialogFooter, DialogHeader } from '../Dialog';
 import { useRepos } from '../repositories/RepoContext';
 import SessionFormFields, { SessionFormValues } from './SessionFormFields';
@@ -66,9 +66,8 @@ const EditSessionDialogContent: FC<Props> = ({ session, clients, onSessionChange
             </Form>
             <DialogFooter className="-mt-2 p-4 flex flex-wrap items-baseline justify-end">
               {session.trainingId != null && (
-                // eslint-disable-next-line jsx-a11y/no-onchange
-                <select
-                  className="mt-2 form-select"
+                <RawSelect
+                  className="mt-2 flex-1"
                   aria-label="Änderungsart"
                   value={changeType}
                   disabled={isSubmitting}
@@ -77,19 +76,13 @@ const EditSessionDialogContent: FC<Props> = ({ session, clients, onSessionChange
                   <option value={ChangeType.SINGLE}>Nur dieses</option>
                   <option value={ChangeType.ALL_FOLLOWING}>Alle zukünftigen</option>
                   <option value={ChangeType.ALL_NON_CONFIRMED}>Alle offenen</option>
-                </select>
+                </RawSelect>
               )}
               <div className="mt-2 ml-4 flex-grow flex justify-end space-x-2">
-                <Button disabled={isSubmitting} onClick={onCancelClick}>
+                <Button shape="outlined" disabled={isSubmitting} onClick={onCancelClick}>
                   Verwerfen
                 </Button>
-                <Button
-                  type="submit"
-                  colorScheme="orange"
-                  loading={isSubmitting}
-                  disabled={!isValid}
-                  onClick={submitForm}
-                >
+                <Button type="submit" loading={isSubmitting} disabled={!isValid} onClick={submitForm}>
                   Speichern
                 </Button>
               </div>

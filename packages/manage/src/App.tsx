@@ -55,7 +55,7 @@ const App: FC = () => {
 
   if (!loggedIn) {
     return (
-      <div className="w-full h-full bg-gray-50 flex items-center justify-center">
+      <div className="flex-1 bg-gray-100 flex items-center justify-center">
         <header
           style={{ maxWidth: '30rem' }}
           className="w-full p-8 flex flex-col items-center justify-center bg-white rounded shadow space-y-6"
