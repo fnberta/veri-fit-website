@@ -1,6 +1,6 @@
 import cx from 'classnames';
 import React from 'react';
-import { IconButton } from '@veri-fit/common-ui';
+import { CloseButton } from '@veri-fit/common-ui';
 
 export type NotificationType = 'success' | 'error';
 
@@ -13,39 +13,27 @@ function getContentForType(type: NotificationType) {
   switch (type) {
     case 'success':
       return {
-        classes: {
-          pill: 'bg-orange-300 text-orange-800',
-          close: 'hover:bg-orange-200 active:bg-orange-400',
-        },
+        pill: 'bg-orange-300 text-orange-800',
         text: 'Herzlichen Dank für deine Nachricht! Ich melde mich sofort bei dir.',
       };
     case 'error':
       return {
-        classes: {
-          pill: 'bg-red-300 text-red-800',
-          close: 'hover:bg-red-200 active:bg-red-400',
-        },
+        pill: 'bg-red-300 text-red-800',
         text: 'Da ist etwas schief gegangen. Bitte versuche es nochmals!',
       };
   }
 }
 
 const Notification: React.FC<Props> = ({ type, onCloseClick, className, ...rest }) => {
-  const { classes, text } = getContentForType(type);
+  const { pill, text } = getContentForType(type);
   return (
     <div
-      className={cx('px-4 py-2 leading-tight rounded-lg flex items-center', classes.pill, className)}
+      className={cx('px-4 py-2 leading-tight rounded flex items-center space-x-2', pill, className)}
       role="alert"
       {...rest}
     >
-      <span className="font-semibold text-left flex-auto">{text}</span>
-      <IconButton
-        className={cx('ml-2', classes.close)}
-        color="none"
-        icon="x"
-        label="Schliessen"
-        onClick={onCloseClick}
-      />
+      <span className="flex-auto font-semibold text-left">{text}</span>
+      <CloseButton onClick={onCloseClick} />
     </div>
   );
 };

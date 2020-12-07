@@ -9,12 +9,13 @@ import Layout from '../Layout';
 import { IndexPageQuery } from '../generatedGraphQL';
 import AboutMe from '../sections/AboutMe';
 import ContactMe from '../sections/ContactMe';
-import Current, { Video } from '../sections/Current';
+import Current from '../sections/Current';
 import Hero from '../sections/Hero';
 import LocationMap from '../sections/LocationMap';
 import Offers, { OfferData } from '../sections/Offers';
 import Schedule, { ScheduleEntryData } from '../sections/Schedule';
 import TryOut from '../sections/TryOut';
+import Videos, { Video } from '../sections/Videos';
 
 export interface Props {
   data: IndexPageQuery;
@@ -46,7 +47,9 @@ const IndexPage: React.FC<Props> = ({ data }) => {
         <a href="/#contact">Kontakt</a>
       </Navbar>
       <Hero />
-      <Current videos={data.videos.nodes.map((node) => node.frontmatter as Video)} />
+      <Current>
+        <Videos videos={data.videos.nodes.map((node) => node.frontmatter as Video)} />
+      </Current>
       <Offers
         data={data.offers.nodes.map(
           (node) =>

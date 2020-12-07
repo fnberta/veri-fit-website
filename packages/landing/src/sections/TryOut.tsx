@@ -18,7 +18,7 @@ const TryOut: React.FC = () => (
             Für dein Wohlbefinden – für deinen Erfolg – für dich!
           </p>
         </div>
-        <AnchorButton className="mt-12 ml-12 uppercase tracking-wider" color="orange" size="huge" href="/#contact">
+        <AnchorButton className="mt-12 ml-12 uppercase tracking-wider" colorScheme="orange" size="xl" href="/#contact">
           Kontakt
         </AnchorButton>
       </div>

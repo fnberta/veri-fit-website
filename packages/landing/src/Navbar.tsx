@@ -72,7 +72,7 @@ const Navbar: React.FC<Props> = ({ variant, sticky, children, className, ...rest
         <Image fixed={logo as FixedObject} alt="Veri-Fit" />
         <IconButton
           className={cx('sm:hidden', text)}
-          color="none"
+          colorScheme="custom"
           icon={<Icon className="h-6 w-6" name="menu" />}
           label="Menu"
           aria-expanded={open}

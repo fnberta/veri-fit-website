@@ -1,5 +1,5 @@
-import { Form, Formik, FormikHelpers } from 'formik';
-import React, { useState } from 'react';
+import { Form, Formik, FormikConfig } from 'formik';
+import React, { useEffect, useState } from 'react';
 import { BotField, Button, InputField, makeValidator, TextAreaField, urlEncode } from '@veri-fit/common-ui';
 import Notification, { NotificationType } from '../Notification';
 import BulletItem from './BulletItem';
@@ -38,17 +38,16 @@ async function submitForm(values: FormValues): Promise<boolean> {
 const ContactMe: React.FC = () => {
   const [notificationType, setNotificationType] = useState<NotificationType>();
 
-  function showNotification(type: NotificationType) {
-    setNotificationType(type);
-    setTimeout(() => setNotificationType(undefined), 3000);
-  }
+  useEffect(() => {
+    const timeoutId = notificationType ? window.setTimeout(() => setNotificationType(undefined), 3000) : undefined;
+    return () => clearTimeout(timeoutId);
+  }, [notificationType]);
 
-  async function handleFormSubmit(values: FormValues, { setSubmitting }: FormikHelpers<FormValues>) {
+  const handleFormSubmit: FormikConfig<FormValues>['onSubmit'] = async (values) => {
     setNotificationType(undefined);
     const successful = await submitForm(values);
-    showNotification(successful ? 'success' : 'error');
-    setSubmitting(false);
-  }
+    setNotificationType(successful ? 'success' : 'error');
+  };
 
   return (
     <section id="contact" className="bg-gray-900 flex flex-col">
@@ -128,7 +127,13 @@ const ContactMe: React.FC = () => {
                   disabled={isSubmitting}
                   dark={true}
                 />
-                <Button className="ml-4 mt-4" type="submit" color="orange" loading={isSubmitting} disabled={!isValid}>
+                <Button
+                  className="ml-4 mt-4"
+                  type="submit"
+                  colorScheme="orange"
+                  loading={isSubmitting}
+                  disabled={!isValid}
+                >
                   Senden
                 </Button>
               </Form>
