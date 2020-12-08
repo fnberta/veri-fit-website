@@ -13,6 +13,7 @@ import {
   ToggleSessionPayload,
   ToggleSessionResponse,
   TrainingInput,
+  TrainingType,
   UpdateSessionPayload,
   YogaSubscription,
 } from '@veri-fit/common';
@@ -273,31 +274,42 @@ export const toggleSessionConfirmed = functions.https.onCall(async (data, contex
   const session = parseSession(sessionSnap);
   const action = session.confirmed ? 'opened' : 'confirmed';
   return db.runTransaction(async (t) => {
-    const clientSubscriptionIds = await Promise.all(
-      session.clientIds.map(async (clientId) => {
-        const query = db
-          .collection(Collection.CLIENTS)
-          .doc(clientId)
-          .collection(Collection.SUBSCRIPTIONS)
-          .where('trainingType', '==', session.type);
-        const querySnap = await t.get(query);
-        const subscriptions = querySnap.docs.map(
-          (snap) => parseSubscription(snap) as YogaSubscription | PersonalSubscription,
-        );
-        const subscriptionId = pickSubscriptionId(session.confirmed ? 'confirmed' : 'opened', subscriptions);
-        if (!subscriptionId) {
-          throw new functions.https.HttpsError(
-            'not-found',
-            `No valid subscription id found for client ${clientId} when updating trainingsLeft for session ${session.id}.`,
-          );
-        }
+    function fetchClientSubscriptionIds() {
+      if (
+        (session.type !== TrainingType.YOGA && session.type !== TrainingType.PERSONAL) ||
+        session.clientIds.length === 0
+      ) {
+        return Promise.resolve([]);
+      }
 
-        return {
-          clientId,
-          subscriptionId,
-        };
-      }),
-    );
+      return Promise.all(
+        session.clientIds.map(async (clientId) => {
+          const query = db
+            .collection(Collection.CLIENTS)
+            .doc(clientId)
+            .collection(Collection.SUBSCRIPTIONS)
+            .where('trainingType', '==', session.type);
+          const querySnap = await t.get(query);
+          const subscriptions = querySnap.docs.map(
+            (snap) => parseSubscription(snap) as YogaSubscription | PersonalSubscription,
+          );
+          const subscriptionId = pickSubscriptionId(session.confirmed ? 'confirmed' : 'opened', subscriptions);
+          if (!subscriptionId) {
+            throw new functions.https.HttpsError(
+              'not-found',
+              `No valid subscription id found for client ${clientId} when updating trainingsLeft for session ${session.id}.`,
+            );
+          }
+
+          return {
+            clientId,
+            subscriptionId,
+          };
+        }),
+      );
+    }
+
+    const clientSubscriptionIds = await fetchClientSubscriptionIds();
 
     t.update(sessionRef, { confirmed: !session.confirmed });
 
