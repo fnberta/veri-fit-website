@@ -123,7 +123,7 @@ export interface Props extends ComponentPropsWithoutRef<'svg'> {
   size?: 'md' | 'lg' | 'custom';
 }
 
-function getIconStyleClasses(size: Props['size'] = 'md'): string {
+function getStyleClasses(size: Props['size'] = 'md'): string {
   return cx({
     ['h-5 w-5']: size === 'md',
     ['h-6 w-6']: size === 'lg',
@@ -131,7 +131,7 @@ function getIconStyleClasses(size: Props['size'] = 'md'): string {
 }
 
 export const Icon: FC<Props> = ({ name, size, className, ...rest }) => (
-  <svg className={cx(getIconStyleClasses(size), className)} viewBox="0 0 20 20" fill="currentColor" {...rest}>
+  <svg className={cx(getStyleClasses(size), className)} viewBox="0 0 20 20" fill="currentColor" {...rest}>
     {ICON_PATHS[name]}
   </svg>
 );

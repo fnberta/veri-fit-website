@@ -1,6 +1,6 @@
 import { FormikErrors } from 'formik';
 import React, { FC } from 'react';
-import { makeValidator, InputField } from '@veri-fit/common-ui';
+import { FieldControl, InputField, makeValidator } from '@veri-fit/common-ui';
 import { getToday, isValidISOString } from '../dateTime';
 import { ClientInput } from '../repositories/ClientRepository';
 
@@ -74,33 +74,48 @@ export function getClientInput(values: ClientFormValues): ClientInput {
 
 const ClientFormFields: FC<Props> = ({ disabled }) => (
   <>
-    <div className="p-4 space-y-4">
+    <div className="p-4 space-y-6">
       <h2 className="text-base font-semibold">Persönlich</h2>
-      <div className="space-y-3">
-        <InputField
-          name="name"
-          type="text"
-          placeholder="Yoga Gott"
-          disabled={disabled}
-          label="Name"
-          validate={makeValidator('Name')}
-        />
-        <InputField name="birthday" type="date" max={getToday()} disabled={disabled} label="Geburtstag" />
+      <div className="space-y-4">
+        <FieldControl name="name">
+          <InputField
+            type="text"
+            placeholder="Yoga Gott"
+            disabled={disabled}
+            label="Name"
+            validate={makeValidator('Name')}
+          />
+        </FieldControl>
+        <FieldControl name="birthday">
+          <InputField type="date" max={getToday()} disabled={disabled} label="Geburtstag" />
+        </FieldControl>
       </div>
     </div>
     <hr className="my-2" />
-    <div className="p-4 space-y-4">
+    <div className="p-4 space-y-6">
       <h2 className="text-base font-semibold">Kontakt</h2>
-      <div className="space-y-2">
-        <InputField name="email" type="email" disabled={disabled} label="Email" />
-        <InputField name="phone" type="tel" disabled={disabled} label="Telefon" />
+      <div className="space-y-4">
+        <FieldControl name="email">
+          <InputField type="email" disabled={disabled} label="Email" />
+        </FieldControl>
+        <FieldControl name="phone">
+          <InputField type="tel" disabled={disabled} label="Telefon" />
+        </FieldControl>
         <div className="flex space-x-2">
-          <InputField className="flex-1" name="address.street" type="text" disabled={disabled} label="Strasse" />
-          <InputField className="w-1/3" name="address.number" type="text" disabled={disabled} label="Hausnummer" />
+          <FieldControl className="flex-1" name="address.street">
+            <InputField type="text" disabled={disabled} label="Strasse" />
+          </FieldControl>
+          <FieldControl className="w-1/3" name="address.number">
+            <InputField type="text" disabled={disabled} label="Hausnummer" />
+          </FieldControl>
         </div>
         <div className="flex space-x-2">
-          <InputField className="w-1/3" name="address.zip" type="text" disabled={disabled} label="PLZ" />
-          <InputField className="flex-1" name="address.city" type="text" disabled={disabled} label="Stadt" />
+          <FieldControl className="w-1/3" name="address.zip">
+            <InputField type="text" disabled={disabled} label="PLZ" />
+          </FieldControl>
+          <FieldControl className="flex-1" name="address.city">
+            <InputField type="text" disabled={disabled} label="Stadt" />
+          </FieldControl>
         </div>
       </div>
     </div>

@@ -98,7 +98,7 @@ export const ButtonContent: FC<ButtonContentProps & Pick<ButtonStyleProps, 'size
   return children as ReactElement;
 };
 
-export type ButtonProps = ComponentPropsWithoutRef<'button'> & ButtonStyleProps & ButtonContentProps;
+export interface ButtonProps extends ComponentPropsWithoutRef<'button'>, ButtonStyleProps, ButtonContentProps {}
 
 export const Button: FC<ButtonProps> = ({
   shape,
@@ -128,7 +128,7 @@ export interface IconButtonContentProps {
   label: string;
 }
 
-export type IconButtonProps = ComponentPropsWithoutRef<'button'> & ButtonStyleProps & IconButtonContentProps;
+export interface IconButtonProps extends ComponentPropsWithoutRef<'button'>, ButtonStyleProps, IconButtonContentProps {}
 
 export const IconButton: FC<IconButtonProps> = ({
   shape,
@@ -152,7 +152,7 @@ export const IconButton: FC<IconButtonProps> = ({
   </button>
 );
 
-export type AnchorButtonProps = ComponentPropsWithoutRef<'a'> & ButtonStyleProps & ButtonContentProps;
+export interface AnchorButtonProps extends ComponentPropsWithoutRef<'a'>, ButtonStyleProps, ButtonContentProps {}
 
 export const AnchorButton: FC<AnchorButtonProps> = ({
   shape,

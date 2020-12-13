@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
-import { Field, Form, Formik, FormikHelpers } from 'formik';
-import { BotField, Button, InputField, makeValidator, TextAreaField, urlEncode } from '@veri-fit/common-ui';
+import { Form, Formik, FormikHelpers } from 'formik';
+import {
+  BotField,
+  Button,
+  CheckInputField,
+  FieldControl,
+  InputField,
+  makeValidator,
+  TextAreaField,
+  urlEncode,
+} from '@veri-fit/common-ui';
 import Notification, { NotificationType } from '../Notification';
 
 export interface Video {
@@ -76,54 +85,50 @@ const Videos: React.FC<Props> = ({ videos }) => {
         {({ isSubmitting, isValid }) => (
           <Form className="mt-8 flex flex-col" name="videos" data-netlify="true" netlify-honeypot="bot-field">
             <BotField />
-            <fieldset>
-              <legend className="form-label text-white">Videos</legend>
-              <ul className="-mt-1 text-white">
-                {videos.map((video) => {
-                  const text = `${video.title} - ${video.description}`;
-                  return (
-                    <li key={video.title} className="mt-2">
-                      <label className="inline-flex items-center">
-                        <Field
-                          className="form-checkbox"
-                          type="checkbox"
-                          name="videos"
-                          value={text}
-                          disabled={isSubmitting}
-                        />
-                        <span className="ml-2 text-sm">{text}</span>
-                      </label>
-                    </li>
-                  );
-                })}
-              </ul>
-            </fieldset>
-            <TextAreaField
-              className="mt-4 flex-auto"
-              name="message"
-              disabled={isSubmitting}
-              label="Dein Wunschtraining ist noch nicht auf der Liste? Beschreibe was du dir wünschst!"
-              dark={true}
-            />
+            <FieldControl name="videos">
+              <fieldset>
+                <legend className="form-label text-white">Videos</legend>
+                <ul className="-mt-1 text-white">
+                  {videos.map((video) => {
+                    const text = `${video.title} - ${video.description}`;
+                    return (
+                      <li key={video.title} className="mt-2">
+                        <CheckInputField type="checkbox" value={text} label={text} />
+                      </li>
+                    );
+                  })}
+                </ul>
+              </fieldset>
+            </FieldControl>
+            <FieldControl name="message">
+              <TextAreaField
+                className="mt-4 flex-auto"
+                disabled={isSubmitting}
+                label="Dein Wunschtraining ist noch nicht auf der Liste? Beschreibe was du dir wünschst!"
+                dark={true}
+              />
+            </FieldControl>
             <div className="-ml-4 flex flex-wrap">
-              <InputField
-                className="w-64 ml-4 mt-4 flex-auto"
-                type="text"
-                name="name"
-                validate={makeValidator('Name')}
-                disabled={isSubmitting}
-                label="Name"
-                dark={true}
-              />
-              <InputField
-                className="w-64 ml-4 mt-4 flex-auto"
-                type="email"
-                name="email"
-                validate={makeValidator('Email')}
-                disabled={isSubmitting}
-                label="Email"
-                dark={true}
-              />
+              <FieldControl name="name">
+                <InputField
+                  className="w-64 ml-4 mt-4 flex-auto"
+                  type="text"
+                  validate={makeValidator('Name')}
+                  disabled={isSubmitting}
+                  label="Name"
+                  dark={true}
+                />
+              </FieldControl>
+              <FieldControl name="email">
+                <InputField
+                  className="w-64 ml-4 mt-4 flex-auto"
+                  type="email"
+                  validate={makeValidator('Email')}
+                  disabled={isSubmitting}
+                  label="Email"
+                  dark={true}
+                />
+              </FieldControl>
             </div>
             <Button
               className="mt-4 self-start"

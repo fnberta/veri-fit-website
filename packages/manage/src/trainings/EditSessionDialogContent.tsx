@@ -2,7 +2,7 @@ import { Form, Formik, FormikHelpers } from 'formik';
 import { DateTime } from 'luxon';
 import React, { FC, useState } from 'react';
 import { ChangeType, Client, Session, SessionInput } from '@veri-fit/common';
-import { Button, RawSelect } from '@veri-fit/common-ui';
+import { Button, Select } from '@veri-fit/common-ui';
 import { DialogFooter, DialogHeader } from '../Dialog';
 import { useRepos } from '../repositories/RepoContext';
 import SessionFormFields, { SessionFormValues } from './SessionFormFields';
@@ -61,12 +61,12 @@ const EditSessionDialogContent: FC<Props> = ({ session, clients, onSessionChange
       >
         {({ isValid, isSubmitting, submitForm }) => (
           <>
-            <Form className="dialog-body p-4 space-x-3">
+            <Form className="dialog-body p-4 space-y-4">
               <SessionFormFields clients={clients} disabled={isSubmitting} />
             </Form>
             <DialogFooter className="-mt-2 p-4 flex flex-wrap items-baseline justify-end">
               {session.trainingId != null && (
-                <RawSelect
+                <Select
                   className="mt-2 flex-1"
                   aria-label="Änderungsart"
                   value={changeType}
@@ -76,7 +76,7 @@ const EditSessionDialogContent: FC<Props> = ({ session, clients, onSessionChange
                   <option value={ChangeType.SINGLE}>Nur dieses</option>
                   <option value={ChangeType.ALL_FOLLOWING}>Alle zukünftigen</option>
                   <option value={ChangeType.ALL_NON_CONFIRMED}>Alle offenen</option>
-                </RawSelect>
+                </Select>
               )}
               <div className="mt-2 ml-4 flex-grow flex justify-end space-x-2">
                 <Button shape="outlined" disabled={isSubmitting} onClick={onCancelClick}>

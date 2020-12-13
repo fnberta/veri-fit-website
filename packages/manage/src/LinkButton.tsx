@@ -9,7 +9,7 @@ import {
   IconButtonContentProps,
 } from '@veri-fit/common-ui';
 
-export type LinkButtonProps<T> = LinkProps<T> & ButtonStyleProps & Omit<ButtonContentProps, 'loading'>;
+export interface LinkButtonProps<T> extends LinkProps<T>, ButtonStyleProps, Omit<ButtonContentProps, 'loading'> {}
 
 export function LinkButton<T>({ shape, colorScheme, size, icon, children, className, ...rest }: LinkButtonProps<T>) {
   return (
@@ -19,7 +19,10 @@ export function LinkButton<T>({ shape, colorScheme, size, icon, children, classN
   );
 }
 
-export type LinkIconButtonProps<T> = LinkProps<T> & ButtonStyleProps & Omit<IconButtonContentProps, 'loading'>;
+export interface LinkIconButtonProps<T>
+  extends LinkProps<T>,
+    ButtonStyleProps,
+    Omit<IconButtonContentProps, 'loading'> {}
 
 export function LinkIconButton<T>({
   shape,

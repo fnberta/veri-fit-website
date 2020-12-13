@@ -2,6 +2,7 @@ import { DateTime } from 'luxon';
 import React, { ComponentPropsWithoutRef, FC, MouseEventHandler, useEffect, useState } from 'react';
 import { Client, Session, Subscription, SubscriptionType, Training } from '@veri-fit/common';
 import { Button, IconButton } from '@veri-fit/common-ui';
+import cx from 'classnames';
 import Dialog from '../Dialog';
 import ConfirmDeleteDialogContent from '../ConfirmDeleteDialogContent';
 import { formatLocale, getToday } from '../dateTime';
@@ -103,14 +104,14 @@ const ClientDetails: FC<Props> = ({ client, className, ...rest }) => {
   useEffect(() => trainingRepo.observeAllForClients(client.id, setTrainings), [trainingRepo, client.id]);
 
   return (
-    <section className={className} {...rest}>
+    <section className={cx('space-y-2', className)} {...rest}>
       <header>
         <h1 className="text-3xl font-semibold">{client.name}</h1>
         {client.birthday != null && (
           <p className="text-base text-gray-600">{`Geboren am ${formatLocale(client.birthday)}`}</p>
         )}
       </header>
-      <div className="mt-2 -ml-6 flex flex-wrap">
+      <div className="-ml-6 flex flex-wrap">
         <div className="mt-6 ml-6">
           <div>
             <h2 className="text-xl font-semibold">Kontaktdaten</h2>

@@ -81,9 +81,9 @@ const AddClientDialogContent: FC<Props> = ({ onClientCreated, onCancelClick }) =
             <Form className="dialog-body">
               <ClientFormFields disabled={isSubmitting} />
               <hr className="my-2" />
-              <div className="p-4 space-y-4">
+              <div className="p-4 space-y-6">
                 <h2 className="text-base font-semibold">Abo</h2>
-                <div className="space-y-2">
+                <div className="space-y-4">
                   <SubscriptionFormFields
                     trainingTypes={trainingTypes}
                     namespace="subscription"

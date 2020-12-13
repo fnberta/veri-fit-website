@@ -30,20 +30,39 @@ export function urlEncode(data: Record<string, string | number | boolean>): stri
     .join('&');
 }
 
-const FieldControlContext = createContext({ name: '', hasError: false });
+export interface FieldControlValues {
+  name?: string;
+  hasError?: boolean;
+}
 
-export interface FieldControlProps {
+const FieldControlContext = createContext<FieldControlValues>({ name: '', hasError: false });
+
+export function useFieldValues<T extends FieldControlValues>(props: T) {
+  const control = useContext(FieldControlContext);
+  const name = props.name ?? control.name;
+  if (name == null) {
+    throw new Error('Name must be specified. Either wrap field in <FieldControl /> or specify name directly.');
+  }
+  const [input, meta, helper] = useField({ ...props, name });
+  const hasError = control.hasError ?? (meta.error != null && meta.touched);
+
+  return {
+    field: {
+      input,
+      meta,
+      helper,
+    },
+    name,
+    hasError,
+  };
+}
+
+export interface FieldControlProps extends ComponentPropsWithoutRef<'div'> {
   name: string;
   helperText?: ReactNode;
 }
 
-export const FieldControl: FC<ComponentPropsWithoutRef<'div'> & FieldControlProps> = ({
-  name,
-  helperText,
-  children,
-  className,
-  ...rest
-}) => {
+export const FieldControl: FC<FieldControlProps> = ({ name, helperText, children, className, ...rest }) => {
   const [, meta] = useField(name);
   const hasError = meta.error != null && meta.touched;
 
@@ -80,20 +99,19 @@ function getInputStyleClasses(hasError: boolean): string {
   );
 }
 
-export type RawProps<T extends ElementType> = ComponentPropsWithoutRef<T> & { hasError?: boolean };
+export type ElementProps<T extends ElementType> = ComponentPropsWithoutRef<T> & { hasError?: boolean };
 
-export const RawInput: FC<RawProps<'input'>> = ({ hasError, className, ...rest }) => (
+export const Input: FC<ElementProps<'input'>> = ({ hasError, className, ...rest }) => (
   <input className={cx(getInputStyleClasses(hasError === true), className)} {...rest} />
 );
 
-export interface InputProps extends ComponentPropsWithoutRef<'input'>, CommonFieldProps {
+export interface InputFieldProps extends ComponentPropsWithoutRef<'input'>, CommonFieldProps {
   icon?: IconName | ReactElement;
 }
 
-export const Input: FC<InputProps> = (props) => {
+export const InputField: FC<InputFieldProps> = (props) => {
   const { label, dark, icon, validate, className, ...rest } = props;
-  const { name, hasError } = useContext(FieldControlContext);
-  const [field] = useField({ ...props, name });
+  const { field, hasError } = useFieldValues(props);
 
   return (
     <label className={cx('form-field', className)}>
@@ -103,80 +121,58 @@ export const Input: FC<InputProps> = (props) => {
           <div className="absolute inset-y-0 pl-3 flex items-center">
             {isValidElement(icon) ? icon : <Icon name={icon} />}
           </div>
-          <RawInput className="pl-10" hasError={hasError} {...field} {...rest} />
+          <Input className="pl-10" hasError={hasError} {...field.input} {...rest} />
         </div>
       ) : (
-        <RawInput hasError={hasError} {...field} {...rest} />
+        <Input hasError={hasError} {...field.input} {...rest} />
       )}
     </label>
   );
 };
 
-export type InputFieldProps = InputProps & FieldControlProps;
-
-export const InputField: FC<InputFieldProps> = ({ name, helperText, className, ...rest }) => (
-  <FieldControl name={name} helperText={helperText} className={className}>
-    <Input {...rest} />
-  </FieldControl>
+const TextArea: FC<ElementProps<'textarea'>> = ({ hasError, className, ...rest }) => (
+  <textarea className={cx(getInputStyleClasses(hasError === true), className)} {...rest} />
 );
 
-export interface TextAreaProps extends ComponentPropsWithoutRef<'textarea'>, CommonFieldProps {}
+export interface TextAreaFieldProps extends ComponentPropsWithoutRef<'textarea'>, CommonFieldProps {}
 
-export const TextArea: FC<TextAreaProps> = (props) => {
+export const TextAreaField: FC<TextAreaFieldProps> = (props) => {
   const { label, dark, validate, className, ...rest } = props;
-  const { name, hasError } = useContext(FieldControlContext);
-  const [field] = useField({ ...props, name });
+  const { field, hasError } = useFieldValues(props);
 
   return (
     <label className={cx('form-field', className)}>
       {isValidElement(label) ? label : <FieldLabel dark={dark}>{label}</FieldLabel>}
-      <textarea className={getInputStyleClasses(hasError)} {...field} {...rest} />
+      <TextArea hasError={hasError} {...field.input} {...rest} />
     </label>
   );
 };
 
-export type TextAreaFieldProps = TextAreaProps & FieldControlProps;
-
-export const TextAreaField: FC<TextAreaFieldProps> = ({ name, helperText, className, ...rest }) => (
-  <FieldControl name={name} helperText={helperText} className={className}>
-    <TextArea {...rest} />
-  </FieldControl>
-);
-
-export const RawSelect: FC<RawProps<'select'>> = ({ hasError, className, ...rest }) => (
+export const Select: FC<ElementProps<'select'>> = ({ hasError, className, ...rest }) => (
   <select className={cx(getInputStyleClasses(hasError === true), className)} {...rest} />
 );
 
-export type SelectProps = ComponentPropsWithoutRef<'select'> & CommonFieldProps;
+export interface SelectFieldProps extends ComponentPropsWithoutRef<'select'>, CommonFieldProps {}
 
-export const Select: FC<SelectProps> = (props) => {
+export const SelectField: FC<SelectFieldProps> = (props) => {
   const { label, dark, validate, className, ...rest } = props;
-  const { name, hasError } = useContext(FieldControlContext);
-  const [field] = useField({ ...props, name });
+  const { field, hasError } = useFieldValues(props);
 
   return (
     <label className={cx('form-field', className)}>
       {isValidElement(label) ? label : <FieldLabel dark={dark}>{label}</FieldLabel>}
-      <RawSelect hasError={hasError} {...field} {...rest} />
+      <Select hasError={hasError} {...field.input} {...rest} />
     </label>
   );
 };
 
-export type SelectFieldProps = SelectProps & FieldControlProps;
+export interface CheckInputFieldProps extends Omit<ComponentPropsWithoutRef<'input'>, 'type'>, CommonFieldProps {
+  type: 'radio' | 'checkbox';
+}
 
-export const SelectField: FC<SelectFieldProps> = ({ name, helperText, className, ...rest }) => (
-  <FieldControl name={name} helperText={helperText} className={className}>
-    <Select {...rest} />
-  </FieldControl>
-);
-
-export type CheckInputProps = Omit<ComponentPropsWithoutRef<'input'>, 'type'> &
-  CommonFieldProps & { type: 'radio' | 'checkbox' };
-
-export const CheckInput: FC<CheckInputProps> = (props) => {
+export const CheckInputField: FC<CheckInputFieldProps> = (props) => {
   const { label, dark, validate, className, ...rest } = props;
-  const { name } = useContext(FieldControlContext);
-  const [field] = useField({ ...props, name });
+  const { field } = useFieldValues(props);
 
   return (
     <label
@@ -190,7 +186,7 @@ export const CheckInput: FC<CheckInputProps> = (props) => {
     >
       <input
         className="rounded shadow-sm text-gray-700 border-gray-300 focus:ring-offset-2 focus:ring-2 focus:ring-gray-400 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:shadow-none disabled:border-0 disabled:bg-gray-200"
-        {...field}
+        {...field.input}
         {...rest}
       />
       {isValidElement(label) ? label : <FieldLabel dark={dark}>{label}</FieldLabel>}

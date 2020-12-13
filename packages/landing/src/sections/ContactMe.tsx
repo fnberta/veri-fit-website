@@ -1,6 +1,14 @@
 import { Form, Formik, FormikConfig } from 'formik';
 import React, { useEffect, useState } from 'react';
-import { BotField, Button, InputField, makeValidator, TextAreaField, urlEncode } from '@veri-fit/common-ui';
+import {
+  BotField,
+  Button,
+  FieldControl,
+  InputField,
+  makeValidator,
+  TextAreaField,
+  urlEncode,
+} from '@veri-fit/common-ui';
 import Notification, { NotificationType } from '../Notification';
 import BulletItem from './BulletItem';
 
@@ -100,33 +108,36 @@ const ContactMe: React.FC = () => {
                 netlify-honeypot="bot-field"
               >
                 <BotField />
-                <InputField
-                  className="w-64 ml-4 mt-4 flex-auto "
-                  type="text"
-                  name="name"
-                  validate={makeValidator('Name')}
-                  disabled={isSubmitting}
-                  label="Name"
-                  dark={true}
-                />
-                <InputField
-                  className="w-64 ml-4 mt-4 flex-auto"
-                  type="email"
-                  name="email"
-                  validate={makeValidator('Email')}
-                  disabled={isSubmitting}
-                  label="Email"
-                  dark={true}
-                />
-                <TextAreaField
-                  className="w-full ml-4 mt-4"
-                  name="message"
-                  label="Nachricht"
-                  placeholder="Wie kann ich dir helfen?"
-                  validate={makeValidator('Nachricht')}
-                  disabled={isSubmitting}
-                  dark={true}
-                />
+                <FieldControl name="name">
+                  <InputField
+                    className="w-64 ml-4 mt-4 flex-auto "
+                    type="text"
+                    validate={makeValidator('Name')}
+                    disabled={isSubmitting}
+                    label="Name"
+                    dark={true}
+                  />
+                </FieldControl>
+                <FieldControl name="email">
+                  <InputField
+                    className="w-64 ml-4 mt-4 flex-auto"
+                    type="email"
+                    validate={makeValidator('Email')}
+                    disabled={isSubmitting}
+                    label="Email"
+                    dark={true}
+                  />
+                </FieldControl>
+                <FieldControl name="message">
+                  <TextAreaField
+                    className="w-full ml-4 mt-4"
+                    label="Nachricht"
+                    placeholder="Wie kann ich dir helfen?"
+                    validate={makeValidator('Nachricht')}
+                    disabled={isSubmitting}
+                    dark={true}
+                  />
+                </FieldControl>
                 <Button
                   className="ml-4 mt-4"
                   type="submit"

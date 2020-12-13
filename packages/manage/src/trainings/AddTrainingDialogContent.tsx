@@ -44,7 +44,7 @@ const AddTrainingDialogContent: FC<Props> = ({ clients, onTrainingCreated, onCan
       >
         {({ isValid, isSubmitting, submitForm }) => (
           <>
-            <Form className="dialog-body p-4 space-y-3">
+            <Form className="dialog-body p-4 space-y-4">
               <TrainingFormFields clients={clients} disabled={isSubmitting} />
             </Form>
             <DialogFooter className="flex justify-end p-4 space-x-2">

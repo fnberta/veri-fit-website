@@ -1,8 +1,8 @@
-import { FieldConfig, FormikErrors, useField, useFormikContext } from 'formik';
+import { FormikErrors, useFormikContext } from 'formik';
 import { DateTime } from 'luxon';
 import React, { ComponentPropsWithoutRef, FC } from 'react';
 import { Client, TrainingInput, TrainingType } from '@veri-fit/common';
-import { InputField, SelectField } from '@veri-fit/common-ui';
+import { CommonFieldProps, FieldControl, InputField, SelectField, useFieldValues } from '@veri-fit/common-ui';
 import { isValidISOString } from '../dateTime';
 import { getTrainingName } from '../displayNames';
 import { validSubscriptionTypes } from '../subscriptionChecks';
@@ -47,21 +47,23 @@ export function validateTrainingForm(values: TrainingInput): FormikErrors<Traini
   return errors;
 }
 
-type ParticipantsFieldProps = ComponentPropsWithoutRef<'select'> & FieldConfig<string[]> & { clients: Client[] };
+interface ParticipantsFieldProps extends ComponentPropsWithoutRef<'select'>, CommonFieldProps {
+  clients: Client[];
+}
 
 const ParticipantsField: FC<ParticipantsFieldProps> = (props) => {
-  const [field, meta, { setValue }] = useField(props);
+  const { field } = useFieldValues(props);
+  const { input, meta, helper } = field;
   const { name, clients, ...rest } = props;
 
   return (
     <SelectField
-      label="Teilnehmer"
       name={name}
       multiple={true}
       size={clients.length > MAX_PARTICIPANTS_SIZE ? MAX_PARTICIPANTS_SIZE : clients.length}
       value={meta.value}
-      onBlur={field.onBlur}
-      onChange={(e) => setValue(Array.from(e.currentTarget.selectedOptions).map((option) => option.value))}
+      onBlur={input.onBlur}
+      onChange={(e) => helper.setValue(Array.from(e.currentTarget.selectedOptions).map((option) => option.value))}
       {...rest}
     >
       {clients.map((client) => (
@@ -77,23 +79,30 @@ const TrainingFormFields: FC<Props> = ({ clients, disabled }) => {
   const { values } = useFormikContext<TrainingInput>();
   return (
     <>
-      <SelectField name="type" disabled={disabled} label="Typ">
-        {Object.keys(validSubscriptionTypes).map((trainingType) => (
-          <option key={trainingType} value={trainingType}>
-            {getTrainingName(trainingType as TrainingType)}
-          </option>
-        ))}
-      </SelectField>
-      <InputField
-        type="date"
+      <FieldControl name="type">
+        <SelectField disabled={disabled} label="Typ">
+          {Object.keys(validSubscriptionTypes).map((trainingType) => (
+            <option key={trainingType} value={trainingType}>
+              {getTrainingName(trainingType as TrainingType)}
+            </option>
+          ))}
+        </SelectField>
+      </FieldControl>
+      <FieldControl
         name="runsFrom"
         helperText={`Training findet am ${DateTime.fromISO(values.runsFrom).weekdayLong} statt.`}
-        disabled={disabled}
-        label="Startpunkt"
-      />
-      <InputField type="time" name="time.start" disabled={disabled} label="Startzeit" />
-      <InputField type="time" name="time.end" disabled={disabled} label="Endzeit" />
-      <ParticipantsField name="clientIds" clients={clients} />
+      >
+        <InputField type="date" disabled={disabled} label="Startpunkt" />
+      </FieldControl>
+      <FieldControl name="time.start">
+        <InputField type="time" disabled={disabled} label="Startzeit" />
+      </FieldControl>
+      <FieldControl name="time.end">
+        <InputField type="time" disabled={disabled} label="Endzeit" />
+      </FieldControl>
+      <FieldControl name="clientIds">
+        <ParticipantsField clients={clients} label="Teilnehmer" />
+      </FieldControl>
     </>
   );
 };

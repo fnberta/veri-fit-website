@@ -49,7 +49,7 @@ const AddSubscriptionDialogContent: FC<Props> = ({ clientId, subscriptions, onSu
       <Formik<SubscriptionFormValues> onSubmit={handleFormSubmission} initialValues={getInitialValues(getToday())}>
         {({ isValid, isSubmitting, submitForm }) => (
           <>
-            <Form className="dialog-body p-4 space-y-2">
+            <Form className="dialog-body p-4 space-y-4">
               <SubscriptionFormFields trainingTypes={getValidTrainingTypes(subscriptions)} disabled={isSubmitting} />
             </Form>
             <DialogFooter className="flex justify-end p-4 space-x-2">
