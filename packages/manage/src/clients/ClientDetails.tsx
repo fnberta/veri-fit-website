@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import React, { ComponentPropsWithoutRef, FC, MouseEventHandler, useEffect, useState } from 'react';
 import { Client, Session, Subscription, SubscriptionType, Training } from '@veri-fit/common';
-import { Button, IconButton } from '@veri-fit/common-ui';
+import { Button, Icon, IconButton, IconName } from '@veri-fit/common-ui';
 import cx from 'classnames';
 import Dialog from '../Dialog';
 import ConfirmDeleteDialogContent from '../ConfirmDeleteDialogContent';
@@ -92,6 +92,13 @@ const SubscriptionSummary: FC<SummaryProps> = ({ subscription, onSetPaidClick, o
   );
 };
 
+const ContactItem: FC<{ icon: IconName }> = ({ icon, children }) => (
+  <div className="flex space-x-8">
+    <Icon className="text-gray-500" name={icon} />
+    {children}
+  </div>
+);
+
 const ClientDetails: FC<Props> = ({ client, className, ...rest }) => {
   const [subscriptions, setSubscriptions] = useState([] as Subscription[]);
   const [sessions, setSessions] = useState([] as Session[]);
@@ -104,136 +111,141 @@ const ClientDetails: FC<Props> = ({ client, className, ...rest }) => {
   useEffect(() => trainingRepo.observeAllForClients(client.id, setTrainings), [trainingRepo, client.id]);
 
   return (
-    <section className={cx('space-y-2', className)} {...rest}>
-      <header>
-        <h1 className="text-3xl font-semibold">{client.name}</h1>
-        {client.birthday != null && (
-          <p className="text-base text-gray-600">{`Geboren am ${formatLocale(client.birthday)}`}</p>
-        )}
+    <section className={cx('', className)} {...rest}>
+      <header className="p-4 md:p-6 flex items-center justify-between border-b space-x-6">
+        <div className="flex items-center space-x-4">
+          <div className="h-14 w-14 inline-flex items-center justify-center rounded-full bg-gray-200">FB</div>
+          <h1 className="text-3xl whitespace-nowrap">{client.name}</h1>
+        </div>
+        <div className="flex space-x-2">
+          <IconButton
+            shape="text"
+            size="sm"
+            icon="pencil"
+            label="Ändern"
+            onClick={() => setClientDialog({ type: 'EDIT' })}
+          />
+          <IconButton
+            shape="text"
+            size="sm"
+            colorScheme="red"
+            icon="user-remove"
+            label="Löschen"
+            disabled={true}
+            onClick={() => setClientDialog({ type: 'DELETE' })}
+          />
+        </div>
       </header>
-      <div className="-ml-6 flex flex-wrap">
-        <div className="mt-6 ml-6">
-          <div>
-            <h2 className="text-xl font-semibold">Kontaktdaten</h2>
-            <div className="mt-2">
-              {client.address != null ? (
-                <a
-                  className="block link"
-                  href={`https://www.google.ch/maps?q=${client.address.street}+${client.address.number}+${client.address.zip}+${client.address.city}`}
-                >
-                  {`${client.address.street} ${client.address.number}`}
-                  <br />
-                  {`${client.address.zip} ${client.address.city}`}
-                </a>
-              ) : (
-                <p>Keine Adresse gespeichert…</p>
-              )}
-              <a className="block link" href={`mailto:${client.email}`}>
-                {client.email}
+      <div className="p-4 md:p-6 border-b space-y-4">
+        <h2 className="text-xl">Kontaktdaten</h2>
+        <div className="space-y-3">
+          <ContactItem icon="email">
+            <a className="block link" href={`mailto:${client.email}`}>
+              {client.email}
+            </a>
+          </ContactItem>
+          <ContactItem icon="phone-outgoing">
+            <a className="block link" href={`tel:${client.phone}`}>
+              {client.phone}
+            </a>
+          </ContactItem>
+          {client.address != null && (
+            <ContactItem icon="location-marker">
+              <a
+                className="block link"
+                href={`https://www.google.ch/maps?q=${client.address.street}+${client.address.number}+${client.address.zip}+${client.address.city}`}
+              >
+                {`${client.address.street} ${client.address.number}, ${client.address.zip} ${client.address.city}`}
               </a>
-              <a className="block link" href={`tel:${client.phone}`}>
-                {client.phone}
-              </a>
-            </div>
-          </div>
-          <div className="-ml-2 flex flex-wrap">
-            <Button
-              className="mt-2 ml-2"
-              shape="outlined"
-              size="sm"
-              icon="pencil"
-              onClick={() => setClientDialog({ type: 'EDIT' })}
-            >
-              Ändern
-            </Button>
-            <Button
-              className="mt-2 ml-2"
-              size="sm"
-              colorScheme="red"
-              shape="text"
-              icon="user-remove"
-              disabled={true}
-              onClick={() => setClientDialog({ type: 'DELETE' })}
-            >
-              Löschen
-            </Button>
-          </div>
+            </ContactItem>
+          )}
+          {client.birthday != null && (
+            <ContactItem icon="cake">
+              <p className="text-base text-gray-600">{`Geboren am ${formatLocale(client.birthday)}`}</p>
+            </ContactItem>
+          )}
         </div>
-        <div className="mt-6 ml-6 space-y-2">
-          <h2 className="text-xl font-semibold">Abos</h2>
-          <div className="space-y-2">
-            <ul className="h-56 px-2 border overflow-auto divide-y">
-              {subscriptions.map((subscription) => (
-                <li key={subscription.id} className="py-4 px-2 space-y-2">
-                  <SubscriptionSummary
-                    subscription={subscription}
-                    onSetPaidClick={async () => {
-                      await clientRepo.updateSubscription(client.id, subscription.id, {
-                        ...subscription,
-                        paidAt: getToday(),
-                      });
-                    }}
-                    onDeleteClick={() => setClientDialog({ type: 'SUBSCRIPTION_DELETE', subscription })}
-                  />
-                </li>
-              ))}
-            </ul>
-            <Button size="sm" icon="document-add" onClick={() => setClientDialog({ type: 'SUBSCRIPTION_ADD' })}>
-              Hinzufügen
-            </Button>
-          </div>
+      </div>
+      <div className="p-4 md:p-6 border-b space-y-4">
+        <h2 className="text-xl">Abos</h2>
+        <div className="flex flex-col space-y-3">
+          <ul className="space-y-2">
+            {subscriptions.map((subscription) => (
+              <li key={subscription.id} className="py-4 px-2 border space-y-2">
+                <SubscriptionSummary
+                  subscription={subscription}
+                  onSetPaidClick={async () => {
+                    await clientRepo.updateSubscription(client.id, subscription.id, {
+                      ...subscription,
+                      paidAt: getToday(),
+                    });
+                  }}
+                  onDeleteClick={() => setClientDialog({ type: 'SUBSCRIPTION_DELETE', subscription })}
+                />
+              </li>
+            ))}
+          </ul>
+          <Button
+            className="self-end"
+            size="sm"
+            shape="outlined"
+            icon="document-add"
+            onClick={() => setClientDialog({ type: 'SUBSCRIPTION_ADD' })}
+          >
+            Hinzufügen
+          </Button>
         </div>
-        <div className="mt-6 ml-6 flex-auto space-y-2">
-          <h2 className="text-xl font-semibold">Trainingszeiten</h2>
-          <div>
-            {trainings.length > 0 ? (
-              <table className="w-full table table-auto">
-                <thead>
-                  <tr>
-                    <th>Training</th>
-                    <th>Zeit</th>
+      </div>
+      <div className="p-4 md:p-6 border-b space-y-4">
+        <h2 className="text-xl">Trainingszeiten</h2>
+        <div>
+          {trainings.length > 0 ? (
+            <table className="w-full table table-auto">
+              <thead>
+                <tr>
+                  <th>Training</th>
+                  <th>Zeit</th>
+                </tr>
+              </thead>
+              <tbody>
+                {trainings.map((training) => (
+                  <tr key={training.id}>
+                    <td>{getTrainingName(training.type)}</td>
+                    <td>{`${training.time.start} - ${training.time.end}`}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {trainings.map((training) => (
-                    <tr key={training.id}>
-                      <td>{getTrainingName(training.type)}</td>
-                      <td>{`${training.time.start} - ${training.time.end}`}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            ) : (
-              <p>Noch keine Trainingszeiten gesetzt…</p>
-            )}
-          </div>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p>Noch keine Trainingszeiten gesetzt…</p>
+          )}
         </div>
-        <div className="mt-6 ml-6 flex-auto space-y-2">
-          <h2 className="text-xl font-semibold">Anwesenheit</h2>
-          <div>
-            {sessions.length > 0 ? (
-              <table className="w-full table table-auto">
-                <thead>
-                  <tr>
-                    <th>Datum</th>
-                    <th>Training</th>
-                    <th>Zeit</th>
+      </div>
+      <div className="p-4 md:p-6 border-b space-y-4">
+        <h2 className="text-xl">Anwesenheit</h2>
+        <div>
+          {sessions.length > 0 ? (
+            <table className="w-full table table-auto">
+              <thead>
+                <tr>
+                  <th>Datum</th>
+                  <th>Training</th>
+                  <th>Zeit</th>
+                </tr>
+              </thead>
+              <tbody>
+                {sessions.map((session) => (
+                  <tr key={session.id}>
+                    <td>{session.date}</td>
+                    <td>{getTrainingName(session.type)}</td>
+                    <td>{`${session.time.start} - ${session.time.end}`}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {sessions.map((session) => (
-                    <tr key={session.id}>
-                      <td>{session.date}</td>
-                      <td>{getTrainingName(session.type)}</td>
-                      <td>{`${session.time.start} - ${session.time.end}`}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            ) : (
-              <p>Leider noch kein Training besucht…</p>
-            )}
-          </div>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p>Leider noch kein Training besucht…</p>
+          )}
         </div>
       </div>
       <Dialog open={clientDialog != null} onCancel={() => setClientDialog(undefined)}>

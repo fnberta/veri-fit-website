@@ -106,7 +106,10 @@ interface ClientsContentProps extends ComponentPropsWithoutRef<'div'> {
 }
 
 const ClientsDesktop: FC<ClientsContentProps> = ({ clients, selectedClient, header, className, ...rest }) => (
-  <div className={cx('flex-auto p-6 min-h-0 hidden lg:flex flex-col space-y-6', className)} {...rest}>
+  <div
+    className={cx('flex-auto p-6 max-w-screen-xl mx-auto min-h-0 hidden lg:flex flex-col space-y-6', className)}
+    {...rest}
+  >
     {header}
     <div className="flex-auto min-h-0 flex space-x-6">
       {clients.length === 0 ? (
@@ -120,7 +123,7 @@ const ClientsDesktop: FC<ClientsContentProps> = ({ clients, selectedClient, head
           />
           <div className="flex-1 flex bg-white shadow rounded overflow-auto">
             {selectedClient ? (
-              <ClientDetails className="p-6 " client={selectedClient} />
+              <ClientDetails className="flex-auto" client={selectedClient} />
             ) : (
               <div className="flex-auto flex flex-col items-center justify-center">
                 <p className="text-lg text-center">Wähle einen Kunden aus um Details zu sehen.</p>
@@ -136,7 +139,7 @@ const ClientsDesktop: FC<ClientsContentProps> = ({ clients, selectedClient, head
 const ClientsMobile: FC<ClientsContentProps> = ({ clients, selectedClient, header, className, ...rest }) => (
   <div className={cx('lg:hidden flex-auto flex flex-col', className)} {...rest}>
     {selectedClient ? (
-      <ClientDetails className="flex-auto p-4 md:p-6 bg-white" client={selectedClient} />
+      <ClientDetails className="flex-auto bg-white" client={selectedClient} />
     ) : (
       <>
         {header}
