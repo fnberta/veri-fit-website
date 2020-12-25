@@ -9,13 +9,11 @@ import Layout from '../Layout';
 import { IndexPageQuery } from '../generatedGraphQL';
 import AboutMe from '../sections/AboutMe';
 import ContactMe from '../sections/ContactMe';
-import Current from '../sections/Current';
 import Hero from '../sections/Hero';
 import LocationMap from '../sections/LocationMap';
 import Offers, { OfferData } from '../sections/Offers';
 import Schedule, { ScheduleEntryData } from '../sections/Schedule';
 import TryOut from '../sections/TryOut';
-import Videos, { Video } from '../sections/Videos';
 
 export type Props = PageProps<IndexPageQuery>;
 
@@ -29,9 +27,6 @@ const IndexPage: FC<Props> = ({ data }) => (
       <Link to="/#contact">Kontakt</Link>
     </Navbar>
     <Hero />
-    <Current>
-      <Videos videos={data.videos.nodes.map((node) => node.frontmatter as Video)} />
-    </Current>
     <Offers
       data={data.offers.nodes.map(
         (node) =>
@@ -90,17 +85,6 @@ export const query = graphql`
           weekday
           timeOfDay
           time
-        }
-      }
-    }
-    videos: allMarkdownRemark(
-      filter: { fields: { collection: { eq: "videos" } } }
-      sort: { fields: [frontmatter___title], order: ASC }
-    ) {
-      nodes {
-        frontmatter {
-          title
-          description
         }
       }
     }
