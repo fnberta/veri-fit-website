@@ -1,0 +1,8 @@
+[build]
+publish = "packages/manage/build/"
+command = "yarn build"
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200

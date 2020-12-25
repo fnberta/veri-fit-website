@@ -135,7 +135,7 @@ interface ClientsContentProps {
 const ClientsDualPane: FC<ClientsContentProps> = ({ clients, header, empty, emptySearch, onAddUserClick }) => {
   const { filterQuery, setFilterQuery, filteredClients, selectedClient } = useFilteredClients(clients);
   return (
-    <div className="min-h-0 flex-auto hidden lg:flex flex-col">
+    <div className="flex-auto min-h-0 hidden lg:flex flex-col">
       <Navbar />
       <section className="flex-auto flex bg-gray-100 min-h-0">
         {header}
@@ -149,7 +149,7 @@ const ClientsDualPane: FC<ClientsContentProps> = ({ clients, header, empty, empt
               onAddUserClick={onAddUserClick}
             />
             {filteredClients.length === 0 ? (
-              { emptySearch }
+              emptySearch
             ) : (
               <div className="flex-auto min-h-0 flex space-x-6">
                 <ClientList
@@ -176,7 +176,7 @@ const ClientsDualPane: FC<ClientsContentProps> = ({ clients, header, empty, empt
 const ClientsSinglePane: FC<ClientsContentProps> = ({ clients, header, empty, emptySearch, onAddUserClick }) => {
   const { filterQuery, setFilterQuery, filteredClients, selectedClient } = useFilteredClients(clients);
   return (
-    <div className="flex-auto flex flex-col lg:hidden">
+    <div className="flex-auto min-h-0 flex flex-col lg:hidden">
       {selectedClient ? (
         <>
           <Navbar upTarget="/clients" />
@@ -185,7 +185,7 @@ const ClientsSinglePane: FC<ClientsContentProps> = ({ clients, header, empty, em
       ) : (
         <>
           <Navbar />
-          <section className="flex-auto flex flex-col bg-gray-100 min-h-0">
+          <section className="flex-auto overflow-auto flex flex-col bg-gray-100">
             {header}
             {!clients ? null : clients.length === 0 ? (
               empty
@@ -198,7 +198,7 @@ const ClientsSinglePane: FC<ClientsContentProps> = ({ clients, header, empty, em
                   onAddUserClick={onAddUserClick}
                 />
                 {filteredClients.length === 0 ? (
-                  { emptySearch }
+                  emptySearch
                 ) : (
                   <ClientList className="flex-auto bg-white shadow" clients={clients} selectedClientId={undefined} />
                 )}
@@ -235,7 +235,7 @@ const Clients: FC = () => {
     </div>
   );
   const emptySearch = (
-    <div className="flex items-center justify-center">
+    <div className="flex-auto flex items-center justify-center">
       <p className="text-lg text-center">Keine Kunden gefunden…</p>
     </div>
   );
