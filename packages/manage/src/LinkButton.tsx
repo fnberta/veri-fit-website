@@ -6,6 +6,7 @@ import {
   ButtonContentProps,
   ButtonStyleProps,
   getButtonStyleClasses,
+  getIconButtonStyleClasses,
   IconButtonContentProps,
 } from '@veri-fit/common-ui';
 
@@ -14,7 +15,9 @@ export interface LinkButtonProps<T> extends LinkProps<T>, ButtonStyleProps, Omit
 export function LinkButton<T>({ shape, colorScheme, size, icon, children, className, ...rest }: LinkButtonProps<T>) {
   return (
     <Link<T> className={cx(getButtonStyleClasses({ shape, colorScheme, size }), className)} {...rest}>
-      <ButtonContent icon={icon}>{children}</ButtonContent>
+      <ButtonContent icon={icon} size={size}>
+        {children}
+      </ButtonContent>
     </Link>
   );
 }
@@ -36,10 +39,10 @@ export function LinkIconButton<T>({
   return (
     <Link<T>
       aria-label={label}
-      className={cx(getButtonStyleClasses({ shape, colorScheme, size }), className)}
+      className={cx(getIconButtonStyleClasses({ shape, colorScheme, size }), className)}
       {...rest}
     >
-      <ButtonContent icon={icon} />
+      <ButtonContent icon={icon} size={size} />
     </Link>
   );
 }

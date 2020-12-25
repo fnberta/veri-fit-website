@@ -34,12 +34,12 @@ const SubscriptionSummary: FC<SummaryProps> = ({ subscription, onSetPaidClick, o
     DateTime.fromISO(subscription.end) > DateTime.local();
   return (
     <>
-      <div className="flex justify-between items-start">
-        <header>
+      <div className="-ml-2 -mt-2 flex flex-wrap justify-between items-start">
+        <header className="ml-2 mt-2">
           <p className="text-xs text-gray-600 uppercase tracking-wider">{getSubscriptionName(subscription.type)}</p>
           <h3 className="text-base font-semibold">{getTrainingName(subscription.trainingType)}</h3>
         </header>
-        <div className="button-group">
+        <div className="button-group ml-2 mt-2">
           {subscription.paidAt == null && (
             <IconButton
               shape="outlined"
@@ -94,10 +94,15 @@ const SubscriptionSummary: FC<SummaryProps> = ({ subscription, onSetPaidClick, o
 
 const ContactItem: FC<{ icon: IconName }> = ({ icon, children }) => (
   <div className="flex space-x-8">
-    <Icon className="text-gray-500" name={icon} />
+    <Icon className="flex-shrink-0 text-gray-500" name={icon} />
     {children}
   </div>
 );
+
+function getInitials(name: string) {
+  const [firstName, lastName] = name.split(' ');
+  return firstName && lastName ? `${firstName.charAt(0)}${lastName.charAt(0)}` : firstName.charAt(0);
+}
 
 const ClientDetails: FC<Props> = ({ client, className, ...rest }) => {
   const [subscriptions, setSubscriptions] = useState([] as Subscription[]);
@@ -111,10 +116,12 @@ const ClientDetails: FC<Props> = ({ client, className, ...rest }) => {
   useEffect(() => trainingRepo.observeAllForClients(client.id, setTrainings), [trainingRepo, client.id]);
 
   return (
-    <section className={cx('', className)} {...rest}>
-      <header className="p-4 md:p-6 flex items-center justify-between border-b space-x-6">
+    <section className={cx('py-4 sm:py-6 space-y-6', className)} {...rest}>
+      <header className="px-4 sm:px-6 flex items-center justify-between space-x-6">
         <div className="flex items-center space-x-4">
-          <div className="h-14 w-14 inline-flex items-center justify-center rounded-full bg-gray-200">FB</div>
+          <div className="h-14 w-14 inline-flex items-center justify-center rounded-full bg-gray-200">
+            {getInitials(client.name)}
+          </div>
           <h1 className="text-3xl whitespace-nowrap">{client.name}</h1>
         </div>
         <div className="flex space-x-2">
@@ -129,14 +136,15 @@ const ClientDetails: FC<Props> = ({ client, className, ...rest }) => {
             shape="text"
             size="sm"
             colorScheme="red"
-            icon="user-remove"
+            icon="trash"
             label="Löschen"
             disabled={true}
             onClick={() => setClientDialog({ type: 'DELETE' })}
           />
         </div>
       </header>
-      <div className="p-4 md:p-6 border-b space-y-4">
+      <hr />
+      <div className="px-4 sm:px-6 space-y-4">
         <h2 className="text-xl">Kontaktdaten</h2>
         <div className="space-y-3">
           <ContactItem icon="email">
@@ -166,12 +174,13 @@ const ClientDetails: FC<Props> = ({ client, className, ...rest }) => {
           )}
         </div>
       </div>
-      <div className="p-4 md:p-6 border-b space-y-4">
+      <hr />
+      <div className="px-4 sm:px-6 space-y-4">
         <h2 className="text-xl">Abos</h2>
-        <div className="flex flex-col space-y-3">
+        <div className="flex flex-col space-y-2">
           <ul className="space-y-2">
             {subscriptions.map((subscription) => (
-              <li key={subscription.id} className="py-4 px-2 border space-y-2">
+              <li key={subscription.id} className="p-4 border space-y-2">
                 <SubscriptionSummary
                   subscription={subscription}
                   onSetPaidClick={async () => {
@@ -188,18 +197,18 @@ const ClientDetails: FC<Props> = ({ client, className, ...rest }) => {
           <Button
             className="self-end"
             size="sm"
-            shape="outlined"
-            icon="document-add"
+            shape="text"
             onClick={() => setClientDialog({ type: 'SUBSCRIPTION_ADD' })}
           >
             Hinzufügen
           </Button>
         </div>
       </div>
-      <div className="p-4 md:p-6 border-b space-y-4">
-        <h2 className="text-xl">Trainingszeiten</h2>
-        <div>
-          {trainings.length > 0 ? (
+      {trainings.length > 0 && (
+        <>
+          <hr />
+          <div className="px-4 sm:px-6 space-y-4">
+            <h2 className="text-xl">Trainingszeiten</h2>
             <table className="w-full table table-auto">
               <thead>
                 <tr>
@@ -216,15 +225,14 @@ const ClientDetails: FC<Props> = ({ client, className, ...rest }) => {
                 ))}
               </tbody>
             </table>
-          ) : (
-            <p>Noch keine Trainingszeiten gesetzt…</p>
-          )}
-        </div>
-      </div>
-      <div className="p-4 md:p-6 border-b space-y-4">
-        <h2 className="text-xl">Anwesenheit</h2>
-        <div>
-          {sessions.length > 0 ? (
+          </div>
+        </>
+      )}
+      {sessions.length > 0 && (
+        <>
+          <hr />
+          <div className="px-4 sm:px-6 space-y-4">
+            <h2 className="text-xl">Anwesenheit</h2>
             <table className="w-full table table-auto">
               <thead>
                 <tr>
@@ -243,11 +251,9 @@ const ClientDetails: FC<Props> = ({ client, className, ...rest }) => {
                 ))}
               </tbody>
             </table>
-          ) : (
-            <p>Leider noch kein Training besucht…</p>
-          )}
-        </div>
-      </div>
+          </div>
+        </>
+      )}
       <Dialog open={clientDialog != null} onCancel={() => setClientDialog(undefined)}>
         {clientDialog?.type === 'EDIT' && (
           <EditClientDialogContent

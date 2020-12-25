@@ -91,9 +91,6 @@ const ICON_PATHS = {
   'user-add': (
     <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z" />
   ),
-  'user-remove': (
-    <path d="M11 6a3 3 0 11-6 0 3 3 0 016 0zM14 17a6 6 0 00-12 0h12zM13 8a1 1 0 100 2h4a1 1 0 100-2h-4z" />
-  ),
   'document-add': (
     <path
       fillRule="evenodd"
@@ -132,20 +129,19 @@ const ICON_PATHS = {
 
 export type IconName = keyof typeof ICON_PATHS;
 
+const SIZES = {
+  md: 'h-5 w-5',
+  lg: 'h-6 w-6',
+  custom: '',
+};
+
 export interface Props extends ComponentPropsWithoutRef<'svg'> {
   name: IconName;
-  size?: 'md' | 'lg' | 'custom';
+  size?: keyof typeof SIZES;
 }
 
-function getStyleClasses(size: Props['size'] = 'md'): string {
-  return cx({
-    ['h-5 w-5']: size === 'md',
-    ['h-6 w-6']: size === 'lg',
-  });
-}
-
-export const Icon: FC<Props> = ({ name, size, className, ...rest }) => (
-  <svg className={cx(getStyleClasses(size), className)} viewBox="0 0 20 20" fill="currentColor" {...rest}>
+export const Icon: FC<Props> = ({ name, size = 'md', className, ...rest }) => (
+  <svg className={cx(SIZES[size], className)} viewBox="0 0 20 20" fill="currentColor" {...rest}>
     {ICON_PATHS[name]}
   </svg>
 );

@@ -3,8 +3,8 @@
   "short_name": "Veri-Fit",
   "start_url": "/",
   "scope": "/",
-  "background_color": "#27303f",
-  "theme_color": "#ff5a1f",
+  "background_color": "#0F172A",
+  "theme_color": "#0F172A",
   "display": "standalone",
   "icons": [
     {
