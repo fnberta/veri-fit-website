@@ -154,7 +154,7 @@ const ClientsDualPane: FC<ClientsContentProps> = ({ clients, header, empty, empt
               <div className="flex-auto min-h-0 flex space-x-6">
                 <ClientList
                   className="w-1/5 bg-white shadow rounded overflow-auto"
-                  clients={clients}
+                  clients={filteredClients}
                   selectedClientId={selectedClient?.id}
                 />
                 {selectedClient ? (
@@ -200,7 +200,11 @@ const ClientsSinglePane: FC<ClientsContentProps> = ({ clients, header, empty, em
                 {filteredClients.length === 0 ? (
                   emptySearch
                 ) : (
-                  <ClientList className="flex-auto bg-white shadow" clients={clients} selectedClientId={undefined} />
+                  <ClientList
+                    className="flex-auto bg-white shadow"
+                    clients={filteredClients}
+                    selectedClientId={undefined}
+                  />
                 )}
               </div>
             )}
