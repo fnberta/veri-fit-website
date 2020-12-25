@@ -2,7 +2,7 @@
 import Carousel from '@brainhubeu/react-carousel';
 import '@brainhubeu/react-carousel/lib/style.css';
 import cx from 'classnames';
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import Testimonial, { Props as TestimonialProps } from './Testimonial';
 
 export interface Props {
@@ -18,7 +18,7 @@ function range(start: number, length: number): number[] {
   return result;
 }
 
-const Testimonials: React.FC<Props> = ({ data }) => {
+const Testimonials: FC<Props> = ({ data }) => {
   const [activeSlideIdx, setActiveSlideIdx] = useState(0);
 
   function handleSlideChange(idx: number) {

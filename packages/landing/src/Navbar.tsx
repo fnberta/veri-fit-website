@@ -1,14 +1,17 @@
 import cx from 'classnames';
 import { graphql, useStaticQuery } from 'gatsby';
-import React, { isValidElement, useState } from 'react';
+import React, {
+  Children,
+  cloneElement,
+  ComponentPropsWithoutRef,
+  FC,
+  isValidElement,
+  useEffect,
+  useState,
+} from 'react';
 import Image, { FixedObject } from 'gatsby-image';
 import { Icon, IconButton } from '@veri-fit/common-ui';
 import { LogosQuery } from './generatedGraphQL';
-
-export interface Props extends React.ComponentPropsWithoutRef<'div'> {
-  variant: 'bright' | 'dark' | 'transparent';
-  sticky?: boolean;
-}
 
 const LOGOS_QUERY = graphql`
   fragment Logo on File {
@@ -29,35 +32,45 @@ const LOGOS_QUERY = graphql`
   }
 `;
 
-function getClasses(variant: Props['variant'], open: boolean) {
+function getClasses(sticky: boolean, open: boolean) {
   const brightText = 'text-gray-900 hover:bg-gray-200 hover:text-orange-500';
-  switch (variant) {
-    case 'bright':
-      return {
-        header: 'bg-white',
-        text: brightText,
-      };
-    case 'dark':
-      return {
-        header: 'bg-gray-900',
-        text: 'text-white hover:bg-gray-700 hover:text-orange-500',
-      };
-    case 'transparent':
-      return {
-        nav: open && 'bg-white',
-        header: 'absolute z-10 inset-x-0 bg-transparent',
-        text: open ? brightText : 'text-white hover:text-gray-200',
-      };
+  if (sticky) {
+    return {
+      header: 'bg-white',
+      text: brightText,
+    };
+  } else {
+    return {
+      nav: open && 'bg-white',
+      header: 'absolute z-10 inset-x-0 bg-transparent',
+      text: open ? brightText : 'text-white hover:text-gray-200',
+    };
   }
 }
 
-const Navbar: React.FC<Props> = ({ variant, sticky, children, className, ...rest }) => {
-  const [open, setOpen] = useState(false);
-  const data = useStaticQuery<LogosQuery>(LOGOS_QUERY);
+export type Props = ComponentPropsWithoutRef<'header'>;
 
-  const { header, nav, text } = getClasses(variant, open);
+const Navbar: FC<Props> = ({ children, className, ...rest }) => {
+  const [open, setOpen] = useState(false);
+  const [sticky, setSticky] = useState(false);
+  const data = useStaticQuery<LogosQuery>(LOGOS_QUERY);
+  const { header, nav, text } = getClasses(sticky, open);
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const logo = variant === 'bright' ? data.logoBlack!.childImageSharp!.fixed : data.logoWhite!.childImageSharp!.fixed;
+  const logo = sticky ? data.logoBlack!.childImageSharp!.fixed : data.logoWhite!.childImageSharp!.fixed;
+
+  useEffect(() => {
+    function handleScroll() {
+      const el = window.document.getElementById('home');
+      if (el) {
+        const { bottom } = el.getBoundingClientRect();
+        setSticky(bottom <= 0);
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <header
       className={cx(
@@ -73,7 +86,7 @@ const Navbar: React.FC<Props> = ({ variant, sticky, children, className, ...rest
         <IconButton
           className={cx('sm:hidden', text)}
           colorScheme="custom"
-          icon={<Icon className="h-6 w-6" name="menu" />}
+          icon={<Icon name="menu" size="lg" />}
           label="Menu"
           aria-expanded={open}
           onClick={() => setOpen((prev) => !prev)}
@@ -81,14 +94,13 @@ const Navbar: React.FC<Props> = ({ variant, sticky, children, className, ...rest
       </div>
       <nav className={cx(nav)}>
         <ul className={cx('px-4 py-2 -mt-1 sm:mt-0 sm:-ml-2 sm:flex', open ? 'block' : 'hidden')}>
-          {React.Children.map(children, (child) => (
+          {Children.map(children, (child) => (
             <li className="mt-1 sm:mt-0 sm:ml-2 flex">
-              {isValidElement(child)
-                ? React.cloneElement(child, {
-                    className: cx('flex-auto px-2 py-1 rounded', text, child.props.className),
-                    onClick: () => setOpen(false),
-                  })
-                : null}
+              {isValidElement(child) &&
+                cloneElement(child, {
+                  className: cx('flex-auto px-2 py-1 rounded', text, child.props.className),
+                  onClick: () => setOpen(false),
+                })}
             </li>
           ))}
         </ul>

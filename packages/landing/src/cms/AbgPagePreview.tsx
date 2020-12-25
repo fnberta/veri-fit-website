@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { AgbTemplate } from '../templates/AgbPageTemplate';
 import { PreviewProps } from './interfaces';
 
-const AgbPagePreview: React.FC<PreviewProps> = ({ entry, widgetFor }) => (
+const AgbPagePreview: FC<PreviewProps> = ({ entry, widgetFor }) => (
   <AgbTemplate
     title={entry.getIn(['data', 'title']) as string}
     subtitle={entry.getIn(['data', 'subtitle']) as string}

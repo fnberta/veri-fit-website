@@ -1,12 +1,12 @@
 import cx from 'classnames';
-import React from 'react';
+import React, { ComponentPropsWithoutRef, FC, MouseEventHandler } from 'react';
 import { CloseButton } from '@veri-fit/common-ui';
 
 export type NotificationType = 'success' | 'error';
 
-export interface Props extends React.ComponentPropsWithoutRef<'div'> {
+export interface Props extends ComponentPropsWithoutRef<'div'> {
   type: NotificationType;
-  onCloseClick: React.MouseEventHandler<HTMLButtonElement>;
+  onCloseClick: MouseEventHandler<HTMLButtonElement>;
 }
 
 function getContentForType(type: NotificationType) {
@@ -24,7 +24,7 @@ function getContentForType(type: NotificationType) {
   }
 }
 
-const Notification: React.FC<Props> = ({ type, onCloseClick, className, ...rest }) => {
+const Notification: FC<Props> = ({ type, onCloseClick, className, ...rest }) => {
   const { pill, text } = getContentForType(type);
   return (
     <div

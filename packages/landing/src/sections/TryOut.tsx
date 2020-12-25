@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { AnchorButton } from '@veri-fit/common-ui';
 
-const TryOut: React.FC = () => (
+const TryOut: FC = () => (
   <section
     className="parallax parallax-overlay"
     style={{ backgroundImage: `url(${require('../images/warrior.jpg')})` }}

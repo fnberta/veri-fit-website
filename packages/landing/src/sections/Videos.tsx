@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import { Form, Formik, FormikHelpers } from 'formik';
 import {
   BotField,
@@ -56,7 +56,7 @@ async function submitForm({ videos, ...rest }: FormValues): Promise<boolean> {
   }
 }
 
-const Videos: React.FC<Props> = ({ videos }) => {
+const Videos: FC<Props> = ({ videos }) => {
   const [notificationType, setNotificationType] = useState<NotificationType>();
 
   function showNotification(type: NotificationType) {
@@ -87,31 +87,29 @@ const Videos: React.FC<Props> = ({ videos }) => {
             <BotField />
             <FieldControl name="videos">
               <fieldset>
-                <legend className="form-label text-white">Videos</legend>
+                <legend className="field-label text-white">Videos</legend>
                 <ul className="-mt-1 text-white">
                   {videos.map((video) => {
                     const text = `${video.title} - ${video.description}`;
                     return (
                       <li key={video.title} className="mt-2">
-                        <CheckInputField type="checkbox" value={text} label={text} />
+                        <CheckInputField type="checkbox" dark={true} value={text} label={text} />
                       </li>
                     );
                   })}
                 </ul>
               </fieldset>
             </FieldControl>
-            <FieldControl name="message">
+            <FieldControl className="mt-4 flex-auto" name="message">
               <TextAreaField
-                className="mt-4 flex-auto"
                 disabled={isSubmitting}
                 label="Dein Wunschtraining ist noch nicht auf der Liste? Beschreibe was du dir wünschst!"
                 dark={true}
               />
             </FieldControl>
             <div className="-ml-4 flex flex-wrap">
-              <FieldControl name="name">
+              <FieldControl className="w-64 ml-4 mt-4 flex-auto" name="name">
                 <InputField
-                  className="w-64 ml-4 mt-4 flex-auto"
                   type="text"
                   validate={makeValidator('Name')}
                   disabled={isSubmitting}
@@ -119,9 +117,8 @@ const Videos: React.FC<Props> = ({ videos }) => {
                   dark={true}
                 />
               </FieldControl>
-              <FieldControl name="email">
+              <FieldControl className="w-64 ml-4 mt-4 flex-auto" name="email">
                 <InputField
-                  className="w-64 ml-4 mt-4 flex-auto"
                   type="email"
                   validate={makeValidator('Email')}
                   disabled={isSubmitting}

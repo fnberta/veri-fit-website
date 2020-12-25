@@ -1,5 +1,5 @@
 import { graphql, useStaticQuery } from 'gatsby';
-import React from 'react';
+import React, { FC } from 'react';
 import Helmet from 'react-helmet';
 import { MetadataQuery, SiteSiteMetadata } from './generatedGraphQL';
 
@@ -66,7 +66,7 @@ function getMeta(meta: Meta[], keywords: string[], { title, description }: SiteS
   return list.concat(meta);
 }
 
-const DocHead: React.FC<Props> = ({ title, lang = 'de-CH', meta = [], keywords = [] }) => {
+const DocHead: FC<Props> = ({ title, lang = 'de-CH', meta = [], keywords = [] }) => {
   const data = useStaticQuery<MetadataQuery>(DETAILS_QUERY);
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const { siteMetadata } = data.site!;

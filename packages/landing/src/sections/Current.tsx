@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { FC } from 'react';
 
-const Current: React.FC = ({ children }) => (
+const Current: FC = ({ children }) => (
   <section id="current" className="bg-gray-900">
     {children}
   </section>

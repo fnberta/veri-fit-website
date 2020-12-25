@@ -1,5 +1,5 @@
 import { FormikErrors, getIn, useFormikContext } from 'formik';
-import React, { FC, useEffect, useRef } from 'react';
+import React, { FC, useCallback, useEffect, useRef } from 'react';
 import { SubscriptionType, TrainingType } from '@veri-fit/common';
 import { CheckInputField, FieldControl, InputField, SelectField } from '@veri-fit/common-ui';
 import { getEndDate, isValidISOString } from '../dateTime';
@@ -143,7 +143,7 @@ function usePrevious<T>(value: T): T | undefined {
 }
 
 const SubscriptionFormFields: FC<Props> = ({ trainingTypes, namespace, disabled }) => {
-  const withNamespace = (name: string) => (namespace ? `${namespace}.${name}` : name);
+  const withNamespace = useCallback((name: string) => (namespace ? `${namespace}.${name}` : name), [namespace]);
 
   // this is not very type safe but good enough for now
   const { values, setFieldValue } = useFormikContext();
@@ -152,17 +152,20 @@ const SubscriptionFormFields: FC<Props> = ({ trainingTypes, namespace, disabled 
   const trainingsLeft = getIn(values, withNamespace('trainingsLeft')) as number;
   const paid = getIn(values, withNamespace('paid')) as boolean;
 
-  const validTypes = validSubscriptionTypes[trainingType];
-  if (!validTypes.includes(type)) {
-    setFieldValue(withNamespace('type'), validTypes[0]);
-  }
-
-  // update trainingsLeft when default changes or if value is higher than default
   const defaultTrainingsLeft = getDefaultTrainingsLeft(type);
   const prevDefaultTrainingsLeft = usePrevious(defaultTrainingsLeft);
-  if (defaultTrainingsLeft !== prevDefaultTrainingsLeft || trainingsLeft > defaultTrainingsLeft) {
-    setFieldValue(withNamespace('trainingsLeft'), defaultTrainingsLeft);
-  }
+  const validTypes = validSubscriptionTypes[trainingType];
+
+  useEffect(() => {
+    if (!validTypes.includes(type)) {
+      setFieldValue(withNamespace('type'), validTypes[0]);
+    }
+
+    // update trainingsLeft when default changes or if value is higher than default
+    if (defaultTrainingsLeft !== prevDefaultTrainingsLeft || trainingsLeft > defaultTrainingsLeft) {
+      setFieldValue(withNamespace('trainingsLeft'), defaultTrainingsLeft);
+    }
+  }, [defaultTrainingsLeft, prevDefaultTrainingsLeft, validTypes, trainingsLeft, type, setFieldValue, withNamespace]);
 
   return (
     <>

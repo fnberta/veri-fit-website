@@ -44,6 +44,10 @@ export function isSubscriptionExpiring(subscription: Subscription): boolean {
 }
 
 export function getClientsWithIssues(clients: Client[], session: Session): Client[] {
+  if (session.confirmed) {
+    return [];
+  }
+
   return clients.filter((client) => {
     if (!session.clientIds.includes(client.id)) {
       return false;

@@ -1,5 +1,5 @@
 import { Form, Formik, FormikConfig } from 'formik';
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import {
   BotField,
   Button,
@@ -43,7 +43,7 @@ async function submitForm(values: FormValues): Promise<boolean> {
   }
 }
 
-const ContactMe: React.FC = () => {
+const ContactMe: FC = () => {
   const [notificationType, setNotificationType] = useState<NotificationType>();
 
   useEffect(() => {
@@ -108,9 +108,8 @@ const ContactMe: React.FC = () => {
                 netlify-honeypot="bot-field"
               >
                 <BotField />
-                <FieldControl name="name">
+                <FieldControl className="w-64 ml-4 mt-4 flex-auto" name="name">
                   <InputField
-                    className="w-64 ml-4 mt-4 flex-auto "
                     type="text"
                     validate={makeValidator('Name')}
                     disabled={isSubmitting}
@@ -118,9 +117,8 @@ const ContactMe: React.FC = () => {
                     dark={true}
                   />
                 </FieldControl>
-                <FieldControl name="email">
+                <FieldControl className="w-64 ml-4 mt-4 flex-auto" name="email">
                   <InputField
-                    className="w-64 ml-4 mt-4 flex-auto"
                     type="email"
                     validate={makeValidator('Email')}
                     disabled={isSubmitting}
@@ -128,9 +126,8 @@ const ContactMe: React.FC = () => {
                     dark={true}
                   />
                 </FieldControl>
-                <FieldControl name="message">
+                <FieldControl className="w-full ml-4 mt-4" name="message">
                   <TextAreaField
-                    className="w-full ml-4 mt-4"
                     label="Nachricht"
                     placeholder="Wie kann ich dir helfen?"
                     validate={makeValidator('Nachricht')}

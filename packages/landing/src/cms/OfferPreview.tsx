@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { FC } from 'react';
 import Offer from '../sections/Offer';
 import { PreviewProps } from './interfaces';
 
-const OfferPreview: React.FC<PreviewProps> = ({ entry, widgetFor, widgetsFor, getAsset }) => {
+const OfferPreview: FC<PreviewProps> = ({ entry, widgetFor, widgetsFor, getAsset }) => {
   const prices = widgetsFor('prices').map((price) => ({
     price: price.getIn(['data', 'price']) as number,
     type: price.getIn(['data', 'type']) as number,

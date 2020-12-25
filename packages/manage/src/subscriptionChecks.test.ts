@@ -193,7 +193,40 @@ describe('runs short', () => {
 });
 
 describe('clients with issues', () => {
-  test('show return faulty clients if session has clients with no matching subscription', () => {
+  test('should return empty list if session is confirmed', () => {
+    const clients = [
+      {
+        id: 'client-1',
+        activeSubscriptions: [
+          {
+            type: SubscriptionType.LIMITED_10,
+            trainingType: TrainingType.PERSONAL,
+            start: 'some-date',
+            end: 'some-date',
+            trainingsLeft: 5,
+          },
+        ],
+      },
+    ] as Client[];
+    const session: Session = {
+      id: 'some-id',
+      type: TrainingType.YOGA,
+      runsFrom: getToday(),
+      time: {
+        start: '',
+        end: '',
+      },
+      clientIds: ['client-1'],
+      trainingId: 'some-training-id',
+      date: '',
+      confirmed: true,
+    };
+
+    const result = getClientsWithIssues(clients, session);
+    expect(result).toEqual([]);
+  });
+
+  test('should return faulty clients if session has clients with no matching subscription', () => {
     const clients = [
       {
         id: 'client-1',
@@ -225,7 +258,7 @@ describe('clients with issues', () => {
     const result = getClientsWithIssues(clients, session);
     expect(result).toEqual(clients);
   });
-  test('show return faulty clients if session has clients with a matching non-block subscription that has no trainings left', () => {
+  test('should return faulty clients if session has clients with a matching non-block subscription that has no trainings left', () => {
     const clients = [
       {
         id: 'client-1',
@@ -257,7 +290,7 @@ describe('clients with issues', () => {
     const result = getClientsWithIssues(clients, session);
     expect(result).toEqual(clients);
   });
-  test('show return empty list if session has clients with a matching block subscription', () => {
+  test('should return empty list if session has clients with a matching block subscription', () => {
     const clients = [
       {
         id: 'client-1',
@@ -288,7 +321,7 @@ describe('clients with issues', () => {
     const result = getClientsWithIssues(clients, session);
     expect(result).toEqual([]);
   });
-  test('show return empty list if session has clients with a matching non-block subscription that has trainings left', () => {
+  test('should return empty list if session has clients with a matching non-block subscription that has trainings left', () => {
     const clients = [
       {
         id: 'client-1',
@@ -321,7 +354,7 @@ describe('clients with issues', () => {
     expect(result).toEqual([]);
   });
 
-  test('show return empty list if session has clients with a multiple matching non-block subscriptions, where at least one (which might not be the first) has trainings left', () => {
+  test('should return empty list if session has clients with a multiple matching non-block subscriptions, where at least one (which might not be the first) has trainings left', () => {
     const clients = [
       {
         id: 'client-1',

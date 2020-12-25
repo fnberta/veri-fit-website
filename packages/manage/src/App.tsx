@@ -7,7 +7,6 @@ import { Button } from '@veri-fit/common-ui';
 import Clients from './clients/Clients';
 import { useRepos } from './repositories/RepoContext';
 import Trainings from './trainings/Trainings';
-import Navbar, { NavbarLink } from './Navbar';
 
 async function registerServiceWorker(): Promise<Workbox> {
   const wb = new Workbox('/service-worker.js');
@@ -29,9 +28,10 @@ async function registerServiceWorker(): Promise<Workbox> {
   return wb;
 }
 
+type AuthState = { type: 'initial' } | { type: 'loggedOut' } | { type: 'loggedIn'; user: firebase.User };
+
 const App: FC = () => {
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [logInResult, setLoginResult] = useState<firebase.auth.UserCredential>();
+  const [authState, setAuthState] = useState<AuthState>({ type: 'initial' });
   const { authRepo } = useRepos();
 
   useEffect(() => {
@@ -42,18 +42,25 @@ const App: FC = () => {
       });
     }
   }, []);
-  useEffect(() => authRepo.observeAuthState((user) => setLoggedIn(user != null)), [authRepo]);
+  useEffect(
+    () =>
+      authRepo.observeAuthState((user) => {
+        if (user) {
+          setAuthState({ type: 'loggedIn', user });
+        } else {
+          setAuthState({ type: 'loggedOut' });
+        }
+      }),
+    [authRepo],
+  );
   useEffect(() => {
-    authRepo
-      .getRedirectResult()
-      .then(setLoginResult)
-      .catch((e) => {
-        // eslint-disable-next-line no-console
-        console.error('social login failed with', e);
-      });
+    authRepo.getRedirectResult().catch((e) => {
+      // eslint-disable-next-line no-console
+      console.error('social login failed with', e);
+    });
   }, [authRepo]);
 
-  if (!loggedIn) {
+  if (authState.type !== 'loggedIn') {
     return (
       <div className="flex-1 p-6 bg-gray-100 flex items-center justify-center">
         <header
@@ -64,7 +71,7 @@ const App: FC = () => {
           <Button
             className="self-stretch"
             colorScheme="orange"
-            loading={!logInResult}
+            loading={authState.type === 'initial'}
             onClick={() => authRepo.signIn()}
           >
             <span className="uppercase tracking-wider">Login</span>
@@ -76,21 +83,15 @@ const App: FC = () => {
 
   const today = DateTime.local();
   return (
-    <>
-      <Navbar className="flex-shrink-0">
-        <NavbarLink to="/clients">Kunden</NavbarLink>
-        <NavbarLink to="/trainings">Trainings</NavbarLink>
-      </Navbar>
-      <Switch>
-        <Route path="/clients/:clientId?">
-          <Clients className="flex-auto" />
-        </Route>
-        <Route path="/trainings/:year?/:week?">
-          <Trainings className="flex-auto" />
-        </Route>
-        <Redirect to={`/trainings/${today.weekYear}/${today.weekNumber}`} />
-      </Switch>
-    </>
+    <Switch>
+      <Route path="/clients/:clientId?" upTarget="/clients">
+        <Clients />
+      </Route>
+      <Route path="/trainings/:year?/:week?">
+        <Trainings />
+      </Route>
+      <Redirect to={`/trainings/${today.weekYear}/${today.weekNumber}`} />
+    </Switch>
   );
 };
 
