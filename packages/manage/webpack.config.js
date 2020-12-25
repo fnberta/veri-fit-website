@@ -56,6 +56,7 @@ module.exports = {
         exclude: /node_modules/,
         options: {
           transpileOnly: true,
+          configFile: 'tsconfig.build.json',
         },
       },
       {
