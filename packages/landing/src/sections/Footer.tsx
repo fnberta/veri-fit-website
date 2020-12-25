@@ -1,7 +1,7 @@
 import { Link } from 'gatsby';
-import React from 'react';
+import React, { FC } from 'react';
 
-const Footer: React.FC = () => (
+const Footer: FC = () => (
   <section className="p-4 flex flex-col items-center justify-center">
     <p className="text-center">
       Copyright 2020 by Vera Lienhard

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { createContext, useContext } from 'react';
 import AuthRepository from './AuthRepository';
 import SessionRepository from './SessionRepository';
 import ClientRepository from './ClientRepository';
@@ -11,7 +11,7 @@ export interface RepoContextValues {
   authRepo: AuthRepository;
 }
 
-export const RepoContext = React.createContext<RepoContextValues | undefined>(undefined);
+export const RepoContext = createContext<RepoContextValues | undefined>(undefined);
 
 export function useRepos() {
   const repos = useContext(RepoContext);

@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig-base.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "target": "es2016",
     "module": "CommonJS",
@@ -10,12 +10,13 @@
     "composite": true,
     "jsx": "react"
   },
+  "include": ["src/**/*"],
   "references": [
     {
       "path": "../common/tsconfig.json"
     },
     {
-      "path": "../common/tsconfig-esm.json"
+      "path": "../common/tsconfig.esm.json"
     }
   ]
 }

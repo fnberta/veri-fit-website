@@ -1,14 +1,14 @@
 import cx from 'classnames';
-import React, { useEffect, useRef, useState } from 'react';
-import { IconButton } from '@veri-fit/common-ui';
+import React, { ComponentPropsWithoutRef, FC, MouseEventHandler, useEffect, useRef, useState } from 'react';
+import { CloseButton } from '@veri-fit/common-ui';
 import Portal from './Portal';
 
-export interface Props extends React.ComponentPropsWithoutRef<'dialog'> {
+export interface Props extends ComponentPropsWithoutRef<'dialog'> {
   open: boolean;
   onCancel: () => void;
 }
 
-const Dialog: React.FC<Props> = ({ open, onCancel, children, className, ...rest }) => {
+const Dialog: FC<Props> = ({ open, onCancel, children, className, ...rest }) => {
   const [registered, setRegistered] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const onCancelRef = useRef(onCancel);
@@ -81,22 +81,27 @@ const Dialog: React.FC<Props> = ({ open, onCancel, children, className, ...rest 
 
 export default Dialog;
 
-export interface DialogHeaderProps extends React.ComponentPropsWithoutRef<'div'> {
+export interface DialogHeaderProps extends ComponentPropsWithoutRef<'div'> {
   title: string;
-  onCloseClick: React.MouseEventHandler;
+  onCloseClick: MouseEventHandler;
 }
 
-export const DialogHeader: React.FC<DialogHeaderProps> = ({ title, onCloseClick, className, ...rest }) => (
-  <header className={cx('relative p-4 bg-gray-100 flex justify-between items-center shadow', className)} {...rest}>
+export const DialogHeader: FC<DialogHeaderProps> = ({ title, onCloseClick, className, ...rest }) => (
+  <header
+    className={cx('relative p-4 flex-shrink-0 bg-gray-100 flex justify-between items-center shadow', className)}
+    {...rest}
+  >
     <h1 id="dialog-header" className="text-2xl font-semibold">
       {title}
     </h1>
-    <IconButton shape="text" icon="x" label="Schliessen" onClick={onCloseClick} />
+    <CloseButton onClick={onCloseClick} />
   </header>
 );
 
-export const DialogFooter: React.FC<React.ComponentPropsWithoutRef<'div'>> = ({ children, className, ...rest }) => (
-  <footer className={cx('bg-gray-100', className)} {...rest}>
+export type FooterProps = ComponentPropsWithoutRef<'div'>;
+
+export const DialogFooter: FC<FooterProps> = ({ children, className, ...rest }) => (
+  <footer className={cx('flex-shrink-0 bg-gray-100', className)} {...rest}>
     {children}
   </footer>
 );

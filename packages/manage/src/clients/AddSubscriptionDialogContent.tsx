@@ -1,11 +1,11 @@
 import { Form, Formik, FormikHelpers } from 'formik';
-import React from 'react';
-import { Subscription, SubscriptionType, TrainingType } from '@veri-fit/common';
+import React, { FC } from 'react';
+import { Subscription, TrainingType } from '@veri-fit/common';
 import { Button } from '@veri-fit/common-ui';
 import { DialogFooter, DialogHeader } from '../Dialog';
 import { getToday } from '../dateTime';
 import { useRepos } from '../repositories/RepoContext';
-import { getValidTrainingTypes } from '../subscriptionChecks';
+import { getValidTrainingTypes, validSubscriptionTypes } from '../subscriptionChecks';
 import SubscriptionFormFields, {
   getDefaultTrainingsLeft,
   getSubscriptionInput,
@@ -19,23 +19,21 @@ export interface Props {
   onCancelClick: () => void;
 }
 
-function getInitialValues(today: string): SubscriptionFormValues {
+function getInitialValues(today: string, validTrainingTypes: TrainingType[]): SubscriptionFormValues {
+  const trainingType = validTrainingTypes[0];
+  const subscriptionTypes = validSubscriptionTypes[trainingType];
+  const subscriptionType = subscriptionTypes[0];
   return {
-    type: SubscriptionType.LIMITED_10,
-    trainingType: TrainingType.YOGA,
-    trainingsLeft: getDefaultTrainingsLeft(SubscriptionType.LIMITED_10),
+    type: subscriptionType,
+    trainingType,
+    trainingsLeft: getDefaultTrainingsLeft(subscriptionType),
     start: today,
     paid: false,
     paidAt: getToday(),
   };
 }
 
-const AddSubscriptionDialogContent: React.FC<Props> = ({
-  clientId,
-  subscriptions,
-  onSubscriptionAdded,
-  onCancelClick,
-}) => {
+const AddSubscriptionDialogContent: FC<Props> = ({ clientId, subscriptions, onSubscriptionAdded, onCancelClick }) => {
   const { clientRepo } = useRepos();
 
   async function handleFormSubmission(
@@ -48,20 +46,24 @@ const AddSubscriptionDialogContent: React.FC<Props> = ({
     onSubscriptionAdded(subscription);
   }
 
+  const validTrainingTypes = getValidTrainingTypes(subscriptions);
   return (
     <>
       <DialogHeader title="Abo hinzufügen" onCloseClick={onCancelClick} />
-      <Formik<SubscriptionFormValues> onSubmit={handleFormSubmission} initialValues={getInitialValues(getToday())}>
+      <Formik<SubscriptionFormValues>
+        onSubmit={handleFormSubmission}
+        initialValues={getInitialValues(getToday(), validTrainingTypes)}
+      >
         {({ isValid, isSubmitting, submitForm }) => (
           <>
-            <Form className="dialog-body p-4 space-y-2">
-              <SubscriptionFormFields trainingTypes={getValidTrainingTypes(subscriptions)} disabled={isSubmitting} />
+            <Form className="dialog-body p-4 space-y-4">
+              <SubscriptionFormFields trainingTypes={validTrainingTypes} disabled={isSubmitting} />
             </Form>
             <DialogFooter className="flex justify-end p-4 space-x-2">
-              <Button disabled={isSubmitting} onClick={onCancelClick}>
+              <Button shape="outlined" disabled={isSubmitting} onClick={onCancelClick}>
                 Verwerfen
               </Button>
-              <Button type="submit" color="orange" loading={isSubmitting} disabled={!isValid} onClick={submitForm}>
+              <Button type="submit" loading={isSubmitting} disabled={!isValid} onClick={submitForm}>
                 Speichern
               </Button>
             </DialogFooter>

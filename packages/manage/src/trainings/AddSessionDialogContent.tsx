@@ -1,5 +1,5 @@
 import { Form, Formik, FormikHelpers } from 'formik';
-import React from 'react';
+import React, { FC } from 'react';
 import { Client, Session, SessionInput, TrainingType } from '@veri-fit/common';
 import { Button } from '@veri-fit/common-ui';
 import { DialogFooter, DialogHeader } from '../Dialog';
@@ -39,7 +39,7 @@ function getInitialValues(runsFrom: string): SessionFormValues {
   };
 }
 
-const AddSessionDialogContent: React.FC<Props> = ({ clients, onSessionAdded, onCancelClick }) => {
+const AddSessionDialogContent: FC<Props> = ({ clients, onSessionAdded, onCancelClick }) => {
   const { sessionRepo } = useRepos();
 
   async function handleFormSubmission(values: SessionFormValues, { setSubmitting }: FormikHelpers<SessionFormValues>) {
@@ -58,14 +58,14 @@ const AddSessionDialogContent: React.FC<Props> = ({ clients, onSessionAdded, onC
       >
         {({ isValid, isSubmitting, submitForm }) => (
           <>
-            <Form className="dialog-body p-4 space-y-3">
+            <Form className="dialog-body p-4 space-y-4">
               <SessionFormFields clients={clients} disabled={isSubmitting} />
             </Form>
             <DialogFooter className="flex justify-end p-4 space-x-2">
-              <Button disabled={isSubmitting} onClick={onCancelClick}>
+              <Button shape="outlined" disabled={isSubmitting} onClick={onCancelClick}>
                 Verwerfen
               </Button>
-              <Button type="submit" color="orange" loading={isSubmitting} disabled={!isValid} onClick={submitForm}>
+              <Button type="submit" loading={isSubmitting} disabled={!isValid} onClick={submitForm}>
                 Speichern
               </Button>
             </DialogFooter>

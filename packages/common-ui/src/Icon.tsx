@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ComponentPropsWithoutRef, FC } from 'react';
 import cx from 'classnames';
 
 const ICON_PATHS = {
@@ -91,9 +91,6 @@ const ICON_PATHS = {
   'user-add': (
     <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z" />
   ),
-  'user-remove': (
-    <path d="M11 6a3 3 0 11-6 0 3 3 0 016 0zM14 17a6 6 0 00-12 0h12zM13 8a1 1 0 100 2h4a1 1 0 100-2h-4z" />
-  ),
   'document-add': (
     <path
       fillRule="evenodd"
@@ -114,24 +111,37 @@ const ICON_PATHS = {
       <path d="M3 8a2 2 0 012-2v10h8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z" />
     </>
   ),
+  email: (
+    <path
+      fillRule="evenodd"
+      d="M14.243 5.757a6 6 0 10-.986 9.284 1 1 0 111.087 1.678A8 8 0 1118 10a3 3 0 01-4.8 2.401A4 4 0 1114 10a1 1 0 102 0c0-1.537-.586-3.07-1.757-4.243zM12 10a2 2 0 10-4 0 2 2 0 004 0z"
+      clipRule="evenodd"
+    />
+  ),
+  cake: (
+    <path
+      fillRule="evenodd"
+      d="M6 3a1 1 0 011-1h.01a1 1 0 010 2H7a1 1 0 01-1-1zm2 3a1 1 0 00-2 0v1a2 2 0 00-2 2v1a2 2 0 00-2 2v.683a3.7 3.7 0 011.055.485 1.704 1.704 0 001.89 0 3.704 3.704 0 014.11 0 1.704 1.704 0 001.89 0 3.704 3.704 0 014.11 0 1.704 1.704 0 001.89 0A3.7 3.7 0 0118 12.683V12a2 2 0 00-2-2V9a2 2 0 00-2-2V6a1 1 0 10-2 0v1h-1V6a1 1 0 10-2 0v1H8V6zm10 8.868a3.704 3.704 0 01-4.055-.036 1.704 1.704 0 00-1.89 0 3.704 3.704 0 01-4.11 0 1.704 1.704 0 00-1.89 0A3.704 3.704 0 012 14.868V17a1 1 0 001 1h14a1 1 0 001-1v-2.132zM9 3a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1zm3 0a1 1 0 011-1h.01a1 1 0 110 2H13a1 1 0 01-1-1z"
+      clipRule="evenodd"
+    />
+  ),
 } as const;
 
 export type IconName = keyof typeof ICON_PATHS;
 
-export interface Props extends React.ComponentPropsWithoutRef<'svg'> {
+const SIZES = {
+  md: 'h-5 w-5',
+  lg: 'h-6 w-6',
+  custom: '',
+};
+
+export interface Props extends ComponentPropsWithoutRef<'svg'> {
   name: IconName;
-  size?: 'normal' | 'large' | 'none';
+  size?: keyof typeof SIZES;
 }
 
-function getIconStyleClasses(size: Props['size'] = 'normal'): string {
-  return cx({
-    ['h-5 w-5']: size === 'normal',
-    ['h-6 w-6']: size === 'large',
-  });
-}
-
-export const Icon: React.FC<Props> = ({ name, size, className, ...rest }) => (
-  <svg className={cx(getIconStyleClasses(size), className)} viewBox="0 0 20 20" fill="currentColor" {...rest}>
+export const Icon: FC<Props> = ({ name, size = 'md', className, ...rest }) => (
+  <svg className={cx(SIZES[size], className)} viewBox="0 0 20 20" fill="currentColor" {...rest}>
     {ICON_PATHS[name]}
   </svg>
 );

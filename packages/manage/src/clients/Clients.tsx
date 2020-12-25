@@ -1,165 +1,267 @@
 import { Link, useParams } from 'react-router-dom';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, {
+  ChangeEventHandler,
+  ComponentPropsWithoutRef,
+  FC,
+  MouseEventHandler,
+  ReactNode,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import cx from 'classnames';
 import { Client } from '@veri-fit/common';
-import { Button } from '@veri-fit/common-ui';
+import { Button, IconButton, Input } from '@veri-fit/common-ui';
 import Dialog from '../Dialog';
 import { useRepos } from '../repositories/RepoContext';
 import { doesSubscriptionRunShort, isSubscriptionExpiring } from '../subscriptionChecks';
-import { LinkButton } from '../LinkButton';
+import Navbar from '../Navbar';
 import AddClientDialogContent from './AddClientDialogContent';
 import ClientDetails from './ClientDetails';
 
-interface ClientsContentProps {
-  clients: Client[];
-  selectedClientId?: string;
-  onAddUserClick: React.MouseEventHandler;
+interface SearchHeaderProps extends ComponentPropsWithoutRef<'div'> {
+  filterQuery: string;
+  onFilterQueryChange: ChangeEventHandler<HTMLInputElement>;
+  onAddUserClick: MouseEventHandler;
 }
 
-const ClientsContent: React.FC<ClientsContentProps> = ({ clients, selectedClientId, onAddUserClick }) => {
-  const [filter, setFilter] = useState('');
+const SearchHeader: FC<SearchHeaderProps> = ({
+  filterQuery,
+  onFilterQueryChange,
+  onAddUserClick,
+  className,
+  ...rest
+}) => (
+  <div className={cx('flex items-center space-x-4', className)} {...rest}>
+    <Input
+      type="search"
+      aria-label="Kundennamen"
+      placeholder="Filtern…"
+      value={filterQuery}
+      onChange={onFilterQueryChange}
+    />
+    <IconButton
+      className="flex-shrink-0"
+      icon="user-add"
+      shape="outlined"
+      label="Hinzufügen"
+      onClick={onAddUserClick}
+    />
+  </div>
+);
+
+interface ClientListProps extends ComponentPropsWithoutRef<'ul'> {
+  clients: Client[];
+  selectedClientId: string | undefined;
+}
+
+const ClientList: FC<ClientListProps> = ({ clients, selectedClientId, className, ...rest }) => (
+  <ul className={className} {...rest}>
+    {clients.map((client) => {
+      const { name, activeSubscriptions } = client;
+      const tags = [] as ReactNode[];
+      if (activeSubscriptions.some((subscription) => subscription.paidAt == null)) {
+        tags.push(
+          <span key="unpaid" className="tag tag-red">
+            Unbezahlt
+          </span>,
+        );
+      }
+      if (activeSubscriptions.some(isSubscriptionExpiring)) {
+        tags.push(
+          <span key="expires" className="tag tag-blue">
+            Läuft ab
+          </span>,
+        );
+      }
+      if (activeSubscriptions.some(doesSubscriptionRunShort)) {
+        tags.push(
+          <span key="runs-short" className="tag tag-blue">
+            Wird knapp
+          </span>,
+        );
+      }
+
+      return (
+        <li
+          key={client.id}
+          className={cx('border-b hover:bg-gray-200', selectedClientId === client.id && 'bg-gray-300')}
+        >
+          <Link
+            className="block p-4 sm:px-6"
+            to={selectedClientId === client.id ? '/clients' : `/clients/${client.id}`}
+          >
+            <h2 className="text-xl">{name}</h2>
+            {tags.length > 0 && <div className="space-x-1">{tags}</div>}
+          </Link>
+        </li>
+      );
+    })}
+  </ul>
+);
+
+function useFilteredClients(clients: Client[] | undefined) {
+  const { clientId } = useParams<{ clientId?: string }>();
+  const [filterQuery, setFilterQuery] = useState('');
+  const selectedClient = clients?.find((client) => client.id === clientId);
 
   const filteredClients = useMemo(() => {
-    if (filter.length > 0) {
-      return clients.filter((client) => client.name.toLowerCase().includes(filter.toLowerCase()));
+    if (!clients) {
+      return [];
+    } else if (filterQuery.length > 0) {
+      const filterQueryLower = filterQuery.toLowerCase();
+      return clients.filter((client) => client.name.toLowerCase().includes(filterQueryLower));
     } else {
       return clients;
     }
-  }, [clients, filter]);
+  }, [clients, filterQuery]);
 
-  const selectedClient = clients.find((client) => client.id === selectedClientId);
-  const hasClients = clients.length > 0;
+  return {
+    filterQuery,
+    setFilterQuery,
+    filteredClients,
+    selectedClient,
+  };
+}
+
+interface ClientsContentProps {
+  clients?: Client[];
+  header: ReactNode;
+  empty: ReactNode;
+  emptySearch: ReactNode;
+  onAddUserClick: MouseEventHandler;
+}
+
+const ClientsDualPane: FC<ClientsContentProps> = ({ clients, header, empty, emptySearch, onAddUserClick }) => {
+  const { filterQuery, setFilterQuery, filteredClients, selectedClient } = useFilteredClients(clients);
   return (
-    <>
-      <LinkButton className={cx(!selectedClient && 'hidden', 'lg:hidden self-start')} to="/clients" icon="arrow-left">
-        Zurück
-      </LinkButton>
-      {hasClients ? (
-        <>
-          <input
-            className={cx(selectedClient && 'hidden', 'lg:block', 'form-input w-full mt-4')}
-            type="search"
-            aria-label="Kundennamen"
-            placeholder="Filtern…"
-            value={filter}
-            onChange={(e) => setFilter(e.currentTarget.value)}
-          />
-          {filteredClients.length > 0 ? (
-            <>
-              <div className="flex-auto mt-4 flex min-h-0">
-                <ul
-                  className={cx(
-                    selectedClient && 'hidden',
-                    'lg:w-1/5 flex-auto lg:flex-initial lg:flex lg:flex-col bg-white rounded shadow overflow-auto',
-                  )}
-                >
-                  {filteredClients.map((client) => {
-                    const { name, activeSubscriptions } = client;
-                    const tags = [] as React.ReactNode[];
-                    if (activeSubscriptions.some((subscription) => subscription.paidAt == null)) {
-                      tags.push(
-                        <span key="unpaid" className="tag tag-red">
-                          Unbezahlt
-                        </span>,
-                      );
-                    }
-                    if (activeSubscriptions.some(isSubscriptionExpiring)) {
-                      tags.push(
-                        <span key="expires" className="tag tag-blue">
-                          Läuft ab
-                        </span>,
-                      );
-                    }
-                    if (activeSubscriptions.some(doesSubscriptionRunShort)) {
-                      tags.push(
-                        <span key="runs-short" className="tag tag-blue">
-                          Wird knapp
-                        </span>,
-                      );
-                    }
-
-                    return (
-                      <li
-                        key={client.id}
-                        className={cx('border-b hover:bg-gray-200', selectedClientId === client.id && 'bg-gray-300')}
-                      >
-                        <Link
-                          className="block p-4"
-                          to={selectedClientId === client.id ? '/clients' : `/clients/${client.id}`}
-                        >
-                          <h2 className="text-xl">{name}</h2>
-                          {tags.length > 0 && <div className="space-x-1">{tags}</div>}
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
-                <div
-                  className={cx(
-                    !selectedClient && 'hidden',
-                    'lg:block flex-1 lg:ml-4 p-4 bg-white rounded shadow overflow-auto',
-                  )}
-                >
-                  {selectedClient ? (
-                    <ClientDetails client={selectedClient} />
-                  ) : (
-                    <div className="h-full flex flex-col items-center justify-center">
-                      <p className="mt-4 text-lg text-center">Wähle einen Kunden aus um Details zu sehen.</p>
-                    </div>
-                  )}
-                </div>
+    <div className="min-h-0 flex-auto hidden lg:flex flex-col">
+      <Navbar />
+      <section className="flex-auto flex bg-gray-100 min-h-0">
+        {header}
+        {!clients ? null : clients.length === 0 ? (
+          empty
+        ) : (
+          <div className="flex-auto p-6 max-w-screen-xl mx-auto min-h-0 flex flex-col space-y-6">
+            <SearchHeader
+              filterQuery={filterQuery}
+              onFilterQueryChange={(e) => setFilterQuery(e.currentTarget.value)}
+              onAddUserClick={onAddUserClick}
+            />
+            {filteredClients.length === 0 ? (
+              { emptySearch }
+            ) : (
+              <div className="flex-auto min-h-0 flex space-x-6">
+                <ClientList
+                  className="w-1/5 bg-white shadow rounded overflow-auto"
+                  clients={clients}
+                  selectedClientId={selectedClient?.id}
+                />
+                {selectedClient ? (
+                  <ClientDetails className="flex-auto shadow rounded overflow-auto bg-white" client={selectedClient} />
+                ) : (
+                  <div className="flex-auto flex flex-col items-center justify-center">
+                    <p className="text-lg text-center">Wähle einen Kunden aus um Details zu sehen.</p>
+                  </div>
+                )}
               </div>
-            </>
-          ) : (
-            <div className="flex-auto mt-4 flex flex-col items-center justify-center">
-              <p className="mt-8 text-xl text-center">Keine Kunden gefunden…</p>
-            </div>
-          )}
-        </>
-      ) : (
-        <div className="flex-auto mt-4 flex flex-col items-center justify-center space-y-4">
-          <p className="text-xl text-center">Starte dein Business und füge einen Kunden hinzu.</p>
-          <Button size="large" color="orange" icon="user-add" onClick={onAddUserClick}>
-            Hinzufügen
-          </Button>
-        </div>
-      )}
-    </>
+            )}
+          </div>
+        )}
+      </section>
+    </div>
   );
 };
 
-export type Props = React.ComponentPropsWithoutRef<'section'>;
+const ClientsSinglePane: FC<ClientsContentProps> = ({ clients, header, empty, emptySearch, onAddUserClick }) => {
+  const { filterQuery, setFilterQuery, filteredClients, selectedClient } = useFilteredClients(clients);
+  return (
+    <div className="flex-auto flex flex-col lg:hidden">
+      {selectedClient ? (
+        <>
+          <Navbar upTarget="/clients" />
+          <ClientDetails className="flex-auto overflow-auto" client={selectedClient} />
+        </>
+      ) : (
+        <>
+          <Navbar />
+          <section className="flex-auto flex flex-col bg-gray-100 min-h-0">
+            {header}
+            {!clients ? null : clients.length === 0 ? (
+              empty
+            ) : (
+              <div className="flex-auto flex flex-col">
+                <SearchHeader
+                  className="p-4 sm:p-6"
+                  filterQuery={filterQuery}
+                  onFilterQueryChange={(e) => setFilterQuery(e.currentTarget.value)}
+                  onAddUserClick={onAddUserClick}
+                />
+                {filteredClients.length === 0 ? (
+                  { emptySearch }
+                ) : (
+                  <ClientList className="flex-auto bg-white shadow" clients={clients} selectedClientId={undefined} />
+                )}
+              </div>
+            )}
+          </section>
+        </>
+      )}
+    </div>
+  );
+};
 
-const Clients: React.FC<Props> = ({ className, ...rest }) => {
+export type Props = ComponentPropsWithoutRef<'section'>;
+
+const Clients: FC = () => {
   const [clients, setClients] = useState<Client[]>();
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const { clientRepo } = useRepos();
 
   useEffect(() => clientRepo.observeAll(setClients), [clientRepo]);
 
-  const { clientId } = useParams<{ clientId?: string }>();
+  const handleAddUserClick = () => setAddDialogOpen(true);
+  const header = (
+    <header className="sr-only">
+      <h1>Kunden</h1>
+    </header>
+  );
+  const empty = (
+    <div className="flex-auto p-4 flex flex-col items-center justify-center space-y-4">
+      <p className="text-xl text-center">Starte dein Business und füge einen Kunden hinzu.</p>
+      <Button size="lg" colorScheme="orange" icon="user-add" onClick={handleAddUserClick}>
+        Hinzufügen
+      </Button>
+    </div>
+  );
+  const emptySearch = (
+    <div className="flex items-center justify-center">
+      <p className="text-lg text-center">Keine Kunden gefunden…</p>
+    </div>
+  );
   return (
-    <section className={cx('flex bg-gray-100 min-h-0', className)} {...rest}>
-      <div className="w-full max-w-screen-xl mx-auto py-6 px-4 flex flex-col">
-        <header className={cx(clientId ? 'hidden' : 'flex', 'flex-shrink-0 lg:flex justify-between items-baseline')}>
-          <h1 className="text-2xl font-semibold">Kunden</h1>
-          {clients && clients.length > 0 && (
-            <Button icon="user-add" onClick={() => setAddDialogOpen(true)}>
-              Hinzufügen
-            </Button>
-          )}
-        </header>
-        {clients && (
-          <ClientsContent clients={clients} selectedClientId={clientId} onAddUserClick={() => setAddDialogOpen(true)} />
-        )}
-        <Dialog open={addDialogOpen} onCancel={() => setAddDialogOpen(false)}>
-          <AddClientDialogContent
-            onClientCreated={() => setAddDialogOpen(false)}
-            onCancelClick={() => setAddDialogOpen(false)}
-          />
-        </Dialog>
-      </div>
-    </section>
+    <>
+      <ClientsSinglePane
+        clients={clients}
+        header={header}
+        empty={empty}
+        emptySearch={emptySearch}
+        onAddUserClick={handleAddUserClick}
+      />
+      <ClientsDualPane
+        clients={clients}
+        header={header}
+        empty={empty}
+        emptySearch={emptySearch}
+        onAddUserClick={handleAddUserClick}
+      />
+      <Dialog open={addDialogOpen} onCancel={() => setAddDialogOpen(false)}>
+        <AddClientDialogContent
+          onClientCreated={() => setAddDialogOpen(false)}
+          onCancelClick={() => setAddDialogOpen(false)}
+        />
+      </Dialog>
+    </>
   );
 };
 

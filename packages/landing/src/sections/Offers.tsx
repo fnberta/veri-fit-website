@@ -1,5 +1,5 @@
 import Image, { FluidObject } from 'gatsby-image';
-import React from 'react';
+import React, { FC } from 'react';
 import Offer, { Price } from './Offer';
 
 export interface OfferData {
@@ -15,7 +15,7 @@ export interface Props {
   data: OfferData[];
 }
 
-const Offers: React.FC<Props> = ({ data }) => (
+const Offers: FC<Props> = ({ data }) => (
   <section id="offer" className="bg-gray-100">
     <div className="max-w-screen-xl mx-auto px-8 py-20">
       <header className="-mt-6 -ml-16 flex flex-wrap items-center">

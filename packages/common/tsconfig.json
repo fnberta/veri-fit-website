@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig-base.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "target": "es2016",
     "module": "CommonJS",
@@ -8,5 +8,6 @@
     "declaration": true,
     "declarationMap": true,
     "composite": true
-  }
+  },
+  "include": ["src/**/*"]
 }

@@ -1,7 +1,7 @@
-import { ErrorMessage, Field, FormikErrors, getIn, useFormikContext } from 'formik';
-import React, { useEffect, useRef } from 'react';
+import { FormikErrors, getIn, useFormikContext } from 'formik';
+import React, { FC, useCallback, useEffect, useRef } from 'react';
 import { SubscriptionType, TrainingType } from '@veri-fit/common';
-import { InputField, SelectField } from '@veri-fit/common-ui';
+import { CheckInputField, FieldControl, InputField, SelectField } from '@veri-fit/common-ui';
 import { getEndDate, isValidISOString } from '../dateTime';
 import { getSubscriptionName, getTrainingName } from '../displayNames';
 import { SubscriptionInput } from '../repositories/ClientRepository';
@@ -142,8 +142,8 @@ function usePrevious<T>(value: T): T | undefined {
   return ref.current;
 }
 
-const SubscriptionFormFields: React.FC<Props> = ({ trainingTypes, namespace, disabled }) => {
-  const withNamespace = (name: string) => (namespace ? `${namespace}.${name}` : name);
+const SubscriptionFormFields: FC<Props> = ({ trainingTypes, namespace, disabled }) => {
+  const withNamespace = useCallback((name: string) => (namespace ? `${namespace}.${name}` : name), [namespace]);
 
   // this is not very type safe but good enough for now
   const { values, setFieldValue } = useFormikContext();
@@ -152,57 +152,62 @@ const SubscriptionFormFields: React.FC<Props> = ({ trainingTypes, namespace, dis
   const trainingsLeft = getIn(values, withNamespace('trainingsLeft')) as number;
   const paid = getIn(values, withNamespace('paid')) as boolean;
 
-  const validTypes = validSubscriptionTypes[trainingType];
-  if (!validTypes.includes(type)) {
-    setFieldValue(withNamespace('type'), validTypes[0]);
-  }
-
-  // update trainingsLeft when default changes or if value is higher than default
   const defaultTrainingsLeft = getDefaultTrainingsLeft(type);
   const prevDefaultTrainingsLeft = usePrevious(defaultTrainingsLeft);
-  if (defaultTrainingsLeft !== prevDefaultTrainingsLeft || trainingsLeft > defaultTrainingsLeft) {
-    setFieldValue(withNamespace('trainingsLeft'), defaultTrainingsLeft);
-  }
+  const validTypes = validSubscriptionTypes[trainingType];
+
+  useEffect(() => {
+    if (!validTypes.includes(type)) {
+      setFieldValue(withNamespace('type'), validTypes[0]);
+    }
+
+    // update trainingsLeft when default changes or if value is higher than default
+    if (defaultTrainingsLeft !== prevDefaultTrainingsLeft || trainingsLeft > defaultTrainingsLeft) {
+      setFieldValue(withNamespace('trainingsLeft'), defaultTrainingsLeft);
+    }
+  }, [defaultTrainingsLeft, prevDefaultTrainingsLeft, validTypes, trainingsLeft, type, setFieldValue, withNamespace]);
 
   return (
     <>
-      <SelectField name={withNamespace('trainingType')} label="Trainings-Typ">
-        {trainingTypes.map((trainingType) => (
-          <option key={trainingType} value={trainingType}>
-            {getTrainingName(trainingType as TrainingType)}
-          </option>
-        ))}
-      </SelectField>
-      <div className="flex space-x-2">
-        <SelectField className="w-2/3" label="Abo-Typ" name={withNamespace('type')}>
-          {validSubscriptionTypes[trainingType].map((type) => (
-            <option key={type} value={type}>
-              {getSubscriptionName(type)}
+      <FieldControl name={withNamespace('trainingType')}>
+        <SelectField label="Trainings-Typ">
+          {trainingTypes.map((trainingType) => (
+            <option key={trainingType} value={trainingType}>
+              {getTrainingName(trainingType as TrainingType)}
             </option>
           ))}
         </SelectField>
+      </FieldControl>
+      <div className="flex space-x-2">
+        <FieldControl className="w-2/3" name={withNamespace('type')}>
+          <SelectField label="Abo-Typ">
+            {validSubscriptionTypes[trainingType].map((type) => (
+              <option key={type} value={type}>
+                {getSubscriptionName(type)}
+              </option>
+            ))}
+          </SelectField>
+        </FieldControl>
         {type !== SubscriptionType.BLOCK && (
-          <InputField
-            className="flex-1"
-            type="number"
-            name={withNamespace('trainingsLeft')}
-            disabled={disabled}
-            label="Trainings übrig"
-          />
+          <FieldControl className="flex-1" name={withNamespace('trainingsLeft')}>
+            <InputField type="number" disabled={disabled} label="Trainings übrig" />
+          </FieldControl>
         )}
       </div>
-      <InputField type="date" name={withNamespace('start')} disabled={disabled} label="Startpunkt" />
-      <fieldset className="form-field">
-        <legend className="form-label">Kosten</legend>
-        <label className="inline-flex items-center space-x-2">
-          <Field className="form-checkbox" type="checkbox" name={withNamespace('paid')} disabled={disabled} />
-          <span className="text-base">{' Bereits bezahlt'}</span>
-        </label>
-        <ErrorMessage name={withNamespace('paid')}>
-          {(error) => <span className="form-error">{error}</span>}
-        </ErrorMessage>
-      </fieldset>
-      {paid && <InputField type="date" name={withNamespace('paidAt')} disabled={disabled} label="Bezahlt am" />}
+      <FieldControl name={withNamespace('start')}>
+        <InputField type="date" disabled={disabled} label="Startpunkt" />
+      </FieldControl>
+      <FieldControl name={withNamespace('paid')}>
+        <fieldset className="form-field">
+          <legend className="field-label">Kosten</legend>
+          <CheckInputField type="checkbox" disabled={disabled} label={' Bereits bezahlt'} />
+        </fieldset>
+      </FieldControl>
+      {paid && (
+        <FieldControl name={withNamespace('paidAt')}>
+          <InputField type="date" disabled={disabled} label="Bezahlt am" />
+        </FieldControl>
+      )}
     </>
   );
 };

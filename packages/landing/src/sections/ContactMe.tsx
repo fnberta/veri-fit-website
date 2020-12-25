@@ -1,6 +1,14 @@
-import { Form, Formik, FormikHelpers } from 'formik';
-import React, { useState } from 'react';
-import { BotField, Button, InputField, makeValidator, TextAreaField, urlEncode } from '@veri-fit/common-ui';
+import { Form, Formik, FormikConfig } from 'formik';
+import React, { FC, useEffect, useState } from 'react';
+import {
+  BotField,
+  Button,
+  FieldControl,
+  InputField,
+  makeValidator,
+  TextAreaField,
+  urlEncode,
+} from '@veri-fit/common-ui';
 import Notification, { NotificationType } from '../Notification';
 import BulletItem from './BulletItem';
 
@@ -35,20 +43,19 @@ async function submitForm(values: FormValues): Promise<boolean> {
   }
 }
 
-const ContactMe: React.FC = () => {
+const ContactMe: FC = () => {
   const [notificationType, setNotificationType] = useState<NotificationType>();
 
-  function showNotification(type: NotificationType) {
-    setNotificationType(type);
-    setTimeout(() => setNotificationType(undefined), 3000);
-  }
+  useEffect(() => {
+    const timeoutId = notificationType ? window.setTimeout(() => setNotificationType(undefined), 3000) : undefined;
+    return () => clearTimeout(timeoutId);
+  }, [notificationType]);
 
-  async function handleFormSubmit(values: FormValues, { setSubmitting }: FormikHelpers<FormValues>) {
+  const handleFormSubmit: FormikConfig<FormValues>['onSubmit'] = async (values) => {
     setNotificationType(undefined);
     const successful = await submitForm(values);
-    showNotification(successful ? 'success' : 'error');
-    setSubmitting(false);
-  }
+    setNotificationType(successful ? 'success' : 'error');
+  };
 
   return (
     <section id="contact" className="bg-gray-900 flex flex-col">
@@ -101,34 +108,40 @@ const ContactMe: React.FC = () => {
                 netlify-honeypot="bot-field"
               >
                 <BotField />
-                <InputField
-                  className="w-64 ml-4 mt-4 flex-auto "
-                  type="text"
-                  name="name"
-                  validate={makeValidator('Name')}
-                  disabled={isSubmitting}
-                  label="Name"
-                  dark={true}
-                />
-                <InputField
-                  className="w-64 ml-4 mt-4 flex-auto"
-                  type="email"
-                  name="email"
-                  validate={makeValidator('Email')}
-                  disabled={isSubmitting}
-                  label="Email"
-                  dark={true}
-                />
-                <TextAreaField
-                  className="w-full ml-4 mt-4"
-                  name="message"
-                  label="Nachricht"
-                  placeholder="Wie kann ich dir helfen?"
-                  validate={makeValidator('Nachricht')}
-                  disabled={isSubmitting}
-                  dark={true}
-                />
-                <Button className="ml-4 mt-4" type="submit" color="orange" loading={isSubmitting} disabled={!isValid}>
+                <FieldControl className="w-64 ml-4 mt-4 flex-auto" name="name">
+                  <InputField
+                    type="text"
+                    validate={makeValidator('Name')}
+                    disabled={isSubmitting}
+                    label="Name"
+                    dark={true}
+                  />
+                </FieldControl>
+                <FieldControl className="w-64 ml-4 mt-4 flex-auto" name="email">
+                  <InputField
+                    type="email"
+                    validate={makeValidator('Email')}
+                    disabled={isSubmitting}
+                    label="Email"
+                    dark={true}
+                  />
+                </FieldControl>
+                <FieldControl className="w-full ml-4 mt-4" name="message">
+                  <TextAreaField
+                    label="Nachricht"
+                    placeholder="Wie kann ich dir helfen?"
+                    validate={makeValidator('Nachricht')}
+                    disabled={isSubmitting}
+                    dark={true}
+                  />
+                </FieldControl>
+                <Button
+                  className="ml-4 mt-4"
+                  type="submit"
+                  colorScheme="orange"
+                  loading={isSubmitting}
+                  disabled={!isValid}
+                >
                   Senden
                 </Button>
               </Form>

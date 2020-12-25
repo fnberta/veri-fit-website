@@ -1,5 +1,5 @@
 import { Form, Formik, FormikErrors, FormikHelpers } from 'formik';
-import React from 'react';
+import React, { FC } from 'react';
 import { Client, SubscriptionType, TrainingType } from '@veri-fit/common';
 import { Button } from '@veri-fit/common-ui';
 import { DialogFooter, DialogHeader } from '../Dialog';
@@ -57,7 +57,7 @@ function getInitialValues(today: string): FormValues {
   };
 }
 
-const AddClientDialogContent: React.FC<Props> = ({ onClientCreated, onCancelClick }) => {
+const AddClientDialogContent: FC<Props> = ({ onClientCreated, onCancelClick }) => {
   const { clientRepo } = useRepos();
 
   async function handleFormSubmission(values: FormValues, { setSubmitting }: FormikHelpers<FormValues>) {
@@ -81,9 +81,9 @@ const AddClientDialogContent: React.FC<Props> = ({ onClientCreated, onCancelClic
             <Form className="dialog-body">
               <ClientFormFields disabled={isSubmitting} />
               <hr className="my-2" />
-              <div className="p-4 space-y-4">
+              <div className="p-4 space-y-6">
                 <h2 className="text-base font-semibold">Abo</h2>
-                <div className="space-y-2">
+                <div className="space-y-4">
                   <SubscriptionFormFields
                     trainingTypes={trainingTypes}
                     namespace="subscription"
@@ -93,10 +93,10 @@ const AddClientDialogContent: React.FC<Props> = ({ onClientCreated, onCancelClic
               </div>
             </Form>
             <DialogFooter className="p-4 flex justify-end space-x-2">
-              <Button disabled={isSubmitting} onClick={onCancelClick}>
+              <Button shape="outlined" disabled={isSubmitting} onClick={onCancelClick}>
                 Verwerfen
               </Button>
-              <Button type="submit" color="orange" loading={isSubmitting} disabled={!isValid} onClick={submitForm}>
+              <Button type="submit" loading={isSubmitting} disabled={!isValid} onClick={submitForm}>
                 Erstellen
               </Button>
             </DialogFooter>

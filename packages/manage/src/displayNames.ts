@@ -3,7 +3,7 @@ import { SubscriptionType, TrainingType } from '@veri-fit/common';
 export function getTrainingName(type: TrainingType): string {
   switch (type) {
     case TrainingType.BOOST:
-      return 'BOOST';
+      return 'Boost';
     case TrainingType.HIIT:
       return 'HIIT';
     case TrainingType.PERSONAL:

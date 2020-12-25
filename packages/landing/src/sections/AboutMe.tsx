@@ -1,5 +1,5 @@
 import Image, { FluidObject } from 'gatsby-image';
-import React from 'react';
+import React, { FC } from 'react';
 import { Icon } from '@veri-fit/common-ui';
 
 export interface Props {
@@ -8,14 +8,14 @@ export interface Props {
 
 const IMG_STYLE = { maxHeight: 300 };
 
-const ExperienceItem: React.FC = ({ children }) => (
+const ExperienceItem: FC = ({ children }) => (
   <li className="flex items-center">
     <Icon className="h-6 w-6" name="check" />
     <span className="ml-4">{children}</span>
   </li>
 );
 
-const AboutMe: React.FC<Props> = ({ vera }) => (
+const AboutMe: FC<Props> = ({ vera }) => (
   <section id="about" className="bg-gray-100">
     <div className="max-w-screen-xl mx-auto px-8 pt-20 pb-40">
       <div className="-ml-12 -mt-12 flex flex-wrap justify-center">

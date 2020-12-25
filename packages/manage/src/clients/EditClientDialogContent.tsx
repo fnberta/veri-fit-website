@@ -1,5 +1,5 @@
 import { Form, Formik, FormikHelpers } from 'formik';
-import React from 'react';
+import React, { FC } from 'react';
 import { Client } from '@veri-fit/common';
 import { Button } from '@veri-fit/common-ui';
 import { DialogFooter, DialogHeader } from '../Dialog';
@@ -28,7 +28,7 @@ function getInitialValues(client: Client): ClientFormValues {
   };
 }
 
-const EditClientDialogContent: React.FC<Props> = ({ client, onClientUpdated, onCancelClick }) => {
+const EditClientDialogContent: FC<Props> = ({ client, onClientUpdated, onCancelClick }) => {
   const { clientRepo } = useRepos();
 
   async function handleFormSubmission(values: ClientFormValues, { setSubmitting }: FormikHelpers<ClientFormValues>) {
@@ -51,16 +51,10 @@ const EditClientDialogContent: React.FC<Props> = ({ client, onClientUpdated, onC
               <ClientFormFields disabled={isSubmitting} />
             </Form>
             <DialogFooter className="flex justify-end p-4 space-x-2">
-              <Button disabled={isSubmitting} onClick={onCancelClick}>
+              <Button shape="outlined" disabled={isSubmitting} onClick={onCancelClick}>
                 Verwerfen
               </Button>
-              <Button
-                type="submit"
-                color="orange"
-                loading={isSubmitting}
-                disabled={!dirty || !isValid}
-                onClick={submitForm}
-              >
+              <Button type="submit" loading={isSubmitting} disabled={!dirty || !isValid} onClick={submitForm}>
                 Speichern
               </Button>
             </DialogFooter>

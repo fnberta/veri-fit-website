@@ -1,8 +1,8 @@
 import { Form, Formik, FormikHelpers } from 'formik';
 import { DateTime } from 'luxon';
-import React, { useState } from 'react';
+import React, { FC, useState } from 'react';
 import { ChangeType, Client, Session, SessionInput } from '@veri-fit/common';
-import { Button } from '@veri-fit/common-ui';
+import { Button, Select } from '@veri-fit/common-ui';
 import { DialogFooter, DialogHeader } from '../Dialog';
 import { useRepos } from '../repositories/RepoContext';
 import SessionFormFields, { SessionFormValues } from './SessionFormFields';
@@ -41,7 +41,7 @@ function getInitialValues(session: Session): SessionFormValues {
   };
 }
 
-const EditSessionDialogContent: React.FC<Props> = ({ session, clients, onSessionChanged, onCancelClick }) => {
+const EditSessionDialogContent: FC<Props> = ({ session, clients, onSessionChanged, onCancelClick }) => {
   const [changeType, setChangeType] = useState(ChangeType.SINGLE);
   const { sessionRepo } = useRepos();
 
@@ -61,14 +61,13 @@ const EditSessionDialogContent: React.FC<Props> = ({ session, clients, onSession
       >
         {({ isValid, isSubmitting, submitForm }) => (
           <>
-            <Form className="dialog-body p-4 space-x-3">
+            <Form className="dialog-body p-4 space-y-4">
               <SessionFormFields clients={clients} disabled={isSubmitting} />
             </Form>
             <DialogFooter className="-mt-2 p-4 flex flex-wrap items-baseline justify-end">
               {session.trainingId != null && (
-                // eslint-disable-next-line jsx-a11y/no-onchange
-                <select
-                  className="mt-2 form-select"
+                <Select
+                  className="mt-2 flex-1"
                   aria-label="Änderungsart"
                   value={changeType}
                   disabled={isSubmitting}
@@ -77,13 +76,13 @@ const EditSessionDialogContent: React.FC<Props> = ({ session, clients, onSession
                   <option value={ChangeType.SINGLE}>Nur dieses</option>
                   <option value={ChangeType.ALL_FOLLOWING}>Alle zukünftigen</option>
                   <option value={ChangeType.ALL_NON_CONFIRMED}>Alle offenen</option>
-                </select>
+                </Select>
               )}
               <div className="mt-2 ml-4 flex-grow flex justify-end space-x-2">
-                <Button disabled={isSubmitting} onClick={onCancelClick}>
+                <Button shape="outlined" disabled={isSubmitting} onClick={onCancelClick}>
                   Verwerfen
                 </Button>
-                <Button type="submit" color="orange" loading={isSubmitting} disabled={!isValid} onClick={submitForm}>
+                <Button type="submit" loading={isSubmitting} disabled={!isValid} onClick={submitForm}>
                   Speichern
                 </Button>
               </div>

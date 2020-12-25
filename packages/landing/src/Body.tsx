@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { ComponentPropsWithoutRef, FC } from 'react';
 import cx from 'classnames';
 
-export interface Props extends React.ComponentPropsWithoutRef<'div'> {
+export interface Props extends ComponentPropsWithoutRef<'div'> {
   body: string | Record<string, unknown>;
 }
 
-const Body: React.FC<Props> = ({ body, className, ...rest }) => {
+const Body: FC<Props> = ({ body, className, ...rest }) => {
   if (typeof body === 'string') {
     return <div className={cx('content', className)} dangerouslySetInnerHTML={{ __html: body }} {...rest} />;
   }

@@ -1,5 +1,6 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
-const tailwindUiPlugin = require('@tailwindcss/ui');
+const colors = require('tailwindcss/colors');
+const forms = require('@tailwindcss/forms');
 
 module.exports = {
   purge: ['./src/**/*.tsx'],
@@ -8,17 +9,28 @@ module.exports = {
       fontFamily: {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
       },
+      colors: {
+        gray: colors.blueGray,
+        orange: colors.orange,
+      },
     },
   },
-  variants: {},
-  plugins: [tailwindUiPlugin],
-  future: {
-    removeDeprecatedGapUtilities: true,
-    purgeLayersByDefault: true,
-    defaultLineHeights: true,
-    standardFontWeights: true,
+  variants: {
+    extend: {
+      borderWidth: ['disabled'],
+      borderColor: ['disabled'],
+      opacity: ['disabled'],
+      backgroundColor: ['disabled', 'active'],
+      backgroundOpacity: ['active'],
+      textColor: ['disabled', 'active'],
+      boxShadow: ['disabled', 'active'],
+      cursor: ['disabled'],
+      ringWidth: ['focus-visible'],
+      ringOffsetWidth: ['focus-visible'],
+      ringOffsetColor: ['focus-visible'],
+      ringColor: ['focus-visible'],
+      ringOpacity: ['focus-visible'],
+    },
   },
-  experimental: {
-    applyComplexClasses: true,
-  },
+  plugins: [forms],
 };

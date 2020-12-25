@@ -1,17 +1,18 @@
 {
-  "extends": "../../tsconfig-base.json",
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "target": "es2018",
     "rootDir": "src",
     "outDir": "build"
   },
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "**/*.test.ts"],
   "references": [
     {
       "path": "../common/tsconfig.json"
     },
     {
-      "path": "../common/tsconfig-esm.json"
+      "path": "../common/tsconfig.esm.json"
     }
   ]
 }

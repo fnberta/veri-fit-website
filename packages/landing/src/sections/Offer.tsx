@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ComponentPropsWithoutRef, FC, ReactNode } from 'react';
 import cx from 'classnames';
 import Body from '../Body';
 
@@ -8,10 +8,10 @@ export interface Price {
   validity?: string;
 }
 
-export interface Props extends React.ComponentPropsWithoutRef<'div'> {
+export interface Props extends ComponentPropsWithoutRef<'div'> {
   title: string;
   subtitle: string;
-  image?: React.ReactNode;
+  image?: ReactNode;
   body: string | Record<string, unknown>;
   prices: Price[];
 }
@@ -24,7 +24,7 @@ function getPriceTypeDisplay(type: number): string {
   return `${type}er Abo`;
 }
 
-const Offer: React.FC<Props> = ({ title, subtitle, image, body, prices, className, ...rest }) => (
+const Offer: FC<Props> = ({ title, subtitle, image, body, prices, className, ...rest }) => (
   <div className={cx('card', className)} {...rest}>
     {image}
     <div className="card-body">

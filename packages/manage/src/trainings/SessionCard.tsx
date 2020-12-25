@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { FC, MouseEventHandler, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Client, Session } from '@veri-fit/common';
 import { Button } from '@veri-fit/common-ui';
@@ -10,10 +10,10 @@ import { useRepos } from '../repositories/RepoContext';
 export interface Props {
   session: Session;
   clients: Client[];
-  onEditClick: React.MouseEventHandler;
+  onEditClick: MouseEventHandler;
 }
 
-const SessionCard: React.FC<Props> = ({ session, clients, onEditClick }) => {
+const SessionCard: FC<Props> = ({ session, clients, onEditClick }) => {
   const [loading, setLoading] = useState(false);
   const { sessionRepo } = useRepos();
 
@@ -56,23 +56,17 @@ const SessionCard: React.FC<Props> = ({ session, clients, onEditClick }) => {
       </div>
       <footer className="flex items-center justify-end bg-gray-100 px-4 py-2 space-x-2">
         {!session.confirmed && (
-          <Button size="small" disabled={loading} onClick={onEditClick}>
+          <Button shape="outlined" size="sm" disabled={loading} onClick={onEditClick}>
             Bearbeiten
           </Button>
         )}
         {session.date <= getToday() &&
           (session.confirmed ? (
-            <Button size="small" loading={loading} onClick={handleToggleClick}>
+            <Button size="sm" loading={loading} onClick={handleToggleClick}>
               Öffnen
             </Button>
           ) : (
-            <Button
-              size="small"
-              color="orange"
-              loading={loading}
-              disabled={hasClientsWithIssues}
-              onClick={handleToggleClick}
-            >
+            <Button size="sm" loading={loading} disabled={hasClientsWithIssues} onClick={handleToggleClick}>
               Bestätigen
             </Button>
           ))}

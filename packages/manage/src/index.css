@@ -4,7 +4,10 @@
 @import '@veri-fit/common-ui';
 
 @layer base {
-  html,
+  html {
+    @apply h-full w-full;
+  }
+
   body {
     @apply h-full w-full subpixel-antialiased text-gray-900;
   }
@@ -14,50 +17,31 @@
   }
 
   dialog {
-    @apply absolute inset-0 h-auto w-auto p-0 flex items-center justify-center bg-transparent overflow-hidden text-gray-900;
+    @apply absolute inset-0 h-auto w-auto p-0 sm:p-4 flex items-center justify-center overflow-hidden bg-transparent;
   }
 
-  @screen sm {
-    dialog {
-      @apply p-4;
-    }
-  }
   dialog:not([open]) {
     @apply hidden;
   }
 
   dialog[open] {
+    /* transitions don't work with the dialog element unfortunately */
     animation: dialog-show 0.2s cubic-bezier(0, 0, 0.2, 1) normal;
   }
 
   dialog::backdrop {
-    @apply bg-gray-900 pointer-events-none opacity-75;
-  }
-
-  dialog + .backdrop {
-    @apply fixed inset-0 bg-gray-900 pointer-events-none opacity-75;
-  }
-
-  ._dialog_overlay {
-    @apply fixed inset-0;
+    @apply fixed inset-0 bg-gray-900 pointer-events-none opacity-50;
   }
 
   dialog[open]::backdrop {
+    /* transitions don't work with the dialog element unfortunately */
     animation: dialog-backdrop-show 0.2s cubic-bezier(0, 0, 0.2, 1) normal;
-  }
-
-  dialog[open] + .backdrop {
-    animation: dialog-backdrop-show 0.2s cubic-bezier(0, 0, 0.2, 1) normal;
-  }
-
-  .dialog-body {
-    @apply overflow-auto flex-grow;
   }
 
   @keyframes dialog-show {
     from {
       @apply opacity-0;
-      transform: scale(0.6);
+      transform: scale(0.5);
     }
     to {
       @apply opacity-100;
@@ -70,12 +54,16 @@
       @apply opacity-0;
     }
     to {
-      @apply opacity-75;
+      @apply opacity-50;
     }
   }
 }
 
 @layer components {
+  .dialog-body {
+    @apply overflow-auto flex-grow;
+  }
+
   .tag {
     @apply inline-block px-2 rounded-full text-xs font-semibold uppercase tracking-wider;
   }

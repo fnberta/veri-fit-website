@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import DocHead from './DocHead';
 import './layout.css';
 
@@ -6,7 +6,7 @@ export interface Props {
   title: string;
 }
 
-const Layout: React.FC<Props> = ({ title, children }) => (
+const Layout: FC<Props> = ({ title, children }) => (
   <>
     <DocHead title={title} />
     {children}

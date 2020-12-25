@@ -3201,15 +3201,6 @@ export type IndexPageQuery = { __typename?: 'Query' } & {
       }
     >;
   };
-  videos: { __typename?: 'MarkdownRemarkConnection' } & {
-    nodes: Array<
-      { __typename?: 'MarkdownRemark' } & {
-        frontmatter?: Maybe<
-          { __typename?: 'MarkdownRemarkFrontmatter' } & Pick<MarkdownRemarkFrontmatter, 'title' | 'description'>
-        >;
-      }
-    >;
-  };
 };
 
 export type AgbPageQueryVariables = {

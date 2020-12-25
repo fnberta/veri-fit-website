@@ -1,9 +1,14 @@
-import React, { useEffect, useRef } from 'react';
+import { FC, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
-const modalRoot = window.document.getElementById('portal');
+let modalRoot = window.document.getElementById('portal');
+if (!modalRoot) {
+  modalRoot = window.document.createElement('div');
+  modalRoot.setAttribute('id', 'portal');
+  window.document.body.appendChild(modalRoot);
+}
 
-const Portal: React.FC = ({ children }) => {
+const Portal: FC = ({ children }) => {
   const { current } = useRef(window.document.createElement('div'));
 
   useEffect(() => {

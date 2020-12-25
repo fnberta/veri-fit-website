@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { AnchorButton } from '@veri-fit/common-ui';
 
-const TryOut: React.FC = () => (
+const TryOut: FC = () => (
   <section
     className="parallax parallax-overlay"
     style={{ backgroundImage: `url(${require('../images/warrior.jpg')})` }}
@@ -18,7 +18,7 @@ const TryOut: React.FC = () => (
             Für dein Wohlbefinden – für deinen Erfolg – für dich!
           </p>
         </div>
-        <AnchorButton className="mt-12 ml-12 uppercase tracking-wider" color="orange" size="huge" href="/#contact">
+        <AnchorButton className="mt-12 ml-12 uppercase tracking-wider" colorScheme="orange" size="xl" href="/#contact">
           Kontakt
         </AnchorButton>
       </div>

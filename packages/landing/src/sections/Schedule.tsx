@@ -1,5 +1,5 @@
 import { Link } from 'gatsby';
-import React from 'react';
+import React, { FC } from 'react';
 import { WeekSchedule, TimeOfDay, Weekday, Week } from '@veri-fit/common-ui';
 
 export interface ScheduleEntryData {
@@ -13,7 +13,7 @@ export interface Props {
   entries: ScheduleEntryData[];
 }
 
-export const ScheduleItem: React.FC<Pick<ScheduleEntryData, 'title' | 'time'>> = ({ title, time }) => (
+export const ScheduleItem: FC<Pick<ScheduleEntryData, 'title' | 'time'>> = ({ title, time }) => (
   <div className="p-4 bg-white rounded shadow text-center">
     <h2 className="text-lg text-gray-900 font-semibold">{title}</h2>
     <p className="text-gray-700">{time}</p>
@@ -42,7 +42,7 @@ function getWeek(entries: ScheduleEntryData[]): Week {
   );
 }
 
-const Schedule: React.FC<Props> = ({ entries }) => (
+const Schedule: FC<Props> = ({ entries }) => (
   <section id="schedule" className="bg-gray-900">
     <div className="max-w-screen-xl mx-auto px-8 py-20 text-white">
       <header className="-ml-16 -mt-6 flex flex-wrap">
@@ -51,16 +51,16 @@ const Schedule: React.FC<Props> = ({ entries }) => (
           {
             'Ich freue mich auf deinen Besuch in einer meiner Gruppenstunden! Um einen Termin für ein Personal Training zu vereinbaren, '
           }
-          <a className="link" href="/#contact">
+          <Link className="link" to="/#contact">
             melde
-          </a>
+          </Link>
           {' dich doch gleich direkt bei mir.'}
         </p>
       </header>
       <WeekSchedule className="mt-12" {...getWeek(entries)} />
       <p className="mt-12 lg:text-center">
         {'Eine Übersicht aller Stunden findest du auch in meinem aktuellen '}
-        <a className="link" href="/assets/VeriFit_Flyer_Herbst19.pdf" target="_blank">
+        <a className="link" href="/assets/VeriFit_Flyer_Herbst19.pdf" target="_blank" rel="noopener noreferrer">
           Flyer
         </a>
         .{' Es gelten die '}
