@@ -1,4 +1,4 @@
-import React, { ComponentPropsWithoutRef, FC, ReactNode } from 'react';
+import React, { cloneElement, ComponentPropsWithoutRef, FC, ReactElement } from 'react';
 import cx from 'classnames';
 
 export const WEEKDAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'] as const;
@@ -11,7 +11,7 @@ export interface WeekdayEntry {
   id: string;
   weekday: Weekday;
   timeOfDay: TimeOfDay;
-  content: ReactNode;
+  content: ReactElement;
 }
 
 export type Week = Record<Weekday, WeekdayEntry[]>;
@@ -27,14 +27,13 @@ const Block: FC<BlockProps> = ({ title, entries }) => (
     {entries
       .slice()
       .sort((a, b) => TIMES_OF_DAY.indexOf(a.timeOfDay) - TIMES_OF_DAY.indexOf(b.timeOfDay))
-      .map((entry) => (
-        <div
-          key={entry.id}
-          className={cx('flex flex-col items-stretch', `schedule-${entry.weekday} schedule-${entry.timeOfDay}`)}
-        >
-          {entry.content}
-        </div>
-      ))}
+      .map(({ id, weekday, timeOfDay, content }) =>
+        cloneElement(content, {
+          ...content.props,
+          id,
+          className: cx(`schedule-${weekday} schedule-${timeOfDay}`, content.props.className),
+        }),
+      )}
   </>
 );
 
