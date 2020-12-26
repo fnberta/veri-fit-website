@@ -11,10 +11,9 @@ import {
 } from '@veri-fit/common';
 import { getToday } from './dateTime';
 import {
-  doesSubscriptionRunShort,
+  getActiveSubscriptionTags,
   getClientsWithIssues,
   getValidTrainingTypes,
-  isSubscriptionExpiring,
   trainingTypes,
 } from './subscriptionChecks';
 
@@ -76,119 +75,210 @@ describe('valid training types', () => {
   });
 });
 
-describe('expires', () => {
-  test('should return false if type is UNLIMITED_10', () => {
-    const result = isSubscriptionExpiring({
-      id: 'random-id',
-      type: SubscriptionType.UNLIMITED_10,
-      trainingType: TrainingType.YOGA,
-      start: getToday(),
-      trainingsLeft: 10,
+describe('active subscription tags', () => {
+  describe('unpaid', () => {
+    test('should return false if paidAt is set', () => {
+      const today = getToday();
+      const result = getActiveSubscriptionTags({
+        id: 'random-id',
+        type: SubscriptionType.UNLIMITED_10,
+        trainingType: TrainingType.YOGA,
+        start: today,
+        trainingsLeft: 10,
+        paidAt: today,
+      });
+      expect(result.unpaid).toBe(false);
     });
-    expect(result).toBe(false);
-  });
 
-  test('should return false if type is not UNLIMITED_10 and end date is longer away than a week from today', () => {
-    const today = DateTime.local();
-    const result = isSubscriptionExpiring({
-      id: 'random-id',
-      type: SubscriptionType.LIMITED_10,
-      trainingType: TrainingType.YOGA,
-      start: today.minus({ weeks: 2 }).toISODate(),
-      end: today.plus({ weeks: 2 }).toISODate(),
-      trainingsLeft: 10,
-    });
-    expect(result).toBe(false);
-  });
-
-  test('should return true if type is not UNLIMITED_10 and end date is one a week from today', () => {
-    const today = DateTime.local();
-    const result = isSubscriptionExpiring({
-      id: 'random-id',
-      type: SubscriptionType.LIMITED_10,
-      trainingType: TrainingType.YOGA,
-      start: today.minus({ weeks: 2 }).toISODate(),
-      end: today.plus({ weeks: 1 }).toISODate(),
-      trainingsLeft: 10,
-    });
-    expect(result).toBe(true);
-  });
-
-  test('should return true if type is not UNLIMITED_10 and end date is within a week from today', () => {
-    const today = DateTime.local();
-    const result = isSubscriptionExpiring({
-      id: 'random-id',
-      type: SubscriptionType.LIMITED_10,
-      trainingType: TrainingType.YOGA,
-      start: today.minus({ weeks: 2 }).toISODate(),
-      end: today.plus({ days: 2 }).toISODate(),
-      trainingsLeft: 10,
-    });
-    expect(result).toBe(true);
-  });
-});
-
-describe('runs short', () => {
-  test('should return false if type is UNLIMITED_10 or BLOCK', () => {
-    expect(
-      doesSubscriptionRunShort({
+    test('should return true if paidAt not set', () => {
+      const result = getActiveSubscriptionTags({
         id: 'random-id',
         type: SubscriptionType.UNLIMITED_10,
         trainingType: TrainingType.YOGA,
         start: getToday(),
         trainingsLeft: 10,
-      }),
-    ).toBe(false);
+      });
+      expect(result.unpaid).toBe(true);
+    });
+  });
 
-    const today = DateTime.local();
-    expect(
-      doesSubscriptionRunShort({
+  describe('expired', () => {
+    test('should return false if type is UNLIMITED_10', () => {
+      const result = getActiveSubscriptionTags({
+        id: 'random-id',
+        type: SubscriptionType.UNLIMITED_10,
+        trainingType: TrainingType.YOGA,
+        start: getToday(),
+        trainingsLeft: 10,
+      });
+      expect(result.expired).toBe(false);
+    });
+
+    test('should return true if type is not UNLIMITED_10 and end date is earlier than today', () => {
+      const today = DateTime.local();
+      const result = getActiveSubscriptionTags({
+        id: 'random-id',
+        type: SubscriptionType.LIMITED_10,
+        trainingType: TrainingType.YOGA,
+        start: today.minus({ weeks: 2 }).toISODate(),
+        end: today.minus({ weeks: 1 }).toISODate(),
+        trainingsLeft: 10,
+      });
+      expect(result.expired).toBe(true);
+    });
+  });
+
+  describe('expiring', () => {
+    test('should return false if type is UNLIMITED_10', () => {
+      const result = getActiveSubscriptionTags({
+        id: 'random-id',
+        type: SubscriptionType.UNLIMITED_10,
+        trainingType: TrainingType.YOGA,
+        start: getToday(),
+        trainingsLeft: 10,
+      });
+      expect(result.expiring).toBe(false);
+    });
+
+    test('should return false if expired', () => {
+      const today = DateTime.local();
+      const result = getActiveSubscriptionTags({
+        id: 'random-id',
+        type: SubscriptionType.LIMITED_10,
+        trainingType: TrainingType.YOGA,
+        start: today.minus({ weeks: 2 }).toISODate(),
+        end: today.minus({ weeks: 1 }).toISODate(),
+        trainingsLeft: 10,
+      });
+      expect(result.expiring).toBe(false);
+    });
+
+    test('should return false if type is not UNLIMITED_10 and end date is longer away than a week from today', () => {
+      const today = DateTime.local();
+      const result = getActiveSubscriptionTags({
+        id: 'random-id',
+        type: SubscriptionType.LIMITED_10,
+        trainingType: TrainingType.YOGA,
+        start: today.minus({ weeks: 2 }).toISODate(),
+        end: today.plus({ weeks: 2 }).toISODate(),
+        trainingsLeft: 10,
+      });
+      expect(result.expiring).toBe(false);
+    });
+
+    test('should return false is type is not UNLIMITED_10 and end date is one week before today', () => {
+      const today = DateTime.local();
+      const result = getActiveSubscriptionTags({
+        id: 'random-id',
+        type: SubscriptionType.LIMITED_10,
+        trainingType: TrainingType.YOGA,
+        start: today.minus({ weeks: 2 }).toISODate(),
+        end: today.minus({ weeks: 1 }).toISODate(),
+        trainingsLeft: 10,
+      });
+      expect(result.expiring).toBe(false);
+    });
+
+    test('should return true if type is not UNLIMITED_10 and end date is one a week from today', () => {
+      const today = DateTime.local();
+      const result = getActiveSubscriptionTags({
+        id: 'random-id',
+        type: SubscriptionType.LIMITED_10,
+        trainingType: TrainingType.YOGA,
+        start: today.minus({ weeks: 2 }).toISODate(),
+        end: today.plus({ weeks: 1 }).toISODate(),
+        trainingsLeft: 10,
+      });
+      expect(result.expiring).toBe(true);
+    });
+
+    test('should return true if type is not UNLIMITED_10 and end date is within a week from today', () => {
+      const today = DateTime.local();
+      const result = getActiveSubscriptionTags({
+        id: 'random-id',
+        type: SubscriptionType.LIMITED_10,
+        trainingType: TrainingType.YOGA,
+        start: today.minus({ weeks: 2 }).toISODate(),
+        end: today.plus({ days: 2 }).toISODate(),
+        trainingsLeft: 10,
+      });
+      expect(result.expiring).toBe(true);
+    });
+  });
+
+  describe('runsShort', () => {
+    test('should return false if type is UNLIMITED_10 or BLOCK', () => {
+      const resultUnlimited = getActiveSubscriptionTags({
+        id: 'random-id',
+        type: SubscriptionType.UNLIMITED_10,
+        trainingType: TrainingType.YOGA,
+        start: getToday(),
+        trainingsLeft: 10,
+      });
+      expect(resultUnlimited.runsShort).toBe(false);
+
+      const today = DateTime.local();
+      const resultBlock = getActiveSubscriptionTags({
         id: 'random-id',
         type: SubscriptionType.BLOCK,
         trainingType: TrainingType.BOOST,
         start: today.minus({ weeks: 2 }).toISODate(),
         end: today.plus({ weeks: 1 }).toISODate(),
-      }),
-    ).toBe(false);
-  });
-
-  test('should return false if type is not UNLIMITED_10 or BLOCK and trainings left is smaller than the amount of weeks left', () => {
-    const today = DateTime.local();
-    const result = doesSubscriptionRunShort({
-      id: 'random-id',
-      type: SubscriptionType.LIMITED_10,
-      trainingType: TrainingType.YOGA,
-      start: today.minus({ weeks: 2 }).toISODate(),
-      end: today.plus({ weeks: 5 }).toISODate(),
-      trainingsLeft: 3,
+      });
+      expect(resultBlock.runsShort).toBe(false);
     });
-    expect(result).toBe(false);
-  });
 
-  test('should return false if type is not UNLIMITED_10 or BLOCK and trainings left equals the amount of weeks left', () => {
-    const today = DateTime.local();
-    const result = doesSubscriptionRunShort({
-      id: 'random-id',
-      type: SubscriptionType.LIMITED_10,
-      trainingType: TrainingType.YOGA,
-      start: today.minus({ weeks: 2 }).toISODate(),
-      end: today.plus({ weeks: 4 }).toISODate(),
-      trainingsLeft: 4,
+    test('should return false if expired', () => {
+      const today = DateTime.local();
+      const result = getActiveSubscriptionTags({
+        id: 'random-id',
+        type: SubscriptionType.LIMITED_10,
+        trainingType: TrainingType.YOGA,
+        start: today.minus({ weeks: 2 }).toISODate(),
+        end: today.minus({ weeks: 1 }).toISODate(),
+        trainingsLeft: 3,
+      });
+      expect(result.runsShort).toBe(false);
     });
-    expect(result).toBe(false);
-  });
 
-  test('should return true if type is not UNLIMITED_10 or BLOCK and trainings left is greater than the amount of weeks left', () => {
-    const today = DateTime.local();
-    const result = doesSubscriptionRunShort({
-      id: 'random-id',
-      type: SubscriptionType.LIMITED_10,
-      trainingType: TrainingType.YOGA,
-      start: today.minus({ weeks: 2 }).toISODate(),
-      end: today.plus({ weeks: 5 }).toISODate(),
-      trainingsLeft: 7,
+    test('should return false if type is not UNLIMITED_10 or BLOCK and trainings left is smaller than the amount of weeks left', () => {
+      const today = DateTime.local();
+      const result = getActiveSubscriptionTags({
+        id: 'random-id',
+        type: SubscriptionType.LIMITED_10,
+        trainingType: TrainingType.YOGA,
+        start: today.minus({ weeks: 2 }).toISODate(),
+        end: today.plus({ weeks: 5 }).toISODate(),
+        trainingsLeft: 3,
+      });
+      expect(result.runsShort).toBe(false);
     });
-    expect(result).toBe(true);
+
+    test('should return false if type is not UNLIMITED_10 or BLOCK and trainings left equals the amount of weeks left', () => {
+      const today = DateTime.local();
+      const result = getActiveSubscriptionTags({
+        id: 'random-id',
+        type: SubscriptionType.LIMITED_10,
+        trainingType: TrainingType.YOGA,
+        start: today.minus({ weeks: 2 }).toISODate(),
+        end: today.plus({ weeks: 4 }).toISODate(),
+        trainingsLeft: 4,
+      });
+      expect(result.runsShort).toBe(false);
+    });
+
+    test('should return true if type is not UNLIMITED_10 or BLOCK and trainings left is greater than the amount of weeks left', () => {
+      const today = DateTime.local();
+      const result = getActiveSubscriptionTags({
+        id: 'random-id',
+        type: SubscriptionType.LIMITED_10,
+        trainingType: TrainingType.YOGA,
+        start: today.minus({ weeks: 2 }).toISODate(),
+        end: today.plus({ weeks: 5 }).toISODate(),
+        trainingsLeft: 7,
+      });
+      expect(result.runsShort).toBe(true);
+    });
   });
 });
 

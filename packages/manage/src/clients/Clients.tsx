@@ -10,12 +10,13 @@ import React, {
   useState,
 } from 'react';
 import cx from 'classnames';
-import { Client } from '@veri-fit/common';
+import { Client, Subscription } from '@veri-fit/common';
 import { Button, IconButton, Input } from '@veri-fit/common-ui';
 import Dialog from '../Dialog';
 import { useRepos } from '../repositories/RepoContext';
-import { doesSubscriptionRunShort, isSubscriptionExpiring } from '../subscriptionChecks';
+import { ActiveSubscriptionTag, ActiveSubscriptionTags, getActiveSubscriptionTags } from '../subscriptionChecks';
 import Navbar from '../Navbar';
+import Tag, { TagColor } from '../Tag';
 import AddClientDialogContent from './AddClientDialogContent';
 import ClientDetails from './ClientDetails';
 
@@ -44,11 +45,69 @@ const SearchHeader: FC<SearchHeaderProps> = ({
       className="flex-shrink-0"
       icon="user-add"
       shape="outlined"
-      label="Hinzufügen"
+      label="Kunde hinzufügen"
       onClick={onAddUserClick}
     />
   </div>
 );
+
+interface ClientTag {
+  text: string;
+  color: TagColor;
+}
+
+function getClientTags(activeSubscriptions: Subscription[]): ClientTag[] {
+  const clientTags = [] as ClientTag[];
+
+  if (activeSubscriptions.length === 0) {
+    clientTags.push({
+      text: 'Kein aktives Abo',
+      color: 'gray',
+    });
+  } else {
+    const initial: ActiveSubscriptionTags = {
+      expired: false,
+      expiring: false,
+      runsShort: false,
+      unpaid: false,
+    };
+    const tags = activeSubscriptions.reduce((acc, curr) => {
+      const tags = getActiveSubscriptionTags(curr);
+      for (const [key, value] of Object.entries(tags)) {
+        if (value) {
+          acc[key as ActiveSubscriptionTag] = true;
+        }
+      }
+      return acc;
+    }, initial);
+    if (tags.unpaid) {
+      clientTags.push({
+        text: 'Unbezahlt',
+        color: 'red',
+      });
+    }
+    if (tags.expired) {
+      clientTags.push({
+        text: 'Abgelaufen',
+        color: 'orange',
+      });
+    }
+    if (tags.expiring) {
+      clientTags.push({
+        text: 'Läuft ab',
+        color: 'blue',
+      });
+    }
+    if (tags.runsShort) {
+      clientTags.push({
+        text: 'Wird knapp',
+        color: 'blue',
+      });
+    }
+  }
+
+  return clientTags;
+}
 
 interface ClientListProps extends ComponentPropsWithoutRef<'ul'> {
   clients: Client[];
@@ -56,43 +115,22 @@ interface ClientListProps extends ComponentPropsWithoutRef<'ul'> {
 }
 
 const ClientList: FC<ClientListProps> = ({ clients, selectedClientId, className, ...rest }) => (
-  <ul className={className} {...rest}>
-    {clients.map((client) => {
-      const { name, activeSubscriptions } = client;
-      const tags = [] as ReactNode[];
-      if (activeSubscriptions.some((subscription) => subscription.paidAt == null)) {
-        tags.push(
-          <span key="unpaid" className="tag tag-red">
-            Unbezahlt
-          </span>,
-        );
-      }
-      if (activeSubscriptions.some(isSubscriptionExpiring)) {
-        tags.push(
-          <span key="expires" className="tag tag-blue">
-            Läuft ab
-          </span>,
-        );
-      }
-      if (activeSubscriptions.some(doesSubscriptionRunShort)) {
-        tags.push(
-          <span key="runs-short" className="tag tag-blue">
-            Wird knapp
-          </span>,
-        );
-      }
-
+  <ul className={cx('divide-y', className)} {...rest}>
+    {clients.map(({ id, name, activeSubscriptions }) => {
+      const tags = getClientTags(activeSubscriptions);
       return (
-        <li
-          key={client.id}
-          className={cx('border-b hover:bg-gray-200', selectedClientId === client.id && 'bg-gray-300')}
-        >
-          <Link
-            className="block p-4 sm:px-6"
-            to={selectedClientId === client.id ? '/clients' : `/clients/${client.id}`}
-          >
+        <li key={id} className={cx('hover:bg-gray-200', selectedClientId === id && 'bg-gray-300')}>
+          <Link className="block p-4 sm:px-6" to={selectedClientId === id ? '/clients' : `/clients/${id}`}>
             <h2 className="text-xl">{name}</h2>
-            {tags.length > 0 && <div className="space-x-1">{tags}</div>}
+            {tags.length > 0 && (
+              <div className="-ml-1 mt-1">
+                {tags.map((tag) => (
+                  <Tag key={tag.text} className="ml-1 mt-1" color={tag.color}>
+                    {tag.text}
+                  </Tag>
+                ))}
+              </div>
+            )}
           </Link>
         </li>
       );
@@ -154,7 +192,8 @@ const ClientsDualPane: FC<ClientsContentProps> = ({ clients, header, empty, empt
             ) : (
               <div className="flex-auto min-h-0 flex space-x-6">
                 <ClientList
-                  className="w-1/5 bg-white shadow rounded overflow-auto"
+                  style={{ width: '22rem' }}
+                  className="bg-white shadow rounded overflow-auto"
                   clients={filteredClients}
                   selectedClientId={selectedClient?.id}
                 />
@@ -226,6 +265,7 @@ const Clients: FC = () => {
   useEffect(() => clientRepo.observeAll(setClients), [clientRepo]);
 
   const handleAddUserClick = () => setAddDialogOpen(true);
+  const handleDialogClose = () => setAddDialogOpen(false);
   const header = (
     <header className="sr-only">
       <h1>Kunden</h1>
@@ -260,11 +300,8 @@ const Clients: FC = () => {
         emptySearch={emptySearch}
         onAddUserClick={handleAddUserClick}
       />
-      <Dialog open={addDialogOpen} onCancel={() => setAddDialogOpen(false)}>
-        <AddClientDialogContent
-          onClientCreated={() => setAddDialogOpen(false)}
-          onCancelClick={() => setAddDialogOpen(false)}
-        />
+      <Dialog open={addDialogOpen} onCancel={handleDialogClose}>
+        <AddClientDialogContent onClientCreated={handleDialogClose} onCancelClick={handleDialogClose} />
       </Dialog>
     </>
   );

@@ -8,6 +8,7 @@ import ConfirmDeleteDialogContent from '../ConfirmDeleteDialogContent';
 import { formatLocale, getToday } from '../dateTime';
 import { getSubscriptionName, getTrainingName } from '../displayNames';
 import { useRepos } from '../repositories/RepoContext';
+import Tag from '../Tag';
 import EditClientDialogContent from './EditClientDialogContent';
 import AddSubscriptionDialogContent from './AddSubscriptionDialogContent';
 
@@ -52,7 +53,7 @@ const SubscriptionSummary: FC<SummaryProps> = ({ subscription, onSetPaidClick, o
           {active ? (
             <IconButton shape="outlined" size="sm" icon="trash" label="Abo löschen" onClick={onDeleteClick} />
           ) : (
-            <IconButton shape="outlined" size="sm" icon="document-duplicate" label="Erneuern" />
+            <IconButton shape="outlined" size="sm" icon="document-duplicate" label="Erneuern" disabled={true} />
           )}
         </div>
       </div>
@@ -81,11 +82,11 @@ const SubscriptionSummary: FC<SummaryProps> = ({ subscription, onSetPaidClick, o
         )}
       </div>
       <div className="space-x-1">
-        {active ? <div className="tag tag-blue">Aktiv</div> : <div className="tag tag-red">Abgelaufen</div>}
+        {active ? <Tag color="blue">Aktiv</Tag> : <Tag color="orange">Abgelaufen</Tag>}
         {subscription.paidAt ? (
-          <div className="tag tag-green">{`Bezahlt am ${formatLocale(subscription.paidAt)}`}</div>
+          <Tag color="green">{`Bezahlt am ${formatLocale(subscription.paidAt)}`}</Tag>
         ) : (
-          <div className="tag tag-red">Unbezahlt</div>
+          <Tag color="red">Unbezahlt</Tag>
         )}
       </div>
     </>
@@ -105,20 +106,18 @@ function getInitials(name: string) {
 }
 
 const ClientDetails: FC<Props> = ({ client, className, ...rest }) => {
-  const [subscriptions, setSubscriptions] = useState([] as Subscription[]);
   const [sessions, setSessions] = useState([] as Session[]);
   const [trainings, setTrainings] = useState([] as Training[]);
   const [clientDialog, setClientDialog] = useState<ClientDialog>();
   const { clientRepo, sessionRepo, trainingRepo } = useRepos();
 
-  useEffect(() => clientRepo.observeAllSubscriptions(client.id, setSubscriptions), [clientRepo, client.id]);
   useEffect(() => sessionRepo.observeAllForClients(client.id, setSessions), [sessionRepo, client.id]);
   useEffect(() => trainingRepo.observeAllForClients(client.id, setTrainings), [trainingRepo, client.id]);
 
   const contactDetails = [] as ReactNode[];
   if (client.email) {
     contactDetails.push(
-      <ContactItem icon="email">
+      <ContactItem key="email" icon="email">
         <a className="block link" href={`mailto:${client.email}`}>
           {client.email}
         </a>
@@ -127,7 +126,7 @@ const ClientDetails: FC<Props> = ({ client, className, ...rest }) => {
   }
   if (client.phone) {
     contactDetails.push(
-      <ContactItem icon="phone-outgoing">
+      <ContactItem key="phone" icon="phone-outgoing">
         <a className="block link" href={`tel:${client.phone}`}>
           {client.phone}
         </a>
@@ -136,7 +135,7 @@ const ClientDetails: FC<Props> = ({ client, className, ...rest }) => {
   }
   if (client.address) {
     contactDetails.push(
-      <ContactItem icon="location-marker">
+      <ContactItem key="address" icon="location-marker">
         <a
           className="block link"
           href={`https://www.google.ch/maps?q=${client.address.street}+${client.address.number}+${client.address.zip}+${client.address.city}`}
@@ -148,7 +147,7 @@ const ClientDetails: FC<Props> = ({ client, className, ...rest }) => {
   }
   if (client.birthday) {
     contactDetails.push(
-      <ContactItem icon="cake">
+      <ContactItem key="birthday" icon="cake">
         <p className="text-base text-gray-600">{`Geboren am ${formatLocale(client.birthday)}`}</p>
       </ContactItem>,
     );
@@ -194,10 +193,10 @@ const ClientDetails: FC<Props> = ({ client, className, ...rest }) => {
       <hr />
       <div className="px-4 sm:px-6 space-y-4">
         <h2 className="text-xl">Abos</h2>
-        {subscriptions.length > 0 ? (
+        {client.activeSubscriptions.length > 0 ? (
           <div className="flex flex-col space-y-2">
             <ul className="space-y-2">
-              {subscriptions.map((subscription) => (
+              {client.activeSubscriptions.map((subscription) => (
                 <li key={subscription.id} className="p-4 border space-y-2">
                   <SubscriptionSummary
                     subscription={subscription}
@@ -223,7 +222,7 @@ const ClientDetails: FC<Props> = ({ client, className, ...rest }) => {
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center space-y-3">
-            <p className="text-sm">Die Kundin hat noch kein Abo. Füge jetzt eines hinzu.</p>
+            <p className="text-sm">Die Kundin hat kein aktives Abo. Füge jetzt eines hinzu.</p>
             <Button size="sm" onClick={() => setClientDialog({ type: 'SUBSCRIPTION_ADD' })}>
               Hinzufügen
             </Button>
@@ -301,7 +300,7 @@ const ClientDetails: FC<Props> = ({ client, className, ...rest }) => {
         {clientDialog?.type === 'SUBSCRIPTION_ADD' && (
           <AddSubscriptionDialogContent
             clientId={client.id}
-            subscriptions={subscriptions}
+            subscriptions={client.activeSubscriptions}
             onSubscriptionAdded={() => setClientDialog(undefined)}
             onCancelClick={() => setClientDialog(undefined)}
           />

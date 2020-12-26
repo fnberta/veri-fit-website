@@ -63,24 +63,4 @@
   .dialog-body {
     @apply overflow-auto flex-grow;
   }
-
-  .tag {
-    @apply inline-block px-2 rounded-full text-xs font-semibold uppercase tracking-wider;
-  }
-
-  .tag-gray {
-    @apply bg-gray-200 text-gray-800;
-  }
-
-  .tag-blue {
-    @apply bg-blue-200 text-blue-800;
-  }
-
-  .tag-green {
-    @apply bg-green-200 text-green-800;
-  }
-
-  .tag-red {
-    @apply bg-red-200 text-red-800;
-  }
 }
