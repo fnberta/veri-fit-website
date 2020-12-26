@@ -41,7 +41,7 @@ const SessionCard: FC<Props> = ({ session, clients, onEditClick }) => {
         <p className=" text-sm text-gray-600">{`${session.clientIds.length} Teilnehmer`}</p>
         {hasClientsWithIssues && (
           <div className="text-xs text-red-600 space-y-1">
-            <p>Folgende Teilnehmer haben kein gültiges Abo:</p>
+            <p>Kein gültiges Abo:</p>
             <ul className="list-disc list-inside">
               {clientsWithIssues.map((client) => (
                 <li key={client.id}>
