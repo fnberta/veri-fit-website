@@ -136,7 +136,7 @@ const ClientsDualPane: FC<ClientsContentProps> = ({ clients, header, empty, empt
   const { filterQuery, setFilterQuery, filteredClients, selectedClient } = useFilteredClients(clients);
   return (
     <div className="flex-auto min-h-0 hidden lg:flex flex-col">
-      <Navbar />
+      <Navbar className="flex-shrink-0" />
       <section className="flex-auto flex bg-gray-100 min-h-0">
         {header}
         {!clients ? null : clients.length === 0 ? (
@@ -144,6 +144,7 @@ const ClientsDualPane: FC<ClientsContentProps> = ({ clients, header, empty, empt
         ) : (
           <div className="flex-auto p-6 max-w-screen-xl mx-auto min-h-0 flex flex-col space-y-6">
             <SearchHeader
+              className="flex-shrink-0"
               filterQuery={filterQuery}
               onFilterQueryChange={(e) => setFilterQuery(e.currentTarget.value)}
               onAddUserClick={onAddUserClick}
@@ -179,7 +180,7 @@ const ClientsSinglePane: FC<ClientsContentProps> = ({ clients, header, empty, em
     <div className="flex-auto min-h-0 flex flex-col lg:hidden">
       {selectedClient ? (
         <>
-          <Navbar upTarget="/clients" />
+          <Navbar className="flex-shrink-0" upTarget="/clients" />
           <ClientDetails className="flex-auto overflow-auto" client={selectedClient} />
         </>
       ) : (
@@ -192,7 +193,7 @@ const ClientsSinglePane: FC<ClientsContentProps> = ({ clients, header, empty, em
             ) : (
               <div className="flex-auto flex flex-col">
                 <SearchHeader
-                  className="p-4 sm:p-6"
+                  className="p-4 sm:p-6 flex-shrink-0"
                   filterQuery={filterQuery}
                   onFilterQueryChange={(e) => setFilterQuery(e.currentTarget.value)}
                   onAddUserClick={onAddUserClick}
