@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import React, { ComponentPropsWithoutRef, FC, MouseEventHandler, useEffect, useState } from 'react';
+import React, { ComponentPropsWithoutRef, FC, MouseEventHandler, ReactNode, useEffect, useState } from 'react';
 import { Client, Session, Subscription, SubscriptionType, Training } from '@veri-fit/common';
 import { Button, Icon, IconButton, IconName } from '@veri-fit/common-ui';
 import cx from 'classnames';
@@ -115,6 +115,45 @@ const ClientDetails: FC<Props> = ({ client, className, ...rest }) => {
   useEffect(() => sessionRepo.observeAllForClients(client.id, setSessions), [sessionRepo, client.id]);
   useEffect(() => trainingRepo.observeAllForClients(client.id, setTrainings), [trainingRepo, client.id]);
 
+  const contactDetails = [] as ReactNode[];
+  if (client.email) {
+    contactDetails.push(
+      <ContactItem icon="email">
+        <a className="block link" href={`mailto:${client.email}`}>
+          {client.email}
+        </a>
+      </ContactItem>,
+    );
+  }
+  if (client.phone) {
+    contactDetails.push(
+      <ContactItem icon="phone-outgoing">
+        <a className="block link" href={`tel:${client.phone}`}>
+          {client.phone}
+        </a>
+      </ContactItem>,
+    );
+  }
+  if (client.address) {
+    contactDetails.push(
+      <ContactItem icon="location-marker">
+        <a
+          className="block link"
+          href={`https://www.google.ch/maps?q=${client.address.street}+${client.address.number}+${client.address.zip}+${client.address.city}`}
+        >
+          {`${client.address.street} ${client.address.number}, ${client.address.zip} ${client.address.city}`}
+        </a>
+      </ContactItem>,
+    );
+  }
+  if (client.birthday) {
+    contactDetails.push(
+      <ContactItem icon="cake">
+        <p className="text-base text-gray-600">{`Geboren am ${formatLocale(client.birthday)}`}</p>
+      </ContactItem>,
+    );
+  }
+
   return (
     <section className={cx('py-4 sm:py-6 space-y-6', className)} {...rest}>
       <header className="px-4 sm:px-6 flex items-center justify-between space-x-6">
@@ -143,66 +182,53 @@ const ClientDetails: FC<Props> = ({ client, className, ...rest }) => {
           />
         </div>
       </header>
-      <hr />
-      <div className="px-4 sm:px-6 space-y-4">
-        <h2 className="text-xl">Kontaktdaten</h2>
-        <div className="space-y-3">
-          <ContactItem icon="email">
-            <a className="block link" href={`mailto:${client.email}`}>
-              {client.email}
-            </a>
-          </ContactItem>
-          <ContactItem icon="phone-outgoing">
-            <a className="block link" href={`tel:${client.phone}`}>
-              {client.phone}
-            </a>
-          </ContactItem>
-          {client.address != null && (
-            <ContactItem icon="location-marker">
-              <a
-                className="block link"
-                href={`https://www.google.ch/maps?q=${client.address.street}+${client.address.number}+${client.address.zip}+${client.address.city}`}
-              >
-                {`${client.address.street} ${client.address.number}, ${client.address.zip} ${client.address.city}`}
-              </a>
-            </ContactItem>
-          )}
-          {client.birthday != null && (
-            <ContactItem icon="cake">
-              <p className="text-base text-gray-600">{`Geboren am ${formatLocale(client.birthday)}`}</p>
-            </ContactItem>
-          )}
-        </div>
-      </div>
+      {contactDetails.length > 0 && (
+        <>
+          <hr />
+          <div className="px-4 sm:px-6 space-y-4">
+            <h2 className="text-xl">Kontaktdaten</h2>
+            <div className="space-y-3">{contactDetails}</div>
+          </div>
+        </>
+      )}
       <hr />
       <div className="px-4 sm:px-6 space-y-4">
         <h2 className="text-xl">Abos</h2>
-        <div className="flex flex-col space-y-2">
-          <ul className="space-y-2">
-            {subscriptions.map((subscription) => (
-              <li key={subscription.id} className="p-4 border space-y-2">
-                <SubscriptionSummary
-                  subscription={subscription}
-                  onSetPaidClick={async () => {
-                    await clientRepo.updateSubscription(client.id, subscription.id, {
-                      ...subscription,
-                      paidAt: getToday(),
-                    });
-                  }}
-                  onDeleteClick={() => setClientDialog({ type: 'SUBSCRIPTION_DELETE', subscription })}
-                />
-              </li>
-            ))}
-          </ul>
-          <Button
-            className="self-end"
-            size="sm"
-            shape="text"
-            onClick={() => setClientDialog({ type: 'SUBSCRIPTION_ADD' })}
-          >
-            Hinzufügen
-          </Button>
-        </div>
+        {subscriptions.length > 0 ? (
+          <div className="flex flex-col space-y-2">
+            <ul className="space-y-2">
+              {subscriptions.map((subscription) => (
+                <li key={subscription.id} className="p-4 border space-y-2">
+                  <SubscriptionSummary
+                    subscription={subscription}
+                    onSetPaidClick={async () => {
+                      await clientRepo.updateSubscription(client.id, subscription.id, {
+                        ...subscription,
+                        paidAt: getToday(),
+                      });
+                    }}
+                    onDeleteClick={() => setClientDialog({ type: 'SUBSCRIPTION_DELETE', subscription })}
+                  />
+                </li>
+              ))}
+            </ul>
+            <Button
+              className="self-end"
+              size="sm"
+              shape="text"
+              onClick={() => setClientDialog({ type: 'SUBSCRIPTION_ADD' })}
+            >
+              Hinzufügen
+            </Button>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center space-y-3">
+            <p className="text-sm">Die Kundin hat noch kein Abo. Füge jetzt eines hinzu.</p>
+            <Button size="sm" onClick={() => setClientDialog({ type: 'SUBSCRIPTION_ADD' })}>
+              Hinzufügen
+            </Button>
+          </div>
+        )}
       </div>
       {trainings.length > 0 && (
         <>
