@@ -82,7 +82,7 @@ const Trainings: FC = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar className="flex-shrink-0" />
       <section className="flex-auto bg-gray-100 overflow-auto">
         <div className="w-full max-w-screen-xl mx-auto p-4 sm:p-6 space-y-4">
           <div className="-mt-4 -ml-4 flex flex-wrap justify-between items-center">

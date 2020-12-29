@@ -47,6 +47,17 @@ export default class ClientRepository {
     return parseSubscription(snap);
   }
 
+  async getSubscriptions(clientId: string): Promise<Subscription[]> {
+    const snap = await this.db
+      .collection(Collection.CLIENTS)
+      .doc(clientId)
+      .collection(Collection.SUBSCRIPTIONS)
+      .orderBy('trainingType')
+      .orderBy('start', 'desc')
+      .get();
+    return snap.docs.map(parseSubscription);
+  }
+
   observeAllSubscriptions(clientId: string, onChange: (subscriptions: Subscription[]) => void): firebase.Unsubscribe {
     return this.db
       .collection(Collection.CLIENTS)

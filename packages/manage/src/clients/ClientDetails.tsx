@@ -21,7 +21,7 @@ type ClientDialog =
   | { type: 'DELETE' }
   | { type: 'SUBSCRIPTION_ADD' }
   | { type: 'SUBSCRIPTION_DELETE'; subscription: Subscription }
-  | { type: 'ALL_SUBSCRIPTIONS' };
+  | { type: 'ALL_SUBSCRIPTIONS'; subscriptions: Subscription[] };
 
 const ContactItem: FC<{ icon: IconName }> = ({ icon, children }) => (
   <div className="flex space-x-8">
@@ -39,10 +39,18 @@ const ClientDetails: FC<Props> = ({ client, className, ...rest }) => {
   const [sessions, setSessions] = useState([] as Session[]);
   const [trainings, setTrainings] = useState([] as Training[]);
   const [clientDialog, setClientDialog] = useState<ClientDialog>();
+  const [loadingSubscriptions, setLoadingSubscriptions] = useState(false);
   const { clientRepo, sessionRepo, trainingRepo } = useRepos();
 
   useEffect(() => sessionRepo.observeAllForClients(client.id, setSessions), [sessionRepo, client.id]);
   useEffect(() => trainingRepo.observeAllForClients(client.id, setTrainings), [trainingRepo, client.id]);
+
+  async function showSubscriptionsDialog() {
+    setLoadingSubscriptions(true);
+    const subscriptions = await clientRepo.getSubscriptions(client.id);
+    setLoadingSubscriptions(false);
+    setClientDialog({ type: 'ALL_SUBSCRIPTIONS', subscriptions });
+  }
 
   const contactDetails = [] as ReactNode[];
   if (client.email) {
@@ -143,7 +151,7 @@ const ClientDetails: FC<Props> = ({ client, className, ...rest }) => {
               ))}
             </ul>
             <div className="self-end space-x-2">
-              <Button size="sm" shape="text" onClick={() => setClientDialog({ type: 'ALL_SUBSCRIPTIONS' })}>
+              <Button size="sm" shape="text" loading={loadingSubscriptions} onClick={() => showSubscriptionsDialog()}>
                 Zeige alle Abos…
               </Button>
               <Button size="sm" shape="outlined" onClick={() => setClientDialog({ type: 'SUBSCRIPTION_ADD' })}>
@@ -158,7 +166,7 @@ const ClientDetails: FC<Props> = ({ client, className, ...rest }) => {
               <Button size="sm" onClick={() => setClientDialog({ type: 'SUBSCRIPTION_ADD' })}>
                 Hinzufügen
               </Button>
-              <Button size="sm" shape="text" onClick={() => setClientDialog({ type: 'ALL_SUBSCRIPTIONS' })}>
+              <Button size="sm" shape="text" loading={loadingSubscriptions} onClick={() => showSubscriptionsDialog()}>
                 Zeige alle Abos…
               </Button>
             </div>
@@ -254,7 +262,11 @@ const ClientDetails: FC<Props> = ({ client, className, ...rest }) => {
           />
         )}
         {clientDialog?.type === 'ALL_SUBSCRIPTIONS' && (
-          <ClientSubscriptionDialogContent client={client} onCancelClick={handleDialogClose} />
+          <ClientSubscriptionDialogContent
+            client={client}
+            subscriptions={clientDialog.subscriptions}
+            onCancelClick={handleDialogClose}
+          />
         )}
       </Dialog>
     </section>
