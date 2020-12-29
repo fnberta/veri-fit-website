@@ -9,7 +9,7 @@ import { getSubscriptionName, getTrainingName } from '../displayNames';
 import { useRepos } from '../repositories/RepoContext';
 import EditClientDialogContent from './EditClientDialogContent';
 import AddSubscriptionDialogContent from './AddSubscriptionDialogContent';
-import SubscriptionItem from './SubscriptionItem';
+import SubscriptionListItem from './SubscriptionListItem';
 import ClientSubscriptionDialogContent from './ClientSubscriptionsDialogContent';
 
 export interface Props extends ComponentPropsWithoutRef<'div'> {
@@ -128,7 +128,7 @@ const ClientDetails: FC<Props> = ({ client, className, ...rest }) => {
           <div className="flex flex-col space-y-2">
             <ul className="space-y-2">
               {client.activeSubscriptions.map((subscription) => (
-                <SubscriptionItem
+                <SubscriptionListItem
                   key={subscription.id}
                   className="p-4 border"
                   subscription={subscription}

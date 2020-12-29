@@ -4,7 +4,7 @@ import { Button } from '@veri-fit/common-ui';
 import { useRepos } from '../repositories/RepoContext';
 import { getToday } from '../dateTime';
 import { DialogFooter, DialogHeader } from '../Dialog';
-import SubscriptionItem from './SubscriptionItem';
+import SubscriptionListItem from './SubscriptionListItem';
 
 export interface Props {
   client: Client;
@@ -24,7 +24,7 @@ const ClientSubscriptionDialogContent: FC<Props> = ({ client, onCancelClick }) =
         subscriptions.length > 0 ? (
           <ul className="space-y-2 divide-y overflow-auto">
             {subscriptions.map((subscription) => (
-              <SubscriptionItem
+              <SubscriptionListItem
                 key={subscription.id}
                 className="p-4"
                 subscription={subscription}

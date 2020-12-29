@@ -13,7 +13,7 @@ export interface Props extends ComponentPropsWithoutRef<'li'> {
   onDeleteClick?: MouseEventHandler;
 }
 
-const SubscriptionItem: FC<Props> = ({ subscription, onSetPaidClick, onDeleteClick, className, ...rest }) => {
+const SubscriptionListItem: FC<Props> = ({ subscription, onSetPaidClick, onDeleteClick, className, ...rest }) => {
   const active =
     subscription.type === SubscriptionType.SINGLE ||
     subscription.type === SubscriptionType.UNLIMITED_10 ||
@@ -89,4 +89,4 @@ const SubscriptionItem: FC<Props> = ({ subscription, onSetPaidClick, onDeleteCli
   );
 };
 
-export default SubscriptionItem;
+export default SubscriptionListItem;
