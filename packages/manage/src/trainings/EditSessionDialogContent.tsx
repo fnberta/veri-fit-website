@@ -74,7 +74,7 @@ const EditSessionDialogContent: FC<Props> = ({ session, clients, onSessionChange
                   onChange={(e) => setChangeType(e.currentTarget.value as ChangeType)}
                 >
                   <option value={ChangeType.SINGLE}>Nur dieses</option>
-                  <option value={ChangeType.ALL_FOLLOWING}>Alle zukünftigen</option>
+                  <option value={ChangeType.ALL_FOLLOWING}>Alle zukünftige</option>
                   <option value={ChangeType.ALL_NON_CONFIRMED}>Alle offenen</option>
                 </Select>
               )}
