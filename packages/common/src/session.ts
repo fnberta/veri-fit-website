@@ -6,7 +6,6 @@ export interface Session extends Training {
   date: string; // YYYY-MM-DD
   confirmed: boolean;
   notes?: string;
-  statusReverted?: boolean;
 }
 
 export type SessionInput = Omit<Session, 'id'>;

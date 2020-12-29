@@ -46,7 +46,7 @@
     grid-template-columns: 1fr;
   }
 
-  @screen md {
+  @screen lg {
     .schedule-grid {
       grid-template-columns: [monday] 1fr [tuesday] 1fr [wednesday] 1fr [thursday] 1fr [friday] 1fr [saturday] 1fr;
       grid-template-rows: auto [morning] 1fr [midday] 1fr [evening] 1fr;
@@ -54,7 +54,7 @@
   }
 
   /* purgecss start ignore */
-  @screen md {
+  @screen lg {
     .schedule-monday {
       grid-column-start: monday;
     }

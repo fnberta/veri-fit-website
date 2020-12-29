@@ -144,12 +144,11 @@ export const createSessionsOnTrainingCreated = functions.firestore
     return batch.commit();
   });
 
-function getSessionsForTrainingQuery(trainingId: string, startingFrom?: string): Query {
+function getOpenSessionsForTrainingQuery(trainingId: string, startingFrom?: string): Query {
   let query = db.collection(Collection.SESSIONS).where('trainingId', '==', trainingId).where('confirmed', '==', false);
   if (startingFrom != null) {
     query = query.where('date', '>=', startingFrom);
   }
-
   return query;
 }
 
@@ -160,7 +159,7 @@ export const deleteSessionsOnTrainingDeleted = functions.firestore
   .document('trainings/{trainingId}')
   .onDelete(async (snap, context) => {
     const training = parseTraining(snap);
-    const query = getSessionsForTrainingQuery(context.params.trainingId, training.runsFrom);
+    const query = getOpenSessionsForTrainingQuery(context.params.trainingId, training.runsFrom);
     return db.runTransaction(async (t) => {
       const snap = await t.get(query);
       snap.forEach((snap) => {
@@ -176,7 +175,7 @@ function makeTrainingAndSessionsUpdater(
   includePast: boolean,
 ): UpdateFunction<void> {
   const trainingsRef = db.collection(Collection.TRAININGS).doc(trainingId);
-  const sessionsQuery = getSessionsForTrainingQuery(trainingId, includePast ? undefined : sessionInput.date);
+  const sessionsQuery = getOpenSessionsForTrainingQuery(trainingId, includePast ? undefined : sessionInput.date);
   const trainingInput: TrainingInput = {
     type: sessionInput.type,
     runsFrom: sessionInput.runsFrom,

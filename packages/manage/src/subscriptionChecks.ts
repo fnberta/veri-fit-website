@@ -23,24 +23,35 @@ export function getValidTrainingTypes(subscriptions: Subscription[]): TrainingTy
   return trainingTypes.filter((trainingType) => !validSubscriptionTrainingTypes.includes(trainingType));
 }
 
-export function doesSubscriptionRunShort(subscription: Subscription): boolean {
-  if (subscription.type === SubscriptionType.UNLIMITED_10 || subscription.type === SubscriptionType.BLOCK) {
-    return false;
-  }
+export type ActiveSubscriptionTag = 'runsShort' | 'expiring' | 'expired' | 'unpaid';
 
-  const { end, trainingsLeft } = subscription;
-  const diff = DateTime.fromISO(end).diff(getStartOfToday());
-  // TODO: with getStartOfToday, Math.round should not be needed
-  return trainingsLeft > Math.round(diff.as('weeks'));
-}
+export type ActiveSubscriptionTags = Record<ActiveSubscriptionTag, boolean>;
 
-export function isSubscriptionExpiring(subscription: Subscription): boolean {
+export function getActiveSubscriptionTags(subscription: Subscription): ActiveSubscriptionTags {
+  const unpaid = subscription.paidAt == null;
   if (subscription.type === SubscriptionType.UNLIMITED_10) {
-    return false;
+    return {
+      unpaid,
+      expired: false,
+      expiring: false,
+      runsShort: false,
+    };
   }
 
   const end = DateTime.fromISO(subscription.end);
-  return end.diff(getStartOfToday()) <= Duration.fromObject({ weeks: 1 });
+  const startOfToday = getStartOfToday();
+  const diff = end.diff(startOfToday);
+  const expired = end < startOfToday;
+  return {
+    unpaid,
+    expired,
+    expiring: !expired && diff <= Duration.fromObject({ weeks: 1 }),
+    // TODO: with getStartOfToday, Math.round should not be needed
+    runsShort:
+      expired || subscription.type === SubscriptionType.BLOCK
+        ? false
+        : subscription.trainingsLeft > Math.round(diff.as('weeks')),
+  };
 }
 
 export function getClientsWithIssues(clients: Client[], session: Session): Client[] {

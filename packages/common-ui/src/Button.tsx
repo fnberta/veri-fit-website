@@ -16,7 +16,7 @@ export interface ButtonStyleProps {
 }
 
 const BUTTON =
-  'inline-flex items-center justify-center font-semibold transition duration-150 ease-out rounded select-none whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-50 disabled:opacity-75 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-800';
+  'inline-flex items-center justify-center font-semibold transition duration-150 ease-out rounded select-none whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:text-gray-800';
 
 function getButtonShapeColorClasses(
   shape: ButtonStyleProps['shape'],
