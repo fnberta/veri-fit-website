@@ -224,7 +224,7 @@ const ClientsSinglePane: FC<ClientsContentProps> = ({ clients, header, empty, em
         </>
       ) : (
         <>
-          <Navbar />
+          <Navbar className="flex-shrink-0" />
           <section className="flex-auto overflow-auto flex flex-col bg-gray-100">
             {header}
             {!clients ? null : clients.length === 0 ? (
