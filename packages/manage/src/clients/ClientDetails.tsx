@@ -152,9 +152,9 @@ const ClientDetails: FC<Props> = ({ client, className, ...rest }) => {
             </div>
           </div>
         ) : (
-          <div className="flex flex-col place-items-center space-y-3">
+          <div className="flex flex-col items-center justify-center space-y-3">
             <p className="text-sm">{`${client.name} hat kein aktives Abo. Füge jetzt eines hinzu.`}</p>
-            <div className="flex flex-col place-items-center space-y-2">
+            <div className="flex flex-col items-center justify-center space-y-2">
               <Button size="sm" onClick={() => setClientDialog({ type: 'SUBSCRIPTION_ADD' })}>
                 Hinzufügen
               </Button>
