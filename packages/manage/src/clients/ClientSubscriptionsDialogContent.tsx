@@ -17,27 +17,29 @@ const ClientSubscriptionDialogContent: FC<Props> = ({ client, subscriptions, onC
   return (
     <>
       <DialogHeader title={`${client.name}'s Abos`} onCloseClick={onCancelClick} />
-      {subscriptions.length > 0 ? (
-        <ul className="space-y-2 divide-y overflow-auto">
-          {subscriptions.map((subscription) => (
-            <SubscriptionListItem
-              key={subscription.id}
-              className="p-4"
-              subscription={subscription}
-              onSetPaidClick={async () => {
-                await clientRepo.updateSubscription(client.id, subscription.id, {
-                  ...subscription,
-                  paidAt: getToday(),
-                });
-              }}
-            />
-          ))}
-        </ul>
-      ) : (
-        <p className="p-4 text-sm">
-          {`${client.name} hatte noch keine Abos. Schliesse den Dialog um eines hinzuzufügen.`}
-        </p>
-      )}
+      <div className="dialog-body">
+        {subscriptions.length > 0 ? (
+          <ul className="space-y-2 divide-y">
+            {subscriptions.map((subscription) => (
+              <SubscriptionListItem
+                key={subscription.id}
+                className="p-4"
+                subscription={subscription}
+                onSetPaidClick={async () => {
+                  await clientRepo.updateSubscription(client.id, subscription.id, {
+                    ...subscription,
+                    paidAt: getToday(),
+                  });
+                }}
+              />
+            ))}
+          </ul>
+        ) : (
+          <p className="p-4 text-sm">
+            {`${client.name} hatte noch keine Abos. Schliesse den Dialog um eines hinzuzufügen.`}
+          </p>
+        )}
+      </div>
       <DialogFooter className="flex justify-end p-4">
         <Button onClick={onCancelClick}>Schliessen</Button>
       </DialogFooter>

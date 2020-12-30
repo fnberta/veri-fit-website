@@ -88,13 +88,13 @@ export interface DialogHeaderProps extends ComponentPropsWithoutRef<'div'> {
 
 export const DialogHeader: FC<DialogHeaderProps> = ({ title, onCloseClick, className, ...rest }) => (
   <header
-    className={cx('relative p-4 flex-shrink-0 bg-gray-100 flex justify-between items-center shadow', className)}
+    className={cx('relative p-4 flex-shrink-0 shadow bg-gray-100 flex items-center space-x-2', className)}
     {...rest}
   >
-    <h1 id="dialog-header" className="text-2xl font-semibold">
+    <h1 id="dialog-header" className="flex-1 text-2xl font-semibold whitespace-nowrap">
       {title}
     </h1>
-    <CloseButton onClick={onCloseClick} />
+    <CloseButton className="flex-shrink-0" onClick={onCloseClick} />
   </header>
 );
 
