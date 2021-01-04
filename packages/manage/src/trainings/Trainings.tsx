@@ -110,7 +110,7 @@ const Trainings: FC = () => {
             </div>
           </div>
           <WeekSchedule
-            className="p-4 bg-white rounded shadow"
+            className="p-4 bg-white rounded shadow items-start"
             {...sessions.reduce<Week>(
               (acc, curr) => {
                 const weekday = getWeekday(curr.runsFrom);
