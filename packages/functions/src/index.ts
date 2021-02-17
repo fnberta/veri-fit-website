@@ -292,7 +292,7 @@ export const toggleSessionConfirmed = functions.https.onCall(async (data, contex
           const subscriptions = querySnap.docs.map(
             (snap) => parseSubscription(snap) as YogaSubscription | PersonalSubscription,
           );
-          const subscriptionId = pickSubscriptionId(session.confirmed ? 'confirmed' : 'opened', subscriptions);
+          const subscriptionId = pickSubscriptionId(action, subscriptions);
           if (!subscriptionId) {
             throw new functions.https.HttpsError(
               'not-found',
