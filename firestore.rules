@@ -2,7 +2,7 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     function isAuthorizedUser() {
-      return request.auth != null && request.auth.uid in ['WGVXSIVVy7bEr3KKlJPwuOIrZWI3', 'NtO4nOpL6vVTMlMXy6HDq9PfSo83'];
+      return request.auth != null && request.auth.uid in ['WGVXSIVVy7bEr3KKlJPwuOIrZWI3', 'NtO4nOpL6vVTMlMXy6HDq9PfSo83', 'GGd5ZglVEcdPJqmDtrjMZGpocgX2'];
     }
 
     match /clients/{clientId} {
