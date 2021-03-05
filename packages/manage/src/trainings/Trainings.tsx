@@ -115,7 +115,7 @@ const Trainings: FC = () => {
               (acc, curr) => {
                 const weekday = getWeekday(curr.runsFrom);
                 acc[weekday].push({
-                  id: curr.id,
+                  key: curr.id,
                   weekday,
                   timeOfDay: getTimeOfDay(curr.time),
                   content: (

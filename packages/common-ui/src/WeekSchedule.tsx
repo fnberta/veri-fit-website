@@ -8,7 +8,7 @@ export type Weekday = typeof WEEKDAYS[number];
 export type TimeOfDay = typeof TIMES_OF_DAY[number];
 
 export interface WeekdayEntry {
-  id: string;
+  key: string;
   weekday: Weekday;
   timeOfDay: TimeOfDay;
   content: ReactElement;
@@ -27,10 +27,10 @@ const Block: FC<BlockProps> = ({ title, entries }) => (
     {entries
       .slice()
       .sort((a, b) => TIMES_OF_DAY.indexOf(a.timeOfDay) - TIMES_OF_DAY.indexOf(b.timeOfDay))
-      .map(({ id, weekday, timeOfDay, content }) =>
+      .map(({ key, weekday, timeOfDay, content }) =>
         cloneElement(content, {
           ...content.props,
-          id,
+          key,
           className: cx(`schedule-${weekday} schedule-${timeOfDay}`, content.props.className),
         }),
       )}

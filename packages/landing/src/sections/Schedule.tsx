@@ -1,6 +1,7 @@
 import { Link } from 'gatsby';
-import React, { FC } from 'react';
-import { WeekSchedule, TimeOfDay, Weekday, Week } from '@veri-fit/common-ui';
+import React, { ComponentPropsWithoutRef, FC } from 'react';
+import { TimeOfDay, Week, Weekday, WeekSchedule } from '@veri-fit/common-ui';
+import cx from 'classnames';
 
 export interface ScheduleEntryData {
   title: string;
@@ -9,12 +10,12 @@ export interface ScheduleEntryData {
   time: string;
 }
 
-export interface Props {
-  entries: ScheduleEntryData[];
-}
+export interface ScheduleItemProps
+  extends Omit<ComponentPropsWithoutRef<'div'>, 'title'>,
+    Pick<ScheduleEntryData, 'title' | 'time'> {}
 
-export const ScheduleItem: FC<Pick<ScheduleEntryData, 'title' | 'time'>> = ({ title, time }) => (
-  <div className="p-4 bg-white rounded shadow text-center">
+export const ScheduleItem: FC<ScheduleItemProps> = ({ title, time, className, ...rest }) => (
+  <div className={cx('p-4 bg-white rounded shadow text-center', className)} {...rest}>
     <h2 className="text-lg text-gray-900 font-semibold">{title}</h2>
     <p className="text-gray-700">{time}</p>
   </div>
@@ -24,7 +25,7 @@ function getWeek(entries: ScheduleEntryData[]): Week {
   return entries.reduce<Week>(
     (acc, { title, weekday, timeOfDay, time }) => {
       acc[weekday].push({
-        id: `${weekday}-${timeOfDay}-${title}`,
+        key: `${weekday}-${timeOfDay}-${title}`,
         weekday,
         timeOfDay,
         content: <ScheduleItem title={title} time={time} />,
@@ -40,6 +41,10 @@ function getWeek(entries: ScheduleEntryData[]): Week {
       saturday: [],
     },
   );
+}
+
+export interface Props {
+  entries: ScheduleEntryData[];
 }
 
 const Schedule: FC<Props> = ({ entries }) => (
