@@ -4,7 +4,7 @@ title: HIIT
 subtitle: High Intensity Interval Training
 image: /hiit.jpg
 prices:
-  - price: 5
+  - price: 10
     type: 1
 ---
 
