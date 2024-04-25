@@ -4,7 +4,7 @@
   },
   "functions": {
     "source": "packages/functions",
-    "runtime": "nodejs20"
+    "runtime": "nodejs14"
   },
   "emulators": {
     "functions": {
