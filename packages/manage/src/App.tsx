@@ -53,12 +53,6 @@ const App: FC = () => {
       }),
     [authRepo],
   );
-  useEffect(() => {
-    authRepo.getRedirectResult().catch((e) => {
-      // eslint-disable-next-line no-console
-      console.error('social login failed with', e);
-    });
-  }, [authRepo]);
 
   if (authState.type !== 'loggedIn') {
     return (

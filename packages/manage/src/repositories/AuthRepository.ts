@@ -4,7 +4,7 @@ export default class AuthRepository {
   constructor(private readonly auth: firebase.auth.Auth, private readonly provider: firebase.auth.AuthProvider) {}
 
   async signIn() {
-    await this.auth.signInWithRedirect(this.provider);
+    await this.auth.signInWithPopup(this.provider);
   }
 
   getRedirectResult() {
