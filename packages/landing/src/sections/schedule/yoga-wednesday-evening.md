@@ -1,6 +1,6 @@
 ---
 title: Yoga
 weekday: wednesday
-timeOfDay: evening
-time: '18:15 - 19:15'
+timeOfDay: midday
+time: 12:10 - 13:00
 ---
