@@ -4,8 +4,8 @@ title: BOOST
 subtitle: Funktionelles Krafttraining
 image: /boost_placeholder.jpg
 prices:
-  - price: 10
-    type: 1
+  - price: 200
+    type: 10
     validity: ""
 ---
 
