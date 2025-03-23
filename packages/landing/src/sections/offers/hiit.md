@@ -4,8 +4,8 @@ title: HIIT
 subtitle: High Intensity Interval Training
 image: /hiit.jpg
 prices:
-  - price: 10
-    type: 1
+  - price: 200
+    type: 10
 ---
 
 Kurze, hochintensive Intervallübungen, die deinen Körper herausfordern. Mach dich fit für den Sommer – ob für
