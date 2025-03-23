@@ -1,6 +1,6 @@
 ---
 title: Yoga
-weekday: wednesday
+weekday: monday
 timeOfDay: midday
 time: 12:10 - 13:00
 ---
