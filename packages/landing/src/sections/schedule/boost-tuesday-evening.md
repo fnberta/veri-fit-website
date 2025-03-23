@@ -1,6 +1,6 @@
 ---
 title: Boost
-weekday: tuesday
+weekday: wednesday
 timeOfDay: evening
-time: '18:30 - 19:45'
+time: 18 - 19
 ---
